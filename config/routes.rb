@@ -11,8 +11,6 @@ Hybrid::Application.routes.draw do
     end
   end
 
-  resources :concept_property_concepts
-
   resources :dictionaries do
     member do
       get :export_to_csv
