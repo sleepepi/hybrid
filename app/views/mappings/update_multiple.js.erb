@@ -1,0 +1,9 @@
+<% @mappings.each do |mapping| %>
+  <% @mapping = mapping %>
+  $("#mapping_form_<%= @mapping.column.gsub(' ', '_') %>").html("<%= escape_javascript(render("show")) %>");
+<% end %>
+
+<% if false %>
+  page.replace_html 'message', partial: 'layouts/message'
+  page.replace_html "table_#{table_div_name}_columns_mapped", @source.table_columns_mapped(params[:table], all_column_names)
+<% end %>

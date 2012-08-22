@@ -1,0 +1,56 @@
+<% if @mapping %>
+  <tr class="search_no_border">
+    <td valign="top" style="white-space:nowrap">
+      <div style="width:35px;">
+      <% if @mapping.mapped? %>
+        <%= image_tag('contour/tag_green.png', align: 'absmiddle', title: 'Column Fully Mapped') %>
+      <% else %>
+        <%= image_tag('contour/tag_red.png', align: 'absmiddle', title: 'Column Partially Mapped') %>
+      <% end %>
+
+      <%= link_to image_tag('contour/information.png', align: 'absmiddle', title: 'View Expanded'), expanded_mapping_path(@mapping, source_id: @mapping.source.id), method: :post, remote: true, with: "'show=' + $('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible')", before: "$('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').toggle(); this.src = ($('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible') ? '#{request.script_name}/assets/contour/down.png' : '#{request.script_name}/assets/contour/right.png')" %>
+      </div>
+    </td>
+    <td valign="top" style="white-space:nowrap">
+      <div style="width:35px">
+        <% if @mapping.source.user_has_action?(current_user, "edit data source mappings") %>
+          <%= link_to image_tag('contour/edit.png', style: 'border:none'), edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, title: "Edit Mapping" %>
+          <%= link_to image_tag('contour/delete.png', style: 'border:none'), mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, title: "Remove Mapping" %>
+        <% end %>
+      </div>
+    </td>
+    <td valign="top">
+      <%= @mapping.column %><br />
+      <span class='disabled' style="font-size: 8px">
+        <%= @mapping.status %><br />
+        <%= 'primary key<br />'.html_safe if @is_primary_key %>
+        <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
+        <%= 'has index' if @has_index %>
+      </span>
+    </td>
+    <td valign="top">
+      <%= link_to @mapping.concept.human_name, info_mapping_path(@mapping), method: :post, remote: true, title: @mapping.concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" if @mapping.concept %>
+      <br />
+      <div style="margin-left:38px"><%= @mapping.concept.uri + '/' + @mapping.concept.namespace + '#' if @mapping.concept %></div><br />
+      <% unit_concept = Concept.find_by_name(@mapping.units) %>
+      <% if unit_concept %><span style="font-size: 8px">Units: <%= link_to unit_concept.human_name, unit_concept %></span><% end %>
+      <div id="mapping_<%= @mapping.column.gsub(' ', '_') %>_stats" style="display:none">
+        <%= image_tag 'ajax-loader.gif' %>
+      </div>
+    </td>
+  </tr>
+<% else %>
+  <tr class="search_no_border">
+      <td><%= image_tag('contour/tag_neutral.png', align: 'absmiddle', title: 'Column Not Mapped') %></td>
+      <td></td>
+      <td><%= @column %><br />
+        <span class='disabled' style="font-size: 8px">
+          <%#= 'unmapped' %><br />
+          <%= 'primary key<br />'.html_safe if @is_primary_key %>
+          <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
+          <%= 'has index' if @has_index %>
+        </span>
+      </td>
+      <td></td>
+  </tr>
+<% end %>

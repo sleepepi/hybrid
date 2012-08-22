@@ -1,0 +1,54 @@
+<tr>
+  <td>
+    <%= image_tag('contour/tag_neutral.png', align: 'absmiddle', title: 'Column Not Mapped') %>
+  </td>
+  <td></td>
+  <td>
+    <%= link_to_function @column, "$('#database_concepts_#{@column.gsub(' ', '_')}_search').val('#{@column.gsub('_',' ')}'); $('#database_concepts_#{@column.gsub(' ', '_')}_search').focus();" %>
+      <span class='disabled' style="font-size: 8px">
+        <%#= 'unmapped' %><br />
+        <%= 'primary key<br />'.html_safe if @is_primary_key %>
+        <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
+        <%= 'has index' if @has_index %>
+      </span>
+  </td>
+  <td>
+    <table class="blank">
+      <tr>
+        <td>
+          <%# TODO: Move this into the assets/javascripts folder, no longer dependent on table and column for autocomplete? %>
+          <script type="text/javascript">
+$(document).ready(function(){
+  $("#database_concepts_<%= @column.gsub(' ', '_') %>_search")
+    .on( "keydown", function( event ) {
+         if ( event.keyCode === $.ui.keyCode.TAB &&
+           $( this ).data( "autocomplete" ).menu.active ) {
+             event.preventDefault();
+         }
+       })
+
+    .catcomplete({
+     source: "<%= search_available_mappings_url(source_id: @source.id, autocomplete: true) %>",
+     html: true,
+      select: function( event, ui ) {
+                $("#new_concept_id").val(ui.item ? ui.item.id : '');
+                $("#new_column").val("<%= @column %>");
+                $("#new_mapping_form").submit();
+              },
+      close: function( event, ui ){
+        // alert('close!');
+        //$("#new_mapping_form").submit();
+      }
+  });
+
+});
+          </script>
+
+          <%= text_field_tag "database_concepts[#{@column}][search]", '', onfocus: "$('#database_concepts_#{@column.gsub(' ', '_')}_search').change(); $('#database_concepts_#{@column.gsub(' ', '_')}_search').keydown();" %>
+          <%= hidden_field_tag "database_concepts[#{@column}][table]", params[:table] %>
+        </td>
+        <td id="database_concepts_<%= @column.gsub(' ', '_') %>_tree"></td>
+      </tr>
+    </table>
+  </td>
+</tr>

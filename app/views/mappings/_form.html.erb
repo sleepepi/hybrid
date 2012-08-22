@@ -1,0 +1,47 @@
+<td>
+  <%= @mapping.column %>
+</td>
+<td>
+  <% if @mapping.concept %>
+    <%= @mapping.concept.human_name %><br />
+    <% case @mapping.concept.concept_type when 'categorical' %>
+      Map Your Column Values to Concepts (specified by chosen concept)<br />
+      <% @mapping.column_values(current_user).each do |column_value| %>
+        <% val_mapping = @mapping.source.mappings.find_or_create_by_table_and_column_and_column_value(@mapping.table, @mapping.column, (column_value == nil) ? 'NULL' : column_value.to_s) %>
+        <% column_value = "&lt;![CDATA[]]&gt;" if column_value == '' %>
+        <% column_value = column_value.gsub('<', '&lt;').gsub('>', '&gt;').gsub('!', '&#33;').gsub('[', '&#91;').gsub(']', '&#93;').gsub(' ', '&#32;') if column_value and column_value.class == String %>
+        <% dccv_default = nil %>
+        <% if val_mapping %>
+          <% if val_mapping.concept and val_mapping.concept != @mapping.concept %>
+            <% dccv_default = val_mapping.concept_id %>
+          <% else %>
+            <% dccv_default = val_mapping.value %>
+          <% end %>
+        <% end %>
+        <%= hidden_field_tag "mappings[#{@mapping.id}][mapping_column_values][value_#{column_value}][is_null]", (column_value == nil) %>
+        <% if column_value == nil %>
+          <span class="disabled">NULL</span>:
+        <% else %>
+          <span class="disabled">'</span><%== column_value.to_s.gsub('&lt;&#33;&#91;CDATA&#91;', '').gsub('&#93;&#93;&gt;', '').gsub('&#32;', '&nbsp;') %><span class="disabled">'</span>:
+        <% end %>
+        <%= select_tag "mappings[#{@mapping.id}][mapping_column_values][value_#{column_value}][value]", options_for_select([['----',nil], ["Unknown #{@mapping.concept.human_name}", 'unknown']] + @mapping.concept.recommended_concepts.collect{|item| [item.human_name, item.id]}, dccv_default), style: 'width:180px' %><br />
+      <% end %>
+    <% when 'continuous' %>
+      Units: <%= select_tag "mappings[#{@mapping.id}][units]", options_for_select([["----", nil]] + @mapping.concept.unit_range, @mapping.units) %>
+    <% when 'boolean' %>
+      Boolean: Please Map True and False<br />
+      <% @mapping.column_values(current_user).each do |column_value| %>
+        <% val_mapping = @mapping.source.mappings.find_or_create_by_table_and_column_and_column_value(@mapping.table, @mapping.column, (column_value == nil) ? 'NULL' : column_value.to_s) %>
+        <% column_value = "&lt;![CDATA[]]&gt;" if column_value == '' %>
+        <% column_value = column_value.gsub('<', '&lt;').gsub('>', '&gt;').gsub('!', '&#33;').gsub('[', '&#91;').gsub(']', '&#93;').gsub(' ', '&#32;') if column_value and column_value.class == String %>
+        <%= hidden_field_tag "mappings[#{@mapping.id}][mapping_column_values][value_#{column_value}][is_null]", (column_value == nil) %>
+        <% if column_value == nil %>
+          <span class="disabled">NULL</span>:
+        <% else %>
+          <span class="disabled">'</span><%== column_value.to_s.gsub('&lt;&#33;&#91;CDATA&#91;', '').gsub('&#93;&#93;&gt;', '').gsub('&#32;', '&nbsp;') %><span class="disabled">'</span>:
+        <% end %>
+        <%= select_tag "mappings[#{@mapping.id}][mapping_column_values][value_#{column_value}][value]", options_for_select([['----',nil], ['unknown', 'unknown'], ['true','true'],['false','false']] + @mapping.concept.recommended_concepts.collect{|item| [item.human_name, item.id]}, val_mapping ? val_mapping.value.to_s : nil) %><br />
+      <% end %>
+    <% end %>
+  <% end %>
+</td>

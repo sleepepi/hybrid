@@ -1,0 +1,38 @@
+<% concept = @concept %>
+$("#popup").css({
+  "width": "816px" //"408px"
+});
+$("#popup_title").html("<%= escape_javascript(image_tag('contour/open.png', align: 'absmiddle', alt: '')) %> Concepts")
+$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><%= escape_javascript(render("layouts/expand_popup")) %><div id='popup_info'></div></div><div style='clear:both'></div>");
+$("#popup_content_left").html("<%= escape_javascript(render("concepts/folder_search") + '<div id="concept_folders">'.html_safe + render("concepts/folders") + '</div>'.html_safe) %>");
+$("#popup_info").html("<span class='quiet'><img align='absmiddle' alt='' src='<%= request.script_name %>/assets/icons/closed.png'/> Navigate through the folders by clicking the expand folder icon.<br /><img align='absmiddle' alt='' src='<%= request.script_name %>/assets/contour/information.png'/> Click on a concept for a detailed description.</span>");
+
+<% @concept = concept %>
+
+<% if @concept %>
+  <% @query = nil %>
+  $("#popup_info").html("<%= escape_javascript(render("concepts/info")) %>");
+<% end %>
+
+$(document.body).qtip('hide');loadPopup();
+centerPopup();
+
+$('#concept_search').watermark('Enter concept name or navigate folders.');
+
+<% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
+  $("#distribution").html('<div><div id="<%= @chart_element_id %>" style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px"></div></div><%= escape_javascript(@stats.to_s.html_safe) %>');
+
+  <% case @chart_type when 'column' %>
+    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>, <%= "[" + @categories.join(',') + "]" %>);
+  <% when 'pie' %>
+    drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'scatter' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'categorical_vs_continuous' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'continuous_vs_categorical' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'categorical_vs_categorical' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% end %>
+<% end %>
