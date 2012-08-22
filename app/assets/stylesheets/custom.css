@@ -1,0 +1,215 @@
+/*************************************
+   WELCOME TO THE CUSTOM STYLESHEET
+--------------------------------------
+              custom.css
+        BlueTrip CSS Framework
+    Put your custom styles in here.
+***************************************/
+
+/**************************************/
+/*           COLOR SCHEME             */
+/**************************************
+- black		#000
+- white		#fff
+- logo blue   #0E7799
+- link blue   #057080
+
+- dark blue   #094E63
+- light blue  #CDEDF7
+- orange      #EB6C20
+***************************************/
+
+/**************************************/
+/*            MAIN CONTENT            */
+/**************************************/
+
+input[type="text"], input[type="password"], textarea {
+  font-family: "Liberation Sans", Helvetica, Arial, sans-serif;
+}
+
+.collapsed {
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+.recently_updated {
+  background-color: #ffffcc;
+}
+
+/* TODO remove query_concepts and concept_folders if no longer needed */
+
+#query_concepts {
+/*  overflow-x: auto;*/
+/*  white-space: nowrap;*/
+}
+
+#concept_folders {
+/*  white-space:nowrap;*/
+/*  overflow:auto;*/
+/*  max-height:200px;*/
+/*  white-space:nowrap;*/
+/*  width:245px;*/
+}
+
+.and {
+/*  margin-left:20px;*/
+  color:#666;
+  font-size:0.8em;
+}
+
+.records_found {
+  color: #76CF00;
+}
+
+.errors_found {
+  color: #8a1f11;
+}
+
+.ui-autocomplete-category {
+	font-weight: bold;
+  padding: 0 .2em;
+  margin: 0 0 .2em;
+  line-height: 1.5;
+	color: #EB6C20;
+}
+
+ul.ui-autocomplete {
+  z-index: 20 !important;
+}
+
+#report_concepts {
+  font-size: 12px;
+}
+
+#concept_title {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*li.connectedSortable {
+  list-style-type: none;
+  float: left;
+  margin: 0px 10px 0px 0px;
+  padding: 5px;
+  background: #eee;
+  width: 143px;
+}*/
+
+ul.connectedSortable{
+  list-style-type: none;
+  padding: 2px 4px;
+  background:#FFF6BF;
+  border: 1px solid #FFD324;
+  min-height: 32px;
+}
+
+ul.connectedSortable li {
+  padding: 5px;
+  margin: 2px 0px;
+  cursor: move;
+}
+
+.ui-state-highlight {
+  height: 1.2em;
+}
+
+tr.labels th {
+  border: 1px solid #777;
+  padding: 5px;
+  background-color: #DFEFFC;
+}
+
+tr.labels th.total {
+  border-left: 2px solid #333;
+  text-align: center;
+}
+
+tr.even td, tr.odd td {
+  border: 1px solid #777;
+}
+
+tr.even td.total, tr.odd td.total {
+  border-left: 2px solid #333;
+}
+
+tr.even td {
+  background-color: #EFFFE2;
+}
+
+tr.even td.total {
+  background-color: #D2E0C7;
+}
+
+tr.odd td {
+/*  background-color: white;*/
+}
+
+tr.even-borderless td {
+  background-color: #FBFBFB;
+}
+
+tr.odd-borderless td {
+/*  background-color: white;*/
+}
+
+tr.odd td.total {
+  background-color: #EDEDED;
+}
+
+tr.overall {
+  font-weight: bold;
+  border: 2px solid #333;
+/*  border-right: 2px solid #333;*/
+}
+
+tr.overall td {
+  border-top: 2px solid #333;
+  border-left: 1px solid #777;
+  border-right: 1px solid #777;
+  background-color: #EDEDED;
+  padding: 5px;
+}
+
+tr.overall td.total {
+  background-color: #E0E0E0;
+  border-left: 2px solid #333;
+}
+
+.common a {
+  font-size:1.4em;
+  color: #094E63;
+}
+
+.common a:hover, .uncommon a:hover {
+  color: #EB6C20;
+}
+
+.uncommon a {
+  color: #057080;
+}
+
+.source_rule_text {
+  font-style: italic;
+  color: #EB6C20;
+  cursor: help;
+}
+
+.space {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.tutorial {
+  position: absolute;
+  top: 85px;
+/*  width: 956px;
+  margin:0 auto;
+*/  z-index: 0;
+  text-align: right;
+/*  background-color: white;*/
+/*  border: 1px solid black;*/
+}
+
+.nolink {
+  color: #404040;
+}
