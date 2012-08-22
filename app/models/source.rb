@@ -39,7 +39,7 @@ class Source < ActiveRecord::Base
   # Source Methods
 
   def all_dictionaries
-    dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
+    Dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
   end
 
   def all_source_joins

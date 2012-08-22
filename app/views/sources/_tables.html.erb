@@ -7,7 +7,7 @@
     <%= form_tag auto_map_source_path(@source), method: :post, remote: true, id: 'auto_map_form_all', style: 'display:inline' do %>
       <%= link_to_function 'Auto Map All Tables', "$('#auto_map_form_all').submit();showWaiting('#table_content', '', true);" %>
       to dictionary
-      <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
+      <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
       <br />
       Name Space
       <%= select_tag :all_namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.compact.uniq.sort{|a,b| a.downcase <=> b.downcase}.collect{|item| [item, item]}, params[:namespace]), name: 'namespace' %>
