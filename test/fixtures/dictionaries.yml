@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: Dictionary One
+  description: Dictionary is a description.
+  status: active
+  user: admin
+  visible: true
+  deleted: false
+
+meta:
+  name: Dictionary Meta
+  description: Dictionary Meta contains abstract higher level concepts
+  status: active
+  user: admin
+  visible: true
+  deleted: false

@@ -1,0 +1,51 @@
+<% width = '914px' %>
+<%= form_for(@source_join) do |f| %>
+  <% if @source_join.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@source_join.errors.count, "error") %> prohibited this source_join from being saved:</h2>
+
+      <ul>
+      <% @source_join.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <legend><%= @title %></legend>
+    <div class="field">
+      <%= f.label :source_id %><br />
+      <%= f.select :source_id, options_for_select([['---', nil]] + current_user.all_sources.collect{|s| [s.name, s.id]}, @source_join.source_id) %>
+    </div>
+    <div class="field">
+      <%= f.label :from_table %><br />
+      <%= f.text_field :from_table %>
+    </div>
+    <div class="field">
+      <%= f.label :from_column %><br />
+      <%= f.text_field :from_column %>
+    </div>
+    <div class="field">
+      <%= f.label :source_to_id %><br />
+      <%= f.select :source_to_id, options_for_select([['---', nil]] + current_user.all_sources.collect{|s| [s.name, s.id]}, @source_join.source_to_id) %>
+    </div>
+    <div class="field">
+      <%= f.label :to_table %><br />
+      <%= f.text_field :to_table %>
+    </div>
+    <div class="field">
+      <%= f.label :to_column %><br />
+      <%= f.text_field :to_column %>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <% form_name = @source_join.new_record? ? 'new_source_join' : "edit_source_join_#{@source_join.id}" %>
+    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@source_join.new_record? ? "Create Join" : "Update Join"), "$('##{form_name}').submit();", class: "button positive" %>
+    <% if @source_join.new_record? %>
+      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', source_joins_path(source_id: @source_join.source_id), class: 'button negative' %>
+    <% else %>
+      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', @source_join, class: 'button negative' %>
+    <% end %>
+  </div>
+<% end %>

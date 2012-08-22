@@ -1,0 +1,46 @@
+<% @title = "File Type: #{@file_type.name}" %>
+
+<h1><%= @title %></h1>
+
+<% if current_user.system_admin? %> <%# current_user.all_file_types.include?(@file_type) %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit File Type", edit_file_type_path(@file_type), class: 'button' %>
+  <%= link_to image_tag('contour/delete.png', alt: '') + "Delete File Type", @file_type, confirm: "Are you sure you want to delete File Type #{@file_type.name}?", method: :delete, class: 'button negative' %>
+<% end %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All File Types", file_types_path, class: 'button' %>
+
+<div style="clear:both"></div>
+
+<pre><%= @file_type.description %></pre>
+<br />
+
+<fieldset>
+  <br />
+  <p>
+    <b>Extension:</b>
+    <%= @file_type.extension %>
+  </p>
+
+  <p>
+    <b>Visible:</b>
+    <%= @file_type.visible %>
+  </p>
+
+  <p>
+    <b>User:</b>
+    <%= @file_type.user_id %>
+  </p>
+
+  <p>
+    <b>Sources:</b>
+    <ul>
+      <% @file_type.sources.each do |source| %>
+        <li><%= link_to source.name, source %></li>
+      <% end %>
+    </ul>
+  </p>
+
+  <p>
+    <b>Dictionary:</b>
+    <%= @file_type.dictionary_id %>
+  </p>
+</fieldset>

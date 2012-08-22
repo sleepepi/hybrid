@@ -1,0 +1,248 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  # id: 1
+  user: valid
+  name: Source One
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+two:
+  # id: 2
+  user: admin
+  name: Source Two
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+three:
+  # id: 3
+  user: admin
+  name: Source Three
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+linked_source_a:
+  # id: 4
+  user: admin
+  name: Linked Source A
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+linked_source_b:
+  # id: 5
+  user: admin
+  name: Linked Source B
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+mysql:
+  # id: 6
+  user: admin
+  name: Source MySQL
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: mysql
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+mssql:
+  # id: 7
+  user: admin
+  name: Source MsSQL2008
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: mssql2008
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+i2b2:
+  # id: 8
+  user: admin
+  name: Source i2b2
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: i2b2
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+elastic:
+  # id: 11
+  user: admin
+  name: Source Elastic Repo
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: elastic
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+ftp:
+  # id: 12
+  user: admin
+  name: Source FTP Repo
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: ftp
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+mounted:
+  # id: 13
+  user: admin
+  name: Source Mounted Repo
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: mounted
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+fully_mapped_test_data_source:
+  # id: 14
+  user: admin
+  name: Fully Mapped Test Data source
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: developer
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString
+
+i2b2_valid:
+  # id: 15
+  user: valid
+  name: Source i2b2 valid user
+  description: MyString
+  host: http://localhost
+  port: 3306
+  wrapper: i2b2
+  database: database
+  username: username
+  password: password
+  deleted: false
+  visible: true
+  repository: developer
+  file_server_host: MyString
+  file_server_path: MyString
+  file_server_login: MyString
+  file_server_password: MyString

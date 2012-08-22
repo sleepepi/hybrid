@@ -1,0 +1,33 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  source: one
+  from_table: MyString
+  from_column: MyString
+  to_table: MyString
+  to_column: MyString
+  # source_to:
+
+two:
+  source: one
+  from_table: MyString
+  from_column: MyString
+  to_table: MyString
+  to_column: MyString
+  # source_to:
+
+three:
+  source: linked_source_a
+  from_table: table
+  from_column: from_column_join
+  to_table: table
+  to_column: to_column_join
+  source_to: linked_source_b
+
+four:
+  source: two
+  from_table: table
+  from_column: to_column_join
+  to_table: table2
+  to_column: from_column_join
+  # source_to: two

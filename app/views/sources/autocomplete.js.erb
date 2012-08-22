@@ -1,0 +1,14 @@
+<% if @sources.size > 0 %>
+<%# Returns a JSON object of Sources %>
+[<%= @sources.collect{|s| "{\"id\":\"#{s.id}\", \"label\":\"#{highlight(s.name, @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{s.name}\", \"category\":\"\"}" }.join(',').html_safe %>]
+<%#=
+  { "id": "Erithacus rubecula", "label": "<span class='quiet small'><%= escape_javascript(image_tag 'icons/folder.png', size: '12x12') %=>Folders/Something/Administration</span><br/>&nbsp;&nbsp;&nbsp;<span style='color:black;font-weight:bold'>Euro</span>pean Robin", "value": "European Robin" },
+  { "id": "Cercotrichas galactotes", "label": "Rufous-Tailed Scrub Robin", "value": "Rufous-Tailed Scrub Robin" },
+  { "id": "Irania gutturalis", "label": "White-throated Robin", "value": "White-throated Robin" },
+  { "id": "Turdus migratorius", "label": "American Robin", "value": "American Robin" }
+%>
+<% else %>
+[
+  {"label": "", "value": "", "category": "<%= escape_javascript(image_tag 'contour/warning.png', size: '12x12', style: 'vertical-align:text-bottom') %> <span class='errors_found'>No Matching Sources Found</span>", "category_only": "true"}
+]
+<% end %>

@@ -1,0 +1,46 @@
+<%= form_for(@file_type) do |f| %>
+  <% if @file_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@file_type.errors.count, "error") %> prohibited this file_type from being saved:</h2>
+
+      <ul>
+      <% @file_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <legend><%= @title %></legend>
+    <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :extension %><br />
+      <%= f.text_field :extension %>
+    </div>
+    <div class="field">
+      <%= f.label :description %><br />
+      <%= f.text_area :description %>
+    </div>
+    <div class="field">
+      <%= f.label :visible %><br />
+      <%= f.check_box :visible %>
+    </div>
+    <div class="field">
+      <%= f.label :user_id %><br />
+      <%= f.number_field :user_id %>
+    </div>
+    <div class="field">
+      <%= f.label :dictionary_id %><br />
+      <%= f.number_field :dictionary_id %>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <% form_name = @file_type.new_record? ? 'new_file_type' : "edit_file_type_#{@file_type.id}" %>
+    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@file_type.new_record? ? "Create File Type" : "Update File Type"), "$('##{form_name}').submit();", class: "button positive" %>
+    <%= cancel %>
+  </div>
+<% end %>

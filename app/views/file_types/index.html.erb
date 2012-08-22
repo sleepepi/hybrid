@@ -1,0 +1,38 @@
+<% @title = 'File Types' %>
+<h1><%= @title %></h1>
+
+<% if current_user.system_admin? %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New File Type", new_file_type_path, class: 'button positive' %>
+<% end %>
+
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Extension</th>
+      <th>Description</th>
+      <th>Visible</th>
+      <th>User</th>
+      <th>Sources</th>
+      <th>Dictionary</th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @file_types.each do |file_type| %>
+    <tr>
+      <td><%= link_to file_type.name, file_type %></td>
+      <td><%= file_type.extension %></td>
+      <td><%= file_type.description %></td>
+      <td><%= file_type.visible %></td>
+      <td><%= link_to file_type.user.name, file_type.user if file_type.user %></td>
+      <td><%= file_type.sources.collect{|s| link_to(s.name, s)}.join(', ').html_safe %></td>
+      <td><%= link_to file_type.dictionary.name, file_type.dictionary if file_type.dictionary %></td>
+      <td><%= link_to 'Edit', edit_file_type_path(file_type) %></td>
+      <td><%= link_to 'Destroy', file_type, confirm: 'Are you sure?', method: :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>

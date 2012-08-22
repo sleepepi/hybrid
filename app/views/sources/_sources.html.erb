@@ -1,0 +1,43 @@
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table style="width:100%"><col width="1px" />
+    <tr>
+      <th>Visible</th>
+      <th>Name</th>
+      <th>Creator</th>
+      <th>Wrapper</th>
+      <% if current_user.system_admin? %>
+      <th>Host</th>
+      <th>Port</th>
+      <th>Database</th>
+      <th>Username</th>
+      <th>Rules</th>
+      <th>File Type</th>
+      <th></th>
+      <th></th>
+      <% end %>
+    </tr>
+
+    <% @sources.each do |source| %>
+      <tr>
+        <td style="text-align:center"><%= check_box_tag :source, :visible, source.visible?, disabled: true %></td>
+        <td><%= link_to_if (source.user_has_action_group?(current_user, "All Read") or source.user_has_action_group?(current_user, "All Write")),  source.name, source %></td>
+        <td><%= link_to source.user.name, source.user %></td>
+        <td><%= source.human_wrapper %></td>
+        <% if current_user.system_admin? %>
+        <td><%= source.host.blank? ? '<span class="quiet">localhost</span>'.html_safe : source.host %></td>
+        <td><%= source.port.blank? ? '<span class="quiet">3306</span>'.html_safe : source.port %></td>
+        <td><%= source.database %></td>
+        <td><%= source.username %></td>
+        <td><%= link_to source.source_rules.size, source_rules_path(source_id: source.id) %></td>
+        <td><%= link_to source.source_file_types.size, source_file_types_path(source_id: source.id) %></td>
+        <td><%= link_to 'Edit', edit_source_path(source) %></td>
+        <td><%= link_to 'Destroy', source, confirm: 'Are you sure?', method: :delete %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<center><%= paginate @sources %></center>

@@ -1,0 +1,85 @@
+<% width = '914px' %>
+<%= form_for(@source) do |f| %>
+  <% if @source.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@source.errors.count, "error") %> prohibited this source from being saved:</h2>
+
+      <ul>
+      <% @source.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <legend><%= @title %></legend>
+    <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :description %><br />
+      <%= f.text_area :description, rows: 7, style: "width:#{width}" %>
+    </div>
+
+
+    <div class="field">
+      <%= f.label :visible %><br />
+      <%= f.check_box :visible %>
+    </div>
+    <div class="field">
+      <%= f.label :wrapper %><br />
+      <%= f.select :wrapper, Source::WRAPPER %>
+    </div>
+
+    <div class="field">
+      <%= f.label :host %><br />
+      <%= f.text_field :host, style: "width:#{width}" %>
+      <%= javascript_tag "$('#source_host').watermark('localhost');" %>
+    </div>
+    <div class="field">
+      <%= f.label :port %><br />
+      <%= f.text_field :port, style: "width:#{width}" %>
+      <%= javascript_tag "$('#source_port').watermark('3306');" %>
+    </div>
+    <div class="field"><%= f.label :database %><br />
+      <%= f.text_field :database, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :username %><br />
+      <%= f.text_field :username, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password, style: "width:#{width}", value: @source.password %>
+    </div>
+    <div class="field">
+      <%= f.label :repository %><br />
+      <%= f.select :repository, Source::REPOSITORY %>
+    </div>
+    <div class="field">
+      <%= f.label :file_server_host %><br />
+      <%= f.text_field :file_server_host, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :file_server_path %><br />
+      <%= f.text_field :file_server_path, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :file_server_login %><br />
+      <%= f.text_field :file_server_login, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :file_server_password %><br />
+      <%= f.password_field :file_server_password, style: "width:#{width}", value: @source.file_server_password %>
+    </div>
+
+  </fieldset>
+
+  <div class="actions">
+    <% form_name = @source.new_record? ? 'new_source' : "edit_source_#{@source.id}" %>
+    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@source.new_record? ? "Create Source" : "Update Source"), "$('##{form_name}').submit();", class: "button positive" %>
+    <%= cancel %>
+  </div>
+<% end %>

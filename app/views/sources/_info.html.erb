@@ -1,0 +1,78 @@
+<h3 style="margin-top:0px"><%= @source.name %></h3>
+<br />
+<% if @query and @query.sources.include?(@source) %>
+  <% query_source = @query.query_sources.find_by_source_id(@source.id) %>
+  <%= link_to image_tag('contour/delete.png', align: 'absmiddle', alt: '') + "Remove from Search", query_source, method: :delete, remote: true, class: 'button negative', confirm: "Are you sure you want to remove #{@source.name} from your query?" %>
+<% else %>
+  <%= link_to image_tag('contour/addfile.png', align: 'absmiddle', alt: '') + "Add to Search", query_sources_path(query_id: @query.id, selected_source_id: @source.id), method: :post, remote: true, title: @source.name, class: 'button positive', onclick: "disablePopup();" if @query %>
+<% end %>
+
+<div style="clear:both"></div>
+<p class="quiet small"><%= sanitize @source.description, attributes: %w(href target) %></p>
+
+<% if @source.user_has_action?(current_user, "view data source general information") or @source.user_has_action?(current_user, "get count") %>
+  <h4>Summary Counts</h4>
+  <ul>
+    <% @source.derived_concepts.where(concept_type: 'identifier').order('display_name').uniq.each do |concept| %>
+      <% tables = @source.concept_tables(concept) %>
+      <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
+      <% join_conditions = join_conditions_hash[:result] %>
+      <% if join_conditions_hash[:error].blank? %>
+        <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, concept) %>
+          <% if result_hash[:error].blank? %>
+            <li><%= result_hash[:result] %> <%= concept.human_name %><br /><br /></li>
+          <% else %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <li><%= pluralize @source.mappings.size, 'Mapped Concept' %></li>
+  </ul>
+
+  <h4>Available File Types</h4>
+  <ul>
+    <% if @source.file_types.size > 0 %>
+
+      <% @source.file_types.each do |file_type| %>
+        <li>
+          <%= file_type.name_and_short_extension %><br /><br />
+        </li>
+      <% end %>
+    <% else %>
+      <li class="quiet">No Files Available for Download</li>
+    <% end %>
+  </ul>
+
+  <% if @source.all_linked_sources.size > 0 %>
+    <h4>Cross-Linked Data Sources</h4>
+    <ul>
+      <% @source.all_linked_sources.sort{|a,b| a.name <=> b.name}.each do |linked_source| %>
+        <li><%= link_to linked_source.name, source_path(linked_source, popup: true, query_id: @query.id), remote: true, method: :get %><br /><br /></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+
+<h4>Data Source Rules</h4>
+<% SourceRule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
+  <ul style="list-style-type: none;margin-left: 0px;">
+    <li>
+      <%= check_box_tag rule_group, '1', false, disabled: true, class: "rule_group_#{index}_parent" %>
+      <b><%= rule_group %></b>
+      <ul style="list-style-type: none;">
+        <% rules.each do |action| %>
+          <li style="<%= @source.user_has_action?(current_user, action) ? 'color:green;' : 'text-decoration:line-through' %>"><%= check_box_tag "rules[#{action.gsub(' ', '_')}]", '1', @source.user_has_action?(current_user, action), disabled: true, class: "rule_group_#{index}" %> <%= action %></li>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+  <%= javascript_tag "toggleCheckboxGroupParent(#{index});" %>
+<% end %>
+
+<% if @source.all_dictionaries.size > 0 %>
+  <h4>Associated dictionaries</h4>
+  <ul>
+    <% @source.all_dictionaries.sort{|a,b| a.name <=> b.name}.each do |dictionary| %>
+      <li><%= link_to dictionary.name, concepts_path(dictionary_id: dictionary.id), target: '_blank' %> <% if false %> <%= image_tag('contour/xls.png', style: 'vertical-align:text-bottom') %> <%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary) %> <% end %><br /><br /></li>
+    <% end %>
+  </ul>
+<% end %>

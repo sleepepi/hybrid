@@ -1,0 +1,25 @@
+<% result_hash = @source.tables(current_user) %>
+<% (@tables, @error) = [result_hash[:result], result_hash[:error]] %>
+
+<% if not @error.blank? %>
+  <span class="quiet"><center><%= image_tag 'contour/warning.png', size: '13x13', align: 'absmiddle' %> <%= @error %></center></span>
+<% elsif @tables.size > 0 %>
+
+  <center>
+  <%= form_tag table_columns_source_path(@source), method: :post, id: "table_columns_search", style: 'margin-bottom:0px' do %>
+    <% if false %>  Search <%= text_field_tag 'search', params[:search] %> <% end %>
+    Tables <%= select_tag 'table', options_for_select(@tables.sort.collect{|t| [t,t]}, params[:table]) %>
+    <%= check_box_tag "filter_unmapped", '1', params[:filter_unmapped] %> Filter Partially Mapped
+  <% end %>
+  </center>
+
+  <%= javascript_tag do %>
+    $(function(){
+      $.post($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script");
+    });
+  <% end %>
+<% else %>
+  <span class="quiet"><center><%= image_tag 'contour/warning.png', size: '13x13', align: 'absmiddle' %> No Tables Retrieved</center></span>
+<% end %>
+
+<div id="table_content"><br /><center><%= image_tag 'ajax-loader.gif' %> Loading Table Mappings</center></div>

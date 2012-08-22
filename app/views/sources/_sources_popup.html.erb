@@ -1,0 +1,8 @@
+<ul>
+<% @sources.each do |source| %>
+  <li>
+  <% link_name = highlight(source.name, @search_terms, highlighter: '<b>\1</b>') %>
+  <%= link_to link_name, source_path(source, popup: true, query_id: @query.id), remote: true, method: :get %><br /><br />
+  </li>
+<% end %>
+</ul>

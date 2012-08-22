@@ -1,0 +1,47 @@
+<% @title = "Join: #{@source_join.name}" %>
+
+<h1><%= @title %></h1>
+
+<% if current_user.all_source_joins.include?(@source_join) %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit Join", edit_source_join_path(@source_join), class: 'button' %>
+  <%= link_to image_tag('contour/delete.png', alt: '') + "Delete Join", @source_join, confirm: "Are you sure you want to delete Join #{@source_join.name}?", method: :delete, class: 'button negative' %>
+<% end %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Joins", source_joins_path, class: 'button' %>
+
+<div style="clear:both"></div>
+
+<fieldset>
+  <br />
+  <p>
+    <b>Source:</b>
+    <%= link_to @source_join.source.name, @source_join.source if @source_join.source %>
+  </p>
+
+  <p>
+    <b>From table:</b>
+    <%= @source_join.from_table %>
+  </p>
+
+  <p>
+    <b>From column:</b>
+    <%= @source_join.from_column %>
+  </p>
+
+  <% if @source_join.source_to and @source_join.source_to != @source_join.source %>
+    <p>
+      <b>To Source:</b>
+      <%= link_to @source_join.source_to.name, @source_join.source_to %>
+    </p>
+  <% end %>
+
+
+  <p>
+    <b>To table:</b>
+    <%= @source_join.to_table %>
+  </p>
+
+  <p>
+    <b>To column:</b>
+    <%= @source_join.to_column %>
+  </p>
+</fieldset>

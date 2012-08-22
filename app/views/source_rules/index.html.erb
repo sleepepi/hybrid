@@ -1,0 +1,35 @@
+<% @title = "#{@source.name} Rules" %>
+<h1>
+  <%= link_to @source.name, @source %> &raquo;Rules
+</h1>
+
+<%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Rule", new_source_rule_path(source_id: @source.id), class: 'button positive' %>
+
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table>
+    <tr>
+      <th>Blocked</th>
+      <th>Name</th>
+      <th>Actions</th>
+      <th>Users</th>
+      <th></th>
+    </tr>
+
+  <% @source_rules.each do |source_rule| %>
+    <tr>
+      <td style="text-align:center"><%= check_box_tag :source_rule, :blocked, source_rule.blocked, disabled: true %></td>
+      <td><%= link_to source_rule.name, source_rule %></td>
+      <td style="<%= 'text-decoration:line-through' if source_rule.blocked %>"><%= (source_rule.actions || []).join(', ') %></td>
+      <td>
+        <%= (source_rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| link_to u.name, u}.join(', ').html_safe %>
+      </td>
+      <td style="vertical-align:middle">
+        <%= link_to image_tag('contour/edit.png', alt: ''), edit_source_rule_path(source_rule) %>
+        <%= link_to image_tag('contour/delete.png', alt: ''), source_rule_path(source_rule, source_id: @source.id), confirm: "Are you sure you want to delete Rule #{source_rule.name}?", method: :delete %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</div>

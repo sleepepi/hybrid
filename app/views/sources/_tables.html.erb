@@ -1,0 +1,24 @@
+<% result_hash = @source.tables(current_user) %>
+<% (@tables, @error) = [result_hash[:result], result_hash[:error]] %>
+
+<fieldset>
+  <legend>Table Mappings</legend>
+  <% if @source.user_has_action?(current_user, "edit data source mappings") %>
+    <%= form_tag auto_map_source_path(@source), method: :post, remote: true, id: 'auto_map_form_all', style: 'display:inline' do %>
+      <%= link_to_function 'Auto Map All Tables', "$('#auto_map_form_all').submit();showWaiting('#table_content', '', true);" %>
+      to dictionary
+      <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
+      <br />
+      Name Space
+      <%= select_tag :all_namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.compact.uniq.sort{|a,b| a.downcase <=> b.downcase}.collect{|item| [item, item]}, params[:namespace]), name: 'namespace' %>
+    <% end %><br />
+    <%= link_to image_tag('contour/delete.png', style: 'border:none', align: 'absmiddle', size: '15x15', title: 'Delete all associated Data Source Mappings') + " Delete All Mappings", remove_all_mappings_source_path(@source), method: :post, confirm: "Are you sure you want to DELETE all associated data source mappings for Data Source #{@source.name}?" %>
+  <% end %>
+  <ul>
+  <% @tables.sort.each do |table| %>
+    <li><strong><%= table %></strong>
+      <% table_div_name = table.gsub(/[^\w\-]/, '_') %>
+      <span id="table_<%= table_div_name %>_columns_mapped"><%= @source.table_columns_mapped(current_user, table) %></span></li>
+  <% end %>
+  </ul>
+</fieldset>

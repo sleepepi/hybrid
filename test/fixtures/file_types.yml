@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  extension: .MyString
+  description: MyText
+  visible: false
+  user: admin
+  dictionary: one
+
+two:
+  name: MyString
+  extension: .MyString
+  description: MyText
+  visible: false
+  user: admin
+  dictionary: one
+
+three:
+  name: MyString
+  extension: .MyString
+  description: MyText
+  visible: false
+  user: admin
+  dictionary: one
+
+four:
+  name: MyString
+  extension: .MyString
+  description: MyText
+  visible: false
+  user: admin
+  dictionary: one

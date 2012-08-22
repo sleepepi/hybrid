@@ -1,0 +1,90 @@
+<% @title = "Source: #{@source.name}" %>
+
+<h1><%= @title %></h1>
+
+<% if @source.user_has_action?(current_user, "edit data source connection information") %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit Source", edit_source_path(@source), class: 'button' %>
+  <%= link_to image_tag('contour/delete.png', alt: '') + "Delete Source", @source, confirm: "Are you sure you want to delete Source #{@source.name}?", method: :delete, class: 'button negative' %>
+<% end %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Sources", sources_path, class: 'button' %>
+<% if @source.user_has_action?(current_user, "edit data source rules") %>
+  <%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Rules", source_rules_path(source_id: @source.id), class: 'button' %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Rule", new_source_rule_path(source_id: @source.id), class: 'button positive' %>
+<% end %>
+<% if @source.user_has_action?(current_user, "edit data source mappings") %>
+  <%= link_to image_tag('contour/mydocuments.png', alt: '') + "View File Types", source_file_types_path(source_id: @source.id), class: 'button' %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Associate File Type", new_source_file_type_path(source_id: @source.id), class: 'button positive' %>
+<% end %>
+
+<div style="clear:both"></div>
+
+<pre><%= sanitize @source.description, attributes: %w(href target) %></pre>
+<br />
+
+<p>
+  <b>Creator:</b>
+  <%= link_to @source.user.name, @source.user if @source.user %>
+</p>
+
+<p>
+  <b>Visible:</b>
+  <%= check_box_tag 'source', 'visible', @source.visible?, disabled: true %>
+</p>
+
+<table class="blank padded" style="width:100%"><col width="50%"/><col width="50%"/>
+  <tr>
+  <td>
+    <%= render partial: 'sources/tables' %>
+  </td>
+  <td>
+
+      <% if @source.has_repository?(current_user) and @source.user_has_action?(current_user, "edit data source connection information") %>
+
+        <fieldset>
+          <legend>Data Source Wrapper: <%= @source.human_wrapper %></legend>
+          <div class="field">
+            <b>Source Host:</b>
+            <%= @source.host.blank? ? '<span class="quiet">localhost</span>'.html_safe : @source.host %>:<%= @source.port.blank? ? '<span class="quiet">3306</span>'.html_safe : @source.port %>
+          </div>
+          <br />
+          <div class="field">
+            <b>Source Database:</b>
+            <%= @source.database %>
+          </div>
+          <br />
+          <div class="field">
+            <b>Source Username:</b>
+            <%= @source.username %>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>File Repository: <%= @source.human_repository %></legend>
+
+          <div class="field">
+            <b>File Server Host:</b>
+              <%= @source.file_server_host %>
+              <% result_hash = @source.file_server_available?(current_user) %>
+              <% if result_hash[:result] %>
+                <%= image_tag('contour/tag_green.png', style: 'vertical-align:text-bottom') %> Available
+              <% else %>
+                <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %> Not Connected: <%= result_hash[:error] %>
+              <% end %>
+          </div>
+          <br />
+          <div class="field">
+            <b>File Server Path:</b>
+            <%= @source.file_server_path %>
+          </div>
+          <br />
+          <div class="field">
+            <b>File Server Login:</b>
+            <%= @source.file_server_login %>
+          </div>
+        </fieldset>
+      <% end %>
+    </td>
+  </tr>
+</table>
+
+<%= render partial: 'sources/source_mappings' %>

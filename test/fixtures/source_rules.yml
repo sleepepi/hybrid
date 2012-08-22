@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  source: two
+  actions: [edit data source rules, get count]
+  users: [<%= ActiveRecord::Fixtures.identify(:admin) %>]
+  blocked: false
+
+two:
+  source: two
+  actions: [get count]
+  users: [<%= ActiveRecord::Fixtures.identify(:valid) %>]
+  blocked: true

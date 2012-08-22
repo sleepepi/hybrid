@@ -1,0 +1,55 @@
+<div class="sub-title">
+  Table <b><%= params[:table] %></b>
+  <% if @source.user_has_action?(current_user, "edit data source mappings") %>
+    <%= form_tag auto_map_source_path(@source, table: params[:table]), method: :post, remote: true, id: 'auto_map_form' do %>
+      <%= link_to_function 'Auto Map Table', "$('#auto_map_form').submit();showWaiting('#table_content', '', true);" %>
+      to dictionary
+      <%= select_tag :dictionary_id, options_for_select([["-All-", 'all']] + dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]) %>
+      Name Space
+      <%= select_tag :namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.uniq.sort{|a,b| a.to_s.downcase <=> b.to_s.downcase}.collect{|item| [item, item]}, params[:namespace]) %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @error.blank? %>
+  <%#= check_box_tag "filter_unmapped", '1', params['filter_unmapped'], onchange: remote_function(url: get_columns_database_path(table: params[:table], page: params[:page].to_i), method: :post, with: "'&'+$('filter_unmapped').serialize()") + ";showWaiting('table_content'); return false;" %>
+  <%= render partial: 'mappings/mappings' %>
+  <%#= render partial: 'database_concepts/search' %>
+<% else %>
+  <%= image_tag 'contour/warning.png', size: '15x15', align: 'absmiddle' %> <%= @error %>
+<% end %>
+
+<% if @max_pages.to_i > 1 %>
+
+  <% page_list = [] %>
+  <% (1..@max_pages).each do |page_number| %>
+    <% if [1,2, @max_pages - 1, @max_pages].include?(page_number) or (page_number - params[:page].to_i).abs < 5 %>
+      <% page_list << page_number %>
+    <% else %>
+      <% page_list << nil unless page_list.last == nil %>
+    <% end %>
+  <% end %>
+
+  <center>
+    <% if params[:page].to_i == 1 %>
+      <span class="quiet">&lsaquo; Previous</span>
+    <% else %>
+      <%= link_to '&lsaquo; Previous'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i - 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
+    <% end %>
+  <% page_list.each do |page_number| %>
+    <% if page_number == nil %>
+      <span class="gap">&hellip;</span>
+    <% elsif params[:page].to_i == page_number %>
+      <%= page_number %>
+    <% else %>
+      <%= link_to page_number, table_columns_source_path(@source, table: params[:table], page: page_number, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
+    <% end %>
+  <% end %>
+    <% if params[:page].to_i == @max_pages %>
+      <span class="quiet">Next &rsaquo;</span>
+    <% else %>
+      <%= link_to 'Next &rsaquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i + 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
+    <% end %>
+  </center>
+
+<% end %>

@@ -1,0 +1,18 @@
+<% @title = 'Sources' %>
+<h1><%= @title %></h1>
+
+<% if current_user.system_admin? %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Source", new_source_path, class: 'button positive' %>
+<% end %>
+
+<%= form_tag sources_path, method: :get, remote: true, id: "sources_search" do %>
+  <%= hidden_field_tag :order %>
+  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
+  <div id="sources"><div style="clear:both"></div><br /><center><%= image_tag "ajax-loader.gif" %></center></div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    $.get($("#sources_search").attr("action"), $("#sources_search").serialize(), null, "script");
+  });
+<% end %>

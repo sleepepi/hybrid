@@ -1,0 +1,33 @@
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table style="width:100%">
+    <tr>
+      <th>From Source</th>
+      <th>From table</th>
+      <th>From column</th>
+      <th>To Source</th>
+      <th>To table</th>
+      <th>To column</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+
+  <% @source_joins.each do |source_join| %>
+    <tr>
+      <td><%= source_join.source.name if source_join.source %></td>
+      <td><%= source_join.from_table %></td>
+      <td><%= source_join.from_column %></td>
+      <td><%= source_join.source_to.name if source_join.source_to %></td>
+      <td><%= source_join.to_table %></td>
+      <td><%= source_join.to_column %></td>
+      <td><%= link_to 'Show', source_join %></td>
+      <td><%= link_to 'Edit', edit_source_join_path(source_join) %></td>
+      <td><%= link_to 'Destroy', source_join, confirm: 'Are you sure?', method: :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+
+<center><%= paginate @source_joins %></center>
