@@ -1,0 +1,21 @@
+<h1>Listing query_users</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @query_users.each do |query_user| %>
+  <tr>
+    <td><%= link_to 'Show', query_user %></td>
+    <td><%= link_to 'Edit', edit_query_user_path(query_user) %></td>
+    <td><%= link_to 'Destroy', query_user, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Query user', new_query_user_path %>
