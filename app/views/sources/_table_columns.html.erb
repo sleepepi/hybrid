@@ -3,8 +3,8 @@
   <% if @source.user_has_action?(current_user, "edit data source mappings") %>
     <%= form_tag auto_map_source_path(@source, table: params[:table]), method: :post, remote: true, id: 'auto_map_form' do %>
       <%= link_to_function 'Auto Map Table', "$('#auto_map_form').submit();showWaiting('#table_content', '', true);" %>
-      to dictionary
-      <%= select_tag :dictionary_id, options_for_select([["-All-", 'all']] + dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]) %>
+      to Dictionary
+      <%= select_tag :dictionary_id, options_for_select([["-All-", 'all']] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]) %>
       Name Space
       <%= select_tag :namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.uniq.sort{|a,b| a.to_s.downcase <=> b.to_s.downcase}.collect{|item| [item, item]}, params[:namespace]) %>
     <% end %>
