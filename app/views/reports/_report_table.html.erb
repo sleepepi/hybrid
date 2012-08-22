@@ -1,0 +1,43 @@
+<% if @report.report_concepts.size > 0 %>
+  <% result_hash = @report.finalize_report_table(current_user) %>
+
+  <% if result_hash[:error].blank? %>
+    <%= link_to image_tag("contour/xls.png", alt: '') + 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'button' %>
+    <%#= link_to_function 'Show/Hide Percentages', "$('.percent').toggle();" %><br /><br />
+    <table class="blank" style="border-collapse:collapse;border:1px solid #777;width:100%">
+      <thead>
+        <tr class="labels">
+          <% result_hash[:result][0].each_with_index do |item, position| %>
+            <th class="<%= (result_hash[:result][0].size - position <= 2) ? 'total' : '' %>">
+              <%= item.to_s.split(' - ')[0..-2].join(' - ') %>
+            </th>
+          <% end %>
+        </tr>
+        <tr class="labels">
+          <% result_hash[:result][0].each_with_index do |item, position| %>
+            <th class="<%= (result_hash[:result][0].size - position <= 2) ? 'total' : '' %>">
+              <% if item.to_s.split(' - ').last == 'Count' %>
+                &sum;
+              <% else %>
+                <%= item.to_s.gsub(/\(Count\)$/, '(&sum;)').split(' - ').last.to_s.html_safe %>
+              <% end %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% result_hash[:result][1..-1].each do |row_values| %>
+          <tr class="<%= row_values.first == 'Total' ? 'overall' : cycle('even', 'odd') %>">
+            <% row_values.each_with_index do |item, position| %>
+              <td class="<%= (row_values.size - position <= 2) ? 'total' : '' %>" style="text-align:center">
+                <%= item.to_s.html_safe %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %> <%= result_hash[:error].html_safe %><br />
+  <% end %>
+<% end %>

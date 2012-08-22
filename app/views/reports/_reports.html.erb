@@ -1,0 +1,4 @@
+<% @query.true_reports.each_with_index do |report| %>
+  <% @report = report %>
+  <%= render partial: 'reports/show' %>
+<% end %>

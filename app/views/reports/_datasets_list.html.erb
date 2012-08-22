@@ -1,0 +1,1 @@
+<%= select_tag :template_report_id, options_for_select([['--Blank Dataset--', nil],['--Or Copy An Existing Dataset--',nil, {disabled: true}]] + current_user.true_datasets.collect{|r| ["#{r.name} (#{pluralize(r.report_concepts.size, 'concept')})", r.id]}), id: 'dataset_template_id' %>

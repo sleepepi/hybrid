@@ -1,0 +1,5 @@
+$("#report_<%= @report.id %>_name").html("<%= escape_javascript(render("reports/name")) %>");
+$("#reports_container").html("<%= escape_javascript(render("reports/reports")) %>");
+$("#reports_list").html("<%= escape_javascript(render("reports/reports_list")) %>");
+$("#datasets_container").html("<%= escape_javascript(render("reports/datasets")) %>");
+$("#datasets_list").html("<%= escape_javascript(render("reports/datasets_list")) %>");
