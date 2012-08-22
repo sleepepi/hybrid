@@ -25,7 +25,7 @@ gem 'aqueduct-ftp',         '~> 0.1.0'
 gem 'aqueduct-mounted',     '~> 0.1.0'
 gem 'aqueduct-mysql',       '~> 0.1.0'
 # gem 'aqueduct-mssql2008',   '~> 0.1.0'
-# gem 'aqueduct-i2b2',        '~> 0.1.0'
+gem 'aqueduct-i2b2',        '~> 0.1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
