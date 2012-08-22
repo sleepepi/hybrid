@@ -57,7 +57,6 @@ Hybrid::Application.routes.draw do
   end
 
   resources :query_sources
-  resources :query_users
 
   resources :reports do
     member do
