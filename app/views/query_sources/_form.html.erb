@@ -1,0 +1,17 @@
+<%= form_for(@query_source) do |f| %>
+  <% if @query_source.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@query_source.errors.count, "error") %> prohibited this query_source from being saved:</h2>
+
+      <ul>
+      <% @query_source.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

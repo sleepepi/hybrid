@@ -1,0 +1,12 @@
+$("#popup").css({
+  "width": "816px"
+});
+$("#popup_title").html("<%= escape_javascript(image_tag('contour/open.png', align: 'absmiddle', alt: '')) %> Sources")
+$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
+$("#popup_content_left").html("<%= escape_javascript(render("sources/sources_search") + '<div id="sources">'.html_safe + render("sources/sources_popup") + '</div>'.html_safe) %>");
+$("#popup_info").html("<%= escape_javascript(render("sources/info")) %>");
+$(document.body).qtip('hide');loadPopup();
+centerPopup();
+
+$('#sources_search').watermark('Enter source name to filter list.');
+$('#sources_search').focus();

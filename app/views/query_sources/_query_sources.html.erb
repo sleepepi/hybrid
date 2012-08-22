@@ -1,0 +1,6 @@
+<%#= @query.query_sources.collect{|query_source| link_to(query_source.source.name, query_source, method: :delete, remote: true)}.join(', ').html_safe %>
+
+<% @query.query_sources.each do |query_source| %>
+  <%= link_to query_source.source.name, query_source, method: :get, remote: true, class: 'faded_delete_icon', 'data-image-id' => "query_source_#{query_source.id}_delete_icon" %>
+  <%= link_to image_tag('contour/blank.png', size: '13x13', style: 'vertical-align:text-bottom;margin-right:8px', class: 'faded_delete_icon', 'data-image-id' => "query_source_#{query_source.id}_delete_icon", id: "query_source_#{query_source.id}_delete_icon"), query_source, method: :delete, remote: true, confirm: "Are you sure you want to remove #{query_source.source.name} from your query?" %>
+<% end %>
