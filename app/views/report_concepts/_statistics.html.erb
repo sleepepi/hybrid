@@ -1,0 +1,31 @@
+<li class="ui-state-default faded_delete_icon" id="report_concept_<%= @report_concept.id %>" data-image-id="report_concept_<%= @report_concept.id %>_delete_icon">
+  <%= image_tag('icons/gentleface/cursor_drag_arrow_16.png', style: 'vertical-align:text-bottom') %>
+  <%#= @report_concept.concept.human_name %>
+  <%= @report_concept.concept ? @report_concept.concept.human_name : @report_concept.external_concept_information(current_user)[:name] %>
+
+  <% @report_concept.statistic = ((@report_concept.concept and @report_concept.concept.date?) ? 'month' : 'all') if @report_concept.statistic.blank? %>
+
+  <%= link_to_function image_tag('contour/edit.png', style: 'vertical-align:text-bottom; cursor:pointer'), "$('#report_concept_#{@report_concept.id}_options').toggle();" %>
+  <%= link_to image_tag('contour/delete.png', style: 'vertical-align:text-bottom; cursor:pointer'), @report_concept, method: :delete, remote: true, id: "report_concept_#{@report_concept.id}_delete_icon", confirm: "Are you sure you want to remove this concept from Report #{@report.name}?" %>
+
+  <% if @report_concept.concept and (@report_concept.concept.continuous? or @report_concept.concept.boolean? or @report_concept.concept.categorical? or @report_concept.concept.date?) %>
+
+    <%= form_tag report_concept_path(@report_concept, query_id: @query.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form", style: 'display:inline' do %>
+      <ul id="report_concept_<%= @report_concept.id %>_options" style="display:none; margin: 5px 0px 0px 0px;padding: 0;list-style-type: none;">
+        <% statistics = @report_concept.concept.continuous? ? ReportConcept::STATISTIC.collect{|a,b| a} : ['all', 'count', 'percent'] %>
+        <% statistics = ['year', 'month', 'week', 'day'] if @report_concept.concept.date? %>
+        <% statistics.each do |statistic, s2| %>
+          <li style="display: inline;white-space:nowrap" id="report_concept_statistic_<%= @report_concept.id %>_<%= statistic %>"><%= radio_button :report_concept, :statistic, statistic, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= statistic %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% elsif @report_concept.concept %>
+    <ul id="report_concept_<%= @report_concept.id %>_options" style="display:none; margin: 5px 0px 0px 0px;padding: 0;list-style-type: none;">
+      <li style="display: inline;white-space:nowrap">No Options for <%= @report_concept.concept.concept_type %></li>
+    </ul>
+  <% else %>
+    <ul id="report_concept_<%= @report_concept.id %>_options" style="display:none; margin: 5px 0px 0px 0px;padding: 0;list-style-type: none;">
+      <li style="display: inline;white-space:nowrap">No Options for <%= @report_concept.external_concept_information(current_user)[:name] %></li>
+    </ul>
+  <% end %>
+</li>

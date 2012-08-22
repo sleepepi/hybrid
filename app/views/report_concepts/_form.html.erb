@@ -1,0 +1,37 @@
+<%= form_for(@report_concept) do |f| %>
+  <% if @report_concept.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@report_concept.errors.count, "error") %> prohibited this report_concept from being saved:</h2>
+
+      <ul>
+      <% @report_concept.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :report_id %><br />
+    <%= f.text_field :report_id %>
+  </div>
+  <div class="field">
+    <%= f.label :concept_id %><br />
+    <%= f.text_field :concept_id %>
+  </div>
+  <div class="field">
+    <%= f.label :position %><br />
+    <%= f.text_field :position %>
+  </div>
+  <div class="field">
+    <%= f.label :strata %><br />
+    <%= f.check_box :strata %>
+  </div>
+  <div class="field">
+    <%= f.label :statistic %><br />
+    <%= f.text_field :statistic %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

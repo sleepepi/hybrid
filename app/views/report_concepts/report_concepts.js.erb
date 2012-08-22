@@ -1,0 +1,23 @@
+disablePopup();
+
+$('#selected_report_concept_id').val('');
+$('#report_concept_search_term').val('');
+
+$("#report_concepts").html("<%= escape_javascript(render("report_concepts/report_concepts")) %>");
+
+$("#report_concepts_num").html("<%= escape_javascript(pluralize(@report.report_concepts.size, 'concept')) %>")
+
+$("#report_configuration").html("<%= escape_javascript(render("reports/configuration")) %>")
+
+<% if false %>
+$('#accordion').accordion( "activate" , 0 );
+
+<% if params[:action] == 'destroy' %>
+  $('#popup_info').html("<center class='disabled'>Select a concept on the left!</center>");
+  $('#concept_title').html("Concept Information")
+<% end %>
+<% end %>
+
+<% unless @report.is_dataset? %>
+  $('#report_table_form').submit();
+<% end %>

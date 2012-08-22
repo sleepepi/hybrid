@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Report:</b>
+  <%= @report_concept.report_id %>
+</p>
+
+<p>
+  <b>Concept:</b>
+  <%= @report_concept.concept_id %>
+</p>
+
+<p>
+  <b>Position:</b>
+  <%= @report_concept.position %>
+</p>
+
+<p>
+  <b>Strata:</b>
+  <%= @report_concept.strata %>
+</p>
+
+<p>
+  <b>Statistic:</b>
+  <%= @report_concept.statistic %>
+</p>
+
+
+<%= link_to 'Edit', edit_report_concept_path(@report_concept) %> |
+<%= link_to 'Back', report_concepts_path %>
