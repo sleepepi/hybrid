@@ -1,0 +1,344 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  id: 1
+
+two:
+  id: 2
+
+boolean:
+  # id: 3
+  dictionary: one
+  commonly_used: false
+  concept_type: boolean
+  description: "This is a boolean & ! < > value with strange symbols that need to be escaped."
+  display_name: Has ECG Study
+  folder: Administrative:SubFolder
+  formula: MyString
+  name: "http://localhost/Namespace#ecg"
+  namespace: Namespace
+  search_name: has ecg study
+  sensitivity: 0
+  short_name: ecg
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+categorical:
+  # id: 4
+  dictionary: one
+  commonly_used: false
+  concept_type: categorical
+  description: MyString
+  display_name: Gender
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#gender"
+  namespace: Namespace
+  search_name: gender
+  sensitivity: 0
+  short_name: gender
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+continuous:
+  # id: 5
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Age at Visit
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#age_at_visit"
+  namespace: Namespace
+  search_name: age at visit
+  sensitivity: 0
+  short_name: age_at_visit
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+datetime:
+  # id: 6
+  dictionary: one
+  concept_type: datetime
+  name: "http://localhost/Namespace#date_of_visit"
+  namespace: Namespace
+  search_name: date of visit
+  sensitivity: 1
+  short_name: date_of_visit
+  uri: http://localhost
+
+identifier:
+  # id: 7
+  dictionary: one
+  concept_type: identifier
+  name: "http://localhost/Namespace#deidentified_id"
+  namespace: Namespace
+  search_name: deidentified id
+  sensitivity: 0
+  short_name: deidentified_id
+  uri: http://localhost
+
+filelocator:
+  # id: 8
+  dictionary: one
+  concept_type: file locator
+  name: "http://localhost/Namespace#file_name_id"
+  namespace: Namespace
+  search_name: file name id
+  sensitivity: 0
+  short_name: file_name_id
+  uri: http://localhost
+
+freetext:
+  # id: 9
+  dictionary: one
+  concept_type: free text
+  name: "http://localhost/Namespace#clinician_notes"
+  namespace: Namespace
+  search_name: clinician notes
+  sensitivity: 1
+  short_name: clinician_notes
+  uri: http://localhost
+
+continuous_parent:
+  # id: 10
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Age
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#age"
+  namespace: Namespace
+  search_name: age
+  sensitivity: 0
+  short_name: age
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+continuous_units:
+  dictionary: one
+  commonly_used: false
+  # concept_type: continuous
+  description: MyString
+  display_name: Year
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#year"
+  namespace: Namespace
+  search_name: year
+  sensitivity: 0
+  short_name: year
+  units: year
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  # status: complete
+  uri: http://localhost
+  version: MyString
+
+boolean_child:
+  # id: 11
+  dictionary: one
+  commonly_used: false
+  concept_type: boolean
+  description: MyString
+  display_name: Male Gender
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#male"
+  namespace: Namespace
+  search_name: male
+  sensitivity: 0
+  short_name: male
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+continuous_with_label:
+  # id: 12
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Body Mass Index
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#body_mass_index"
+  namespace: Namespace
+  search_name: body mass index
+  sensitivity: 0
+  short_name: body_mass_index
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+invalid:
+  # id: 13
+  description: invalid concept mapping
+
+boolean_child_two:
+  # id: 14
+  dictionary: one
+  commonly_used: false
+  concept_type: boolean
+  description: MyString
+  display_name: Female Gender
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/Namespace#female"
+  namespace: Namespace
+  search_name: female
+  sensitivity: 0
+  short_name: female
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+formula:
+  # id: 15
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Formula
+  folder: Demographics
+  formula: date_of_visit + age_at_visit
+  name: "http://localhost/Namespace#formula"
+  namespace: Namespace
+  search_name: formula
+  sensitivity: 0
+  short_name: formula
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+formula_parent:
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Formula Parent
+  folder: Demographics
+  # formula: date_of_visit + age_at_visit
+  name: "http://localhost/Namespace#formula_parent"
+  namespace: Namespace
+  search_name: formula parent
+  sensitivity: 0
+  short_name: formula_parent
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+equivalent_age_at_visit:
+  dictionary: meta
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Equivalent Age at Visit
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/NamespaceMeta#equivalent_age_at_visit"
+  namespace: NamespaceMeta
+  search_name: equivalent age at visit
+  sensitivity: 0
+  short_name: equivalent_age_at_visit
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+similar_age_at_visit:
+  dictionary: meta
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Equivalent Age at Visit
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/NamespaceMeta#similar_age_at_visit"
+  namespace: NamespaceMeta
+  search_name: similar age at visit
+  sensitivity: 0
+  short_name: similar_age_at_visit
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+age_meta:
+  dictionary: meta
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: Age Meta
+  folder: Demographics
+  # formula: MyString
+  name: "http://localhost/NamespaceMeta#age_meta"
+  namespace: NamespaceMeta
+  search_name: age meta
+  sensitivity: 0
+  short_name: age_meta
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  uri: http://localhost
+  version: MyString
+
+no_uri:
+  dictionary: one
+  commonly_used: false
+  concept_type: continuous
+  description: MyString
+  display_name: No Uri
+  # folder:
+  # formula: MyString
+  name: "http://localhost/Namespace#no_uri"
+  namespace: Namespace
+  search_name: no uri
+  sensitivity: 0
+  short_name: no_uri
+  source_file: MyString
+  source_description: MyString
+  source_name: MyString
+  status: complete
+  # uri: http://localhost
+  version: MyString

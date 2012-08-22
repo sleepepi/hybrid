@@ -1,0 +1,79 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  # id: 1
+  report: report
+  concept: boolean
+  position: 1
+  strata: false
+  statistic: all
+
+two:
+  # id: 2
+  report: report
+  concept: categorical
+  position: 2
+  strata: false
+  statistic: all
+
+test_data_for_boolean:
+  report: report_with_data
+  concept: boolean
+  position: 1
+  strata: true
+  # statistic: all
+
+test_data_for_categorical:
+  report: report_with_data
+  concept: categorical
+  position: 2
+  strata: false
+  statistic: all
+
+test_data_for_age:
+  report: report_with_data
+  concept: formula
+  position: 3
+  strata: false
+  statistic: all
+
+test_data_for_percent:
+  report: report_with_data
+  concept: categorical
+  position: 4
+  strata: false
+  statistic: percent
+
+test_data_for_count:
+  report: report_with_data
+  concept: categorical
+  position: 5
+  strata: false
+  statistic: count
+
+test_data_for_age_min:
+  report: report_with_data
+  concept: formula
+  position: 6
+  strata: false
+  statistic: min
+
+test_data_for_unknown_statistic:
+  report: report_with_data
+  concept: categorical
+  position: 7
+  strata: false
+  statistic: unknown
+
+test_data_for_date:
+  report: report_with_data
+  concept: datetime
+  position: 8
+  strata: false
+  # statistic: all
+
+external_concept:
+  report: report_for_external
+  # concept:
+  source: i2b2_valid
+  external_key: \\i2b2_DEMO\i2b2\Demographics\Gender\Female\

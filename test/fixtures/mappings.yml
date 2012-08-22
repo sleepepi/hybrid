@@ -1,0 +1,281 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  # id: 1
+  source: two
+  concept: boolean
+  # value: MyString
+  table: table
+  column: column1
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+two:
+  # id: 2
+  source: two
+  concept: boolean
+  # value: MyString
+  table: table
+  column: column2
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+three:
+  # id: 3
+  source: two
+  concept: one
+  # value: MyString
+  table: table
+  column: column3
+  # column_value: MyString
+  # units: MyString
+  # status: unmapped
+  deleted: false
+
+continuous_with_units:
+  # id: 4
+  source: two
+  concept: continuous
+  # value: MyString
+  table: table
+  column: column4
+  # column_value: MyString
+  units: MyString
+  # status: unmapped
+  deleted: false
+
+continuous_without_units:
+  # id: 5
+  source: two
+  concept: continuous
+  # value: MyString
+  table: table
+  column: column5
+  # column_value: MyString
+  # units: MyString
+  # status: unmapped
+  deleted: false
+
+mapped:
+  # id: 6
+  source: two
+  concept: boolean
+  # value: MyString
+  table: table
+  column: column6
+  # column_value: MyString
+  # units: MyString
+  status: mapped
+  deleted: false
+
+categorical_with_values:
+  # id: 7
+  source: two
+  concept: categorical
+  # value: MyString
+  table: table
+  column: gender
+  # column_value: MyString
+  # units: MyString
+  status: mapped
+  deleted: false
+
+boolean_male:
+  # id: 8
+  source: two
+  concept: boolean_child
+  # value: MyString
+  table: table
+  column: gender
+  column_value: m
+  # units: MyString
+  status: mapped
+  deleted: false
+
+boolean_female:
+  # id: 8
+  source: two
+  concept: boolean_child_two
+  value: Strange Value
+  table: table
+  column: gender
+  column_value: f
+  # units: MyString
+  status: mapped
+  deleted: false
+
+datetime:
+  # id: 9
+  source: two
+  concept: datetime
+  # value: MyString
+  table: table
+  column: column9
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+identifier:
+  # id: 10
+  source: two
+  concept: identifier
+  # value: MyString
+  table: table
+  column: column10
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+filelocator:
+  # id: 11
+  source: two
+  concept: filelocator
+  # value: MyString
+  table: table
+  column: column11
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+filelocatormapped:
+  source: two
+  concept: filelocator
+  # value: MyString
+  table: table
+  column: column12
+  # column_value: MyString
+  # units: MyString
+  status: mapped
+  deleted: false
+
+freetext:
+  # id: 12
+  source: two
+  concept: freetext
+  # value: MyString
+  table: table
+  column: column12
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+invalid:
+  # id: 13
+  source: two
+  concept: invalid
+  # value: MyString
+  table: table
+  column: column13
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+no_concept:
+  # id: 14
+  source: two
+  # concept: MyString
+  table: table
+  column: column14
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+nonexistent_concept:
+  # id: 15
+  source: two
+  concept_id: -1
+  table: table
+  column: column15
+  # column_value: MyString
+  # units: MyString
+  # status: mapped
+  deleted: false
+
+continuous_with_formula:
+  # id: 16
+  source: two
+  concept: formula
+  # value: MyString
+  table: table
+  column: column16
+  # column_value: MyString
+  units: MyString
+  status: mapped
+  deleted: false
+
+continuous_with_units_and_linked:
+  # id: 17
+  source: linked_source_b
+  concept: continuous
+  # value: MyString
+  table: table
+  column: column4
+  # column_value: MyString
+  units: MyString
+  status: mapped
+  deleted: false
+
+mapped_boolean:
+  source: fully_mapped_test_data_source
+  concept: boolean
+  # value: MyString
+  table: table
+  column: column6
+  column_value: t
+  # units: MyString
+  status: mapped
+  deleted: false
+
+mapped_continuous:
+  source: fully_mapped_test_data_source
+  concept: formula
+  # value: MyString
+  table: table
+  column: column16
+  # column_value: MyString
+  units: MyString
+  status: mapped
+  deleted: false
+
+mapped_categorical:
+  source: fully_mapped_test_data_source
+  concept: categorical
+  # value: MyString
+  table: table
+  column: column6
+  # column_value: MyString
+  # units: MyString
+  status: mapped
+  deleted: false
+
+mapped_date:
+  source: fully_mapped_test_data_source
+  concept: datetime
+  # value: MyString
+  table: table
+  column: column9
+  # column_value: MyString
+  # units: MyString
+  status: mapped
+  deleted: false
+
+mapped_with_human_units:
+  source: fully_mapped_test_data_source
+  concept: continuous_parent
+  # value: MyString
+  table: table
+  column: column11
+  # column_value: MyString
+  units: "http://localhost/Namespace#year"
+  status: mapped
+  deleted: false

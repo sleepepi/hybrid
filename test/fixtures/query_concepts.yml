@@ -1,0 +1,287 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+# Concept Age at Visit with ages 18:25 selected
+one:
+  # id: 1
+  query: one
+  concept: continuous
+  value: 18:25
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+# Concept Gender with male selected
+categorical:
+  # id: 2
+  query: one
+  concept: categorical
+  value: 11
+  position: 1
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: true
+  level: 0
+
+date_concept:
+  query: one
+  concept: datetime
+  # value: 18:25
+  position: 2
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+three:
+  # id: 3
+  query: query_with_sources
+  concept: continuous
+  value: 18:25
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+# Concept Gender with male selected
+four:
+  # id: 4
+  query: query_with_sources
+  concept: categorical
+  value: 11
+  position: 1
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: true
+  level: 0
+
+# Concept Age at Visit with ages 18:25 selected
+linked_concept:
+  # id: 5
+  query: query_across_linked_sources
+  concept: continuous
+  value: 18:25
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+rev_linked_concept:
+  # id: 6
+  query: query_across_linked_sources
+  concept: boolean
+  value: "20:250"
+  position: 1
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+negated_continuous:
+  query: query_with_negated_concepts
+  concept: continuous
+  value: 18:25
+  position: 0
+  negated: true
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+# Concept Gender with male selected
+negated_categorical:
+  query: query_with_negated_concepts
+  concept: categorical
+  value: 11
+  position: 1
+  negated: true
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: true
+  level: 0
+
+with_data:
+  query: query_with_test_data
+  concept: continuous
+  value: 18:25
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_categorical_data:
+  query: query_with_test_data
+  concept: categorical
+  value: 11
+  position: 1
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_data_negated:
+  query: query_with_test_data
+  concept: continuous
+  value: 18:25
+  position: 2
+  negated: true
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_categorical_data_negated:
+  query: query_with_test_data
+  concept: categorical
+  value: 11
+  position: 3
+  negated: true
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_boolean_data:
+  query: query_with_test_data
+  concept: boolean
+  value: true
+  position: 4
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_date_data:
+  query: query_with_test_data
+  concept: datetime
+  value: 1234
+  position: 5
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_boolean_data_negated:
+  query: query_with_test_data
+  concept: boolean
+  value: true
+  position: 6
+  negated: true
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+with_categorical_data_true_false:
+  query: query_with_test_data
+  concept: categorical
+  value: 'true,false'
+  position: 7
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+history_query_concept:
+  query: query_with_history
+  concept: categorical
+  # value: 'true,false'
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+history_query_concept_two:
+  query: query_with_undone_history
+  concept: categorical
+  # value: 'true,false'
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+  deleted: true
+
+history_query_concept_update_change:
+  query: query_with_history_update_change
+  concept: continuous
+  value: 20
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+
+history_query_concept_two_update_change:
+  query: query_with_undone_history_update_change
+  concept: continuous
+  # value: 20
+  position: 0
+  negated: false
+  group_negated: false
+  right_operator: and
+  left_brackets: 0
+  right_brackets: 0
+  selected: false
+  level: 0
+

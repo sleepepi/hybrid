@@ -1,0 +1,46 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  concept_one: continuous
+  property: is_a
+  concept_two_id: continuous_parent
+
+male_gender:
+  concept_one_id: boolean_child
+  property: is_a
+  concept_two: categorical
+
+female_gender:
+  concept_one: boolean_child_two
+  property: is_a
+  concept_two: categorical
+
+equivalent:
+  concept_one: equivalent_age_at_visit
+  property: equivalent_class
+  concept_two: continuous
+
+similar:
+  concept_one: similar_age_at_visit
+  property: similar_class
+  concept_two: continuous
+
+equivalent_rev:
+  concept_one: continuous
+  property: equivalent_class
+  concept_two: equivalent_age_at_visit
+
+similar_rev:
+  concept_one: continuous
+  property: similar_class
+  concept_two: similar_age_at_visit
+
+age_hierarchy:
+  concept_one: continuous
+  property: is_a
+  concept_two: age_meta
+
+formula_hierarchy:
+  concept_one: formula
+  property: is_a
+  concept_two: formula_parent
