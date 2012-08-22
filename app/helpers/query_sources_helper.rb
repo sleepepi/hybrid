@@ -1,0 +1,2 @@
+module QuerySourcesHelper
+end

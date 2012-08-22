@@ -1,0 +1,2 @@
+module QueryUsersHelper
+end
