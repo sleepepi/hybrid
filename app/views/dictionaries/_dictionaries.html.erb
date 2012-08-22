@@ -1,0 +1,37 @@
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table style="width:100%"><col width="50px"/><col width="60px"/>
+    <tr>
+      <th>Status</th>
+      <th>Visible</th>
+      <th>Name</th>
+      <th>Creator</th>
+      <th>Concepts</th>
+      <th>Relations</th>
+      <th>Export</th>
+    </tr>
+    <% @dictionaries.each do |dictionary| %>
+      <tr>
+        <td><%= dictionary.status %></td>
+        <td><%= check_box_tag :dictionary, :visible, dictionary.visible?, disabled: true %></td>
+        <td><%= link_to dictionary.name, dictionary %></td>
+        <td><%= link_to dictionary.user.name, dictionary.user %></td>
+
+        <td><%= dictionary.concepts.size %></td>
+        <td><%#= dictionary.concept_property_concepts.size %></td>
+        <td><%= link_to 'CSV File', export_to_csv_dictionary_path(dictionary) %> or <%= link_to 'OWL File', export_to_owl_dictionary_path(dictionary) %></td>
+      </tr>
+      <% unless dictionary.description.blank? %>
+        <tr>
+          <td colspan='2'></td>
+          <td colspan='5' style="color: #777; font-style:italic; font-size: 10px">
+            <%= dictionary.description %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
+<center><%= paginate @dictionaries %></center>

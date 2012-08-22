@@ -1,0 +1,45 @@
+<% @title = "dictionary: #{@dictionary.name}" %>
+
+<h1><%= @title %></h1>
+
+<% if current_user.all_dictionaries.include?(@dictionary) %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit dictionary", edit_dictionary_path(@dictionary), class: 'button' %>
+  <%= link_to image_tag('contour/delete.png', alt: '') + "Delete dictionary", @dictionary, confirm: "Are you sure you want to delete dictionary #{@dictionary.name}?", method: :delete, class: 'button negative' %>
+<% end %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All dictionaries", dictionaries_path, class: 'button' %>
+
+<div style="clear:both"></div>
+
+<pre><%= @dictionary.description %></pre>
+<br />
+
+<fieldset>
+  <br />
+  <p>
+    <b>Creator:</b>
+    <%= link_to @dictionary.user.name, @dictionary.user if @dictionary.user %>
+  </p>
+
+  <p>
+    <b>Visible:</b>
+    <%= check_box_tag 'dictionary', 'visible', @dictionary.visible?, disabled: true %>
+  </p>
+
+  <p>
+    <b>Status:</b>
+    <%= @dictionary.status %>
+  </p>
+
+  <p>
+    <b>Export</b>
+    <%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary) %> or <%= link_to 'OWL File', export_to_owl_dictionary_path(@dictionary) %>
+  </p>
+
+  <p>
+    <b>Concepts</b>
+    <%= link_to @dictionary.concepts.size, concepts_path(dictionary_id: @dictionary.id) %>
+      <% if current_user.all_dictionaries.include?(@dictionary) %>
+        <%= link_to image_tag('contour/delete.png', style: 'border:none', align: 'absmiddle', :size=> '15x15', title: 'Delete all associated Concepts and Relationships'), remove_concepts_and_relations_dictionary_path(@dictionary), method: :post, confirm: "Are you sure you want to DELETE all associated concepts and relationships for #{@dictionary.name} dictionary?\n\nIt is recommended to BACKUP the dictionary first by downloading an EXPORT first." %>
+      <% end %>
+  </p>
+</fieldset>

@@ -1,0 +1,44 @@
+<% width = '914px' %>
+<%= form_for(@dictionary, html: {multipart: true}) do |f| %>
+  <% if @dictionary.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dictionary.errors.count, "error") %> prohibited this dictionary from being saved:</h2>
+
+      <ul>
+      <% @dictionary.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <legend><%= @title %></legend>
+    <div class="field">
+      <%= f.label :name %><br />
+      <%= f.text_field :name, style: "width:#{width}" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :description %><br />
+      <%= f.text_area :description, rows: 7, style: "width:#{width}" %>
+    </div>
+    <div class="field">
+      <%= f.label :visible %><br />
+      <%= f.check_box :visible %>
+    </div>
+    <div class="field">
+      <%= f.label :status %><br />
+      <%= f.select :status, dictionary::STATUS %>
+    </div>
+    <div class="field">
+      <%= label :dictionary, :dictionary_file, 'CSV or OWL File' %><br />
+      <%= file_field_tag :dictionary_file %>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <% form_name = @dictionary.new_record? ? 'new_dictionary' : "edit_dictionary_#{@dictionary.id}" %>
+    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@dictionary.new_record? ? "Create dictionary" : "Update dictionary"), "$('##{form_name}').submit();", class: "button positive" %>
+    <%= cancel %>
+  </div>
+<% end %>

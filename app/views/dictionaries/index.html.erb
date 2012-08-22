@@ -1,0 +1,18 @@
+<% @title = 'dictionaries' %>
+<h1><%= @title %></h1>
+
+<% if current_user.system_admin? %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New dictionary", new_dictionary_path, class: 'button positive' %>
+<% end %>
+
+<%= form_tag dictionaries_path, method: :get, remote: true, id: "dictionaries_search" do %>
+  <%= hidden_field_tag :order %>
+  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
+  <div id="dictionaries"><div style="clear:both"></div><br /><center><%= image_tag "ajax-loader.gif" %></center></div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    $.get($("#dictionaries_search").attr("action"), $("#dictionaries_search").serialize(), null, "script");
+  });
+<% end %>
