@@ -1,3 +1,5 @@
+== 0.12.0
+
 == 0.11.8
 
 * Enhancements
@@ -149,7 +151,7 @@
   * The data source popup box now displays:
     * Summary Count information: Counts for mapped concepts that are marked as identifiers, (ie: Patient IDs, Record IDs, Study IDs)
     * Cross-Linked Data Sources: Sources that are linked using a cross-data source join (unique key)
-    * Associated Ontologies: Lists of the ontologies that have concepts mapped to the data source
+    * Associated Dictionaries: Lists of the dictionaries that have concepts mapped to the data source
 
 * Bug Fix
   * Concepts with a Source PDF document now correctly append the request script_name to correctly link to the associated PDF
@@ -162,13 +164,13 @@
   * Reports for queries that return an empty set now generate an error message that states that the underlying query needs to be modified to generate a report table
 
 * Documentation
-  * Added a sample ontology file (CSV) to doc/ontology/tiny_ontology.csv
-  * Added a sample database file (SQL Dump) to doc/ontology/tiny_sleep.sql
+  * Added a sample dictionary file (CSV) to doc/dictionary/tiny_dictionary.csv
+  * Added a sample database file (SQL Dump) to doc/dictionary/tiny_sleep.sql
 
 * Testing
   * Updated Report Concept tests to assure that the positions are correctly updated when a report is modified
   * Reordering Report Concepts tests to make sure the stratified variables (rows) are always put before the other variables (columns)
-  * Ontology controller functional test now tests that CSV files are imported correctly
+  * Dictionary controller functional test now tests that CSV files are imported correctly
 
 == 0.6.0
 
@@ -212,8 +214,8 @@
   * When a user does not select a data source for the search, the search now returns an empty set
   * Menu bar now sticks to the top of the window when the user scrolls down the page
   * Concept graphs now show all values for individual associated mappings
-  * Data Sources can now generate their derived mappings to leverage relationships across and within ontologies
-  * Sensitive variables can now be identified in the ontology and can only be viewed by users with source access rule:
+  * Data Sources can now generate their derived mappings to leverage relationships across and within dictionaries
+  * Sensitive variables can now be identified in the dictionary and can only be viewed by users with source access rule:
     * view data distribution
     * edit data source mappings
   * Non-sensitive variables can be seen by users with source access rule:
