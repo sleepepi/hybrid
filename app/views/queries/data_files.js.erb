@@ -1,0 +1,13 @@
+$("#popup").css({
+  "width": "816px" //"408px"
+});
+$("#popup_title").html("<%= escape_javascript(image_tag('contour/open.png', align: 'absmiddle', alt: '')) %> Files")
+$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
+$("#popup_content_left").html("<%= escape_javascript(render("available_files")) %>");
+// $("#popup_info").html("<%#= escape_javascript(render("add_file_type")) %>");
+
+showWaiting('#popup_info', ' Loading File Information', true);
+$.post("<%= request.script_name + '/queries/' + @query.id.to_s + '/load_file_type?file_type_id=' + (@file_type ? @file_type.id.to_s : '') %>", null, null, "script")
+
+$(document.body).qtip('hide');loadPopup();
+centerPopup();

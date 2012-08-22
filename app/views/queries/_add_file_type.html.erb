@@ -1,0 +1,36 @@
+<% if @file_type %>
+  <span class="large"><strong><%= @file_type.name_and_short_extension %></strong></span>
+  <br />
+  <span class="quiet">
+    <%= @file_type.description %>
+    <br />
+    <br />
+    <% @query.file_type_count(current_user, @file_type).each do |source_id, concept_hash| %>
+      <% source = Source.find_by_id(source_id) %>
+      <b><%= source.name %>:</b><br />
+      <% if concept_hash[:error].blank? %>
+        <% concept_hash.each do |concept_id, result_hash| %>
+            <% concept = Concept.find_by_id(concept_id) %>
+            &nbsp;&nbsp;<%= concept.human_name %> (<%= pluralize(result_hash[:result], 'file') %>):<br />
+            <% if result_hash[:error].blank? %>
+              <% if result_hash[:result].to_i > 0 %>
+                <% result_hash[:urls].each do |url| %>
+                  &nbsp;&nbsp;&nbsp;&nbsp;<%= link_to url.split("/").last.split('&fn=').last, url, target: '_blank' %><br />
+                <% end %>
+              <% end %>
+            <% else %>
+              &nbsp;&nbsp;&nbsp;&nbsp;<code><%= result_hash[:error] %></code><br />
+            <% end %>
+            <br />
+        <% end %>
+        <br />
+      <% else %>
+        &nbsp;&nbsp;<code><%= concept_hash[:error] %></code><br />
+      <% end %>
+    <% end %>
+
+  </span>
+<% else %>
+  <br />
+  <center><%= image_tag('contour/cross.png', alt: '', style: 'vertical-align:text-bottom') %> No file type selected.<br /><br />Select a file type to the left.</center>
+<% end %>

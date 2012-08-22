@@ -1,0 +1,18 @@
+$("#information").html("<%= escape_javascript(render("total_records_count")) %>");
+
+$(".errors_found").html("");
+
+<% @overall_totals.each do |grouping,total| %>
+  <% if grouping == nil %>
+    $('#total_records_found_display').html('<%= number_with_delimiter(total) %>');
+  <% else %>
+    $('#<%= grouping %>_display').html('<%= number_with_delimiter(total) %>');
+  <% end %>
+<% end %>
+<% @overall_errors.each do |grouping,error| %>
+  <% if grouping == nil %>
+    $('#total_errors_found').html("<%= escape_javascript(image_tag('contour/warning.png', size: '13x13', style: 'vertical-align:text-bottom')) %> <%= escape_javascript(error.html_safe) %>");
+  <% else %>
+    $('#<%= grouping %>_errors').html("<%= escape_javascript(image_tag('contour/warning.png', size: '13x13', style: 'vertical-align:text-bottom')) %> <%= escape_javascript(error.html_safe) %>");
+  <% end %>
+<% end %>

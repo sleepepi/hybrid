@@ -1,0 +1,16 @@
+<% @title = 'History' %>
+<h1><%= @title %></h1>
+
+<%= link_to image_tag('contour/addfile.png', alt: '') + "New Search", new_query_path, class: 'button positive' %>
+
+<%= form_tag queries_path, method: :get, remote: true, id: 'queries_search' do %>
+  <%= hidden_field_tag :order %>
+  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
+  <div id="queries"><div style="clear:both"></div><br /><center><%= image_tag "ajax-loader.gif" %></center></div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    $.get($("#queries_search").attr("action"), $("#queries_search").serialize(), null, "script");
+  });
+<% end %>

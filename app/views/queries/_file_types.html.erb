@@ -1,0 +1,24 @@
+<% file_types = FileType.available.with_source(@query.sources.collect{|s| s.id}) %>
+
+<% if file_types.blank? %>
+  <% if @query.sources.size > 0 %>
+    <%= image_tag('contour/information.png', style: 'vertical-align: text-bottom') %>
+    <span class="quiet">No files available for selected <%= @query.sources.size > 1 ? 'source'.pluralize : 'source' %>.</span>
+  <% end %>
+<% else %>
+  <% unavailable_files = 0 %>
+  <% file_types.each_with_index do |file_type| %>
+    <% if file_type.user_can_download?(current_user, @query.sources) %>
+      <%= link_to file_type.name_and_short_extension, data_files_query_path(@query, file_type_id: file_type.id), method: :post, remote: true %>
+    <% else %>
+      <% unavailable_files += 1 %>
+      <span class="quiet" style="text-decoration: line-through;"><%= file_type.name_and_short_extension %></span>
+    <% end %>
+    <br />
+  <% end %>
+  <% if unavailable_files > 0 %>
+    <br />
+    <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %>
+    <span class="quiet">You do not have the <span class="source_rule_text">download files</span> access rule for any selected data source for <%= pluralize unavailable_files, 'file type' %>.</span>
+  <% end %>
+<% end %>

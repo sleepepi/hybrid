@@ -1,0 +1,46 @@
+<% if false %>
+<div style="float:right;margin-bottom:-5px">
+  Per Page
+  <% [5,10,20].each do |count| %>
+    <span class="per_page">
+      <% if current_user.queries_per_page != count %>
+        <%= link_to count, "#", 'data-count' => count, 'data-object' => 'queries', id: "count_#{count}" %>
+      <% else %>
+        <%= count %>
+      <% end %>
+    </span>
+  <% end %>
+</div>
+<% end %>
+
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table style="width:100%">
+    <tr>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'name', 'Name', 'queries_search') %></th>
+      <th>From</th>
+      <th>Concepts</th>
+      <th>Datasets</th>
+      <th>Reports</th>
+      <th>Owner</th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'created_at', 'Created', 'queries_search') %></th>
+      <th></th>
+    </tr>
+
+  <% @queries.each do |query| %>
+    <tr class="<%= cycle('even-borderless', 'odd-borderless') %>">
+      <td><%= link_to query.display_name, query %></td>
+      <td><%= query.sources.collect{|s| s.name}.join(', ') %></td>
+      <td><%= query.query_concepts.size %></td>
+      <td><%= query.true_datasets.size %></td>
+      <td><%= query.true_reports.size %></td>
+      <td><%= link_to query.user.name, query.user %></td>
+      <td style="text-align:right"><%= simple_time(query.created_at) %></td>
+      <td><%= link_to image_tag('contour/delete.png', alt: '', style: 'vertical-align:text-bottom'), query, confirm: "Are you sure you want to delete #{query.name.blank? ? 'this search' : query.name}?", method: :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+
+<center><%= paginate @queries %></center>
