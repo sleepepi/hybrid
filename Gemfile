@@ -15,8 +15,6 @@ gem 'contour-minimalist',   '~> 0.1.4'
 # gem 'contour',              '~> 0.11.0.pre'
 # gem 'contour-minimalist',   '~> 0.2.0.pre'
 gem 'kaminari'
-# LibXML: Parsing OWL Files
-gem 'libxml-ruby',          '~> 2.3.2'
 # Builder: For Building XML messages for Web service based data sources
 gem 'builder',              '~> 3.0.0'
 
@@ -26,8 +24,8 @@ gem 'aqueduct-elastic',     '~> 0.1.0'
 gem 'aqueduct-ftp',         '~> 0.1.0'
 gem 'aqueduct-mounted',     '~> 0.1.0'
 gem 'aqueduct-mysql',       '~> 0.1.0'
-gem 'aqueduct-mssql2008',   '~> 0.1.0'
-gem 'aqueduct-i2b2',        '~> 0.1.0'
+# gem 'aqueduct-mssql2008',   '~> 0.1.0'
+# gem 'aqueduct-i2b2',        '~> 0.1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
