@@ -1,0 +1,23 @@
+<% @title = ["Concepts", @dictionary ? @dictionary.name : nil].compact.join(' - ') %>
+<h1><%= @title %></h1>
+
+<% if current_user.system_admin? and false %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Concept", new_concept_path, class: 'button positive' %>
+<% end %>
+
+<% if @dictionary and false %>
+  <%= link_to image_tag('contour/download.png', alt: '') + 'dictionary: ' + @dictionary.name + ' ' + image_tag('contour/xls.png', alt: '') + ' CSV File', export_to_csv_dictionary_path(@dictionary), class: 'button' %>
+<% end %>
+
+<%= form_tag concepts_path, method: :get, remote: true, id: "concepts_search" do %>
+  <%= hidden_field_tag :order %>
+  <%= hidden_field_tag :dictionary_id, params[:dictionary_id] %>
+  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
+  <div id="concepts"><div style="clear:both"></div><br /><center><%= image_tag "ajax-loader.gif" %></center></div>
+<% end %>
+
+<%= javascript_tag do %>
+  $(function(){
+    $.get($("#concepts_search").attr("action"), $("#concepts_search").serialize(), null, "script");
+  });
+<% end %>

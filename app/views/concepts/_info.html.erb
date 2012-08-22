@@ -1,0 +1,59 @@
+<% if @query %>
+  <% if @report = @query.reports.find_by_id(params[:add_report_id]) %>
+    <% report_type = @report.is_dataset? ? 'Dataset' : 'Report' %>
+    <% if @report.concepts.include?(@concept) %>
+      <% report_concept = @report.report_concepts.find_by_concept_id(@concept.id) %>
+      <%= link_to image_tag('contour/delete.png', align: 'absmiddle', alt: '') + "Remove from #{report_type}", report_concept, method: :delete, remote: true, title: @concept.human_name, class: 'button negative', confirm: "Are you sure you want to remove #{@concept.human_name} from Dataset: #{@report.name}?" %>
+    <% else %>
+      <%= link_to image_tag('contour/addfile.png', align: 'absmiddle', alt: '') + "Add to #{report_type}", report_concepts_path(query_id: @query.id, concept_id: @concept.id, report_id: params[:add_report_id], source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'button positive' %>
+    <% end %>
+  <% else %>
+    <span class="large"><strong><%= @concept.human_name %></strong></span>
+    <br />
+    <%= link_to image_tag('contour/addfile.png', align: 'absmiddle', alt: '') + "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'button positive', onclick: "disablePopup();" %>
+  <% end %>
+<% else %>
+  <span class="large"><strong><%= @concept.human_name %></strong></span>
+  <br />
+<% end %>
+<div style="clear:both"></div>
+<br />
+<p class="quiet small"><%= @concept.description %></p>
+
+<% unless @concept.totalnum.blank? %>
+  <strong>Total Number</strong> <%= @concept.totalnum %><br />
+  <br />
+<% end %>
+
+<% if @query_concept %>
+  <% @query_concept.external_concept_information(current_user).each do |key, value| %>
+    <strong><%= key.to_s.titleize %></strong> <%= value %><br /><br />
+  <% end %>
+<% end %>
+
+<% if @concept.sensitivity != '0' %>
+<strong style="color:red">Sensitive</strong><br />
+<p class="quiet small">This concept can ONLY be viewed or downloaded if you only have <span class='source_rule_text'>view data distribution</span> or <span class='source_rule_text'>download dataset</span> respectively.</p>
+<% end %>
+
+<% unless @concept.formula.blank? %>
+<strong>Calculation</strong><br />
+<center><%= link_concepts(@concept) %></center><br />
+<br />
+<% end %>
+<% unless @concept.source_file.blank? %>
+<strong>Source</strong> <% if @concept.source_file.blank? %>none <% else %> <%= link_to @concept.source_name, "#{request.script_name}/forms/" + @concept.source_file, target: '_blank' %> <% end %><br />
+<br />
+<% end %>
+<%# Only show mappings to users who can see the data source mappings... 'view data source mappings' or 'edit data source mappings' %>
+<% unless @concept.mappings.empty? or true %>
+<strong>Mappings</strong>
+<div class="small">
+<% @concept.mappings.each do |mapping| %>
+  <i><%= mapping.source.name %></i>.<%= mapping.table %>.<%= mapping.column %><% unless mapping.column_value.blank? %>.<strong><%= mapping.column_value %></strong><% end %><br />
+<% end %>
+</div>
+<strong>Distribution</strong>
+<br />
+<% end %>
+<div id="distribution" style="relative"></div>

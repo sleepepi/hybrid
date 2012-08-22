@@ -1,0 +1,30 @@
+<% if @concepts.size + @external_concepts.size > 0 %>
+[
+<%#= User.current.collect{|u| "{\"id\":\"#{u.id}\", \"label\":\"#{highlight(u.email, @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{u.name}\", \"category\":\"Users\"}" }.join(',').html_safe%>
+<%= @concepts.collect{|c| "{\"id\":\"#{c.id || c.key}\", \"label\":\"#{highlight(c.human_name, @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{c.human_name}\", \"category\":\"#{escape_javascript(image_tag 'icons/folder.png', size: '12x12', style: 'vertical-align:text-bottom')} #{c.folder.blank? ? 'Uncategorized' : c.folder}\"}" }.join(',').html_safe %>
+
+
+<%# TODO: Refactor and include with @concepts initially %>
+<% if @external_concepts.size > 0 %>
+<%= ',' if @concepts.size > 0 %>
+<%= @external_concepts.collect{|c| "{\"id\":\"#{c[:source_id]},#{escape_javascript(c[:key])}\", \"label\":\"#{highlight(c[:name], @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{c[:source_id]},#{c[:name]}\", \"category\":\"#{escape_javascript(image_tag 'icons/folder.png', size: '12x12', style: 'vertical-align:text-bottom')} #{c[:folder].blank? ? 'Uncategorized' : c[:folder]}\"}" }.join(',').html_safe %>
+<% end %>
+
+<%# <br />#{escape_javascript(image_tag 'icons/folder.png', size: '12x12')} <span class='small quiet'>#{c.folder.gsub(':', '/')}</span> %>
+
+<%#=
+  { "id": "Erithacus rubecula", "label": "<span class='quiet small'><%= escape_javascript(image_tag 'icons/folder.png', size: '12x12') %=>Folders/Something/Administration</span><br/>&nbsp;&nbsp;&nbsp;<span style='color:black;font-weight:bold'>Euro</span>pean Robin", "value": "European Robin" },
+  { "id": "Cercotrichas galactotes", "label": "Rufous-Tailed Scrub Robin", "value": "Rufous-Tailed Scrub Robin" },
+  { "id": "Irania gutturalis", "label": "White-throated Robin", "value": "White-throated Robin" },
+  { "id": "Turdus migratorius", "label": "American Robin", "value": "American Robin" }
+%>
+]
+<% elsif @query and @query.sources.size == 0 %>
+[
+  {"label": "", "value": "", "category": "<%= escape_javascript(image_tag 'contour/warning.png', size: '12x12', style: 'vertical-align:text-bottom') %> <span class='errors_found'>Select a Data Source First</span>", "category_only": "true"}
+]
+<% else %>
+[
+  {"label": "", "value": "", "category": "<%= escape_javascript(image_tag 'contour/warning.png', size: '12x12', style: 'vertical-align:text-bottom') %> <span class='errors_found'>No Matching Concept Found</span>", "category_only": "true"}
+]
+<% end %>

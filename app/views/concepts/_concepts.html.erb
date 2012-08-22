@@ -1,0 +1,31 @@
+<div style="clear:both"></div>
+
+<div class="frame">
+  <table style="width:100%">
+    <tr>
+      <th>Name</th>
+      <th>Concept Type</th>
+      <th>Folder</th>
+      <th>dictionary</th>
+      <% if false %>
+        <th></th>
+        <th></th>
+      <% end %>
+    </tr>
+
+  <% @concepts.each do |concept| %>
+    <tr>
+      <td><%= link_to concept.human_name, concept %></td>
+      <td><%= concept.concept_type %></td>
+      <td><%= concept.folder %></td>
+      <td><%= link_to concept.dictionary.name, concept.dictionary if concept.dictionary %></td>
+      <% if false %>
+        <td><%= link_to 'Edit', edit_concept_path(concept) %></td>
+        <td><%= link_to 'Destroy', concept, confirm: 'Are you sure?', method: :delete %></td>
+      <% end %>
+    </tr>
+  <% end %>
+  </table>
+</div>
+
+<center><%= paginate @concepts %></center>

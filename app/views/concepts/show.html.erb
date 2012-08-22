@@ -1,0 +1,50 @@
+<% @title = "Concept: #{@concept.human_name}" %>
+
+<h1><%= @title %></h1>
+
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Concepts", concepts_path, class: 'button' %>
+
+<div style="clear:both"></div>
+
+<fieldset>
+  <br />
+
+  <p>
+    <b>Concept Type:</b>
+    <%= @concept.concept_type %>
+  </p>
+
+  <p>
+    <b>Folder:</b>
+    <%= @concept.folder %>
+  </p>
+
+  <p>
+    <b>dictionary:</b>
+    <%= link_to @concept.dictionary.name, @concept.dictionary if @concept.dictionary %>
+  </p>
+
+  <% if @concept.parents.size > 0 %>
+    <p>
+      <b>Parents:</b>
+      <ul>
+        <% @concept.parents.each do |parent| %>
+          <li><%= link_to parent.human_name, parent %></li>
+        <% end %>
+      </ul>
+    </p>
+  <% end %>
+
+  <% if @concept.children.size > 0 %>
+    <p>
+      <b>Children:</b>
+      <ul>
+        <% @concept.children.each do |child| %>
+          <li><%= link_to child.human_name, child %></li>
+        <% end %>
+      </ul>
+    </p>
+  <% end %>
+
+  <%= render partial: 'concepts/info' %>
+</fieldset>

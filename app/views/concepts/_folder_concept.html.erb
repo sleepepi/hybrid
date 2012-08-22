@@ -1,0 +1,10 @@
+<div class="<%= 'common' if @concept.commonly_used? %>">
+  <% link_name = @simple ? @concept.human_name : highlight(@concept.human_name, @terms, highlighter: '<b>\1</b>') %>
+
+  <% if @concept.new_record? %>
+    <%= link_to image_tag('contour/information.png', style: 'vertical-align:text-bottom;padding-right:3px') + link_name + "#{ ' - ' + @concept.totalnum unless @concept.totalnum.blank?}", info_external_concepts_path(name: @concept.name, key: @concept.key, totalnum: @concept.totalnum, source_id: @concept.source_id, query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: @concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %>
+  <% else %>
+    <%= link_to image_tag('contour/information.png', style: 'vertical-align:text-bottom;padding-right:3px') + link_name, info_concept_path(@concept, query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: @concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %>
+  <% end %>
+</div>
+<div style="clear:both"></div>

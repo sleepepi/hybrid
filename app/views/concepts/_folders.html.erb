@@ -1,0 +1,138 @@
+<% r = Regexp.new("^#{@folder.to_s.gsub(/\\/, ':')}:") %>
+
+<% @terms = params['concept_search'].to_s.titleize.downcase.split(' ') %>
+
+<% if @query %>
+  <% concept_scope = Concept.current.with_source(@query.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.id}) %>
+
+  <% external_concepts = [] %>
+  <% @query.sources.each do |source| %>
+    <% external_concepts_hash = source.external_concepts(current_user, @folder, params['concept_search']) %>
+    <% if external_concepts_hash[:error].blank? %>
+      <% external_concepts = external_concepts | external_concepts_hash[:result] %>
+    <% elsif current_user.system_admin? %>
+      <code><%= image_tag 'contour/warning.png', style: 'vertical-align:text-bottom' %> <%= external_concepts_hash[:error] %></code><br /><br />
+    <% end %>
+  <% end %>
+<% else %>
+  <% concept_scope = Concept.current %>
+<% end %>
+
+<% if false %>
+<%= external_concepts.inspect %><br /><br />
+
+<%= external_concepts.collect{|ec| ec[:key]}.inspect %>
+<% end %>
+
+<% external_folders = external_concepts.select{|ec| ec[:is_folder]} %>
+
+<% external_concepts = external_concepts.select{|ec| not ec[:is_folder]} %>
+
+<% concept_scope = concept_scope.with_concept_type(params[:concept_type] || 'all') %>
+
+<% concept_scope = concept_scope.with_report(params[:report_id].to_s) %>
+
+<% if not params[:report_id].blank? %>
+  <% @terms = [''] %>
+  <% filtered_concept_scope = concept_scope %>
+  <% filtered_children_scope = filtered_concept_scope %>
+  <% filtered_concept_scope = filtered_concept_scope.with_exact_folder(@folder) %>
+<% elsif @terms.size > 0 %>
+  <% filtered_concept_scope = concept_scope %>
+  <% @terms.each do |term| %>
+    <% filtered_concept_scope = filtered_concept_scope.search(term) %>
+  <% end %>
+  <% filtered_children_scope = filtered_concept_scope %>
+  <% filtered_concept_scope = filtered_concept_scope.with_exact_folder(@folder) %>
+<% else %>
+  <% filtered_children_scope = [] %>
+  <% filtered_concept_scope = [] %>
+<% end %>
+
+<% @current_folder_id = "folder_#{@folder.to_s.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
+
+<% @current_folder_id += "_#{params[:report_id]}" unless params[:report_id].blank? %>
+
+
+<%# Draws the folders for the folder with prefix @folder %>
+<%# concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? 'Uncategorized' : c.folder.to_s.gsub(r, '').split(":").first}.sort.uniq.each do |folder| %>
+<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + ':' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split(":").first, c.folder.to_s.gsub(r, '').split(":").first.titleize, {}]} | external_folders.select{|ec| ec[:is_folder]}.collect{|ec| [ec[:key], ec[:key].to_s.gsub(/(\\)*$/, '').gsub(/\\/, ':').gsub(r, '').split(":").last, ec]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
+
+  <%# full_folder = "#{@folder.blank? ? '' : "#{@folder}:" }#{folder}" %>
+  <% full_folder = full_folder_path %>
+
+
+  <% folder_id = "folder_#{full_folder.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
+  <% folder_id += "_#{params[:report_id]}" unless params[:report_id].blank? %>
+
+  <% found_number = (@terms.size == 0) ? 0 : filtered_children_scope.with_exact_folder_or_subfolder(full_folder).size %>
+  <% unless folder_id == "folder_Uncategorized" %>
+    <% if folder_hash[:is_queryable] == true %>
+      <div style="float:left"><%= link_to image_tag('contour/information.png', style: 'vertical-align:text-bottom;padding-right:3px'), info_external_concepts_path(name: folder_hash[:name], key: folder_hash[:key], totalnum: folder_hash[:totalnum], source_id: folder_hash[:source_id], query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: folder_hash[:name], onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %></div>
+    <% end %>
+    <div id="<%= folder_id %>_link">
+      <% @folder_id = folder_id %>
+      <%# @folder_title = folder.titleize %>
+      <% @folder_title = display_folder_name + "#{ ' - ' + folder_hash[:totalnum] unless folder_hash[:totalnum].blank?}" %>
+      <% if found_number > 0 %>
+        <%= render partial: 'concepts/folders_toggle_link' %>
+      <% else %>
+        <%#= image_tag 'icons/closed.png', size: '16x16', align: 'absmiddle', style: "cursor:pointer", before: "showWaiting('#{folder_id}_content');" + remote_function(url: open_folder_concepts_path(query_id: @query.id, report_id: params[:report_id], folder_name: full_folder, folder_id: folder_id, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0')), method: :post, with: "$('concept_search').serialize()")  %>
+        <%#= image_tag 'icons/closed.png', size: '16x16', align: 'absmiddle', style: "cursor:pointer", onclick: "showWaiting('#{folder_id}_content');" + remote_function(url: open_folder_concepts_path(folder_name: full_folder, folder_id: folder_id, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0')), method: :post, with: "'&concept_search='+$('#search').val()")  %>
+        <%= link_to open_folder_concepts_path(query_id: @query.id, folder_name: full_folder, folder_id: folder_id, display_folder_name: @folder_title, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0'), concept_type: params[:concept_type], identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), onclick: "showWaiting('##{folder_id}_content', '', false);", method: :post, remote: true, style: "text-decoration:none" do %>
+          <%= image_tag('icons/closed.png', style: "cursor:pointer;vertical-align:text-bottom") %>
+          <%= image_tag 'icons/folder.png', style: "vertical-align:text-bottom" %> <span class="nolink"><%= @folder_title %></span>
+        <% end %>
+      <% end %>
+    </div>
+    <div id="<%= folder_id %>_content" style="margin-left:20px">
+      <% if found_number > 0 %>
+        <%# if filtered_children_scope.with_exact_folder_or_subfolder(full_folder).size > 0 %>
+          <% orig_folder = @folder %>
+          <% @folder = full_folder %>
+          <%= render partial: 'concepts/folders' %>
+          <% @folder = orig_folder %>
+        <%# end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%# Draws the concepts contained in @folder %>
+<div>
+  <%#= concept_scope.with_exact_folder(@folder).size %>
+  <%# concept_scope = concept_scope #.with_exact_folder(@folder) %>
+
+  <%#= filtered_concept_scope.with_exact_folder(@folder).size %>
+
+  <% filtered_external_concepts = external_concepts %>
+
+  <% filtered_external_concepts.sort{|a,b| a[:name] <=> b[:name]}.each do |external_concept| %>
+    <% @concept = Concept.new(name: external_concept[:name], totalnum: external_concept[:totalnum], key: external_concept[:key], source_id: external_concept[:source_id]) %> <%# TODO Copy below %>
+    <%= render partial: 'concepts/folder_concept' %>
+    <% concept_difference = (external_concepts.size - filtered_external_concepts.size) %>
+    <%= link_to_function image_tag('contour/addfile.png')+"Show More +#{concept_difference}", "$('##{@current_folder_id}_more').show();$(this).hide();", class: 'button', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px" if concept_difference > 0 %>
+    <div style="clear:both"></div>
+  <% end %>
+
+
+  <% if filtered_concept_scope.size > 0 %>
+    <% filtered_concept_scope.sort{|a,b| a.human_name <=> b.human_name}.each do |concept| %>
+      <%= @concept = concept; @simple = false; render partial: 'concepts/folder_concept' %>
+    <% end %>
+    <% concept_difference = (concept_scope.with_exact_folder(@folder).size - filtered_concept_scope.size) %>
+    <%= link_to_function image_tag('contour/addfile.png')+"Show More +#{concept_difference}", "$('##{@current_folder_id}_more').show();$(this).hide();", class: 'button', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px" if concept_difference > 0 %>
+    <div style="clear:both"></div>
+  <% end %>
+  <div id="<%= @current_folder_id %>_more" style="<%= 'display:none' if filtered_concept_scope.size > 0 %>">
+
+    <% (external_concepts - filtered_external_concepts).sort{|a,b| a[:name] <=> b[:name]}.each do |external_concept| %>
+      <% @concept = Concept.new(name: external_concept[:name], totalnum: external_concept[:totalnum], key: external_concept[:key], source_id: external_concept[:source_id]) %> <%# TODO COPY HERE %>
+      <%= render partial: 'concepts/folder_concept' %>
+    <% end %>
+
+    <% (concept_scope.with_exact_folder(@folder) - filtered_concept_scope).sort{|a,b| a.human_name <=> b.human_name}.each do |concept| %>
+      <%= @concept = concept; @simple = true; render partial: 'concepts/folder_concept' %>
+    <% end %>
+  </div>
+</div>
