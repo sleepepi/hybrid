@@ -1,0 +1,24 @@
+<% if @query_concept.left_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.left_brackets), 0].max %>px"><%= '('*@query_concept.left_brackets %></div><% end %>
+<div style="position:relative;"><div style="padding-left:<%= 10*@query_concept.level %>px"><div id="record_ids_<%= @query_concept.id %>_display" class="quiet records_found" style="top:0;position:absolute;left:-55px;width:50px;text-align:right" title="Sub Total"></div><%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, onclick: "markQueryConcept('#query_concept_#{@query_concept.id}_checked', #{@query_concept.id});" %>
+<%= link_to edit_query_concept_path(@query_concept), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', 'data-image-id' => "query_concept_#{@query_concept.id}_delete_icon" do %>
+<span style="font-size: 1.2em"><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></span>
+
+  <span class="nolink">is</span> <% if @query_concept.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
+
+  <% if @query_concept.value.blank? and @query_concept.concept %>
+    <span class="quiet" style="text-decoration:none;color:#EB6C20">Click to Set Value</span>
+  <% elsif not @query_concept.external_key.blank? %>
+    true
+  <% else %>
+
+    <%= @query_concept.human_value %>
+
+  <% end %>
+  <%= image_tag('icons/gentleface/cursor_H_split_16.png', style: 'vertical-align:text-bottom;cursor:move') %>
+<% end %>
+
+<%= link_to image_tag('contour/blank.png', size: '13x13', style: 'vertical-align:text-bottom;', class: 'faded_delete_icon', 'data-image-id' => "query_concept_#{@query_concept.id}_delete_icon", id: "query_concept_#{@query_concept.id}_delete_icon"), @query_concept, method: :delete, remote: true %>
+</div>
+<div style="padding-left:<%= 10*@query_concept.level %>px"><span id="record_ids_<%= @query_concept.id %>_errors" class="quiet errors_found"></span></div>
+<% if @query_concept.right_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px"><%= ')'*@query_concept.right_brackets %></div><% end %>
+</div>

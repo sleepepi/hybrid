@@ -1,0 +1,93 @@
+<%= form_for(@query_concept, remote: true) do |f| %>
+  <% form_name = @query_concept.new_record? ? 'new_query_concept' : "edit_query_concept_#{@query_concept.id}" %>
+  <fieldset>
+    <legend><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></legend>
+
+    <% if not @query_concept.concept and not @query_concept.external_key.blank? %>
+
+    <% elsif @query_concept.concept.continuous? %>
+      <div class="field">
+        <%= f.label :value %>: <%= f.text_field :value, class: 'continuous', style: "width:290px" %>
+      </div>
+
+      <%= javascript_tag do %>
+        $('#query_concept_value')
+          .qtip({
+            content:{
+              text: '<table><thead><tr><th>Format</th><th>Values Returned</th><th style="border-top:1px solid transparent;border-bottom:1px solid transparent"></th><th>Format</th><th>Values Returned</th></tr></thead>\
+                       <tbody>\
+                         <tr><td>&gt; x</td><td>greater than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
+                           <td>[x:y]</td><td><em style="text-decoration:underline">Including Endpoints</em><br />greater than or equal to <strong>x</strong> and <br />less than or equal to <strong>y</strong></td></tr>\
+                         <tr><td>&gt;= x</td><td>greater than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
+                           <td>(x:y)</td><td><em style="text-decoration:underline">Excluding Endpoints</em><br />greater than <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
+                         <tr><td>&lt; x</td><td>less than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
+                           <td>[x:y)</td><td>greater than or equal to <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
+                         <tr><td>&lt;= x</td><td>less than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
+                           <td>(x:y]</td><td>greater than <strong>x</strong> and <br />less than and equal to <strong>y</strong></td></tr>\
+                         <tr><td>x</td><td>exactly equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
+                           <td style="white-space:nowrap">(a:b), &gt; c</td><td><em style="text-decoration:underline">Combining Formats</em><br /> (greater than <strong>a</strong> and less than <strong>b</strong>) or <br />greater than <strong>c</strong></td></tr>\
+                       </tbody></table>',
+              title:{
+                text: 'Value Formats:'
+              }
+            },
+            position:{
+              my: 'top left',
+              at: 'bottom left',
+//              my: 'left center',
+//              at: 'right center',
+              viewport: $(window)
+            },
+            style:{
+              classes: 'ui-tooltip-shadow'
+            }
+          });
+      <% end %>
+
+    <% elsif @query_concept.concept.categorical? %>
+      <div class="field">
+        <%= f.label :value %>: <%= link_to_function image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), "checkAllCategoricalValues();", class: 'bubble-azure', style: 'padding-top:10px' %>
+        <%= link_to_function image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), "uncheckAllCategoricalValues();", class: 'bubble-azure', style: 'padding-top:10px' %><br />
+        <br />
+        <% @query_concept.concept.recommended_concepts.each do |concept| %>
+          <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></span>
+        <% end %>
+      </div>
+    <% elsif @query_concept.concept.boolean? %>
+      <div class="field">
+        <%= f.label :value %>:
+        <% ['true','false'].each do |value| %>
+          <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></span>
+        <% end %>
+      </div>
+    <% elsif @query_concept.concept.date? %>
+      <div class="field">
+        <%= label_tag :start_date %>:
+        <%= text_field_tag :start_date, (@query_concept.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+      </div>
+      <div class="field">
+        <%= label_tag :end_date %>
+        <%= text_field_tag :end_date, (@query_concept.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+      </div>
+    <% elsif @query_concept.concept.identifier? %>
+      Identifier
+      <%= f.text_field :value %>
+    <% elsif @query_concept.concept.file_locator? %>
+      File Locator
+      <%= f.text_field :value %>
+    <% elsif @query_concept.concept.free_text? %>
+      Free Text
+      <%= f.text_field :value %>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :negated %>:<%= f.check_box :negated %>
+      <p>
+    </div>
+  </fieldset>
+  <div class="actions">
+    <%= link_to_function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'button positive' %>
+    <%= link_to_function image_tag('contour/cross.png', align: 'absmiddle') + 'Cancel', "disablePopup();", class: 'button' %>
+  </div>
+<% end %>
+<%= link_to image_tag('contour/delete.png', align: 'absmiddle') + 'Delete', @query_concept, method: 'delete', remote: true, onclick: 'disablePopup();', class: 'button negative' %>

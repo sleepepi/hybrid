@@ -1,0 +1,44 @@
+//$("#query_concept_<%= @query_concept.id %>").html("<%= escape_javascript(render("edit")) %>");
+
+$("#popup").css({
+  "width": "816px", // "408px"
+  "height": ""
+});
+
+$("#popup_title").html("<%= escape_javascript(image_tag('contour/edit.png', align: 'absmiddle', alt: '')) %> Edit");
+$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
+$("#popup_content_left").html("<%= escape_javascript(render("edit")) %>");
+
+<% if @concept %>
+  <% @query = nil %>
+$("#popup_info").html("<%= escape_javascript(render("concepts/info")) %>");
+<% end %>
+
+
+$(document.body).qtip('hide');loadPopup();
+centerPopup();
+
+$('input.continuous').watermark('Drag and select a range on the graph!');
+
+<% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
+  <% width = @defaults[:width].to_s.gsub("'", '') %>
+  <% height = @defaults[:height].to_s.gsub("'", '') %>
+  $("#distribution").html('<div id="<%= @chart_element_id %>" style="position:relative;width: <%= width %>;height: <%= height %>"></div><%= escape_javascript(@stats.to_s.html_safe) %>');
+
+
+  <% case @chart_type when 'column' %>
+    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>, <%= "[" + @categories.join(',') + "]" %>);
+  <% when 'pie' %>
+    drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'scatter' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'categorical_vs_continuous' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'continuous_vs_categorical' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% when 'categorical_vs_categorical' %>
+    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  <% end %>
+<% end %>
+
+$('.datepicker').datepicker({ showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
