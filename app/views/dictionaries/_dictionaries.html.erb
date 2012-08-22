@@ -20,7 +20,7 @@
 
         <td><%= dictionary.concepts.size %></td>
         <td><%#= dictionary.concept_property_concepts.size %></td>
-        <td><%= link_to 'CSV File', export_to_csv_dictionary_path(dictionary) %> or <%= link_to 'OWL File', export_to_owl_dictionary_path(dictionary) %></td>
+        <td><%= link_to 'CSV File', export_to_csv_dictionary_path(dictionary) %></td>
       </tr>
       <% unless dictionary.description.blank? %>
         <tr>
