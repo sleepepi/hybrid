@@ -6,10 +6,23 @@ class SourceRulesController < ApplicationController
     source = Source.find_by_id(params[:source_id])
     @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source rules")
 
-    if @source
-      @source_rules = @source.source_rules.order('(source_rules.name IS NULL or source_rules.name = ""), source_rules.name, source_rules.id')
-    else
-      redirect_to root_path
+    respond_to do |format|
+      if @source
+        source_rule_scope = @source.source_rules
+
+        @order = scrub_order(SourceRule, params[:order], 'source_rules.name')
+        source_rule_scope = source_rule_scope.order(@order)
+
+        @source_rules = source_rule_scope.page(params[:page]).per( 20 )
+
+        format.html # index.html.erb
+        format.js
+        format.json { render json: @source_rules }
+      else
+        format.html { redirect_to root_path }
+        format.js { render nothing: true }
+        format.json { head :no_content }
+      end
     end
   end
 

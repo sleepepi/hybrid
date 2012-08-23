@@ -1,26 +1,25 @@
-<% @title = "Rule: #{@source_rule.name}" %>
-<h1>
-  <%= link_to @source_rule.source.name, @source_rule.source %> &raquo;<%= @title %>
-</h1>
-<% if @source.user_has_action?(current_user, "edit data source rules") %>
-  <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '') + "Edit Source Rule", edit_source_rule_path(@source_rule), class: 'btn' %>
-  <%= link_to image_tag('gentleface/16/doc_delete.png', alt: '') + "Delete Source Rule", source_rule_path(@source_rule, source_id: @source.id), confirm: "Are you sure you want to delete Source Rule #{@source_rule.name}?", method: :delete, class: 'btn btn-danger' %>
-<% end %>
-<%= link_to "View All Source Rules", source_rules_path(source_id: @source.id), class: 'btn' %>
+<% @title = "Source Rule: #{@source_rule.name}" %>
+<div class="page-header">
+  <h1>
+    <%= link_to @source_rule.source.name, @source_rule.source %> &raquo;<%= @title %>
+    <% if @source.user_has_action?(current_user, "edit data source rules") %>
+      <%= link_to "Edit Source Rule", edit_source_rule_path(@source_rule), class: 'btn btn-mini' %>
+      <%= link_to "Delete Source Rule", source_rule_path(@source_rule, source_id: @source.id), confirm: "Are you sure you want to delete Source Rule #{@source_rule.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+    <% end %>
+    <%= link_to "View Source Rules", source_rules_path(source_id: @source.id), class: 'btn btn-mini' %>
+  </h1>
+</div>
 
-<div style="clear:both"></div>
+<dl class="dl-horizontal">
+  <dt>Description</dt>
+  <dd><%= simple_format @source_rule.description %></dd>
 
-<pre><%= @source_rule.description %></pre>
-
-<fieldset>
-  <br />
-
-  <p>
-    <b>Actions:</b><br />
+  <dt>Actions</dt>
+  <dd>
     <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
       <tr>
         <% SourceRule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
-          <td>
+          <td style="vertical-align:top">
             <%= check_box_tag rule_group, '1', false, disabled: true, class: "rule_group_#{index}_parent" %> <b><%= rule_group %></b><br />
             <% rules.each do |rule| %>
               &nbsp;&nbsp;<%= check_box_tag "rules[#{rule.gsub(' ', '_')}]", '1', @source_rule.has_action?(rule), disabled: true, class: "rule_group_#{index}" %> <%= rule %><br />
@@ -30,19 +29,18 @@
         <% end %>
       </tr>
     </table>
-  </p>
+  </dd>
 
-  <p>
-    <b>Users:</b>
+  <dt>Users</dt>
+  <dd>
     <ul>
-    <% @source_rule.users.collect{|id| User.find_by_id(id)}.compact.each do |user| %>
-      <li><%= link_to user.name, user %> &lsaquo;<%= user.email %>&rsaquo;</li>
-    <% end %>
+      <% @source_rule.users.collect{|id| User.find_by_id(id)}.compact.each do |user| %>
+        <li><%= link_to user.name, user %> &lsaquo;<%= user.email %>&rsaquo;</li>
+      <% end %>
     </ul>
-  </p>
+  </dd>
 
-  <p>
-    <b>Blocked:</b>
-    <%= @source_rule.blocked %>
-  </p>
-</fieldset>
+  <dt>Blocked</dt>
+  <dd><%= @source_rule.blocked %></dd>
+
+</dl>

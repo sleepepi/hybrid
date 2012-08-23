@@ -1,5 +1,8 @@
-<% width = '914px' %>
-<%= form_for(@source_rule) do |f| %>
+<div class="page-header">
+  <h1><%= @title %></h1>
+</div>
+
+<%= form_for @source_rule, html: { class: 'form-horizontal' } do |f| %>
   <% if @source_rule.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@source_rule.errors.count, "error") %> prohibited this source_rule from being saved:</h2>
@@ -14,26 +17,27 @@
 
   <%= hidden_field_tag :source_id, @source.id %>
 
-  <fieldset>
-    <legend><%= @title %></legend>
-
-    <div class="field">
-      <%= f.label :name %><br />
+  <div class="control-group">
+    <%= f.label :name, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.text_field :name %>
-      <%= javascript_tag "$('#source_rule_name').watermark('#{@source_rule.name = nil; @source_rule.name}');" %>
     </div>
+  </div>
 
-    <div class="field">
-      <%= f.label :description %><br />
-      <%= f.text_area :description, rows: 7, style: "width:#{width}" %>
+  <div class="control-group">
+    <%= f.label :description, nil, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
+  </div>
 
-    <div class="field">
-      <%= f.label :actions %><br /><br />
+  <div class="control-group">
+    <%= f.label :actions, nil, class: 'control-label' %>
+    <div class="controls">
       <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
         <tr>
           <% SourceRule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
-            <td>
+            <td style="vertical-align:top">
               <%= check_box_tag rule_group, '1', false, onclick: "toggleCheckboxGroup(#{index});", class: "rule_group_#{index}_parent" %> <b><%= rule_group %></b><br />
               <% rules.each do |rule| %>
                 &nbsp;&nbsp;<%= check_box_tag "rules[#{rule.gsub(' ', '_')}]", '1', @source_rule.has_action?(rule), onclick: "toggleCheckboxGroupParent(#{index});", class: "rule_group_#{index}" %> <%= rule %><br />
@@ -43,26 +47,25 @@
           <% end %>
         </tr>
       </table>
-      <br />
     </div>
-    <div class="field">
-      <%= f.label :user_tokens, 'Users' %><br />
+  </div>
+
+  <div class="control-group">
+    <%= f.label :users, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.text_field :user_tokens, "data-pre" => (@source_rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| {name: u.name_and_email, id: u.id}}.to_json %>
     </div>
-    <div class="field">
-      <%= f.label :blocked %><br />
+  </div>
+
+  <div class="control-group">
+    <%= f.label :blocked, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.check_box :blocked %>
     </div>
+  </div>
 
-  </fieldset>
-
-  <div class="actions">
-    <% form_name = @source_rule.new_record? ? 'new_source_rule' : "edit_source_rule_#{@source_rule.id}" %>
-    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@source_rule.new_record? ? "Create Rule" : "Update Rule"), "$('##{form_name}').submit();", class: "button positive" %>
-    <% if @source_rule.new_record? %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', source_rules_path(source_id: @source.id), class: 'btn btn-danger' %>
-    <% else %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', @source_rule, class: 'btn btn-danger' %>
-    <% end %>
+  <div class="form-actions">
+    <%= f.submit nil, class: 'btn btn-primary' %>
+    <%= cancel %>
   </div>
 <% end %>
