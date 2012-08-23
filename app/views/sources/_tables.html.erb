@@ -6,7 +6,7 @@
   <% if @source.user_has_action?(current_user, "edit data source mappings") %>
     <%= form_tag auto_map_source_path(@source), method: :post, remote: true, id: 'auto_map_form_all', style: 'display:inline' do %>
       <%= link_to_function 'Auto Map All Tables', "$('#auto_map_form_all').submit();showWaiting('#table_content', '', true);" %>
-      to dictionary
+      to Dictionary
       <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
       <br />
       Name Space

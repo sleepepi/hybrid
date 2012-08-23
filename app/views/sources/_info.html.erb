@@ -69,7 +69,7 @@
 <% end %>
 
 <% if @source.all_dictionaries.size > 0 %>
-  <h4>Associated dictionaries</h4>
+  <h4>Associated Dictionaries</h4>
   <ul>
     <% @source.all_dictionaries.sort{|a,b| a.name <=> b.name}.each do |dictionary| %>
       <li><%= link_to dictionary.name, concepts_path(dictionary_id: dictionary.id), target: '_blank' %> <% if false %> <%= image_tag('contour/xls.png', style: 'vertical-align:text-bottom') %> <%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary) %> <% end %><br /><br /></li>

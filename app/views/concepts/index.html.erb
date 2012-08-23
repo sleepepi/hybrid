@@ -6,7 +6,7 @@
 <% end %>
 
 <% if @dictionary and false %>
-  <%= link_to image_tag('contour/download.png', alt: '') + 'dictionary: ' + @dictionary.name + ' ' + image_tag('contour/xls.png', alt: '') + ' CSV File', export_to_csv_dictionary_path(@dictionary), class: 'button' %>
+  <%= link_to image_tag('contour/download.png', alt: '') + 'Dictionary: ' + @dictionary.name + ' ' + image_tag('contour/xls.png', alt: '') + ' CSV File', export_to_csv_dictionary_path(@dictionary), class: 'button' %>
 <% end %>
 
 <%= form_tag concepts_path, method: :get, remote: true, id: "concepts_search" do %>
