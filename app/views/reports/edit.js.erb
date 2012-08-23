@@ -4,7 +4,7 @@
   $("#popup").css({
     "width": "816px" //"408px"
   });
-  $("#popup_title").html("<%= escape_javascript(image_tag('contour/open.png', align: 'absmiddle', alt: '')) %> <%= escape_javascript(@report.name) %>")
+  $("#popup_title").html("<%= escape_javascript(image_tag('gentleface/16/folder_open.png', align: 'absmiddle', alt: '')) %> <%= escape_javascript(@report.name) %>")
   $("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'></div><div style='clear:both'></div>");
 
   $("#popup_content_left").html("<%= escape_javascript(render("concepts/folder_search") + '<div id="concept_folders">'.html_safe + render("concepts/folders") + '</div>'.html_safe) %>");

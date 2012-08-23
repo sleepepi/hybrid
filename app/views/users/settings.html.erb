@@ -1,18 +1,17 @@
 <% @title = "My Settings" %>
-<h1><%= @title %></h1>
+<div class="page-header">
+  <h1>Email Notifications</h1>
+</div>
 
-<%= form_tag update_settings_user_path(current_user), method: :post, id: 'email_settings' do %>
-  <fieldset>
-    <legend>Email Notifications</legend>
-    <div class="field">
-      <label>Emails</label><br />
-      <%= check_box_tag 'email[send_email]', '1', current_user.email_on?(:send_email) %> <%= information('Receive Emails') %>
+<%= form_tag update_settings_user_path(current_user), method: :post, id: 'email_settings', class: 'form-horizontal' do %>
+  <div class="control-group">
+    <div class="controls checkbox">
+      <label><%= check_box_tag 'email[send_email]', '1', current_user.email_on?(:send_email) %> Receive Emails</label>
     </div>
-  </fieldset>
+  </div>
 
-  <div class="actions">
+  <div class="form-actions">
     <% form_name = "email_settings" %>
-    <%= link_to_function image_tag('contour/tick.png', alt: '') + "Save Settings", "$('##{form_name}').submit();", class: "button positive" %>
-  	<br />
+    <%= submit_tag "Save Settings", class: 'btn btn-primary' %>
   </div>
 <% end %>

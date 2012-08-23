@@ -143,7 +143,7 @@ class QueryConceptsControllerTest < ActionController::TestCase
 
   test "should not create query concept without valid concept" do
     assert_difference('QueryConcept.count', 0) do
-      post :create, query_concept: @query_concept.attributes, query_id: queries(:one).to_param, selected_concept_id: -1, format: 'js'
+      post :create, query_concept: @query_concept.attributes, query_id: queries(:one).to_param, selected_concept_id: '-1', format: 'js'
     end
 
     assert_not_nil assigns(:query)

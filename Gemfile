@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails',                '3.2.3'
+gem 'rails',                '3.2.4'
 
 # Database Adapter
 # Install instructions for Windows: http://blog.mmediasys.com/2011/07/07/installing-mysql-on-windows-7-x64-and-using-ruby-with-it/
@@ -9,11 +9,7 @@ gem 'thin',                 '~> 1.4.1',           :platforms => [ :mswin, :mingw
 gem 'eventmachine',         '~> 1.0.0.rc.4',      :platforms => [ :mswin, :mingw ]
 
 # Gems used by project
-gem 'contour',              '~> 0.10.2'
-gem 'contour-minimalist',   '~> 0.1.4'
-
-# gem 'contour',              '~> 0.11.0.pre'
-# gem 'contour-minimalist',   '~> 0.2.0.pre'
+gem 'contour',              '~> 1.0.0'
 gem 'kaminari'
 # Builder: For Building XML messages for Web service based data sources
 gem 'builder',              '~> 3.0.0'

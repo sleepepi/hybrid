@@ -8,7 +8,7 @@
           <div style="float:left;width:50px"><label>With: </label></div>
           <div style="float:left">
             <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', style: 'width:475px', class: 'bubble-orange', tabindex: '2' %>
-            <%= link_to image_tag('contour/open.png', style: 'vertical-align:text-bottom'), search_folder_concepts_path(popup: true, query_id: @query.id, add_report_id: @report.id), method: :post, remote: true, id: 'open_concepts', class: 'bubble-grey' %>
+            <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom'), search_folder_concepts_path(popup: true, query_id: @query.id, add_report_id: @report.id), method: :post, remote: true, id: 'open_concepts', class: 'bubble-grey' %>
           </div>
         </div>
       <% end %>

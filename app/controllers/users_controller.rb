@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, except: [:new, :create]
-  before_filter :check_system_admin, except: [:new, :create, :index, :show, :settings, :update_settings, :activate]
+  before_filter :check_system_admin, except: [:new, :create, :settings, :update_settings, :activate]
   before_filter :check_service_account, only: [:activate]
 
   def settings
@@ -17,18 +17,26 @@ class UsersController < ApplicationController
   end
 
   def index
-    params[:search] ||= params[:q]
-    current_user.update_attribute :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
-    @order = params[:order].blank? ? 'users.current_sign_in_at DESC' : params[:order]
-    users_scope = User.current
-    @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-    @search_terms.each{|search_term| users_scope = users_scope.search(search_term) }
-    users_scope = users_scope.order(@order)
-    @users = users_scope.page(params[:page]).per(current_user.users_per_page)
+    unless current_user.system_admin? or params[:format] == 'json'
+      redirect_to root_path, alert: "You do not have sufficient privileges to access that page."
+      return
+    end
+    current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
+
+    user_scope = User.current
+    @search_terms = (params[:search] || params[:q]).to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
+    @search_terms.each{|search_term| user_scope = user_scope.search(search_term) }
+
+    @order = scrub_order(User, params[:order], 'users.current_sign_in_at DESC')
+    user_scope = user_scope.order(@order)
+
+    @count = user_scope.count
+    @users = user_scope.page(params[:page]).per(current_user.users_per_page)
+
     respond_to do |format|
       format.html
       format.js
-      format.json { render json: @users.collect{|u| {name: u.name_and_email, id: u.id}}}
+      format.json { render json: params[:q].to_s.split(',').collect{|u| (u.strip.downcase == 'me') ? { name: current_user.name, id: current_user.name } : { name: u.strip.titleize, id: u.strip.titleize }} + @users.collect{|u| { name: u.name, id: u.name }}}
     end
   end
 
