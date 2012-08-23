@@ -2,7 +2,7 @@
 <h1><%= @title %></h1>
 
 <% if current_user.system_admin? %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New File Type", new_file_type_path, class: 'button positive' %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New File Type", new_file_type_path, class: 'btn btn-primary' %>
 <% end %>
 
 <div style="clear:both"></div>

@@ -11,7 +11,7 @@
     <% if external_concepts_hash[:error].blank? %>
       <% external_concepts = external_concepts | external_concepts_hash[:result] %>
     <% elsif current_user.system_admin? %>
-      <code><%= image_tag 'contour/warning.png', style: 'vertical-align:text-bottom' %> <%= external_concepts_hash[:error] %></code><br /><br />
+      <span class="label label-warning"><%= external_concepts_hash[:error] %></span>
     <% end %>
   <% end %>
 <% else %>

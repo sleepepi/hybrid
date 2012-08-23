@@ -86,8 +86,8 @@
     </div>
   </fieldset>
   <div class="actions">
-    <%= link_to_function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'button positive' %>
+    <%= link_to_function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'btn btn-primary' %>
     <%= link_to_function image_tag('contour/cross.png', align: 'absmiddle') + 'Cancel', "disablePopup();", class: 'btn' %>
   </div>
 <% end %>
-<%= link_to image_tag('contour/delete.png', align: 'absmiddle') + 'Delete', @query_concept, method: 'delete', remote: true, onclick: 'disablePopup();', class: 'button negative' %>
+<%= link_to image_tag('gentleface/16/doc_delete.png', align: 'absmiddle') + 'Delete', @query_concept, method: 'delete', remote: true, onclick: 'disablePopup();', class: 'btn btn-danger' %>

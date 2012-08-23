@@ -4,7 +4,7 @@
 </h1>
 
 <% if current_user.system_admin? %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Join", new_source_join_path(source_id: @source ? @source.id : nil), class: 'button positive' %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Join", new_source_join_path(source_id: @source ? @source.id : nil), class: 'btn btn-primary' %>
 <% end %>
 
 <%= form_tag source_joins_path(source_id: @source ? @source.id : nil), method: :get, remote: true, id: "source_joins_search" do %>

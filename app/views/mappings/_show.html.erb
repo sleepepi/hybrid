@@ -14,8 +14,8 @@
     <td valign="top" style="white-space:nowrap">
       <div style="width:35px">
         <% if @mapping.source.user_has_action?(current_user, "edit data source mappings") %>
-          <%= link_to image_tag('contour/edit.png', style: 'border:none'), edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, title: "Edit Mapping" %>
-          <%= link_to image_tag('contour/delete.png', style: 'border:none'), mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, title: "Remove Mapping" %>
+          <%= link_to image_tag('gentleface/16/doc_edit.png', style: 'border:none'), edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, title: "Edit Mapping" %>
+          <%= link_to image_tag('gentleface/16/doc_delete.png', style: 'border:none'), mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, title: "Remove Mapping" %>
         <% end %>
       </div>
     </td>

@@ -3,14 +3,14 @@
     <% report_type = @report.is_dataset? ? 'Dataset' : 'Report' %>
     <% if @report.concepts.include?(@concept) %>
       <% report_concept = @report.report_concepts.find_by_concept_id(@concept.id) %>
-      <%= link_to image_tag('contour/delete.png', align: 'absmiddle', alt: '') + "Remove from #{report_type}", report_concept, method: :delete, remote: true, title: @concept.human_name, class: 'button negative', confirm: "Are you sure you want to remove #{@concept.human_name} from Dataset: #{@report.name}?" %>
+      <%= link_to "Remove from #{report_type}", report_concept, method: :delete, remote: true, title: @concept.human_name, class: 'btn btn-danger', confirm: "Are you sure you want to remove #{@concept.human_name} from Dataset: #{@report.name}?" %>
     <% else %>
-      <%= link_to image_tag('contour/addfile.png', align: 'absmiddle', alt: '') + "Add to #{report_type}", report_concepts_path(query_id: @query.id, concept_id: @concept.id, report_id: params[:add_report_id], source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'button positive' %>
+      <%= link_to "Add to #{report_type}", report_concepts_path(query_id: @query.id, concept_id: @concept.id, report_id: params[:add_report_id], source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary' %>
     <% end %>
   <% else %>
     <span class="large"><strong><%= @concept.human_name %></strong></span>
     <br />
-    <%= link_to image_tag('contour/addfile.png', align: 'absmiddle', alt: '') + "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'button positive', onclick: "disablePopup();" %>
+    <%= link_to "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary', onclick: '$("#concepts_popup").modal("hide");' %>
   <% end %>
 <% else %>
   <span class="large"><strong><%= @concept.human_name %></strong></span>

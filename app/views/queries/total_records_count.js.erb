@@ -11,8 +11,8 @@ $(".errors_found").html("");
 <% end %>
 <% @overall_errors.each do |grouping,error| %>
   <% if grouping == nil %>
-    $('#total_errors_found').html("<%= escape_javascript(image_tag('contour/warning.png', size: '13x13', style: 'vertical-align:text-bottom')) %> <%= escape_javascript(error.html_safe) %>");
+    $('#total_errors_found').html("<span class='label label-warning'><%= escape_javascript(error.html_safe) %></span>");
   <% else %>
-    $('#<%= grouping %>_errors').html("<%= escape_javascript(image_tag('contour/warning.png', size: '13x13', style: 'vertical-align:text-bottom')) %> <%= escape_javascript(error.html_safe) %>");
+    $('#<%= grouping %>_errors').html("<span class='label label-warning'><%= escape_javascript(error.html_safe) %></span>");
   <% end %>
 <% end %>

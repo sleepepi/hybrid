@@ -1,5 +1,5 @@
 <%= link_to @report.name, edit_report_path(@report, query_id: @query.id), method: :get, remote: true, onclick: "$('#inlaid_report').html('<div class=\"frame\"><table width=\"100%\"><tr><td id=\"report_waiting_#{@report.id}\"></td></tr></table></div>');showWaiting('#report_waiting_#{@report.id}', ' Loading #{@report.is_dataset? ? 'Dataset' : 'Report'}', true);" %>
 
 
-<%= link_to image_tag('contour/edit.png', alt: '', style: 'vertical-align:text-bottom'), edit_name_report_path(@report, query_id: @query.id), method: :post, remote: true %>
-<%= link_to image_tag('contour/blank.png', size: '13x13', style: 'vertical-align:text-bottom;', class: 'faded_delete_icon', 'data-image-id' => "report_#{@report.id}_delete_icon", id: "report_#{@report.id}_delete_icon"), report_path(@report, query_id: @query.id), method: :delete, remote: true, confirm: "Are you sure you want to delete #{@report.name}?" %>
+<%= link_to image_tag('gentleface/16/doc_edit.png', alt: '', style: 'vertical-align:text-bottom'), edit_name_report_path(@report, query_id: @query.id), method: :post, remote: true %>
+<%= link_to 'remove', report_path(@report, query_id: @query.id), method: :delete, remote: true, confirm: "Are you sure you want to delete #{@report.name}?", class: 'btn btn-mini btn-danger' %>

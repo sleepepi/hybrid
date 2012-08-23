@@ -17,7 +17,7 @@
   <%= image_tag('icons/gentleface/cursor_H_split_16.png', style: 'vertical-align:text-bottom;cursor:move') %>
 <% end %>
 
-<%= link_to image_tag('contour/blank.png', size: '13x13', style: 'vertical-align:text-bottom;', class: 'faded_delete_icon', 'data-image-id' => "query_concept_#{@query_concept.id}_delete_icon", id: "query_concept_#{@query_concept.id}_delete_icon"), @query_concept, method: :delete, remote: true %>
+<%= link_to 'remove', @query_concept, method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
 </div>
 <div style="padding-left:<%= 10*@query_concept.level %>px"><span id="record_ids_<%= @query_concept.id %>_errors" class="quiet errors_found"></span></div>
 <% if @query_concept.right_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px"><%= ')'*@query_concept.right_brackets %></div><% end %>

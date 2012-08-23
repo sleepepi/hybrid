@@ -12,7 +12,7 @@
       Name Space
       <%= select_tag :all_namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.compact.uniq.sort{|a,b| a.downcase <=> b.downcase}.collect{|item| [item, item]}, params[:namespace]), name: 'namespace' %>
     <% end %><br />
-    <%= link_to image_tag('contour/delete.png', style: 'border:none', align: 'absmiddle', size: '15x15', title: 'Delete all associated Data Source Mappings') + " Delete All Mappings", remove_all_mappings_source_path(@source), method: :post, confirm: "Are you sure you want to DELETE all associated data source mappings for Data Source #{@source.name}?" %>
+    <%= link_to image_tag('gentleface/16/doc_delete.png', style: 'border:none', align: 'absmiddle', size: '15x15', title: 'Delete all associated Data Source Mappings') + " Delete All Mappings", remove_all_mappings_source_path(@source), method: :post, confirm: "Are you sure you want to DELETE all associated data source mappings for Data Source #{@source.name}?" %>
   <% end %>
   <ul>
   <% @tables.sort.each do |table| %>

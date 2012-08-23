@@ -1,6 +1,6 @@
 <% form_name = "report_#{@report.id}_name_form" %>
 <%= form_tag save_name_report_path(@report, query_id: @query.id), method: :post, remote: true, id: "#{form_name}" do %>
   <%= text_field :report, :name, style: 'width:200px', id: "report_name_field_#{@report.id}" %>
-  <%= link_to_function image_tag('contour/save.png', alt: '', style: 'vertical-align:text-bottom'), "$('##{form_name}').submit();" %>
+  <%= link_to_function image_tag('gentleface/16/save.png', alt: '', style: 'vertical-align:text-bottom'), "$('##{form_name}').submit();" %>
 <% end %>
 <%= javascript_tag "$('#report_name_field_#{@report.id}').watermark('#{@report.name = nil; @report.name}');" %>

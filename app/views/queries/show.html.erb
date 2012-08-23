@@ -12,7 +12,7 @@
       <%= form_tag query_sources_path(query_id: @query), method: :post, remote: true, onsubmit: "showWaiting('#query_sources', 'Loading Sources', false)", id: "sources_form" do %>
         <%= hidden_field_tag 'selected_source_id' %>
         <div class="field">
-          <div style="float:left;width:50px"><label>From: </label></div>
+          <div style="float:left;width:50px"><label>From</label></div>
           <div style="float:left">
             <%= text_field_tag :source, '', style: 'width:475px;', name: 'search', class: 'bubble-orange', tabindex: '1' %>
             <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom;padding-right:8px'), sources_path(popup: true, query_id: @query.id), remote: true, id: 'open_sources', class: 'bubble-grey' %>
@@ -25,7 +25,7 @@
       <%= form_tag query_concepts_path(query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#concept_folders', 'Loading Concepts', false);", id: 'search_form' do %>
         <%= hidden_field_tag 'selected_concept_id' %>
         <div class="field">
-          <div style="float:left;width:50px"><label>With: </label></div>
+          <div style="float:left;width:50px"><label>With</label></div>
           <div style="float:left">
             <%= text_field_tag 'concept_search_term', '', style: 'width:475px', class: 'bubble-orange', tabindex: '2' %>
             <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom;padding-right:8px'), search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, id: 'open_concepts', class: 'bubble-grey' %>
@@ -36,8 +36,7 @@
     <td style="vertical-align:top;text-align:right">
       <div style="background-color:white">
         <div id="query_<%= @query.id %>_name" style="margin-top:5px"><%= render partial: 'queries/name' %></div><br />
-        <%= link_to "History", queries_path, id: 'history_link', style: 'padding-left:8px' %>
-        <%= link_to image_tag('contour/mydocuments.png', alt: '', style: 'vertical-align:text-bottom;cursor:pointer'), queries_path %><br />
+        <%= link_to "History", queries_path, id: 'history_link', style: 'padding-left:8px' %><br />
         <%= javascript_tag("$('#history_link').CreateBubblePopup({
           innerHtml: '#{pluralize(current_user.all_queries.size, 'Existing Search')}',
           themeName: 'orange',
@@ -127,7 +126,6 @@
 </div>
 
 <%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', false)" do %>
-  <%#= link_to_function 'Update', "$('#query_form').submit();", id: 'refresh_count' %>
 <% end %>
 
 <br />
@@ -136,14 +134,14 @@
   <tr>
     <td valign="top" style="padding-left:0px">
       <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-          <span style="padding-bottom:10px;font-weight:bold">Result:</span>
+          <span style="padding-bottom:10px;font-weight:bold">Result</span>
           <span id="total_records_found_display" class="records_found"></span>
           <span id="total_errors_found" class="errors_found"></span>
       </td></tr></table></div>
     </td>
     <td valign="top">
       <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Datasets: <%= image_tag('contour/addfile.png', style: 'vertical-align:text-bottom;cursor:pointer', alt: '', id: 'add_dataset_tab', class: 'bubble-orange') %></span>
+        <span style="padding-bottom:10px;font-weight:bold">Datasets <%= link_to 'create', '#', id: 'add_dataset_tab', class: 'btn btn-mini btn-primary bubble-orange' %></span>
         <div id="datasets_container">
           <%= render partial: 'reports/datasets' %>
         </div>
@@ -151,7 +149,7 @@
     </td>
     <td valign="top">
       <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Reports: <%= image_tag('contour/addfile.png', style: 'vertical-align:text-bottom;cursor:pointer', alt: '', id: 'add_report_tab', class: 'bubble-orange') %></span>
+        <span style="padding-bottom:10px;font-weight:bold">Reports <%= link_to 'create', '#', id: 'add_report_tab', class: 'btn btn-mini btn-primary bubble-orange' %></span>
         <div id="reports_container">
           <%= render partial: 'reports/reports' %>
         </div>
@@ -159,7 +157,7 @@
     </td>
     <td valign="top" style="padding-right:0px">
       <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Data Files:</span>
+        <span style="padding-bottom:10px;font-weight:bold">Data Files</span>
         <div id="query_file_types">
           <%= render partial: 'queries/file_types' %>
         </div>
@@ -172,3 +170,6 @@
 <div id="information" style="display:none"></div>
 <br />
 <div id="inlaid_report"></div>
+
+<%= render partial: 'sources/modal' %>
+<%= render partial: 'concepts/modal' %>

@@ -1,4 +1,5 @@
-disablePopup();
+$("#sources_popup").modal('hide');
+
 $("#query_sources").html("<%= escape_javascript(render("query_sources/query_sources")) %>");
 $("#query_file_types").html("<%= escape_javascript(render("queries/file_types")) %>")
 $('#selected_source_id').val('');

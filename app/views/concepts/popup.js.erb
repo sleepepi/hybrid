@@ -1,12 +1,14 @@
-$("#popup").css({
-  "width": "816px" //"408px"
-});
-$("#popup_title").html("<%= escape_javascript(image_tag('gentleface/16/folder_open.png', align: 'absmiddle', alt: '')) %> Concepts")
-$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><%= escape_javascript(render("layouts/expand_popup")) %><div id='popup_info'></div></div><div style='clear:both'></div>");
+$("#concepts_popup").modal({ dynamic: true });
+$("#concepts_popup").modal('show');
+
+$("#concepts_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><%= escape_javascript(render("layouts/expand_popup")) %><div id='popup_info'></div></div><div style='clear:both'></div>");
+
+
+// $("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><%= escape_javascript(render("layouts/expand_popup")) %><div id='popup_info'></div></div><div style='clear:both'></div>");
 $("#popup_content_left").html("<%= escape_javascript(render("concepts/folder_search") + '<div id="concept_folders">'.html_safe + render("concepts/folders") + '</div>'.html_safe) %>");
 $("#popup_info").html("<br /><br /><span class='quiet'><img align='absmiddle' alt='' src='<%= request.script_name %>/assets/icons/closed.png'/> Navigate through the folders by clicking the expand folder icon.<br /><img align='absmiddle' alt='' src='<%= request.script_name %>/assets/contour/information.png'/> Click on a concept for a detailed description.</span>");
-$(document.body).qtip('hide');loadPopup();
-centerPopup();
+$(document.body).qtip('hide');
+
 
 $('#concept_search').watermark('Enter concept name or navigate folders.');
 

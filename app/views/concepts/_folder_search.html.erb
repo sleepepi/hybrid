@@ -9,15 +9,15 @@
   </div>
   <br />
   <div class="field">
-    <%= image_tag("contour/information.png", style: "vertical-align:text-bottom") %> Click on a concept for a detailed description.
+    Click on a concept for a detailed description.
   </div>
   <br />
   <div class="field common">
-    <%= image_tag("contour/blank.png", style: "vertical-align:text-bottom") %> <%= link_to 'Commonly Used Concept', '#' %>
+    <%= link_to 'Commonly Used Concept', '#' %>
   </div>
   <br />
   <div class="field uncommon">
-    <%= image_tag("contour/blank.png", style: "vertical-align:text-bottom") %> <%= link_to 'Uncommon Concept', '#' %>
+    <%= link_to 'Uncommon Concept', '#' %>
   </div>
 </fieldset>
 <%#= text_field_tag 'concept_search', '', onchange: remote_function(url: search_folder_concepts_path(query_id: @query.id), method: :post, with: "$('concept_search').serialize()", before: "showWaitingNew('concept_folders', true);") + "; return false;" %>

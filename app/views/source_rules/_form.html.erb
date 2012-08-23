@@ -60,9 +60,9 @@
     <% form_name = @source_rule.new_record? ? 'new_source_rule' : "edit_source_rule_#{@source_rule.id}" %>
     <%= link_to_function image_tag('contour/tick.png', alt: '') + (@source_rule.new_record? ? "Create Rule" : "Update Rule"), "$('##{form_name}').submit();", class: "button positive" %>
     <% if @source_rule.new_record? %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', source_rules_path(source_id: @source.id), class: 'button negative' %>
+      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', source_rules_path(source_id: @source.id), class: 'btn btn-danger' %>
     <% else %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', @source_rule, class: 'button negative' %>
+      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', @source_rule, class: 'btn btn-danger' %>
     <% end %>
   </div>
 <% end %>
