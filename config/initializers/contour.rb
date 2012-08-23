@@ -31,10 +31,6 @@ Contour.setup do |config|
               { name: 'Logout', path: 'destroy_user_session_path' }]
     },
     {
-      name: 'About', display: 'not_signed_in', path: 'about_path', position: 'left',
-      links: []
-    },
-    {
       name: 'Search', display: 'signed_in', path: 'root_path', position: 'left',
       links: [{ name: 'History', path: 'queries_path' },
               { html: '<br />' },
@@ -46,6 +42,22 @@ Contour.setup do |config|
       links: [{ name: 'Rules', path: 'source_rules_path(source_id: @source.id)' },
               { name: 'File Types', path: 'source_file_types_path(source_id: @source.id)' },
               { name: 'Joins', path: 'source_joins_path(source_id: @source.id)' }]
+    },
+    {
+      name: 'Dictionaries', display: 'signed_in', path: 'dictionaries_path', position: 'left', condition: 'current_user.system_admin?',
+      links: []
+    },
+    {
+      name: 'Sources', display: 'signed_in', path: 'sources_path', position: 'left', condition: 'current_user.system_admin?',
+      links: []
+    },
+    {
+      name: 'Users', display: 'signed_in', path: 'users_path', position: 'left', condition: 'current_user.system_admin?',
+      links: []
+    },
+    {
+      name: 'About', display: 'always', path: 'about_path', position: 'left',
+      links: []
     }
   ]
 

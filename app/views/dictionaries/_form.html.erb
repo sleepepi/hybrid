@@ -38,7 +38,7 @@
   </fieldset>
   <div class="actions">
     <% form_name = @dictionary.new_record? ? 'new_dictionary' : "edit_dictionary_#{@dictionary.id}" %>
-    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@dictionary.new_record? ? "Create dictionary" : "Update dictionary"), "$('##{form_name}').submit();", class: "button positive" %>
+    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@dictionary.new_record? ? "Create Dictionary" : "Update Dictionary"), "$('##{form_name}').submit();", class: "button positive" %>
     <%= cancel %>
   </div>
 <% end %>
