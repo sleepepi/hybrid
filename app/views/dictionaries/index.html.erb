@@ -1,8 +1,8 @@
-<% @title = 'dictionaries' %>
+<% @title = 'Dictionaries' %>
 <h1><%= @title %></h1>
 
 <% if current_user.system_admin? %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New dictionary", new_dictionary_path, class: 'button positive' %>
+  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Dictionary", new_dictionary_path, class: 'button positive' %>
 <% end %>
 
 <%= form_tag dictionaries_path, method: :get, remote: true, id: "dictionaries_search" do %>
