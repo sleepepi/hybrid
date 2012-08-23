@@ -46,8 +46,31 @@ jQuery ->
       cancel: 'span.errors_found, div.qc-cancel'
     )
 
-  $(document).on('click', '[data-object~="folder-show-more"]', () ->
-    $($(this).data('target')).show()
-    $(this).hide()
-    false
-  )
+  $(document)
+    .on('click', '[data-object~="folder-show-more"]', () ->
+      $($(this).data('target')).show()
+      $(this).hide()
+      false
+    )
+    .on('click', '[data-object~="launch-tutorial"]', () ->
+      $(document.body).qtip('toggle')
+      false
+    )
+    .on('click', '[data-object~="categorical-check-all"]', () ->
+      checkAllCategoricalValues()
+      false
+    )
+    .on('click', '[data-object~="categorical-uncheck-all"]', () ->
+      uncheckAllCategoricalValues()
+      false
+    )
+    .on('click', '[data-object~="operand-edit"]', () ->
+      $('#query_concept_' + $(this).data('value') + '_rop_text').hide()
+      $('#query_concept_' + $(this).data('value') + '_rop_select').show()
+      false
+    )
+    .on('click', '[data-object~="operand-hide"]', () ->
+      $('#query_concept_' + $(this).data('value') + '_rop_text').show()
+      $('#query_concept_' + $(this).data('value') + '_rop_select').hide()
+      false
+    )

@@ -1,0 +1,34 @@
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'file_types', per_page: 20 } %>
+
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.name', 'Name', 'file_types_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.extension', 'Extension', 'file_types_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.description', 'Description', 'file_types_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.visible', 'Visible', 'file_types_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.user_id', 'Creator', 'file_types_search') %></th>
+      <th>Sources</th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'file_types.dictionary_id', 'Dictionary', 'file_types_search') %></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <% @file_types.each do |file_type| %>
+    <tr>
+      <td><%= link_to file_type.name, file_type %></td>
+      <td><%= file_type.extension %></td>
+      <td><%= file_type.description %></td>
+      <td><%= file_type.visible %></td>
+      <td><%= link_to file_type.user.name, file_type.user if file_type.user %></td>
+      <td><%= file_type.sources.collect{|s| link_to(s.name, s)}.join(', ').html_safe %></td>
+      <td><%= link_to file_type.dictionary.name, file_type.dictionary if file_type.dictionary %></td>
+      <td>
+        <%= link_to 'Edit', edit_file_type_path(file_type), class: 'btn btn-mini' %>
+        <%= link_to 'Delete', file_type, confirm: "Are you sure you want to delete File Type #{file_type.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<center><%= paginate @file_types %></center>

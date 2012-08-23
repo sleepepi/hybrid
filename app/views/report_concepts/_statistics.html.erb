@@ -5,7 +5,7 @@
 
   <% @report_concept.statistic = ((@report_concept.concept and @report_concept.concept.date?) ? 'month' : 'all') if @report_concept.statistic.blank? %>
 
-  <%= link_to_function image_tag('gentleface/16/doc_edit.png', style: 'vertical-align:text-bottom; cursor:pointer'), "$('#report_concept_#{@report_concept.id}_options').toggle();" %>
+  <%= link_to image_tag('gentleface/16/doc_edit.png', style: 'vertical-align:text-bottom; cursor:pointer'), '#', data: { object: 'toggle', target: "#report_concept_#{@report_concept.id}_options" } %>
   <%= link_to image_tag('gentleface/16/doc_delete.png', style: 'vertical-align:text-bottom; cursor:pointer'), @report_concept, method: :delete, remote: true, id: "report_concept_#{@report_concept.id}_delete_icon", confirm: "Are you sure you want to remove this concept from Report #{@report.name}?" %>
 
   <% if @report_concept.concept and (@report_concept.concept.continuous? or @report_concept.concept.boolean? or @report_concept.concept.categorical? or @report_concept.concept.date?) %>

@@ -4,7 +4,7 @@
     <%= image_tag('contour/tag_red.png', align: 'absmiddle', title: 'Column Partially Mapped') %>
   </td>
   <td style="white-space:nowrap">
-    <%= link_to_function image_tag('contour/tick.png', style: 'border:none'), "$('selected_mapping_id').val(#{@mapping.id});$('#mappings_form').submit();" %>
+    <%= link_to image_tag('contour/tick.png', style: 'border:none'), '#', data: { object: 'mapping-select', value: "#{@mapping.id}"} %>
     <%#= link_to image_tag('contour/tick.png', style: 'border:none'), update_multiple_mappings_path(source_id: @mapping.source.id, mapping_ids: [@mapping.id], table: @mapping.table), method: :post, remote: true %>
     <%# with: "$('mappings_form').serialize()" %>
     <%= link_to image_tag('contour/cross.png', style: 'border:none'), mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true %>

@@ -1,46 +1,40 @@
 <% @title = "File Type: #{@file_type.name}" %>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+    <% if current_user.system_admin? %>
+      <%= link_to "Edit File Type", edit_file_type_path(@file_type), class: 'btn btn-mini' %>
+      <%= link_to "Delete File Type", @file_type, confirm: "Are you sure you want to delete File Type #{@file_type.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+    <% end %>
+    <%= link_to "View File Types", file_types_path, class: 'btn btn-mini' %>
+  </h1>
+</div>
 
-<h1><%= @title %></h1>
+<dl class="dl-horizontal">
 
-<% if current_user.system_admin? %> <%# current_user.all_file_types.include?(@file_type) %>
-  <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '') + "Edit File Type", edit_file_type_path(@file_type), class: 'btn' %>
-  <%= link_to image_tag('gentleface/16/doc_delete.png', alt: '') + "Delete File Type", @file_type, confirm: "Are you sure you want to delete File Type #{@file_type.name}?", method: :delete, class: 'btn btn-danger' %>
-<% end %>
-<%= link_to "View All File Types", file_types_path, class: 'btn' %>
+  <dt>Description</dt>
+  <dd><%= simple_format @file_type.description %></dd>
 
-<div style="clear:both"></div>
+  <dt>Extension</dt>
+  <dd><%= @file_type.extension %></dd>
 
-<pre><%= @file_type.description %></pre>
-<br />
 
-<fieldset>
-  <br />
-  <p>
-    <b>Extension:</b>
-    <%= @file_type.extension %>
-  </p>
+  <dt>Visible</dt>
+  <dd><%= @file_type.visible %></dd>
 
-  <p>
-    <b>Visible:</b>
-    <%= @file_type.visible %>
-  </p>
+  <dt>User</dt>
+  <dd><%= link_to @file_type.user.name, @file_type.user if @file_type.user %></dd>
 
-  <p>
-    <b>User:</b>
-    <%= @file_type.user_id %>
-  </p>
-
-  <p>
-    <b>Sources:</b>
+  <dt>Sources</dt>
+  <dd>
     <ul>
       <% @file_type.sources.each do |source| %>
         <li><%= link_to source.name, source %></li>
       <% end %>
     </ul>
-  </p>
+  </dd>
 
-  <p>
-    <b>Dictionary:</b>
-    <%= @file_type.dictionary_id %>
-  </p>
-</fieldset>
+  <dt>Dictionary</dt>
+  <dd><%= link_to @file_type.dictionary.name, @file_type.dictionary if @file_type.dictionary %></dd>
+
+</dl>

@@ -4,7 +4,7 @@
   </td>
   <td></td>
   <td>
-    <%= link_to_function @column, "$('#database_concepts_#{@column.gsub(' ', '_')}_search').val('#{@column.gsub('_',' ')}'); $('#database_concepts_#{@column.gsub(' ', '_')}_search').focus();" %>
+    <%= link_to @column, '#', data: { object: 'mapping-new', value: "#{@column.gsub(' ', '_')}"} %>
       <span class='disabled' style="font-size: 8px">
         <%#= 'unmapped' %><br />
         <%= 'primary key<br />'.html_safe if @is_primary_key %>

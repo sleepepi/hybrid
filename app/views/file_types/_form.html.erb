@@ -1,4 +1,8 @@
-<%= form_for(@file_type) do |f| %>
+<div class="page-header">
+  <h1><%= @title %></h1>
+</div>
+
+<%= form_for @file_type, html: { class: 'form-horizontal' } do |f| %>
   <% if @file_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@file_type.errors.count, "error") %> prohibited this file_type from being saved:</h2>
@@ -11,36 +15,43 @@
     </div>
   <% end %>
 
-  <fieldset>
-    <legend><%= @title %></legend>
-    <div class="field">
-      <%= f.label :name %><br />
+  <div class="control-group">
+    <%= f.label :name, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.text_field :name %>
     </div>
-    <div class="field">
-      <%= f.label :extension %><br />
+  </div>
+
+  <div class="control-group">
+    <%= f.label :extension, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.text_field :extension %>
     </div>
-    <div class="field">
-      <%= f.label :description %><br />
-      <%= f.text_area :description %>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :description, nil, class: 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
-    <div class="field">
-      <%= f.label :visible %><br />
+  </div>
+
+  <div class="control-group">
+    <%= f.label :visible, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.check_box :visible %>
     </div>
-    <div class="field">
-      <%= f.label :user_id %><br />
-      <%= f.number_field :user_id %>
+  </div>
+
+  <div class="control-group">
+    <%= f.label :dictionary_id, nil, class: 'control-label' %>
+    <div class="controls">
+      <%= f.select :dictionary_id, [['---', nil]] + Dictionary.current.collect{|d| [d.name, d.id]} %>
     </div>
-    <div class="field">
-      <%= f.label :dictionary_id %><br />
-      <%= f.number_field :dictionary_id %>
-    </div>
-  </fieldset>
-  <div class="actions">
-    <% form_name = @file_type.new_record? ? 'new_file_type' : "edit_file_type_#{@file_type.id}" %>
-    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@file_type.new_record? ? "Create File Type" : "Update File Type"), "$('##{form_name}').submit();", class: "button positive" %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, class: 'btn btn-primary' %>
     <%= cancel %>
   </div>
 <% end %>

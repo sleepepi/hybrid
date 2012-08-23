@@ -21,7 +21,7 @@
       </div>
 
       <div id="report_table">
-        <%= link_to_function 'Reload Report', "$('#report_table_form').submit()" %>
+        <%= link_to 'Reload Report', '#', data: { object: 'submit', target: '#report_table_form'} %>
       </div>
     <% end %>
     <div style="clear:both"></div>

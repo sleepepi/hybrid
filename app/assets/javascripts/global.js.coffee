@@ -64,3 +64,14 @@
   elements = $('.categorical_values').each( () ->
     $(this).removeAttr('checked')
   )
+
+jQuery ->
+  $(document)
+    .on('click', '[data-object~="submit"]', () ->
+      $($(this).data('target')).submit()
+      false
+    )
+    .on('click', '[data-object~="toggle"]', () ->
+      $($(this).data('target')).toggle()
+      false
+    )

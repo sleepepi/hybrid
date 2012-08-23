@@ -46,8 +46,8 @@
 
     <% elsif @query_concept.concept.categorical? %>
       <div class="field">
-        <%= f.label :value %>: <%= link_to_function image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), "checkAllCategoricalValues();", class: 'bubble-azure', style: 'padding-top:10px' %>
-        <%= link_to_function image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), "uncheckAllCategoricalValues();", class: 'bubble-azure', style: 'padding-top:10px' %><br />
+        <%= f.label :value %>: <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-check-all' }, class: 'bubble-azure', style: 'padding-top:10px' %>
+        <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-uncheck-all' }, class: 'bubble-azure', style: 'padding-top:10px' %><br />
         <br />
         <% @query_concept.concept.recommended_concepts.each do |concept| %>
           <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></span>
@@ -86,8 +86,8 @@
     </div>
   </fieldset>
   <div class="actions">
-    <%= link_to_function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'btn btn-primary' %>
-    <%= link_to_function image_tag('contour/cross.png', align: 'absmiddle') + 'Cancel', "disablePopup();", class: 'btn' %>
+    <%#= link_to _function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'btn btn-primary' %>
+    <%#= link_to _function image_tag('contour/cross.png', align: 'absmiddle') + 'Cancel', "disablePopup();", class: 'btn' %>
   </div>
 <% end %>
 <%= link_to image_tag('gentleface/16/doc_delete.png', align: 'absmiddle') + 'Delete', @query_concept, method: 'delete', remote: true, onclick: 'disablePopup();', class: 'btn btn-danger' %>

@@ -4,6 +4,18 @@ class FileTypesController < ApplicationController
 
   def index
     @file_types = current_user.file_types.all
+    file_type_scope = FileType.current
+
+    @order = scrub_order(FileType, params[:order], 'file_types.name')
+    file_type_scope = file_type_scope.order(@order)
+
+    @file_types = file_type_scope.page(params[:page]).per( 20 )
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js
+      format.json { render json: @file_types }
+    end
   end
 
   def show
@@ -32,12 +44,12 @@ class FileTypesController < ApplicationController
 
   def update
     @file_type = current_user.file_types.find_by_id(params[:id])
-    
+
     unless @file_type
       redirect_to root_path
       return
     end
-    
+
     if @file_type.update_attributes(params[:file_type])
       redirect_to @file_type, notice: 'File type was successfully updated.'
     else
@@ -47,7 +59,7 @@ class FileTypesController < ApplicationController
 
   def destroy
     @file_type = current_user.file_types.find_by_id(params[:id])
-    
+
     if @file_type
       @file_type.destroy
       redirect_to file_types_path
