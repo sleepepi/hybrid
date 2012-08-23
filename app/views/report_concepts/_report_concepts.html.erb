@@ -6,7 +6,7 @@
   <table style="width:100%" class="padded blank"><col width="50%"/><col width="50%"/>
     <tr>
       <td style="vertical-align:top">
-        <%= link_to image_tag("contour/xls.png", align: 'absmiddle', alt: '') + 'Download CSV', get_csv_report_path(@report, query_id: @query.id), method: :post, class: 'button', target: '_blank' %>
+        <%= link_to image_tag("contour/xls.png", align: 'absmiddle', alt: '') + 'Download CSV', get_csv_report_path(@report, query_id: @query.id), method: :post, class: 'btn', target: '_blank' %>
         <div style="clear:both"></div>
         <br />
         <%= params[:report_id] = @report.id; params[:add_report_id] = @report.id; render partial: 'concepts/folders' %>

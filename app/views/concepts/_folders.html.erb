@@ -111,7 +111,7 @@
     <% @concept = Concept.new(name: external_concept[:name], totalnum: external_concept[:totalnum], key: external_concept[:key], source_id: external_concept[:source_id]) %> <%# TODO Copy below %>
     <%= render partial: 'concepts/folder_concept' %>
     <% concept_difference = (external_concepts.size - filtered_external_concepts.size) %>
-    <%= link_to_function image_tag('contour/addfile.png')+"Show More +#{concept_difference}", "$('##{@current_folder_id}_more').show();$(this).hide();", class: 'button', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px" if concept_difference > 0 %>
+    <%= link_to "Show More +#{concept_difference}", '#', class: 'btn', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px", data: { object: 'folder-show-more', target: "##{@current_folder_id}_more"} if concept_difference > 0 %>
     <div style="clear:both"></div>
   <% end %>
 
@@ -121,7 +121,7 @@
       <%= @concept = concept; @simple = false; render partial: 'concepts/folder_concept' %>
     <% end %>
     <% concept_difference = (concept_scope.with_exact_folder(@folder).size - filtered_concept_scope.size) %>
-    <%= link_to_function image_tag('contour/addfile.png')+"Show More +#{concept_difference}", "$('##{@current_folder_id}_more').show();$(this).hide();", class: 'button', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px" if concept_difference > 0 %>
+    <%= link_to "Show More +#{concept_difference}", '#', class: 'btn', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px", data: { object: 'folder-show-more', target: "##{@current_folder_id}_more"} if concept_difference > 0 %>
     <div style="clear:both"></div>
   <% end %>
   <div id="<%= @current_folder_id %>_more" style="<%= 'display:none' if filtered_concept_scope.size > 0 %>">

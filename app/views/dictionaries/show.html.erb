@@ -1,45 +1,34 @@
 <% @title = "Dictionary: #{@dictionary.name}" %>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+    <%= link_to "Edit Dictionary", edit_dictionary_path(@dictionary), class: 'btn btn-mini' %>
+    <%= link_to "Delete Dictionary", @dictionary, confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+    <%= link_to "View Dictionaries", dictionaries_path, class: 'btn btn-mini' %>
+  </h1>
+</div>
 
-<h1><%= @title %></h1>
+<dl class="dl-horizontal">
+  <dt>Description</dt>
+  <dd><%= simple_format @dictionary.description %></dd>
 
-<% if current_user.all_dictionaries.include?(@dictionary) %>
-  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit Dictionary", edit_dictionary_path(@dictionary), class: 'button' %>
-  <%= link_to image_tag('contour/delete.png', alt: '') + "Delete Dictionary", @dictionary, confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?", method: :delete, class: 'button negative' %>
-<% end %>
-<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Dictionaries", dictionaries_path, class: 'button' %>
+  <dt>Creator</dt>
+  <dd><%= link_to @dictionary.user.name, @dictionary.user if @dictionary.user %></dd>
 
-<div style="clear:both"></div>
+  <dt>Visible</dt>
+  <dd><%= @dictionary.visible %></dd>
 
-<pre><%= @dictionary.description %></pre>
-<br />
+  <dt>Status</dt>
+  <dd><%= @dictionary.status %></dd>
 
-<fieldset>
-  <br />
-  <p>
-    <b>Creator:</b>
-    <%= link_to @dictionary.user.name, @dictionary.user if @dictionary.user %>
-  </p>
+  <dt>Export</dt>
+  <dd><%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary), class: 'btn btn-mini' %></dd>
 
-  <p>
-    <b>Visible:</b>
-    <%= check_box_tag 'dictionary', 'visible', @dictionary.visible?, disabled: true %>
-  </p>
-
-  <p>
-    <b>Status:</b>
-    <%= @dictionary.status %>
-  </p>
-
-  <p>
-    <b>Export</b>
-    <%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary) %>
-  </p>
-
-  <p>
-    <b>Concepts</b>
+  <dt>Concepts</dt>
+  <dd>
     <%= link_to @dictionary.concepts.size, concepts_path(dictionary_id: @dictionary.id) %>
-      <% if current_user.all_dictionaries.include?(@dictionary) %>
-        <%= link_to image_tag('contour/delete.png', style: 'border:none', align: 'absmiddle', :size=> '15x15', title: 'Delete all associated Concepts and Relationships'), remove_concepts_and_relations_dictionary_path(@dictionary), method: :post, confirm: "Are you sure you want to DELETE all associated concepts and relationships for #{@dictionary.name} dictionary?\n\nIt is recommended to BACKUP the dictionary first by downloading an EXPORT first." %>
-      <% end %>
-  </p>
-</fieldset>
+    <% if current_user.all_dictionaries.include?(@dictionary) %>
+      <%= link_to 'Delete all associated Concepts and Relationships', remove_concepts_and_relations_dictionary_path(@dictionary), method: :post, confirm: "Are you sure you want to DELETE all associated concepts and relationships for #{@dictionary.name} dictionary?\n\nIt is recommended to BACKUP the dictionary first by downloading an EXPORT first.", class: 'btn btn-mini btn-danger' %>
+    <% end %>
+  </dd>
+</dl>

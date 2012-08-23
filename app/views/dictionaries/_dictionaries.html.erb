@@ -1,37 +1,31 @@
-<div style="clear:both"></div>
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'dictionaries', per_page: 20 } %>
 
-<div class="frame">
-  <table style="width:100%"><col width="50px"/><col width="60px"/>
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
     <tr>
-      <th>Status</th>
-      <th>Visible</th>
-      <th>Name</th>
-      <th>Creator</th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.name', 'Name', 'dictionaries_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.status', 'Status', 'dictionaries_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.user_id', 'Creator', 'dictionaries_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.visible', 'Visible', 'dictionaries_search') %></th>
       <th>Concepts</th>
-      <th>Relations</th>
-      <th>Export</th>
+      <th>Actions</th>
     </tr>
-    <% @dictionaries.each do |dictionary| %>
-      <tr>
-        <td><%= dictionary.status %></td>
-        <td><%= check_box_tag :dictionary, :visible, dictionary.visible?, disabled: true %></td>
-        <td><%= link_to dictionary.name, dictionary %></td>
-        <td><%= link_to dictionary.user.name, dictionary.user %></td>
+  </thead>
 
-        <td><%= dictionary.concepts.size %></td>
-        <td><%#= dictionary.concept_property_concepts.size %></td>
-        <td><%= link_to 'CSV File', export_to_csv_dictionary_path(dictionary) %></td>
-      </tr>
-      <% unless dictionary.description.blank? %>
-        <tr>
-          <td colspan='2'></td>
-          <td colspan='5' style="color: #777; font-style:italic; font-size: 10px">
-            <%= dictionary.description %>
-          </td>
-        </tr>
-      <% end %>
-    <% end %>
-  </table>
-</div>
+  <% @dictionaries.each do |dictionary| %>
+    <tr>
+      <td><%= link_to dictionary.name, dictionary %></td>
+      <td><%= dictionary.status %></td>
+      <td><%= link_to dictionary.user.name, dictionary.user if dictionary.user %></td>
+      <td><%= dictionary.visible %></td>
+      <td><%= link_to dictionary.concepts.size, concepts_path(dictionary_id: dictionary.id) %></td>
+      <td>
+        <%= link_to 'Export', export_to_csv_dictionary_path(dictionary), class: 'btn btn-mini' %>
+        <%= link_to 'Edit', edit_dictionary_path(dictionary), class: 'btn btn-mini' %>
+        <%= link_to 'Delete', dictionary, confirm: "Are you sure you want to delete Dictionary #{dictionary.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+      </td>
+    </tr>
+  <% end %>
+</table>
 
 <center><%= paginate @dictionaries %></center>

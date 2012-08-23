@@ -3,10 +3,10 @@
 <h1><%= @title %></h1>
 
 <% if current_user.system_admin? %> <%# current_user.all_file_types.include?(@file_type) %>
-  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit File Type", edit_file_type_path(@file_type), class: 'button' %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit File Type", edit_file_type_path(@file_type), class: 'btn' %>
   <%= link_to image_tag('contour/delete.png', alt: '') + "Delete File Type", @file_type, confirm: "Are you sure you want to delete File Type #{@file_type.name}?", method: :delete, class: 'button negative' %>
 <% end %>
-<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All File Types", file_types_path, class: 'button' %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All File Types", file_types_path, class: 'btn' %>
 
 <div style="clear:both"></div>
 

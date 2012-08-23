@@ -3,10 +3,10 @@
 <h1><%= @title %></h1>
 
 <% if current_user.all_source_joins.include?(@source_join) %>
-  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit Join", edit_source_join_path(@source_join), class: 'button' %>
+  <%= link_to image_tag('contour/edit.png', alt: '') + "Edit Join", edit_source_join_path(@source_join), class: 'btn' %>
   <%= link_to image_tag('contour/delete.png', alt: '') + "Delete Join", @source_join, confirm: "Are you sure you want to delete Join #{@source_join.name}?", method: :delete, class: 'button negative' %>
 <% end %>
-<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Joins", source_joins_path, class: 'button' %>
+<%= link_to image_tag('contour/mydocuments.png', alt: '') + "View All Joins", source_joins_path, class: 'btn' %>
 
 <div style="clear:both"></div>
 

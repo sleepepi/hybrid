@@ -45,3 +45,9 @@ jQuery ->
         $.post($("#query_concepts_form").attr("action"), "&order=#{order}", null, "script")
       cancel: 'span.errors_found, div.qc-cancel'
     )
+
+  $(document).on('click', '[data-object~="folder-show-more"]', () ->
+    $($(this).data('target')).show()
+    $(this).hide()
+    false
+  )
