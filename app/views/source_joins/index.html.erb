@@ -10,7 +10,7 @@
 <%= form_tag source_joins_path(source_id: @source ? @source.id : nil), method: :get, remote: true, id: "source_joins_search" do %>
   <%= hidden_field_tag :order %>
   Search <%= text_field_tag 'search', params[:search] %> <%= information %>
-  <div id="source_joins"><div style="clear:both"></div><br /><center><%= image_tag "ajax-loader.gif" %></center></div>
+  <div id="source_joins"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
 <% end %>
 
 <%= javascript_tag do %>

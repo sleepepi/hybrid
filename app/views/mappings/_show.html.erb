@@ -35,7 +35,7 @@
       <% unit_concept = Concept.find_by_name(@mapping.units) %>
       <% if unit_concept %><span style="font-size: 8px">Units: <%= link_to unit_concept.human_name, unit_concept %></span><% end %>
       <div id="mapping_<%= @mapping.column.gsub(' ', '_') %>_stats" style="display:none">
-        <%= image_tag 'ajax-loader.gif' %>
+        <%= image_tag 'contour/ajax-loader.gif' %>
       </div>
     </td>
   </tr>
