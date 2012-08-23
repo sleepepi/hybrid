@@ -6,10 +6,23 @@ class SourceFileTypesController < ApplicationController
     source = Source.find_by_id(params[:source_id])
     @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
 
-    if @source
-      @source_file_types = @source.source_file_types
-    else
-      redirect_to root_path
+    respond_to do |format|
+      if @source
+        source_file_type_scope = @source.source_file_types
+
+        @order = scrub_order(SourceFileType, params[:order], 'source_file_types.file_type_id')
+        source_file_type_scope = source_file_type_scope.order(@order)
+
+        @source_file_types = source_file_type_scope.page(params[:page]).per( 20 )
+
+        format.html # index.html.erb
+        format.js
+        format.json { render json: @source_file_types }
+      else
+        format.html { redirect_to root_path }
+        format.js { render nothing: true }
+        format.json { head :no_content }
+      end
     end
   end
 

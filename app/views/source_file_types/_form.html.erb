@@ -1,4 +1,8 @@
-<%= form_for(@source_file_type) do |f| %>
+<div class="page-header">
+  <h1><%= @title %></h1>
+</div>
+
+<%= form_for @source_file_type, html: { class: 'form-horizontal' } do |f| %>
   <% if @source_file_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@source_file_type.errors.count, "error") %> prohibited this source_file_type from being saved:</h2>
@@ -13,21 +17,15 @@
 
   <%= hidden_field_tag :source_id, @source.id %>
 
-  <fieldset>
-    <legend><%= @title %></legend>
-    <div class="field">
-      <%= f.label :file_type_id %><br />
+  <div class="control-group">
+    <%= f.label :file_type_id, nil, class: 'control-label' %>
+    <div class="controls">
       <%= f.select :file_type_id, options_for_select([['---', nil]] + (FileType.available - @source.file_types + (@source_file_type.file_type ? [@source_file_type.file_type] : [])).collect{|ft| [ft.name_and_extension, ft.id]}, @source_file_type.file_type_id) %>
     </div>
-  </fieldset>
+  </div>
 
-  <div class="actions">
-    <% form_name = @source_file_type.new_record? ? 'new_source_file_type' : "edit_source_file_type_#{@source_file_type.id}" %>
-    <%= link_to_function image_tag('contour/tick.png', alt: '') + (@source_file_type.new_record? ? "Create File Type" : "Update File Type"), "$('##{form_name}').submit();", class: "button positive" %>
-    <% if @source_file_type.new_record? %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', source_file_types_path(source_id: @source.id), class: 'btn btn-danger' %>
-    <% else %>
-      <%= link_to image_tag('contour/cross.png', alt: '') + 'Cancel', @source_file_type, class: 'btn btn-danger' %>
-    <% end %>
+  <div class="form-actions">
+    <%= f.submit nil, class: 'btn btn-primary' %>
+    <%= cancel %>
   </div>
 <% end %>

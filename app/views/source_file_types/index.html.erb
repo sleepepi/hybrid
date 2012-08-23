@@ -1,28 +1,21 @@
 <% @title = "#{@source.name} File Types" %>
-<h1>
-  <%= link_to @source.name, @source %> &raquo;File Types
-</h1>
-
-<%= link_to image_tag('contour/addfile.png', alt: '') + "Associate New File Type", new_source_file_type_path(source_id: @source.id), class: 'btn btn-primary' %>
-
-<div style="clear:both"></div>
-
-<div class="frame">
-  <table>
-    <tr>
-      <th>File types</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-
-  <% @source_file_types.each do |source_file_type| %>
-    <tr>
-      <td><%= source_file_type.file_type.name_and_extension if source_file_type.file_type %></td>
-      <td><%= link_to 'Show', source_file_type %></td>
-      <td><%= link_to 'Edit', edit_source_file_type_path(source_file_type) %></td>
-      <td><%= link_to 'Destroy', source_file_type_path(source_file_type, source_id: @source.id), confirm: "Are you sure you want to disassociate File Type #{source_file_type.file_type ? source_file_type.file_type.name_and_extension : source_file_type.name}?", method: :delete %></td>
-    </tr>
-  <% end %>
-  </table>
+<div class="page-header">
+  <h1>
+    <%= link_to @source.name, @source %> &raquo;File Types
+    <%= link_to "Associate File Type", new_source_file_type_path(source_id: @source.id), class: 'btn btn-mini btn-primary' %>
+  </h1>
 </div>
+
+<%= form_tag source_file_types_path(source_id: @source.id), method: :get, remote: true, id: "source_file_types_search", class: 'form-search' do %>
+  <%= hidden_field_tag :order %>
+  <%= text_field_tag 'search', params[:search], class: 'search-query' %>
+  <%= submit_tag 'Search', class: 'btn btn-primary' %>
+<% end %>
+
+<div id="source_file_types"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
+
+<%= javascript_tag do %>
+  $(function(){
+    $.get($("#source_file_types_search").attr("action"), $("#source_file_types_search").serialize(), null, "script");
+  });
+<% end %>
