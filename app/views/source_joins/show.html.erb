@@ -1,47 +1,33 @@
-<% @title = "Join: #{@source_join.name}" %>
+<% @title = "Source Join: #{@source_join.name}" %>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+    <% if current_user.all_source_joins.include?(@source_join) %>
+      <%= link_to "Edit Source Join", edit_source_join_path(@source_join), class: 'btn btn-mini' %>
+      <%= link_to "Delete Source Join", @source_join, confirm: "Are you sure you want to delete Source Join #{@source_join.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+    <% end %>
+    <%= link_to "View Source Joins", source_joins_path, class: 'btn btn-mini' %>
+  </h1>
+</div>
 
-<h1><%= @title %></h1>
+<dl class="dl-horizontal">
+  <dt>Source</dt>
+  <dd><%= link_to @source_join.source.name, @source_join.source if @source_join.source %></dd>
 
-<% if current_user.all_source_joins.include?(@source_join) %>
-  <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '') + "Edit Join", edit_source_join_path(@source_join), class: 'btn' %>
-  <%= link_to image_tag('gentleface/16/doc_delete.png', alt: '') + "Delete Join", @source_join, confirm: "Are you sure you want to delete Join #{@source_join.name}?", method: :delete, class: 'btn btn-danger' %>
-<% end %>
-<%= link_to "View All Joins", source_joins_path, class: 'btn' %>
+  <dt>From Table</dt>
+  <dd><%= @source_join.from_table %></dd>
 
-<div style="clear:both"></div>
-
-<fieldset>
-  <br />
-  <p>
-    <b>Source:</b>
-    <%= link_to @source_join.source.name, @source_join.source if @source_join.source %>
-  </p>
-
-  <p>
-    <b>From table:</b>
-    <%= @source_join.from_table %>
-  </p>
-
-  <p>
-    <b>From column:</b>
-    <%= @source_join.from_column %>
-  </p>
+  <dt>From Column</dt>
+  <dd><%= @source_join.from_column %></dd>
 
   <% if @source_join.source_to and @source_join.source_to != @source_join.source %>
-    <p>
-      <b>To Source:</b>
-      <%= link_to @source_join.source_to.name, @source_join.source_to %>
-    </p>
+    <dt>Source To</dt>
+    <dd><%= link_to @source_join.source_to.name, @source_join.source_to if @source_join.source_to %></dd>
   <% end %>
 
+  <dt>To Table</dt>
+  <dd><%= @source_join.to_table %></dd>
 
-  <p>
-    <b>To table:</b>
-    <%= @source_join.to_table %>
-  </p>
-
-  <p>
-    <b>To column:</b>
-    <%= @source_join.to_column %>
-  </p>
-</fieldset>
+  <dt>To Column</dt>
+  <dd><%= @source_join.to_column %></dd>
+</dl>

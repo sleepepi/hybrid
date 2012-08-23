@@ -1,17 +1,20 @@
 <% @title = [@source ? @source.name : nil, 'Joins'].compact.join(' ') %>
-<h1>
-  <%= [@source ? link_to(@source.name, @source) : nil, "Joins"].compact.join(" &raquo; ").html_safe %>
-</h1>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+    <% if current_user.system_admin? %>
+      <%= link_to "Create Source Join", new_source_join_path(source_id: @source ? @source.id : nil), class: 'btn btn-mini btn-primary' %>
+    <% end %>
+  </h1>
+</div>
 
-<% if current_user.system_admin? %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Join", new_source_join_path(source_id: @source ? @source.id : nil), class: 'btn btn-primary' %>
-<% end %>
-
-<%= form_tag source_joins_path(source_id: @source ? @source.id : nil), method: :get, remote: true, id: "source_joins_search" do %>
+<%= form_tag source_joins_path(source_id: @source ? @source.id : nil), method: :get, remote: true, id: "source_joins_search", class: 'form-search' do %>
   <%= hidden_field_tag :order %>
-  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
-  <div id="source_joins"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
+  <%= text_field_tag 'search', params[:search], class: 'search-query' %>
+  <%= submit_tag 'Search', class: 'btn btn-primary' %>
 <% end %>
+
+<div id="source_joins"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
 
 <%= javascript_tag do %>
   $(function(){

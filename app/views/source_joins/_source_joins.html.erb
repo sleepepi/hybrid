@@ -1,33 +1,32 @@
-<div style="clear:both"></div>
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'source_joins', per_page: 20 } %>
 
-<div class="frame">
-  <table style="width:100%">
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
     <tr>
-      <th>From Source</th>
-      <th>From table</th>
-      <th>From column</th>
-      <th>To Source</th>
-      <th>To table</th>
-      <th>To column</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.source_id', 'From Source', 'source_joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.from_table', 'From Table', 'source_joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.from_column', 'From Column', 'source_joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.source_to_id', 'To Source', 'source_joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.to_table', 'To Table', 'source_joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'source_joins.to_column', 'To Column', 'source_joins_search') %></th>
+      <th>Actions</th>
     </tr>
+  </thead>
 
   <% @source_joins.each do |source_join| %>
     <tr>
-      <td><%= source_join.source.name if source_join.source %></td>
+      <td><%= link_to source_join.source.name, source_join.source if source_join.source %></td>
       <td><%= source_join.from_table %></td>
       <td><%= source_join.from_column %></td>
-      <td><%= source_join.source_to.name if source_join.source_to %></td>
+      <td><%= link_to source_join.source_to.name, source_join.source_to if source_join.source_to %></td>
       <td><%= source_join.to_table %></td>
       <td><%= source_join.to_column %></td>
-      <td><%= link_to 'Show', source_join %></td>
-      <td><%= link_to 'Edit', edit_source_join_path(source_join) %></td>
-      <td><%= link_to 'Destroy', source_join, confirm: 'Are you sure?', method: :delete %></td>
+      <td>
+        <%= link_to 'Edit', edit_source_join_path(source_join), class: 'btn btn-mini' %>
+        <%= link_to 'Delete', source_join, confirm: "Are you sure you want to delete Source Join #{source_join.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+      </td>
     </tr>
   <% end %>
-  </table>
-</div>
+</table>
 
 <center><%= paginate @source_joins %></center>

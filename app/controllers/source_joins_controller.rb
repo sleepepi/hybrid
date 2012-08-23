@@ -10,12 +10,15 @@ class SourceJoinsController < ApplicationController
     @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
 
     # current_user.update_attribute :source_joins_per_page, params[:source_joins_per_page].to_i if params[:source_joins_per_page].to_i >= 10 and params[:source_joins_per_page].to_i <= 200
-    @order = params[:order].blank? ? 'source_joins.source_id' : params[:order]
+
     source_join_scope = SourceJoin.current
     source_join_scope = source_join_scope.with_source(@source.id) if @source
     @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| source_join_scope = source_join_scope.search(search_term) }
+
+    @order = scrub_order(SourceJoin, params[:order], 'source_joins.source_id')
     source_join_scope = source_join_scope.order(@order)
+
     @source_joins = source_join_scope.page(params[:page]).per(20) #(current_user.source_joins_per_page)
   end
 
