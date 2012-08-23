@@ -1,90 +1,114 @@
 <% @title = "Source: #{@source.name}" %>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+  </h1>
+  <div class="btn-toolbar">
+    <% if @source.user_has_action?(current_user, "edit data source connection information") %>
+      <div class="btn-group"><%= link_to "Edit Source", edit_source_path(@source), class: 'btn btn-mini' %></div>
+      <div class="btn-group"><%= link_to "Delete Source", @source, confirm: "Are you sure you want to delete Source #{@source.name}?", method: :delete, class: 'btn btn-mini btn-danger' %></div>
+    <% end %>
+    <div class="btn-group">
+      <%= link_to "View Sources", sources_path, class: 'btn btn-mini' %>
+    </div>
+    <% if @source.user_has_action?(current_user, "edit data source rules") %>
+      <div class="btn-group">
+        <%= link_to "Rules", source_rules_path(source_id: @source.id), class: 'btn btn-mini' %>
+        <button class="btn dropdown-toggle btn-mini" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Create', new_source_rule_path(source_id: @source.id) %></li>
+        </ul>
+      </div>
+    <% end %>
+    <% if @source.user_has_action?(current_user, "edit data source mappings") %>
+      <div class="btn-group">
+        <%= link_to "File Types", source_file_types_path(source_id: @source.id), class: 'btn btn-mini' %>
+        <button class="btn dropdown-toggle btn-mini" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Create', new_source_file_type_path(source_id: @source.id) %></li>
+        </ul>
+      </div>
+    <% end %>
+    <% if current_user.system_admin? %>
+      <div class="btn-group">
+        <%= link_to "Joins", source_joins_path(source_id: @source.id), class: 'btn btn-mini' %>
+        <button class="btn dropdown-toggle btn-mini" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to 'Create', new_source_join_path(source_id: @source.id) %></li>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>
 
-<h1><%= @title %></h1>
+<div class="row">
+  <div class="span4">
+    <dl class="dl-horizontal">
+      <div class="page-header">
+        <h3>General Information</h3>
+      </div>
+      <dt>Creator</dt>
+      <dd><%= link_to @source.user.name, @source.user if @source.user %></dd>
 
-<% if @source.user_has_action?(current_user, "edit data source connection information") %>
-  <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '') + "Edit Source", edit_source_path(@source), class: 'btn' %>
-  <%= link_to image_tag('gentleface/16/doc_delete.png', alt: '') + "Delete Source", @source, confirm: "Are you sure you want to delete Source #{@source.name}?", method: :delete, class: 'btn btn-danger' %>
-<% end %>
-<%= link_to "View All Sources", sources_path, class: 'btn' %>
-<% if @source.user_has_action?(current_user, "edit data source rules") %>
-  <%= link_to "View All Rules", source_rules_path(source_id: @source.id), class: 'btn' %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Rule", new_source_rule_path(source_id: @source.id), class: 'btn btn-primary' %>
-<% end %>
-<% if @source.user_has_action?(current_user, "edit data source mappings") %>
-  <%= link_to "View File Types", source_file_types_path(source_id: @source.id), class: 'btn' %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Associate File Type", new_source_file_type_path(source_id: @source.id), class: 'btn btn-primary' %>
-<% end %>
+      <dt>Visible</dt>
+      <dd><%= check_box_tag 'source', 'visible', @source.visible?, disabled: true %></dd>
 
-<div style="clear:both"></div>
+      <dt>Description</dt>
+      <dd><%= sanitize @source.description, attributes: %w(href target) %></dd>
+    </dl>
+  </div>
 
-<pre><%= sanitize @source.description, attributes: %w(href target) %></pre>
-<br />
+  <% if @source.has_repository?(current_user) and @source.user_has_action?(current_user, "edit data source connection information") %>
+    <div class="span4">
+      <div class="page-header">
+        <h3>Data Source Wrapper: <%= @source.human_wrapper %></h3>
+      </div>
 
-<p>
-  <b>Creator:</b>
-  <%= link_to @source.user.name, @source.user if @source.user %>
-</p>
+      <dl class="dl-horizontal">
+        <dt>Source Host</dt>
+        <dd><%= @source.host.blank? ? '<span class="quiet">localhost</span>'.html_safe : @source.host %>:<%= @source.port.blank? ? '<span class="quiet">3306</span>'.html_safe : @source.port %></dd>
 
-<p>
-  <b>Visible:</b>
-  <%= check_box_tag 'source', 'visible', @source.visible?, disabled: true %>
-</p>
+        <dt>Source Database</dt>
+        <dd><%= @source.database %></dd>
 
-<table class="blank padded" style="width:100%"><col width="50%"/><col width="50%"/>
-  <tr>
-  <td>
-    <%= render partial: 'sources/tables' %>
-  </td>
-  <td>
+        <dt>Source Username</dt>
+        <dd><%= @source.username %></dd>
+      </dl>
+    </div>
 
-      <% if @source.has_repository?(current_user) and @source.user_has_action?(current_user, "edit data source connection information") %>
+    <div class="span4">
+      <div class="page-header">
+        <h3>File Repository: <%= @source.human_repository %></h3>
+      </div>
 
-        <fieldset>
-          <legend>Data Source Wrapper: <%= @source.human_wrapper %></legend>
-          <div class="field">
-            <b>Source Host:</b>
-            <%= @source.host.blank? ? '<span class="quiet">localhost</span>'.html_safe : @source.host %>:<%= @source.port.blank? ? '<span class="quiet">3306</span>'.html_safe : @source.port %>
-          </div>
-          <br />
-          <div class="field">
-            <b>Source Database:</b>
-            <%= @source.database %>
-          </div>
-          <br />
-          <div class="field">
-            <b>Source Username:</b>
-            <%= @source.username %>
-          </div>
-        </fieldset>
+      <dl class="dl-horizontal">
+        <dt>File Server Host</dt>
+        <dd>
+          <%= @source.file_server_host %>
+          <% result_hash = @source.file_server_available?(current_user) %>
+          <% if result_hash[:result] %>
+            <span class="label label-success">Available</span>
+          <% else %>
+            <span class="label label-warning">Not Connected</span> <%= result_hash[:error] %>
+          <% end %>
+        </dd>
 
-        <fieldset>
-          <legend>File Repository: <%= @source.human_repository %></legend>
+        <dt>File Server Path</dt>
+        <dd><%= @source.file_server_path %></dd>
 
-          <div class="field">
-            <b>File Server Host:</b>
-              <%= @source.file_server_host %>
-              <% result_hash = @source.file_server_available?(current_user) %>
-              <% if result_hash[:result] %>
-                <%= image_tag('contour/tag_green.png', style: 'vertical-align:text-bottom') %> Available
-              <% else %>
-                <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %> Not Connected: <%= result_hash[:error] %>
-              <% end %>
-          </div>
-          <br />
-          <div class="field">
-            <b>File Server Path:</b>
-            <%= @source.file_server_path %>
-          </div>
-          <br />
-          <div class="field">
-            <b>File Server Login:</b>
-            <%= @source.file_server_login %>
-          </div>
-        </fieldset>
-      <% end %>
-    </td>
-  </tr>
-</table>
+        <dt>File Server Login</dt>
+        <dd><%= @source.file_server_login %></dd>
+      </dl>
+    </div>
+  <% end %>
+</div>
+
+<%= render partial: 'sources/tables' %>
 
 <%= render partial: 'sources/source_mappings' %>

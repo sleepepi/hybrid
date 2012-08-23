@@ -1,43 +1,45 @@
-<div style="clear:both"></div>
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'sources', per_page: 20 } %>
 
-<div class="frame">
-  <table style="width:100%"><col width="1px" />
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
     <tr>
-      <th>Visible</th>
-      <th>Name</th>
-      <th>Creator</th>
-      <th>Wrapper</th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.visible', 'Visible', 'sources_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.name', 'Name', 'sources_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.user_id', 'Creator', 'sources_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.wrapper', 'Wrapper', 'sources_search') %></th>
       <% if current_user.system_admin? %>
-      <th>Host</th>
-      <th>Port</th>
-      <th>Database</th>
-      <th>Username</th>
-      <th>Rules</th>
-      <th>File Type</th>
-      <th></th>
-      <th></th>
+        <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.host', 'Host', 'sources_search') %></th>
+        <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.port', 'Port', 'sources_search') %></th>
+
+        <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.database', 'Database', 'sources_search') %></th>
+        <th style="white-space:nowrap"><%== sort_field_helper(@order, 'sources.username', 'Username', 'sources_search') %></th>
+        <th>Rules</th>
+        <th>File Type</th>
+        <th>Actions</th>
       <% end %>
     </tr>
+  </thead>
 
-    <% @sources.each do |source| %>
-      <tr>
-        <td style="text-align:center"><%= check_box_tag :source, :visible, source.visible?, disabled: true %></td>
-        <td><%= link_to_if (source.user_has_action_group?(current_user, "All Read") or source.user_has_action_group?(current_user, "All Write")),  source.name, source %></td>
-        <td><%= link_to source.user.name, source.user %></td>
-        <td><%= source.human_wrapper %></td>
-        <% if current_user.system_admin? %>
-        <td><%= source.host.blank? ? '<span class="quiet">localhost</span>'.html_safe : source.host %></td>
-        <td><%= source.port.blank? ? '<span class="quiet">3306</span>'.html_safe : source.port %></td>
+  <% @sources.each do |source| %>
+    <tr>
+      <td style="text-align:center"><%= check_box_tag :source, :visible, source.visible?, disabled: true %></td>
+      <td><%= link_to_if (source.user_has_action_group?(current_user, "All Read") or source.user_has_action_group?(current_user, "All Write")),  source.name, source %></td>
+      <td><%= link_to source.user.name, source.user if source.user %></td>
+      <td><%= source.wrapper %></td>
+      <% if current_user.system_admin? %>
+        <td><%= source.host.blank? ? '<span class="muted">localhost</span>'.html_safe : source.host %></td>
+        <td><%= source.port.blank? ? '<span class="muted">3306</span>'.html_safe : source.port %></td>
         <td><%= source.database %></td>
         <td><%= source.username %></td>
         <td><%= link_to source.source_rules.size, source_rules_path(source_id: source.id) %></td>
         <td><%= link_to source.source_file_types.size, source_file_types_path(source_id: source.id) %></td>
-        <td><%= link_to 'Edit', edit_source_path(source) %></td>
-        <td><%= link_to 'Destroy', source, confirm: 'Are you sure?', method: :delete %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </table>
-</div>
+        <td>
+          <%= link_to 'Edit', edit_source_path(source), class: 'btn btn-mini' %>
+          <%= link_to 'Delete', source, confirm: "Are you sure you want to delete Source #{source.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+        </td>
+      <% end %>
+    </tr>
+  <% end %>
+</table>
 
 <center><%= paginate @sources %></center>
