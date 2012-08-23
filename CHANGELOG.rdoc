@@ -2,6 +2,7 @@
 
 * Enhancements
   * Updated to Rails 3.2.4 and Contour 1.0.0
+  * Updated Devise configuration files for devise 2.1.0
 
 == 0.11.9
 
