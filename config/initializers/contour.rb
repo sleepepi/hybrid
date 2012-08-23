@@ -32,16 +32,11 @@ Contour.setup do |config|
     },
     {
       name: 'Search', display: 'signed_in', path: 'root_path', position: 'left',
-      links: [{ name: 'History', path: 'queries_path' },
-              { html: '<br />' },
-              { name: 'About', path: 'about_path' }]
+      links: []
     },
     {
-      name: '@source.name', eval: true, display: 'signed_in', path: 'source_path(@source)', position: 'left',
-      condition: '@source and not @source.new_record?',
-      links: [{ name: 'Rules', path: 'source_rules_path(source_id: @source.id)' },
-              { name: 'File Types', path: 'source_file_types_path(source_id: @source.id)' },
-              { name: 'Joins', path: 'source_joins_path(source_id: @source.id)' }]
+      name: 'History', display: 'signed_in', path: 'queries_path', position: 'left',
+      links: []
     },
     {
       name: 'Dictionaries', display: 'signed_in', path: 'dictionaries_path', position: 'left', condition: 'current_user.system_admin?',
@@ -50,6 +45,13 @@ Contour.setup do |config|
     {
       name: 'Sources', display: 'signed_in', path: 'sources_path', position: 'left', condition: 'current_user.system_admin?',
       links: []
+    },
+    {
+      name: '@source.name', eval: true, display: 'signed_in', path: 'source_path(@source)', position: 'left',
+      condition: '@source and not @source.new_record?',
+      links: [{ name: 'Rules', path: 'source_rules_path(source_id: @source.id)' },
+              { name: 'File Types', path: 'source_file_types_path(source_id: @source.id)' },
+              { name: 'Joins', path: 'source_joins_path(source_id: @source.id)' }]
     },
     {
       name: 'Users', display: 'signed_in', path: 'users_path', position: 'left', condition: 'current_user.system_admin?',
