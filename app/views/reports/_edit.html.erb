@@ -1,35 +1,38 @@
-<div class="frame">
-  <table width="100%"><tr><td>
-    <span style="font-size:1.3em"><%= @report.is_dataset? ? 'Dataset' : 'Report' %>: <%= @report.name %></span>
-      <span style="font-size:0.9em">(<span id="report_concepts_num"><%= pluralize @report.report_concepts.size, 'concept' %></span>)</span>
-      <%= form_tag report_concepts_path(query_id: @query.id, report_id: @report.id), method: :post, remote: true, id: 'report_concept_search_form' do %>
-        <%= hidden_field_tag 'selected_report_concept_id', '', name: 'concept_id' %>
-        <div class="field">
-          <div style="float:left;width:50px"><label>With: </label></div>
-          <div style="float:left">
-            <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', style: 'width:475px', class: 'bubble-orange', tabindex: '2' %>
-            <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom'), search_folder_concepts_path(popup: true, query_id: @query.id, add_report_id: @report.id), method: :post, remote: true, id: 'open_concepts', class: 'bubble-grey' %>
-          </div>
-        </div>
-      <% end %>
-
-
-
-    <% unless @report.is_dataset? %>
-      <div id="report_configuration">
-        <%= render 'reports/configuration' %>
-      </div>
-
-      <div id="report_table">
-        <%= link_to 'Reload Report', '#', data: { object: 'submit', target: '#report_table_form'} %>
-      </div>
-    <% end %>
-    <div style="clear:both"></div>
-    <div id="report_concepts">
-      <%= render partial: 'report_concepts/report_concepts' %>
-    </div>
-  </td></tr></table>
+<div class="page-header">
+  <h3>
+    <%= @report.is_dataset? ? 'Dataset' : 'Report' %>: <%= @report.name %>
+    <small>(<span id="report_concepts_num"><%= pluralize @report.report_concepts.size, 'concept' %></span>)</small>
+  </h3>
 </div>
+
+<%= form_tag report_concepts_path(query_id: @query.id, report_id: @report.id), method: :post, remote: true, id: 'report_concept_search_form', class: 'form-horizontal' do %>
+  <%= hidden_field_tag 'selected_report_concept_id', '', name: 'concept_id' %>
+
+  <div class="control-group">
+    <label class="control-label">With</label>
+    <div class="controls">
+      <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>'  %>
+      <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id, add_report_id: @report.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
+    </div>
+  </div>
+<% end %>
+
+
+<% unless @report.is_dataset? %>
+  <div id="report_configuration">
+    <%= render 'reports/configuration' %>
+  </div>
+
+  <div id="report_table">
+    <%= link_to 'Reload Report', '#', data: { object: 'submit', target: '#report_table_form'} %>
+  </div>
+<% end %>
+
+<div id="report_concepts">
+  <%= render partial: 'report_concepts/report_concepts' %>
+</div>
+
+
 <%= javascript_tag do %>
 $(function(){
   return $("#report_concept_search_term").on("keydown", function(event) {

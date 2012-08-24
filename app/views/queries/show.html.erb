@@ -92,36 +92,6 @@
 
 <hr class="soften" style="margin: 20px 0px">
 
-
-<div id="new_dataset_dialog" title="New Dataset">
-	<%= form_tag reports_path(query_id: @query.id, is_dataset: true), method: :post, remote: true, id: "new_dataset_form" do %>
-		<fieldset class="ui-helper-reset">
-		  <% @report = Report.new({name: "Dataset: #{Time.now.strftime("%Y.%m.%d")}"}) %>
-		  <%= label :report, :name %>:<br />
-			<%= text_field :report, :name, class: "ui-widget-content ui-corner-all", id: 'dataset_name' %><br /><br />
-			<%= label :report, :template_id, "Template" %>:<br />
-			<div id="datasets_list">
-			  <%= render partial: 'reports/datasets_list' %>
-			</div>
-		</fieldset>
-  <% end %>
-</div>
-
-
-<div id="new_report_dialog" title="New Report">
-	<%= form_tag reports_path(query_id: @query.id, is_dataset: false), method: :post, remote: true, id: "new_report_form" do %>
-		<fieldset class="ui-helper-reset">
-		  <% @report = Report.new({name: "Report: #{Time.now.strftime("%Y.%m.%d")}"}) %>
-		  <%= label :report, :name %>:<br />
-			<%= text_field :report, :name, class: "ui-widget-content ui-corner-all", id: 'report_name' %><br /><br />
-			<%= label :report, :template_id, "Template" %>:<br />
-			<div id="reports_list">
-			  <%= render partial: 'reports/reports_list' %>
-			</div>
-		</fieldset>
-  <% end %>
-</div>
-
 <%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', false)" do %>
 <% end %>
 
@@ -133,12 +103,12 @@
   </div>
 
   <div class="span3">
-    <span style="font-weight:bold">Datasets <%= link_to 'create', '#', id: 'add_dataset_tab', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset' %></span>
+    <span style="font-weight:bold">Datasets <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: '#dataset_popup' } %></span>
     <div id="datasets_container"><%= render partial: 'reports/datasets' %></div>
   </div>
 
   <div class="span3">
-    <span style="font-weight:bold">Reports <%= link_to 'create', '#', id: 'add_report_tab', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report' %></span>
+    <span style="font-weight:bold">Reports <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report', data: { object: 'modal-show', target: '#report_popup' } %></span>
     <div id="reports_container"><%= render partial: 'reports/reports' %></div>
   </div>
 
@@ -159,3 +129,5 @@
 
 <%= render partial: 'sources/modal' %>
 <%= render partial: 'concepts/modal' %>
+<%= render partial: 'reports/report_modal' %>
+<%= render partial: 'reports/dataset_modal' %>

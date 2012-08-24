@@ -2,7 +2,7 @@
 <% (@tables, @error) = [result_hash[:result], result_hash[:error]] %>
 
 <% if not @error.blank? %>
-  <span class="quiet"><center><%= image_tag 'contour/warning.png', size: '13x13', align: 'absmiddle' %> <%= @error %></center></span>
+  <span class="quiet"><%= @error %></center></span>
 <% elsif @tables.size > 0 %>
 
   <center>
@@ -19,7 +19,7 @@
     });
   <% end %>
 <% else %>
-  <span class="quiet"><center><%= image_tag 'contour/warning.png', size: '13x13', align: 'absmiddle' %> No Tables Retrieved</center></span>
+  <center><span class="label label-warning">No Tables Retrieved</span></center>
 <% end %>
 
 <div id="table_content"><br /><center><%= image_tag 'contour/ajax-loader.gif' %> Loading Table Mappings</center></div>

@@ -16,7 +16,7 @@
   <%= render partial: 'mappings/mappings' %>
   <%#= render partial: 'database_concepts/search' %>
 <% else %>
-  <%= image_tag 'contour/warning.png', size: '15x15', align: 'absmiddle' %> <%= @error %>
+  <%= @error %>
 <% end %>
 
 <% if @max_pages.to_i > 1 %>

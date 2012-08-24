@@ -31,7 +31,7 @@ class QuerySourcesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:sources)
     assert_not_nil assigns(:order)
-    assert_template 'show'
+    assert_template 'sources/popup'
   end
 
   test "should not show invalid query source" do

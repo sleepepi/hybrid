@@ -78,3 +78,7 @@ jQuery ->
       $($(this).data('target')).toggle()
       false
     )
+    .on('click', '[data-object~="modal-show"]', () ->
+      $($(this).data('target')).modal( dynamic: true )
+      false
+    )

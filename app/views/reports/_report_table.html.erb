@@ -37,6 +37,6 @@
       </tbody>
     </table>
   <% else %>
-    <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %> <%= result_hash[:error].html_safe %><br />
+    <%= result_hash[:error].html_safe %>
   <% end %>
 <% end %>

@@ -1,0 +1,28 @@
+<div class="modal hide modal-large" id="report_popup">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>New Report</h3>
+  </div>
+  <div class="modal-body">
+    <%= form_tag reports_path(query_id: @query.id, is_dataset: false), method: :post, remote: true, id: "new_report_form", class: 'form-horizontal' do %>
+      <% @report = Report.new({name: "Report: #{Time.now.strftime("%Y.%m.%d")}"}) %>
+      <div class="control-group">
+        <%= label :report, :name, class: 'control-label' %>
+        <div class="controls">
+          <%= text_field :report, :name, class: "ui-widget-content ui-corner-all", id: 'report_name' %>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <%= label :report, :template_id, "Template", class: 'control-label' %>
+        <div class="controls" id="reports_list">
+          <%= render partial: 'reports/reports_list' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="modal-footer">
+    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Close</a>
+    <%= link_to 'Save', '#', data: { object: 'submit', target: '#new_report_form', dismiss: 'modal' }, class: 'btn btn-primary'  %>
+  </div>
+</div>

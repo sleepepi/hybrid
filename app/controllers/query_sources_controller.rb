@@ -10,6 +10,7 @@ class QuerySourcesController < ApplicationController
       source_scope = Source.available
       source_scope = source_scope.order(@order)
       @sources = source_scope.page(params[:page]).per(20) #params[:page]).per(current_user.sources_per_page)
+      render 'sources/popup'
     else
       render nothing: true
     end

@@ -18,7 +18,6 @@
   <% end %>
   <% if unavailable_files > 0 %>
     <br />
-    <%= image_tag('contour/warning.png', style: 'vertical-align:text-bottom') %>
     <span class="quiet">You do not have the <span class="source_rule_text">download files</span> access rule for any selected data source for <%= pluralize unavailable_files, 'file type' %>.</span>
   <% end %>
 <% end %>

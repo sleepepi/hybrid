@@ -1,9 +1,0 @@
-$("#sources_popup").modal({ dynamic: true });
-$("#sources_popup").modal('show');
-
-$(document.body).qtip('hide');
-
-$('#sources_search').focus();
-
-$("#sources").html("<%= escape_javascript(render("sources/sources_popup")) %>");
-$("#source_info").html("<%= escape_javascript(render("sources/info")) %>");
