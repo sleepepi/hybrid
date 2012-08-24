@@ -286,7 +286,7 @@ class Concept < ActiveRecord::Base
   # TODO: Units
   def update_unit_type!
     # UNIT_ARRAYS.each do |unit_type, unit_array|
-    # self.update_attribute :unit_type, unit_type.to_s if unit_array.collect{|display_name, stored_name| stored_name}.include?(self.units)
+    # self.update_attributes unit_type: unit_type.to_s if unit_array.collect{|display_name, stored_name| stored_name}.include?(self.units)
     # end
   end
 
@@ -318,7 +318,7 @@ class Concept < ActiveRecord::Base
   end
 
   def update_search_name!
-    self.update_attribute :search_name, self.human_name.downcase
+    self.update_column :search_name, self.human_name.downcase
   end
 
   def self.name_to_uri_and_namespace_and_short_name(name, uri_missing = nil, namespace_missing = nil)

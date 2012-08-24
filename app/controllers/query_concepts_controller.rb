@@ -15,7 +15,7 @@ class QueryConceptsController < ApplicationController
   def mark_selected
     @query = current_user.all_queries.find_by_id(params[:query_id])
     @query_concept = @query.query_concepts.find_by_id(params[:query_concept_id]) if @query
-    @query_concept.update_attribute :selected, params[:selected] if @query and @query_concept
+    @query_concept.update_column :selected, params[:selected] if @query and @query_concept
     render nothing: true
   end
 
@@ -56,7 +56,7 @@ class QueryConceptsController < ApplicationController
     @query = current_user.all_queries.find_by_id(params[:query_id])
     if @query and @query.query_concepts.where(selected: true).size > 0
       @query.query_concepts.where(selected: true).each do |query_concept|
-        query_concept.update_attribute :level, [query_concept.level + params[:indent].to_i, 0].max
+        query_concept.update_attributes level: [query_concept.level + params[:indent].to_i, 0].max
       end
 
       @query.update_brackets!
@@ -71,7 +71,7 @@ class QueryConceptsController < ApplicationController
     @query = current_user.all_queries.find_by_id(params[:query_id])
     @query_concept = @query.query_concepts.find_by_id(params[:query_concept_id]) if @query
     if @query and @query_concept
-      @query_concept.update_attribute :right_operator, params[:right_operator] if QueryConcept::OPERATOR.include?([params[:right_operator], params[:right_operator]])
+      @query_concept.update_attributes right_operator: params[:right_operator] if QueryConcept::OPERATOR.include?([params[:right_operator], params[:right_operator]])
       @query.update_brackets!
       render 'query_concepts/query_concepts'
     else

@@ -20,7 +20,7 @@ class Dictionary < ActiveRecord::Base
   # Methods
 
   def destroy
-    update_attribute :deleted, true
+    update_column :deleted, true
   end
 
   # This function is run after an dictionary is imported or destroyed.
@@ -113,8 +113,8 @@ class Dictionary < ActiveRecord::Base
         line[8].to_s.split(';').each do |parent_name|
           (parent_name, parent_uri, parent_namespace, parent_short_name) = Concept.name_to_uri_and_namespace_and_short_name(parent_name.strip, c.uri, c.namespace)
           concept_parent = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(parent_name, parent_uri, parent_namespace, parent_short_name)
-          concept_parent.update_attribute :version, dictionary_version
-          concept_parent.update_attribute :dictionary_id, self.id if concept_parent.dictionary_id.blank?
+          concept_parent.update_column :version, dictionary_version
+          concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
           concept_parent.update_status!
           cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(c.id, concept_parent.id, "is_a")
         end
@@ -122,12 +122,12 @@ class Dictionary < ActiveRecord::Base
         line[9].to_s.split(';').each do |child_name|
           (child_name, child_uri, child_namespace, child_short_name) = Concept.name_to_uri_and_namespace_and_short_name(child_name.strip, c.uri, c.namespace)
           concept_child = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(child_name.strip, child_uri, child_namespace, child_short_name)
-          concept_child.update_attribute :version, dictionary_version
-          concept_child.update_attribute :dictionary_id, self.id if concept_child.dictionary_id.blank?
+          concept_child.update_column :version, dictionary_version
+          concept_child.update_column :dictionary_id, self.id if concept_child.dictionary_id.blank?
           if c.categorical?
-            concept_child.update_attribute :concept_type, 'boolean'
+            concept_child.update_column :concept_type, 'boolean'
           elsif not c.concept_type.blank?
-            concept_child.update_attribute :concept_type, c.concept_type
+            concept_child.update_column :concept_type, c.concept_type
           end
           concept_child.update_status!
           cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(concept_child.id, c.id, "is_a")
@@ -137,8 +137,8 @@ class Dictionary < ActiveRecord::Base
           line[position].to_s.split(';').each do |relation_name|
             (relation_name, relation_uri, relation_namespace, relation_short_name) = Concept.name_to_uri_and_namespace_and_short_name(relation_name.strip, c.uri, c.namespace)
             relation_concept = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(relation_name.strip, relation_uri, relation_namespace, relation_short_name)
-            relation_concept.update_attribute :version, dictionary_version
-            relation_concept.update_attribute :dictionary_id, self.id if relation_concept.dictionary_id.blank?
+            relation_concept.update_column :version, dictionary_version
+            relation_concept.update_column :dictionary_id, self.id if relation_concept.dictionary_id.blank?
             relation_concept.update_status!
             cpc = ConceptPropertyConcept.find_by_concept_one_id_and_concept_two_id_and_property(c.id, relation_concept.id, property)
             cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(relation_concept.id, c.id, property) unless cpc
@@ -177,7 +177,7 @@ class Dictionary < ActiveRecord::Base
 
   def second_pass_categorical_concepts #(file_name)
   #   self.concepts.where(concept_type: nil).each do |concept|
-  #     concept.update_attribute :concept_type, 'categorical' if concept.children.size > 0
+  #     concept.update_column :concept_type, 'categorical' if concept.children.size > 0
   #   end
   end
 

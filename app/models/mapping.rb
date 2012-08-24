@@ -21,28 +21,28 @@ class Mapping < ActiveRecord::Base
     if self.concept
       if self.concept.continuous?
         if self.units.blank?
-          update_attribute :status, 'unmapped'
+          update_column :status, 'unmapped'
         else
-          update_attribute :status, 'mapped'
+          update_column :status, 'mapped'
         end
       elsif self.concept.categorical? or self.concept.boolean?
         self.column_values(current_user).each do |column_value|
           val_mapping = self.source.mappings.find_by_table_and_column_and_column_value(self.table, self.column, (column_value == nil) ? 'NULL' : column_value.to_s)
           if val_mapping and val_mapping.status == 'mapped'
-            update_attribute :status, 'mapped'
+            update_column :status, 'mapped'
             return
           end
         end
-        update_attribute :status, 'unmapped'
+        update_column :status, 'unmapped'
       elsif self.concept.date? or self.concept.identifier? or self.concept.file_locator? or self.concept.free_text?
-        update_attribute :status, 'mapped'
+        update_column :status, 'mapped'
       else
-        update_attribute :status, 'unmapped'
+        update_column :status, 'unmapped'
       end
     elsif self.concept_id != nil
-      update_attribute :status, 'outdated' # If the concept no longer exists than the mapping has become outdated
+      update_column :status, 'outdated' # If the concept no longer exists than the mapping has become outdated
     else
-      update_attribute :status, 'unmapped'
+      update_column :status, 'unmapped'
     end
   end
 

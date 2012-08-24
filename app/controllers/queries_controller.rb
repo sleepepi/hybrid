@@ -78,7 +78,7 @@ class QueriesController < ApplicationController
   def save_name
     @query = current_user.all_queries.find_by_id(params[:id])
     if @query
-      @query.update_attribute :name, params[:query][:name]
+      @query.update_attributes name: params[:query][:name]
     else
       render nothing: true
     end
@@ -105,7 +105,7 @@ class QueriesController < ApplicationController
   end
 
   def index
-    # current_user.update_attribute :queries_per_page, params[:queries_per_page].to_i if params[:queries_per_page].to_i >= 5 and params[:queries_per_page].to_i <= 20
+    # current_user.update_column :queries_per_page, params[:queries_per_page].to_i if params[:queries_per_page].to_i >= 5 and params[:queries_per_page].to_i <= 20
     @order = ['name', 'created_at'].include?(params[:order].to_s.split(' ').first) ? params[:order] : 'name'
     # @order = params[:order].blank? ? 'name' : params[:order]
     query_scope = current_user.all_queries
@@ -122,12 +122,12 @@ class QueriesController < ApplicationController
     @query = current_user.all_queries.find_by_id(current_user.current_query_id) unless @query
     @query = current_user.queries.create(name: "#{current_user.last_name} #{Time.now.strftime("%Y.%m.%d %l:%M %p")}") unless @query
 
-    current_user.update_attribute :current_query_id, @query.id
+    current_user.update_column :current_query_id, @query.id
   end
 
   def new
     @query = current_user.queries.create(name: "#{current_user.last_name} #{Time.now.strftime("%Y.%m.%d %l:%M %p")}")
-    current_user.update_attribute :current_query_id, @query.id
+    current_user.update_column :current_query_id, @query.id
     redirect_to root_path, notice: "Created search #{@query.name}"
   end
 
@@ -135,7 +135,7 @@ class QueriesController < ApplicationController
     @original_query = current_user.all_queries.find_by_id(params[:id])
     if @original_query
       @query = @original_query.copy
-      current_user.update_attribute :current_query_id, @query.id
+      current_user.update_column :current_query_id, @query.id
       redirect_to root_path, notice: "Copied search #{@original_query.name}"
     else
       redirect_to root_path, alert: "You do not have access to that query"

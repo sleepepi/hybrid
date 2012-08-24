@@ -29,7 +29,7 @@ class ConceptsController < ApplicationController
   end
 
   def index
-    # current_user.update_attribute :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
+    # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
     @order = params[:order].blank? ? 'concepts.search_name' : params[:order]
     concept_scope = Concept.current
     @query = current_user.queries.find_by_id(params[:query_id])

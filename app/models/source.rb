@@ -216,7 +216,7 @@ class Source < ActiveRecord::Base
   end
 
   def destroy
-    update_attribute :deleted, true
+    update_column :deleted, true
   end
 
   def table_columns_mapped(current_user, table)

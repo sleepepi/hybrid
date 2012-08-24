@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :email_notifications
 
   after_create :notify_system_admins
 
@@ -72,8 +72,9 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    update_attribute :deleted, true
-    update_attribute :status, 'inactive'
+    update_column :deleted, true
+    update_column :status, 'inactive'
+    update_column :updated_at, Time.now
   end
 
   def email_on?(value)

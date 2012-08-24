@@ -29,7 +29,7 @@ class ReportConceptsController < ApplicationController
     @report = @report_concept.report if @report_concept
     @query = @report.query if @report
     if @report_concept and @report and @query and current_user.all_queries.include?(@query)
-      @report.report_concepts.select{|rc| rc.position > @report_concept.position}.each{|rc| rc.update_attribute :position, rc.position - 1}
+      @report.report_concepts.select{|rc| rc.position > @report_concept.position}.each{|rc| rc.update_column :position, rc.position - 1}
       @report_concept.destroy
       @report.reload
       render 'report_concepts/report_concepts'
@@ -43,7 +43,7 @@ class ReportConceptsController < ApplicationController
     @report_concept = ReportConcept.find_by_id(params[:id])
     @report = current_user.reports.find_by_id(@report_concept.report_id) if @report_concept
     if @query and @report_concept and @report
-      @report_concept.update_attribute :statistic, params[:report_concept][:statistic]
+      @report_concept.update_attributes statistic: params[:report_concept][:statistic]
       render 'reports/report_table'
     else
       render nothing: true

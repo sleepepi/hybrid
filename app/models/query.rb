@@ -13,7 +13,7 @@ class Query < ActiveRecord::Base
   belongs_to :user
   belongs_to :identifier_concept, class_name: "Concept"
 
-  has_many :query_concepts, conditions: {deleted: false}, order: 'position'
+  has_many :query_concepts, conditions: { deleted: false }, order: 'position'
   has_many :concepts, through: :query_concepts, order: 'query_concepts.position'
 
   has_many :query_sources, dependent: :destroy
@@ -21,8 +21,8 @@ class Query < ActiveRecord::Base
 
   has_many :reports
 
-  has_many :true_datasets, class_name: "Report", conditions: {is_dataset: true}, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
-  has_many :true_reports, class_name: "Report", conditions: {is_dataset: false}, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_datasets, class_name: "Report", conditions: { is_dataset: true }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_reports, class_name: "Report", conditions: { is_dataset: false }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
 
   # has_many :query_users, dependent: :destroy
   # has_many :users, through: :query_users, order: 'last_name, first_name', conditions: ['users.deleted = ?', false]
@@ -253,14 +253,14 @@ class Query < ActiveRecord::Base
   end
 
   def destroy
-    update_attribute :deleted, true
+    update_column :deleted, true
   end
 
   def reorder(query_concept_ids)
     return if (query_concept_ids | self.query_concepts.collect{|qc| qc.id.to_s}).size != self.query_concepts.size or query_concept_ids.size != self.query_concepts.size
 
     query_concept_ids.each_with_index do |query_concept_id, index|
-      self.query_concepts.find_by_id(query_concept_id).update_attribute :position, index
+      self.query_concepts.find_by_id(query_concept_id).update_attributes position: index
     end
 
     self.reload
@@ -280,8 +280,8 @@ class Query < ActiveRecord::Base
       #   current_offset = 0
       # end
 
-      previous_query_concept.update_attribute :right_brackets, [current_level - query_concept.level + current_offset, 0].max if previous_query_concept
-      query_concept.update_attribute :left_brackets, [query_concept.level - current_level + current_offset, 0].max
+      previous_query_concept.update_column :right_brackets, [current_level - query_concept.level + current_offset, 0].max if previous_query_concept
+      query_concept.update_column :left_brackets, [query_concept.level - current_level + current_offset, 0].max
       if previous_query_concept and previous_operator != query_concept.right_operator and previous_query_concept.level == query_concept.level and query_concept.level > 0 and current_offset == 0
         current_offset = 1
       else
@@ -292,12 +292,12 @@ class Query < ActiveRecord::Base
       previous_operator = query_concept.right_operator
     end
 
-    previous_query_concept.update_attribute :right_brackets, [current_level, 0].max if previous_query_concept
+    previous_query_concept.update_column :right_brackets, [current_level, 0].max if previous_query_concept
     self.reload
   end
 
   def update_positions
-    self.query_concepts.each_with_index{ |qc, index| qc.update_attribute :position, index }
+    self.query_concepts.each_with_index{ |qc, index| qc.update_column :position, index }
     self.reload
   end
 
@@ -343,7 +343,7 @@ class Query < ActiveRecord::Base
           qc.update_attributes up_changes
         end
       end
-      self.update_attribute :history_position, current_position + direction
+      self.update_attributes history_position: current_position + direction # Needs to trigger the save
       self.update_positions
       self.reload
       self.update_brackets!

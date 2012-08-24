@@ -113,7 +113,7 @@ class ReportsController < ApplicationController
     @report = current_user.reports.find_by_id(params[:id])
     @query = current_user.all_queries.find_by_id(params[:query_id])
     if @report and @query
-      @report.update_attribute :name, params[:report][:name]
+      @report.update_attributes name: params[:report][:name]
     else
       render nothing: true
     end

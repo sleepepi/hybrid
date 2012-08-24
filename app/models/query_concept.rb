@@ -273,12 +273,12 @@ class QueryConcept < ActiveRecord::Base
   end
 
   def destroy
-    update_attribute :deleted, true
+    update_attributes deleted: true
     self.query.update_positions if self.query
   end
 
   def undestroy
-    update_attribute :deleted, false
+    update_attributes deleted: false
     self.query.update_positions if self.query
   end
 

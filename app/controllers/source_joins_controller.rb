@@ -9,7 +9,7 @@ class SourceJoinsController < ApplicationController
     source = Source.find_by_id(params[:source_id])
     @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
 
-    # current_user.update_attribute :source_joins_per_page, params[:source_joins_per_page].to_i if params[:source_joins_per_page].to_i >= 10 and params[:source_joins_per_page].to_i <= 200
+    # current_user.update_column :source_joins_per_page, params[:source_joins_per_page].to_i if params[:source_joins_per_page].to_i >= 10 and params[:source_joins_per_page].to_i <= 200
 
     source_join_scope = SourceJoin.current
     source_join_scope = source_join_scope.with_source(@source.id) if @source

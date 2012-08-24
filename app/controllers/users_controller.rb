@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     email_settings.each do |email_setting|
       notifications[email_setting] = (not params[:email].blank? and params[:email][email_setting] == '1')
     end
-    current_user.update_attribute :email_notifications, notifications
+    current_user.update_attributes email_notifications: notifications
     redirect_to settings_path, notice: 'Email settings saved.'
   end
 

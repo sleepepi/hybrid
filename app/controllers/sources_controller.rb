@@ -107,7 +107,7 @@ class SourcesController < ApplicationController
   end
 
   def index
-    # current_user.update_attribute :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
+    # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
     @order = params[:order].blank? ? 'sources.name' : params[:order]
     if [params[:autocomplete], params[:popup]].include?('true')
       source_scope = Source.available
