@@ -1,10 +1,22 @@
-<div class="modal hide" id="sources_popup">
+<div class="modal hide modal-large" id="sources_popup">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>Sources</h3>
   </div>
   <div class="modal-body" id="sources_content">
-    <p>One fine body...</p>
+    <div class="row">
+      <div class="span4">
+        <%= render partial: 'sources/sources_search' %>
+        <div id="sources"><%#= render partial: 'sources/sources_popup' %></div>
+      </div>
+
+      <div class="span4">
+        <div id="source_info">
+          <span class='label label-info'>Click on a source for a detailed description.</span>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="modal-footer">
     <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Close</a>

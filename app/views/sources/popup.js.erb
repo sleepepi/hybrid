@@ -1,14 +1,8 @@
 $("#sources_popup").modal({ dynamic: true });
 $("#sources_popup").modal('show');
 
-$("#sources_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
-
-
-// $("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
-$("#popup_content_left").html("<%= escape_javascript(render("sources_search") + '<div id="sources">'.html_safe + render("sources_popup") + '</div>'.html_safe) %>");
-$("#popup_info").html("<span class='label label-info'>Click on a source for a detailed description.</span>");
 $(document.body).qtip('hide');
 
-
-$('#sources_search').watermark('Enter source name to filter list.');
 $('#sources_search').focus();
+
+$("#sources").html("<%= escape_javascript(render("sources/sources_popup")) %>");

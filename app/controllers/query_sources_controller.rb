@@ -17,9 +17,9 @@ class QuerySourcesController < ApplicationController
 
   def create
     @query = current_user.all_queries.find_by_id(params[:query_id])
-    source = Source.available.find_by_id(params[:selected_source_id])
+    @source = Source.available.find_by_id(params[:selected_source_id])
     if @query
-      @query.sources << source if source and not @query.sources.include?(source)
+      @query.sources << @source if @source and not @query.sources.include?(@source)
       render 'query_sources/query_sources'
     else
       render nothing: true
@@ -29,6 +29,7 @@ class QuerySourcesController < ApplicationController
   def destroy
     @query_source = QuerySource.find_by_id(params[:id])
     @query = @query_source.query if @query_source and current_user.all_queries.include?(@query_source.query)
+    @source = @query_source.source if @query_source
     if @query and @query_source
       @query_source.destroy
       @query.reload
