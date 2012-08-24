@@ -213,3 +213,45 @@ tr.overall td.total {
 .nolink {
   color: #404040;
 }
+
+.modal.modal-large {
+  width: 800px;
+}
+
+.modal-wrapper {
+  margin-left:-400px;
+}
+
+@media (max-width: 768px) {
+  .modal.modal-large {
+    width: auto;
+  }
+
+  .modal-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    margin: 0;
+    z-index: 1050;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal.modal-large {
+    width: auto;
+  }
+
+  .modal-wrapper {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    margin: 0;
+    z-index: 1050;
+    overflow: visible;
+  }
+}

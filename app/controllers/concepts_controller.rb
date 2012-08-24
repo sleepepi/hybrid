@@ -30,7 +30,6 @@ class ConceptsController < ApplicationController
 
   def index
     # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
-    @order = params[:order].blank? ? 'concepts.search_name' : params[:order]
     concept_scope = Concept.current
     @query = current_user.queries.find_by_id(params[:query_id])
 
@@ -43,6 +42,8 @@ class ConceptsController < ApplicationController
     @search_terms.each{|search_term| concept_scope = concept_scope.search(search_term) }
     if params[:autocomplete] == 'true'
       concept_scope = concept_scope.with_source(@query.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.id}) if @query
+
+      @order = scrub_order(Concept, params[:order], "concepts.search_name")
       concept_scope = concept_scope.order("(concepts.folder IS NULL or concepts.folder = '') ASC, concepts.folder ASC, " + @order)
       @concepts = concept_scope.page(params[:page]).per(10)
 

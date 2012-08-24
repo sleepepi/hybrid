@@ -1,20 +1,23 @@
 <% @title = ["Concepts", @dictionary ? @dictionary.name : nil].compact.join(' - ') %>
-<h1><%= @title %></h1>
+<div class="page-header">
+  <h1>
+    <%= @title %>
+    <% if current_user.system_admin? and false %>
+      <%= link_to "Create Concept", new_concept_path, class: 'btn btn-mini btn-primary' %>
+    <% end %>
+    <% if @dictionary %>
+      <%= link_to "Dictionary: #{@dictionary.name} CSV File", export_to_csv_dictionary_path(@dictionary), class: 'btn btn-mini' %>
+    <% end %>
+  </h1>
+</div>
 
-<% if current_user.system_admin? and false %>
-  <%= link_to image_tag('contour/addfile.png', alt: '') + "Create New Concept", new_concept_path, class: 'btn btn-primary' %>
-<% end %>
-
-<% if @dictionary and false %>
-  <%= link_to image_tag('contour/download.png', alt: '') + 'Dictionary: ' + @dictionary.name + ' ' + image_tag('contour/xls.png', alt: '') + ' CSV File', export_to_csv_dictionary_path(@dictionary), class: 'btn' %>
-<% end %>
-
-<%= form_tag concepts_path, method: :get, remote: true, id: "concepts_search" do %>
+<%= form_tag concepts_path, method: :get, remote: true, id: "concepts_search", class: 'form-search' do %>
   <%= hidden_field_tag :order %>
-  <%= hidden_field_tag :dictionary_id, params[:dictionary_id] %>
-  Search <%= text_field_tag 'search', params[:search] %> <%= information %>
-  <div id="concepts"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
+  <%= text_field_tag 'search', params[:search], class: 'search-query' %>
+  <%= submit_tag 'Search', class: 'btn btn-primary' %>
 <% end %>
+
+<div id="concepts"><center><%= image_tag "contour/ajax-loader.gif" %></center></div>
 
 <%= javascript_tag do %>
   $(function(){
