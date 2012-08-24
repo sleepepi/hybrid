@@ -2,4 +2,4 @@
 
 
 <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '', style: 'vertical-align:text-bottom'), edit_name_report_path(@report, query_id: @query.id), method: :post, remote: true %>
-<%= link_to 'remove', report_path(@report, query_id: @query.id), method: :delete, remote: true, confirm: "Are you sure you want to delete #{@report.name}?", class: 'btn btn-mini btn-danger' %>
+<%= link_to 'remove', report_path(@report, query_id: @query.id), method: :delete, remote: true, data: { confirm: "Are you sure you want to delete #{@report.name}?" }, class: 'btn btn-mini btn-danger' %>

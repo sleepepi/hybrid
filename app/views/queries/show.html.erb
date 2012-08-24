@@ -1,101 +1,97 @@
 <% @title = "Search" %>
 
 <div class="page-header">
-  <h1><%= @title %></h1>
+  <h1>
+    <%= @title %>
+    <%= render partial: 'layouts/tutorial' %>
+    <div class="pull-right">
+      <%= link_to "History", queries_path, rel: 'tooltip', title: pluralize(current_user.all_queries.size, 'Existing Search'), data: { placement: 'left' }, class: 'btn btn-mini' %>
+      <%= link_to "New Search", new_query_path, id: 'new_search_link', class: 'btn btn-mini' %>
+      <%= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>
+    </div>
+  </h1>
 </div>
 
-<%= render partial: 'layouts/tutorial' %>
+<div class="row">
+  <div class="span6">
 
-<table class="blank padded" style="width:100%;table-layout: fixed"><col width="600px"/>
-  <tr>
-    <td style="vertical-align:top;">
-      <%= form_tag query_sources_path(query_id: @query), method: :post, remote: true, onsubmit: "showWaiting('#query_sources', 'Loading Sources', false)", id: "sources_form" do %>
-        <%= hidden_field_tag 'selected_source_id' %>
-        <div class="field">
-          <div style="float:left;width:50px"><label>From</label></div>
-          <div style="float:left">
-            <%= text_field_tag :source, '', style: 'width:475px;', name: 'search', class: 'bubble-orange', tabindex: '1' %>
-            <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom;padding-right:8px'), sources_path(popup: true, query_id: @query.id), remote: true, id: 'open_sources', class: 'bubble-grey' %>
-          </div>
+    <%= form_tag query_sources_path(query_id: @query), method: :post, remote: true, onsubmit: "showWaiting('#query_sources', 'Loading Sources', false)", id: "sources_form", class: 'form-horizontal' do %>
+      <%= hidden_field_tag 'selected_source_id' %>
+      <div class="control-group">
+        <label class="control-label">From</label>
+        <div class="controls">
+          <%= text_field_tag :source, '', name: 'search', tabindex: '1', rel: 'tooltip', title: 'Type in a data source and hit <b>[Enter]</b>' %>
+          <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' } %>
         </div>
-      <% end %>
-      <div id="query_sources" style="clear:both;margin-left:50px"><%= render partial: 'query_sources/query_sources' %></div>
-      <br />
-
-      <%= form_tag query_concepts_path(query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#concept_folders', 'Loading Concepts', false);", id: 'search_form' do %>
-        <%= hidden_field_tag 'selected_concept_id' %>
-        <div class="field">
-          <div style="float:left;width:50px"><label>With</label></div>
-          <div style="float:left">
-            <%= text_field_tag 'concept_search_term', '', style: 'width:475px', class: 'bubble-orange', tabindex: '2' %>
-            <%= link_to image_tag('gentleface/16/folder_open.png', style: 'vertical-align:text-bottom;padding-right:8px'), search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, id: 'open_concepts', class: 'bubble-grey' %>
-          </div>
-        </div>
-      <% end %>
-    </td>
-    <td style="vertical-align:top;text-align:right">
-      <div style="background-color:white">
-        <div id="query_<%= @query.id %>_name" style="margin-top:5px"><%= render partial: 'queries/name' %></div><br />
-        <%= link_to "History", queries_path, id: 'history_link', style: 'padding-left:8px' %><br />
-        <%= javascript_tag("$('#history_link').CreateBubblePopup({
-          innerHtml: '#{pluralize(current_user.all_queries.size, 'Existing Search')}',
-          themeName: 'orange',
-          themePath: root_url + 'assets/jquerybubblepopup-theme/',
-          position: 'left',
-          align: 'middle',
-          distance: '0px'
-        });") %>
-        <br />
-        <%= link_to "New Search", new_query_path, id: 'new_search_link' %>
-        <%= link_to image_tag('icons/gentleface/doc_new_16.png', alt: '', style: 'vertical-align:text-bottom;cursor:pointer', id: 'new_search_link_icon'), new_query_path %>
-        <br /><br />
-        <%= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link' %>
-        <%= link_to image_tag('icons/gentleface/clipboard_copy_16.png', alt: '', style: 'vertical-align:text-bottom;cursor:pointer', id: 'copy_search_link_icon'), copy_query_path(@query), method: :post %>
       </div>
-    </td>
-  </tr>
-</table>
 
-
-
-<table class="blank padded" style="width:100%">
-  <tr>
-  <td>
-    <%= form_tag mark_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, id: 'mark_query_concepts_form' do %>
-      <%= hidden_field_tag :selected_query_concept_id, '', name: 'query_concept_id' %>
-      <%= hidden_field_tag :query_concept_selected, '', name: 'selected' %>
+      <div class="control-group">
+        <div class="controls" id="query_sources">
+          <%= render partial: 'query_sources/query_sources' %>
+        </div>
+      </div>
     <% end %>
 
-    <%= form_tag right_operator_query_concepts_path(query_id: @query.id), method: :post, remote: true, id: 'right_operator_query_concepts_form' do %>
-      <%= hidden_field_tag :selected_right_operator_query_concept_id, '', name: 'query_concept_id' %>
-      <%= hidden_field_tag :query_concept_right_operator, '', name: 'right_operator' %>
-    <% end %>
-    <div class="field">
-      <div style="float:left;width:46px"><label>Tools: </label></div>
-      <div style="float:left">
-        <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'select_all_img'), select_all_query_concepts_path(query_id: @query.id, selected: true), method: :post, remote: true, class: 'bubble-orange loader', id: 'select_all' %>
-        <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'select_none_img'), select_all_query_concepts_path(query_id: @query.id, selected: false), method: :post, remote: true, class: 'bubble-orange loader', id: 'select_none' %>
-        <span class="space"></span>
-        <%= link_to image_tag('icons/gentleface/indent_increase_16.png', alt: 'Indent', title: 'Indent Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'increase_indent_img'), indent_query_concepts_path(query_id: @query.id, indent: 1), method: :post, remote: true, class: 'bubble-orange loader', id: 'increase_indent' %>
-        <%= link_to image_tag('icons/gentleface/indent_decrease_16.png', alt: 'Un-Indent', title: 'Decrease Indent for Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'decrease_indent_img'), indent_query_concepts_path(query_id: @query.id, indent: -1), method: :post, remote: true, class: 'bubble-orange loader', id: 'decrease_indent' %>
-        <span class="space"></span>
-        <%= link_to image_tag('icons/gentleface/clipboard_copy_16.png', alt: 'Copy Concepts', title: 'Copy Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'copy_concepts_img'), copy_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, class: 'bubble-orange loader', id: 'copy_concepts' %>
-        <span class="space"></span>
-        <%= link_to image_tag("icons/gentleface/undo_16#{'_q' unless @query.undo?}.png", alt: 'Undo', title: 'Undo Last Change', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'undo_img', 'data-img-disabled' => "icons/gentleface/undo_16_q.png", 'data-img-enabled' => "icons/gentleface/undo_16.png"), undo_query_path(@query), method: :post, remote: true, class: 'bubble-orange loader', id: 'undo' %>
-        <%= link_to image_tag("icons/gentleface/redo_16#{'_q' unless @query.redo?}.png", alt: 'Redo', title: 'Redo Last Change', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'redo_img', 'data-img-disabled' => "icons/gentleface/redo_16_q.png", 'data-img-enabled' => "icons/gentleface/redo_16.png"), redo_query_path(@query), method: :post, remote: true, class: 'bubble-orange loader', id: 'redo' %>
-        <span class="space"></span>
-        <%= link_to image_tag('icons/gentleface/trash_16.png', alt: 'Remove Concepts', title: 'Remove Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'remove_concepts_img'), trash_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, confirm: 'Are you sure you want to remove all the selected concepts?', class: 'bubble-orange loader', id: 'remove_concepts' %>
+
+    <%= form_tag query_concepts_path(query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#concept_folders', 'Loading Concepts', false);", id: 'search_form', class: 'form-horizontal' do %>
+      <%= hidden_field_tag 'selected_concept_id' %>
+
+      <div class="control-group">
+        <label class="control-label">With</label>
+        <div class="controls">
+          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>' %>
+          <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
+        </div>
       </div>
+    <% end %>
+  </div>
+
+  <div class="span6" style="text-align:right">
+
+        <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
+  </div>
+</div>
+
+
+<%= form_tag mark_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, id: 'mark_query_concepts_form' do %>
+  <%= hidden_field_tag :selected_query_concept_id, '', name: 'query_concept_id' %>
+  <%= hidden_field_tag :query_concept_selected, '', name: 'selected' %>
+<% end %>
+
+<%= form_tag right_operator_query_concepts_path(query_id: @query.id), method: :post, remote: true, id: 'right_operator_query_concepts_form' do %>
+  <%= hidden_field_tag :selected_right_operator_query_concept_id, '', name: 'query_concept_id' %>
+  <%= hidden_field_tag :query_concept_right_operator, '', name: 'right_operator' %>
+<% end %>
+
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">Tools</label>
+    <div class="controls" style="padding-top:4px">
+      <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'select_all_img'), select_all_query_concepts_path(query_id: @query.id, selected: true), method: :post, remote: true, class: 'loader', id: 'select_all', rel: 'tooltip', title: 'Select All Concepts' %>
+      <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'select_none_img'), select_all_query_concepts_path(query_id: @query.id, selected: false), method: :post, remote: true, class: 'loader', id: 'select_none', rel: 'tooltip', title: 'Deselect All Concepts' %>
+      <span class="space"></span>
+      <%= link_to image_tag('icons/gentleface/indent_increase_16.png', alt: 'Indent', title: 'Indent Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'increase_indent_img'), indent_query_concepts_path(query_id: @query.id, indent: 1), method: :post, remote: true, class: 'loader', id: 'increase_indent', rel: 'tooltip', title: 'Increase Indent' %>
+      <%= link_to image_tag('icons/gentleface/indent_decrease_16.png', alt: 'Un-Indent', title: 'Decrease Indent for Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'decrease_indent_img'), indent_query_concepts_path(query_id: @query.id, indent: -1), method: :post, remote: true, class: 'loader', id: 'decrease_indent', rel: 'tooltip', title: 'Decrease Indent' %>
+      <span class="space"></span>
+      <%= link_to image_tag('icons/gentleface/clipboard_copy_16.png', alt: 'Copy Concepts', title: 'Copy Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'copy_concepts_img'), copy_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, class: 'loader', id: 'copy_concepts', rel: 'tooltip', title: 'Copy Selected Concepts' %>
+      <span class="space"></span>
+      <%= link_to image_tag("icons/gentleface/undo_16#{'_q' unless @query.undo?}.png", alt: 'Undo', title: 'Undo Last Change', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'undo_img', 'data-img-disabled' => "icons/gentleface/undo_16_q.png", 'data-img-enabled' => "icons/gentleface/undo_16.png"), undo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'undo', rel: 'tooltip', title: 'Undo Last Change' %>
+      <%= link_to image_tag("icons/gentleface/redo_16#{'_q' unless @query.redo?}.png", alt: 'Redo', title: 'Redo Last Change', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'redo_img', 'data-img-disabled' => "icons/gentleface/redo_16_q.png", 'data-img-enabled' => "icons/gentleface/redo_16.png"), redo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'redo', rel: 'tooltip', title: 'Redo Last Change' %>
+      <span class="space"></span>
+      <%= link_to image_tag('icons/gentleface/trash_16.png', alt: 'Remove Concepts', title: 'Remove Selected Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px', id: 'remove_concepts_img'), trash_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, data: { confirm: 'Are you sure you want to remove all the selected concepts?' }, class: 'loader', id: 'remove_concepts', rel: 'tooltip', title: 'Remove Selected Concepts' %>
     </div>
+  </div>
+</form>
 
-    <br /><br />
+<hr class="soften" style="margin: 20px 0px">
 
-    <%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form' do %>
-      <div id="query_concepts" style="clear:both;margin-left:50px;margin-right:50px"><%= render partial: 'query_concepts/query_concepts' %></div>
-    <% end %>
-  </td>
-  </tr>
-</table>
+<%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form' do %>
+  <div id="query_concepts" style="clear:both;margin-left:50px;margin-right:50px"><%= render partial: 'query_concepts/query_concepts' %></div>
+<% end %>
+
+
+<hr class="soften" style="margin: 20px 0px">
+
 
 <div id="new_dataset_dialog" title="New Dataset">
 	<%= form_tag reports_path(query_id: @query.id, is_dataset: true), method: :post, remote: true, id: "new_dataset_form" do %>
@@ -110,6 +106,7 @@
 		</fieldset>
   <% end %>
 </div>
+
 
 <div id="new_report_dialog" title="New Report">
 	<%= form_tag reports_path(query_id: @query.id, is_dataset: false), method: :post, remote: true, id: "new_report_form" do %>
@@ -128,47 +125,36 @@
 <%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', false)" do %>
 <% end %>
 
-<br />
+<div class="row">
+  <div class="span3">
+    <span style="font-weight:bold">Result</span>
+    <span id="total_records_found_display" class="records_found"></span>
+    <span id="total_errors_found" class="errors_found"></span>
+  </div>
 
-<table class="blank padded" style="width:100%"><col width="25%" /><col width="25%" /><col width="25%" /><col width="25%" />
-  <tr>
-    <td valign="top" style="padding-left:0px">
-      <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-          <span style="padding-bottom:10px;font-weight:bold">Result</span>
-          <span id="total_records_found_display" class="records_found"></span>
-          <span id="total_errors_found" class="errors_found"></span>
-      </td></tr></table></div>
-    </td>
-    <td valign="top">
-      <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Datasets <%= link_to 'create', '#', id: 'add_dataset_tab', class: 'btn btn-mini btn-primary bubble-orange' %></span>
-        <div id="datasets_container">
-          <%= render partial: 'reports/datasets' %>
-        </div>
-      </td></tr></table></div>
-    </td>
-    <td valign="top">
-      <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Reports <%= link_to 'create', '#', id: 'add_report_tab', class: 'btn btn-mini btn-primary bubble-orange' %></span>
-        <div id="reports_container">
-          <%= render partial: 'reports/reports' %>
-        </div>
-      </td></tr></table></div>
-    </td>
-    <td valign="top" style="padding-right:0px">
-      <div class="frame"><table class="blank padded" style="width:100%"><tr><td>
-        <span style="padding-bottom:10px;font-weight:bold">Data Files</span>
-        <div id="query_file_types">
-          <%= render partial: 'queries/file_types' %>
-        </div>
-      </td></tr></table></div>
-    </td>
-  </tr>
-</table>
+  <div class="span3">
+    <span style="font-weight:bold">Datasets <%= link_to 'create', '#', id: 'add_dataset_tab', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset' %></span>
+    <div id="datasets_container"><%= render partial: 'reports/datasets' %></div>
+  </div>
 
-<div style="clear:both"></div>
+  <div class="span3">
+    <span style="font-weight:bold">Reports <%= link_to 'create', '#', id: 'add_report_tab', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report' %></span>
+    <div id="reports_container"><%= render partial: 'reports/reports' %></div>
+  </div>
+
+  <div class="span3">
+    <span style="font-weight:bold">Data Files</span>
+    <div id="query_file_types"><%= render partial: 'queries/file_types' %></div>
+  </div>
+</div>
+
+
+
+
 <div id="information" style="display:none"></div>
-<br />
+
+<hr class="soften" style="margin: 20px 0px">
+
 <div id="inlaid_report"></div>
 
 <%= render partial: 'sources/modal' %>

@@ -11,7 +11,7 @@
   <tr>
     <td><%= link_to 'Show', query_source %></td>
     <td><%= link_to 'Edit', edit_query_source_path(query_source) %></td>
-    <td><%= link_to 'Destroy', query_source, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Destroy', query_source, data: { confirm: 'Are you sure?' }, method: :delete %></td>
   </tr>
 <% end %>
 </table>

@@ -21,10 +21,8 @@ $("#reports_list").html("<%= escape_javascript(render("reports/reports_list")) %
     "width": "412px"
   })
 
-  $(document.body).qtip('hide');loadPopup();
-  centerPopup();
+  $(document.body).qtip('hide');
 
-  $('#concept_search').watermark('Enter concept name or navigate folders.');
   $('#accordion').accordion({ fillSpace: true });
 
   <% unless @report.is_dataset? %>

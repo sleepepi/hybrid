@@ -23,9 +23,9 @@
 /*            MAIN CONTENT            */
 /**************************************/
 
-input[type="text"], input[type="password"], textarea {
+/*input[type="text"], input[type="password"], textarea {
   font-family: "Liberation Sans", Helvetica, Arial, sans-serif;
-}
+}*/
 
 .collapsed {
   white-space:nowrap;

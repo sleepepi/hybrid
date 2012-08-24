@@ -56,21 +56,3 @@ jQuery ->
   $(document)
     .on('mouseover', ".smudge", () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?.png/, '_g1.png')))
     .on('mouseout', ".smudge",  () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?_g1.png/, '.png')))
-
-  $('#new_search_link, #copy_search_link')
-    .on('mouseover', () ->
-      $('#'+this.id+'_icon').attr('src', $('#'+this.id+'_icon').attr('src').replace(/(-(.*?))?.png/, '_g1.png'))
-    )
-    .on('mouseout', () ->
-      $('#'+this.id+'_icon').attr('src', $('#'+this.id+'_icon').attr('src').replace(/(-(.*?))?_g1.png/, '.png'))
-    )
-
-  $('#new_search_link_icon, #copy_search_link_icon')
-    .on('mouseover', () ->
-      $('#'+this.id.replace('_icon', '')).css('color':'#EB6C20')
-      $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?.png/, '_g1.png'))
-    )
-    .on('mouseout', () ->
-      $('#'+this.id.replace('_icon', '')).css('color':'')
-      $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?_g1.png/, '.png'))
-    )

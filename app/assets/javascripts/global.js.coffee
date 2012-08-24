@@ -66,6 +66,9 @@
   )
 
 jQuery ->
+  $("input[rel=tooltip]").tooltip()
+  $("a[rel~=tooltip]").tooltip()
+
   $(document)
     .on('click', '[data-object~="submit"]', () ->
       $($(this).data('target')).submit()

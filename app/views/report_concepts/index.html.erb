@@ -21,7 +21,7 @@
     <td><%= report_concept.statistic %></td>
     <td><%= link_to 'Show', report_concept %></td>
     <td><%= link_to 'Edit', edit_report_concept_path(report_concept) %></td>
-    <td><%= link_to 'Destroy', report_concept, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= link_to 'Destroy', report_concept, data: { confirm: 'Are you sure?' }, method: :delete %></td>
   </tr>
 <% end %>
 </table>

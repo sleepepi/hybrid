@@ -4,7 +4,7 @@
     <%= @title %>
     <% if current_user.all_source_joins.include?(@source_join) %>
       <%= link_to "Edit Source Join", edit_source_join_path(@source_join), class: 'btn btn-mini' %>
-      <%= link_to "Delete Source Join", @source_join, confirm: "Are you sure you want to delete Source Join #{@source_join.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+      <%= link_to "Delete Source Join", @source_join, data: { confirm: "Are you sure you want to delete Source Join #{@source_join.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
     <% end %>
     <%= link_to "View Source Joins", source_joins_path, class: 'btn btn-mini' %>
   </h1>

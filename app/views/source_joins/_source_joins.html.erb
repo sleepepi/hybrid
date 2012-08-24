@@ -23,7 +23,7 @@
       <td><%= source_join.to_column %></td>
       <td>
         <%= link_to 'Edit', edit_source_join_path(source_join), class: 'btn btn-mini' %>
-        <%= link_to 'Delete', source_join, confirm: "Are you sure you want to delete Source Join #{source_join.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+        <%= link_to 'Delete', source_join, data: { confirm: "Are you sure you want to delete Source Join #{source_join.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
       </td>
     </tr>
   <% end %>

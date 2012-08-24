@@ -1,12 +1,10 @@
-<div class="container tutorial">
-  <span id="tutorial_buttons" style="display:none;float:right;cursor:default">
-    <%= link_to image_tag('icons/gentleface/playback_prev_16.png', alt: '', class: 'smudge', style: 'vertical-align:text-bottom', size: '16x16'), "#", id: 'play_first' %>
-    <%= link_to image_tag('icons/gentleface/playback_rew_16.png', alt: '', class: 'smudge', style: 'vertical-align:text-bottom', size: '16x16'), "#", id: 'prev' %>
-    <%= link_to image_tag('icons/gentleface/playback_play_16.png', alt: '', class: 'smudge', style: 'vertical-align:text-bottom', size: '16x16', id: 'playpause-img'), "#", id: 'playpause' %>
-    <%= link_to image_tag('icons/gentleface/playback_ff_16.png', alt: '', class: 'smudge', style: 'vertical-align:text-bottom', size: '16x16'), "#", id: 'next' %>
-    <%= link_to image_tag('icons/gentleface/playback_next_16.png', alt: '', class: 'smudge', style: 'vertical-align:text-bottom', size: '16x16'), "#", id: 'play_last' %>
-  </span>
-  <span id="tutorial_link" style="float:right">
-    <%= link_to 'Tutorial', '#', data: { object: 'launch-tutorial' }, style: 'text-decoration:none' %>
-  </span>
-</div>
+<span id="tutorial_buttons" style="display:none;cursor:default">
+  <%= link_to image_tag('icons/gentleface/playback_prev_16.png', alt: '', class: 'smudge', size: '16x16'), "#", id: 'play_first' %>
+  <%= link_to image_tag('icons/gentleface/playback_rew_16.png', alt: '', class: 'smudge', size: '16x16'), "#", id: 'prev' %>
+  <%= link_to image_tag('icons/gentleface/playback_play_16.png', alt: '', class: 'smudge', size: '16x16', id: 'playpause-img'), "#", id: 'playpause' %>
+  <%= link_to image_tag('icons/gentleface/playback_ff_16.png', alt: '', class: 'smudge', size: '16x16'), "#", id: 'next' %>
+  <%= link_to image_tag('icons/gentleface/playback_next_16.png', alt: '', class: 'smudge', size: '16x16'), "#", id: 'play_last' %>
+</span>
+<span id="tutorial_link">
+  <%= link_to 'Tutorial', '#', data: { object: 'launch-tutorial' }, class: 'btn btn-mini' %>
+</span>

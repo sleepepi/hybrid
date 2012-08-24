@@ -21,7 +21,7 @@
       <td><%= link_to concept.dictionary.name, concept.dictionary if concept.dictionary %></td>
       <% if false %>
         <td><%= link_to 'Edit', edit_concept_path(concept) %></td>
-        <td><%= link_to 'Destroy', concept, confirm: 'Are you sure?', method: :delete %></td>
+        <td><%= link_to 'Destroy', concept, data: { confirm: 'Are you sure?' }, method: :delete %></td>
       <% end %>
     </tr>
   <% end %>

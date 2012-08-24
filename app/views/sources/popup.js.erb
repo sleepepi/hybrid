@@ -6,7 +6,7 @@ $("#sources_content").html("<div id='popup_content_left'>Left</div><div id='popu
 
 // $("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
 $("#popup_content_left").html("<%= escape_javascript(render("sources_search") + '<div id="sources">'.html_safe + render("sources_popup") + '</div>'.html_safe) %>");
-$("#popup_info").html("<span class='quiet'><%= escape_javascript(image_tag('contour/information.png', alt: '', style: 'vertical-align:text-bottom')) %> Click on a source for a detailed description.</span>");
+$("#popup_info").html("<span class='label label-info'>Click on a source for a detailed description.</span>");
 $(document.body).qtip('hide');
 
 

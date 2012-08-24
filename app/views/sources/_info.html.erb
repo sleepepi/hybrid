@@ -2,7 +2,7 @@
 <br />
 <% if @query and @query.sources.include?(@source) %>
   <% query_source = @query.query_sources.find_by_source_id(@source.id) %>
-  <%= link_to "Remove from Search", query_source, method: :delete, remote: true, class: 'btn btn-danger', confirm: "Are you sure you want to remove #{@source.name} from your query?" %>
+  <%= link_to "Remove from Search", query_source, method: :delete, remote: true, class: 'btn btn-danger', data: { confirm: "Are you sure you want to remove #{@source.name} from your query?" } %>
 <% else %>
   <%= link_to "Add to Search", query_sources_path(query_id: @query.id, selected_source_id: @source.id), method: :post, remote: true, title: @source.name, class: 'btn btn-primary', onclick: "disablePopup();" if @query %>
 <% end %>

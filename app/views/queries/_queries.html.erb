@@ -25,7 +25,7 @@
       <td style="text-align:right"><%= simple_time(query.created_at) %></td>
       <td>
         <%= link_to 'Edit', query, class: 'btn btn-mini' %>
-        <%= link_to 'Delete', query, confirm: "Are you sure you want to delete Query #{query.name}?", method: :delete, class: 'btn btn-mini btn-danger' %>
+        <%= link_to 'Delete', query, data: { confirm: "Are you sure you want to delete Query #{query.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
       </td>
     </tr>
   <% end %>

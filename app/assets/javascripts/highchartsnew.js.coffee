@@ -31,7 +31,7 @@
     sub_title = if typeof document.ontouchstart == 'undefined' then 'Click and drag in the plot area to select values' else 'Drag your finger over the plot to select values'
   else
     sub_title = if typeof document.ontouchstart == 'undefined' then 'Click and drag in the plot area to zoom in' else 'Drag your finger over the plot to zoom in'
-  
+
   new Highcharts.Chart(
     chart:
       renderTo: element_id
@@ -91,7 +91,7 @@
 
   for key, value of values
     source_count += 1
-  
+
   donut_size = parseInt(75 / source_count)
 
   for key, value of values
@@ -104,7 +104,7 @@
       dataLabels:
         enabled: (source_count == source_index + 1)
     )
-    source_index += 1    
+    source_index += 1
 
     for index, h of value
       total_count = total_count + h['y']
@@ -158,190 +158,3 @@
     # },
     series: my_series
   )
-
-# @drawHighChartScatterChart = (element_id, values, params) ->
-#   myXPlotBands = [];
-#   myYPlotBands = [];
-# 
-#   two_colors = ['rgba(0, 0, 0, 0)', 'rgba(68, 170, 213, 0.1)'];
-# 
-#   faded_colors = ['rgba(69, 114, 167, 0.5)', 'rgba(170, 70, 67, 0.5)', 'rgba(137, 165, 78, 0.5)', 'rgba(128, 105, 155, 0.5)', 'rgba(61, 150, 174, 0.5)', 'rgba(219, 132, 61, 0.5)', 'rgba(146, 168, 205, 0.5)', 'rgba(164, 125, 124, 0.5)', 'rgba(181, 202, 146, 0.5)'];
-#                     # '#4572A7',                     '#AA4643',               '#89A54E',                '#80699B',                 '#3D96AE',                   '#DB843D',                   '#92A8CD',                   '#A47D7C',                  '#B5CA92'  
-# 
-#   index = 0;
-# 
-#   for (index = 0; index < params['xPlotBands'].length; ++index) {
-#     item = params['xPlotBands'][index];
-#     band_color = two_colors[(index % two_colors.size())];
-#     band_text = item;
-# 
-#     if(item.indexOf("#") >= 0){
-#       band_text = item.substring(item.indexOf("#")+1);
-#     }
-# 
-#     myXPlotBands.push({
-#                  from: index,
-#                  to: index+1,
-#                  color: band_color,
-#                  label: {
-#                     text: band_text
-#                  }
-#               });
-#   }
-# 
-#   for (index = 0; index < params['yPlotBands'].length; ++index) {
-#     item = params['yPlotBands'][index];
-#     band_color = two_colors[(index % two_colors.size())];
-#     band_text = item;
-# 
-#     if(item.indexOf("#") >= 0){
-#       band_text = item.substring(item.indexOf("#")+1);
-#     }
-# 
-#     myYPlotBands.push({
-#                  from: index,
-#                  to: index+1,
-#                  color: band_color,
-#                  label: {
-#                     text: band_text,
-#                     verticalAlign: 'middle'
-#                  }
-#               });
-#   }
-# 
-#   Highcharts.setOptions({colors: faded_colors});
-# 
-#   new Highcharts.Chart({
-#         chart: {
-#            renderTo: element_id, 
-#            defaultSeriesType: 'scatter',
-#            zoomType: 'xy'
-#         },
-#         credits: {
-#           enabled: false
-#         },
-#         title: {
-#            text: params['title']
-#         },
-#         # subtitle: {
-#         #    text: 'Source: Heinz  2003'
-#         # },
-#         xAxis: {
-#            title: {
-#               enabled: true,
-#               text: params['title_x']
-#            },
-#            labels: {
-#              enabled: params['xAxisLabelsEnabled']
-#            },
-#            startOnTick: true,
-#            endOnTick: true,
-#            showLastLabel: true,
-#            plotBands: myXPlotBands
-#         },
-#         yAxis: {
-#            title: {
-#               text: params['title_y']
-#            },
-#            labels: {
-#              enabled: params['yAxisLabelsEnabled']
-#            },
-#            plotBands: myYPlotBands
-# 
-#            # [{ # Light air
-#            #             from: 0.3,
-#            #             to: 1.5,
-#            #             color: 'rgba(68, 170, 213, 0.1)',
-#            #             label: {
-#            #                text: 'Light air',
-#            #                style: {
-#            #                   color: Highcharts.theme.textColor || '#606060'
-#            #                }
-#            #             }
-#            #          }, { # Light breeze
-#            #             from: 1.5,
-#            #             to: 3.3,
-#            #             color: 'rgba(0, 0, 0, 0)',
-#            #             label: {
-#            #                text: 'Light breeze',
-#            #                style: {
-#            #                   color: Highcharts.theme.textColor || '#606060'
-#            #                }
-#            #             }
-#            #          }]
-# 
-#         },
-#         tooltip: {
-#            formatter: function() {
-#                       if(params['title_z'] != '' && params['title_z'] != null && this.z != null){
-#                         if(!params['xAxisLabelsEnabled'] && !params['yAxisLabelsEnabled']){
-#                           return '';
-#                         }else if(!params['xAxisLabelsEnabled']){
-#                           return this.y + ' ' + params['title_y'] + ' ' + this.z + ' ' + params['title_z'];
-#                         }else if(!params['yAxisLabelsEnabled']){
-#                           return this.x + ' ' + params['title_x'] + ' ' + this.z + ' ' + params['title_z'];
-#                         }else{
-#                           return this.x + ' ' + params['title_x'] + ', ' + this.y + ' ' + params['title_y'] + ' ' + this.z + ' ' + params['title_z'];
-#                         }
-# 
-#                       }else{
-#                         if(!params['xAxisLabelsEnabled'] && !params['yAxisLabelsEnabled']){
-#                           return '';
-#                         }else if(!params['xAxisLabelsEnabled']){
-#                           return this.y + ' ' + params['title_y'];
-#                         }else if(!params['yAxisLabelsEnabled']){
-#                           return this.x + ' ' + params['title_x'];
-#                         }else{
-#                           return this.x + ' ' + params['title_x'] + ', ' + this.y + ' ' + params['title_y'];
-#                         }
-#                       }
-#            }
-#         },
-#         # legend: {
-#         #    layout: 'vertical',
-#         #    # align: 'left',
-#         #    # verticalAlign: 'top',
-#         #    # x: 100,
-#         #    # y: 70,
-#         #    # floating: true,
-#         #    backgroundColor: '#FFFFFF',
-#         #    borderWidth: 1
-#         # },
-#         plotOptions: {
-#            scatter: {
-#               marker: {
-#                  radius: 5,
-#                  states: {
-#                     hover: {
-#                        enabled: true,
-#                        lineColor: 'rgb(100,100,100)'
-#                     }
-#                  }
-#               },
-#               states: {
-#                  hover: {
-#                     marker: {
-#                        enabled: false
-#                     }
-#                  }
-#               }
-#            }
-#         },
-#         series: values
-#         # [{
-#         #    name: 'Female',
-#         #    color: 'rgba(223, 83, 83, .5)',
-#         #    data: 
-#            # [[161.2, 51.6], [167.5, 59.0], [159.5, 49.2], [157.0, 63.0], [155.8, 53.6], 
-#            #    [176.5, 71.8], [164.4, 55.5], [160.7, 48.6], [174.0, 66.4], [163.8, 67.3]]
-# 
-#         # }
-#         # , {
-#         #    name: 'Male',
-#         #    color: 'rgba(119, 152, 191, .5)',
-#         #    data: [[174.0, 65.6], [175.3, 71.8], [193.5, 80.7], [186.5, 72.6], [187.2, 78.8], 
-#         #       [180.3, 83.2], [180.3, 83.2]]
-# 
-#         # }
-#         # ]
-#      });

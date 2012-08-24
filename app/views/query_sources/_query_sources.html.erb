@@ -1,4 +1,4 @@
 <% @query.query_sources.each do |query_source| %>
   <%= link_to query_source.source.name, query_source, method: :get, remote: true %>
-  <%= link_to 'remove', query_source, method: :delete, remote: true, confirm: "Are you sure you want to remove #{query_source.source.name} from your query?", class: 'btn btn-mini btn-danger' %>
+  <%= link_to 'remove', query_source, method: :delete, remote: true, data: { confirm: "Are you sure you want to remove #{query_source.source.name} from your query?" }, class: 'btn btn-mini btn-danger' %>
 <% end %>
