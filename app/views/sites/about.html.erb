@@ -1,10 +1,45 @@
 <% @title = "About #{DEFAULT_APP_NAME}" %>
 
-<h1><%= @title %></h1>
+<div class="row" style="margin-top:54px">
+  <div class="span12">
+    <h1 class="about-title"><%= @title %></h1>
+    <p class="about-tagline">Visit our <%= link_to 'online community', ABOUT_PAGE_FORUM, target: '_blank' %> or contact us <%= mail_to ABOUT_PAGE_CONTACT, 'via email', target: '_blank', subject: "#{DEFAULT_APP_NAME} Question" %>.</p>
+    <p class="about-signup"><%= link_to 'Sign Me Up', new_user_registration_path, class: "btn btn-primary btn-large" %></p>
+  </div>
+</div>
 
-<ol style="font-size:1.3em">
-  <li>Build powerful searches and see interactive counts</li>
-  <li>Generate and download dynamic datasets</li>
-  <li>Create and download easily customizable summary reports</li>
-  <li>Download numerous large files associated with your search with a single click</li>
-</ol>
+<hr class="soften">
+
+<p class="about-description">The <%= DEFAULT_APP_NAME %> is a <%= link_to 'free to use*', 'https://github.com/sleepepi/hybrid/blob/master/LICENSE', rel: 'tooltip', data: { title: 'Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License' } %> and <%= link_to 'open source', 'https://github.com/sleepepi/hybrid', rel: 'tooltip', data: { title: 'Source code freely available on GitHub' } %> web application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. Hybrid also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. The <%= DEFAULT_APP_NAME %> uses a data dictionary approach to define data and database relationships.</p>
+
+<div class="row">
+  <div class="span4">
+    <h2 class="about-title">Interactive Search</h2>
+    <ul>
+      <li>See interactive counts.</li>
+      <li>Individual concept statistics and graphs.</li>
+      <li>Longitudinal searches and searches across multiple data sources.</li>
+    </ul>
+  </div>
+  <div class="span4">
+    <h2 class="about-title">Exportable Datasets</h2>
+    <ul>
+      <li>Filter and export datasets for offline statistical analysis.</li>
+      <li>Download numerous large files associated with your search with a single click.</li>
+    </ul>
+  </div>
+  <div class="span4">
+    <h2 class="about-title">Dynamic Reports</h2>
+    <ul>
+      <li>Create and download customizable summary reports.</li>
+      <li>Save reports for future reference.</li>
+      <li>Specify stratification concepts for detailed reports.</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="soften">
+
+<footer class="footer">
+  <p class="muted about-footer"><%= DEFAULT_APP_NAME %> Version <%= link_to Hybrid::VERSION::STRING, "https://github.com/sleepepi/hybrid/tree/#{Hybrid::VERSION::MAJOR}.#{Hybrid::VERSION::MINOR}.#{Hybrid::VERSION::TINY}" %></p>
+</footer>
