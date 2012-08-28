@@ -51,7 +51,7 @@
             $("#query_concept_value").val(categories[low_range] + ':' + categories[high_range])
             $("#query_concept_value").change()
             $("#query_concept_value").effect("highlight", {}, 1000)
-            event.preventDefault()
+            false
     credits:
       enabled: false
     title:
@@ -146,7 +146,7 @@
                 else
                   $(el_id).attr('checked','checked')
                   $(el_id).parent().effect("highlight", {color:'#99ff99'}, 1000)
-                event.preventDefault()
+                false
     # legend: {
     #   layout: 'vertical',
     #   style: {

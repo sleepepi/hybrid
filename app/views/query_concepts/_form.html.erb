@@ -1,13 +1,19 @@
-<%= form_for(@query_concept, remote: true) do |f| %>
+<div class="page-header">
+  <h4><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></h4>
+</div>
+
+<%= form_for @query_concept, remote: true, html: { class: 'form-horizontal' } do |f| %>
   <% form_name = @query_concept.new_record? ? 'new_query_concept' : "edit_query_concept_#{@query_concept.id}" %>
-  <fieldset>
-    <legend><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></legend>
+
 
     <% if not @query_concept.concept and not @query_concept.external_key.blank? %>
 
     <% elsif @query_concept.concept.continuous? %>
-      <div class="field">
-        <%= f.label :value %>: <%= f.text_field :value, class: 'continuous', style: "width:290px" %>
+      <div class="control-group">
+        <%= f.label :value, nil, class: 'control-label' %>
+        <div class="controls">
+          <%= f.text_field :value, class: 'input-medium', placeholder: 'Drag and select a range on the graph!' %>
+        </div>
       </div>
 
       <%= javascript_tag do %>
@@ -45,29 +51,38 @@
       <% end %>
 
     <% elsif @query_concept.concept.categorical? %>
-      <div class="field">
-        <%= f.label :value %>: <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-check-all' }, class: 'bubble-azure', style: 'padding-top:10px' %>
-        <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-uncheck-all' }, class: 'bubble-azure', style: 'padding-top:10px' %><br />
-        <br />
-        <% @query_concept.concept.recommended_concepts.each do |concept| %>
-          <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></span>
-        <% end %>
+      <div class="control-group">
+        <%= f.label :value, nil, class: 'control-label' %>
+        <div class="controls">
+          <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-check-all' }, class: 'bubble-azure', style: 'padding-top:10px' %>
+          <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-uncheck-all' }, class: 'bubble-azure', style: 'padding-top:10px' %><br />
+          <br />
+          <% @query_concept.concept.recommended_concepts.each do |concept| %>
+            <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></span>
+          <% end %>
+        </div>
       </div>
     <% elsif @query_concept.concept.boolean? %>
-      <div class="field">
-        <%= f.label :value %>:
-        <% ['true','false'].each do |value| %>
-          <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></span>
-        <% end %>
+      <div class="control-group">
+        <%= f.label :value, nil, class: 'control-label' %>
+        <div class="controls">
+          <% ['true','false'].each do |value| %>
+            <span style="white-space:nowrap"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></span>
+          <% end %>
+        </div>
       </div>
     <% elsif @query_concept.concept.date? %>
-      <div class="field">
-        <%= label_tag :start_date %>:
-        <%= text_field_tag :start_date, (@query_concept.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+      <div class="control-group">
+        <%= label_tag :start_date, nil, class: 'control-label' %>
+        <div class="controls">
+          <%= text_field_tag :start_date, (@query_concept.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+        </div>
       </div>
-      <div class="field">
-        <%= label_tag :end_date %>
-        <%= text_field_tag :end_date, (@query_concept.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+      <div class="control-group">
+        <%= label_tag :end_date, nil, class: 'control-label' %>
+        <div class="controls">
+          <%= text_field_tag :end_date, (@query_concept.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+        </div>
       </div>
     <% elsif @query_concept.concept.identifier? %>
       Identifier
@@ -80,14 +95,16 @@
       <%= f.text_field :value %>
     <% end %>
 
-    <div class="field">
-      <%= f.label :negated %>:<%= f.check_box :negated %>
-      <p>
+    <div class="control-group">
+      <%= f.label :negated, nil, class: 'control-label' %>
+      <div class="controls">
+        <%= f.check_box :negated %>
+      </div>
     </div>
-  </fieldset>
-  <div class="actions">
-    <%#= link_to _function image_tag('contour/tick.png', align: 'absmiddle') + 'Update', "$('##{form_name}').submit();disablePopup();", class: 'btn btn-primary' %>
-    <%#= link_to _function image_tag('contour/cross.png', align: 'absmiddle') + 'Cancel', "disablePopup();", class: 'btn' %>
+
+  <div class="form-actions">
+    <%= link_to 'Update', '#', class: 'btn btn-primary btn-mini', data: { object: 'submit', target: "##{form_name}" } %>
+    <%= link_to 'Cancel', '#', class: 'btn btn-mini', data: { dismiss: 'modal' } %>
+    <%= link_to 'Remove', @query_concept, method: 'delete', remote: true, class: 'btn btn-danger btn-mini' %>
   </div>
 <% end %>
-<%= link_to image_tag('gentleface/16/doc_delete.png', align: 'absmiddle') + 'Delete', @query_concept, method: 'delete', remote: true, onclick: 'disablePopup();', class: 'btn btn-danger' %>

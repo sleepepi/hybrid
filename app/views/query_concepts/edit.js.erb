@@ -1,24 +1,21 @@
-//$("#query_concept_<%= @query_concept.id %>").html("<%= escape_javascript(render("edit")) %>");
 
-$("#popup").css({
-  "width": "816px", // "408px"
-  "height": ""
-});
+$("#query_concepts_popup").modal({ dynamic: true });
+$("#query_concepts_popup").modal('show');
 
-$("#popup_title").html("<%= escape_javascript(image_tag('gentleface/16/doc_edit.png', align: 'absmiddle', alt: '')) %> Edit");
-$("#popup_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
-$("#popup_content_left").html("<%= escape_javascript(render("edit")) %>");
+
+$("#query_concepts_popup_title").html("<%= escape_javascript(image_tag('gentleface/16/doc_edit.png', align: 'absmiddle', alt: '')) %> Edit");
+
+$("#query_concepts_left").html("<%= escape_javascript(render("edit")) %>");
+
+
 
 <% if @concept %>
   <% @query = nil %>
-$("#popup_info").html("<%= escape_javascript(render("concepts/info")) %>");
+  $("#query_concepts_right").html("<%= escape_javascript(render("concepts/info")) %>");
 <% end %>
 
 
-$(document.body).qtip('hide');loadPopup();
-centerPopup();
-
-$('input.continuous').watermark('Drag and select a range on the graph!');
+$(document.body).qtip('hide');
 
 <% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
   <% width = @defaults[:width].to_s.gsub("'", '') %>
@@ -27,18 +24,12 @@ $('input.continuous').watermark('Drag and select a range on the graph!');
 
 
   <% case @chart_type when 'column' %>
-    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>, <%= "[" + @categories.join(',') + "]" %>);
+    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>, <%= ("[" + @categories.join(',') + "]").html_safe %>);
   <% when 'pie' %>
-    drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>);
-  <% when 'scatter' %>
-    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-  <% when 'categorical_vs_continuous' %>
-    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-  <% when 'continuous_vs_categorical' %>
-    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-  <% when 'categorical_vs_categorical' %>
-    drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+    drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>);
   <% end %>
 <% end %>
 
+
 $('.datepicker').datepicker({ showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
+

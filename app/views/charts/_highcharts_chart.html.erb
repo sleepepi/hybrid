@@ -1,158 +1,30 @@
-<% if ['scatter', 'categorical_vs_continuous', 'continuous_vs_categorical', 'categorical_vs_categorical'].include?(@chart_type) %>
-  <% @defaults = {width: 320, height: 240, units: '', title: '', legend: 'right', title_x: "", title_y: "", xAxisLabelsEnabled: true, yAxisLabelsEnabled: true, yPlotBands: [], xPlotBands: []} %>
-<% else %>
-  <% @defaults = {width: 320, height: 240, units: '', title: '', legend: 'right'} %> <%# , min: @values.values.flatten.min.to_i, max: @values.values.flatten.max.to_i %>
-<% end %>
-<%= logger.debug "@default #{@defaults.inspect}" %>
-<%= logger.debug "@chart_params #{@chart_params.inspect}" %>
+<% @defaults = { width: 320, height: 240, units: '', title: '', legend: 'right' } %> <%# , min: @values.values.flatten.min.to_i, max: @values.values.flatten.max.to_i %>
+
 <% @defaults.merge!(@chart_params) %>
+
 <% @defaults.each do |k, v| %>
   <%= logger.debug "k #{k.inspect} v #{v.inspect}" %>
   <% @defaults[k] = array_or_string_for_javascript(v) if v.kind_of?(String) or v.kind_of?(Array) %>
 <% end %>
 
-<% if @chart_type == 'scatter' and @values.first.size == 2 %>
-  <% result = [] %>
-  <% @values[1..-1].each do |v| %>
-    <%# result << "[" + v.collect{|a,b| ["'" + a + "'", "'" + b + "'"]}.join(',') + "]" %>
-    <% result << "[" + v.collect{|a| a.class==String ? "'#{a}'" : a}.join(',') + "]" %>
-  <% end %>
-  <% @values = '[' + result.join(',') + ']' %>
 
-  <% @new_values = '[' + options_for_javascript({name: array_or_string_for_javascript('Records'), data: @values}) + ']' %>
-
-  <% @values = @new_values %>
-
-<% elsif @chart_type == 'scatter' and @values.first.size == 3 %>
-  <% result = [] %>
-  <% @values = @values[1..-1].group_by{|a| a[2]} %>
-  <% @values.each do |key, vals| %>
-    <% inner_result = [] %>
-    <% vals.each do |v| %>
-      <% inner_result << "[" + v[0..1].collect{|a| a.class==String ? "'#{a}'" : a}.join(',') + "]" %>
-    <% end %>
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[" + inner_result.join(',') + "]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-<% elsif @chart_type == 'categorical_vs_continuous' and @values.first.size == 3 %>
-  <% @x_plot_bands = @chart_params[:xPlotBands] %>
-  <% @values = @values[1..-1].group_by{|a| a[2]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% inner_result = [] %>
-
-    <% vals.each do |v| %>
-      <% inner_result << "[#{[@x_plot_bands.index(v[0])+((rand(50)+25)/100.0), v[1]].join(',')}]" %>
-    <% end %>
-
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[" + inner_result.join(',') + "]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-
-<% elsif @chart_type == 'continuous_vs_categorical' and @values.first.size == 3 %>
-  <% @y_plot_bands = @chart_params[:yPlotBands] %>
-  <% @values = @values[1..-1].group_by{|a| a[2]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% inner_result = [] %>
-
-    <% vals.each do |v| %>
-      <% inner_result << "[#{[v[0], @y_plot_bands.index(v[1])+((rand(50)+25)/100.0)].join(',')}]" %>
-    <% end %>
-
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[" + inner_result.join(',') + "]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-
-<% elsif @chart_type == 'categorical_vs_categorical' and @values.first.size == 3 %>
-  <% @x_plot_bands = @chart_params[:xPlotBands] %>
-  <% @y_plot_bands = @chart_params[:yPlotBands] %>
-
-  <% @values = @values[1..-1].group_by{|a| a[2]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% inner_result = [] %>
-
-    <% vals.each do |v| %>
-      <% inner_result << "[#{[@x_plot_bands.index(v[0])+((rand(50)+25)/100.0), @y_plot_bands.index(v[1])+((rand(50)+25)/100.0)].join(',')}]" %>
-    <% end %>
-
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[" + inner_result.join(',') + "]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-
-<% elsif @chart_type == 'categorical_vs_continuous' %>
-  <% @values = @values[1..-1].group_by{|a| a[0]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[#{vals.collect{|v| "[#{[index+((rand(50)+25)/100.0), v[1]].join(',')}]"}.join(',')}]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-
-<% elsif @chart_type == 'continuous_vs_categorical' %>
-  <% @values = @values[1..-1].group_by{|a| a[1]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[#{vals.collect{|v| "[#{[v[0], index+((rand(50)+25)/100.0)].join(',')}]"}.join(',')}]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-
-<% elsif @chart_type == 'categorical_vs_categorical' %>
-
-  <% @y_plot_bands = @chart_params[:yPlotBands] %>
-
-  <% @values = @values[1..-1].group_by{|a| a[0]} %>
-
-  <% result = [] %>
-
-  <% @values.each_with_index do |(key, vals), index| %>
-    <% result << options_for_javascript(name: array_or_string_for_javascript(key.split('#').last), data: "[#{vals.collect{|v| "[#{[index+((rand(50)+25)/100.0), @y_plot_bands.index(v[1])+((rand(50)+25)/100.0)].join(',')}]"}.join(',')}]") %>
-  <% end %>
-
-  <% @values = '[' + result.join(',') + ']' %>
-<% else %>
-  <% @values.each do |k, v| %>
-    <% @values[k] = array_or_string_for_javascript(v) if v.kind_of?(Array) %>
-  <% end %>
-
-  <% @new_values = {} %>
-  <% @values.each do |k, v| %>
-    <% @new_values[array_or_string_for_javascript(k)] = v %>
-  <% end %>
-
-  <% @values = @new_values %>
+<% @values.each do |k, v| %>
+  <% @values[k] = array_or_string_for_javascript(v) if v.kind_of?(Array) %>
 <% end %>
+
+<% @new_values = {} %>
+<% @values.each do |k, v| %>
+  <% @new_values[array_or_string_for_javascript(k)] = v %>
+<% end %>
+
+<% @values = @new_values %>
 
 
 
 <% case @chart_type when 'column' %>
-  <%= javascript_tag "drawHighChartHistogramChart('#{@chart_element_id}', #{options_for_javascript(@values)}, #{options_for_javascript(@defaults)});" %>
+  drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>, <%= ("[" + @categories.join(',') + "]").html_safe %>);
 <% when 'pie' %>
-  <%= javascript_tag "drawHighChartPieChart('#{@chart_element_id}', #{options_for_javascript(@values)}, #{options_for_javascript(@defaults)});" %>
-<% when 'scatter' %>
-  <%= javascript_tag "drawHighChartScatterChart('#{@chart_element_id}', #{@values}, #{options_for_javascript(@defaults)});" %>
-<% when 'categorical_vs_continuous' %>
-  <%= javascript_tag "drawHighChartScatterChart('#{@chart_element_id}', #{@values}, #{options_for_javascript(@defaults)});" %>
-<% when 'continuous_vs_categorical' %>
-  <%= javascript_tag "drawHighChartScatterChart('#{@chart_element_id}', #{@values}, #{options_for_javascript(@defaults)});" %>
-<% when 'categorical_vs_categorical' %>
-  <%= javascript_tag "drawHighChartScatterChart('#{@chart_element_id}', #{@values}, #{options_for_javascript(@defaults)});" %>
+  drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>);
 <% end %>
 
 <div><div id="<%= @chart_element_id %>" style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px"></div></div>

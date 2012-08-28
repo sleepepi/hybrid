@@ -5,15 +5,7 @@ $("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").show();
 
 
 <% case @chart_type when 'column' %>
-  drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>, <%= "[" + @categories.join(',') + "]" %>);
+  drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>, <%= ("[" + @categories.join(',') + "]").html_safe %>);
 <% when 'pie' %>
-  drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values) %>, <%= options_for_javascript(@defaults) %>);
-<% when 'scatter' %>
-  drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-<% when 'categorical_vs_continuous' %>
-  drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-<% when 'continuous_vs_categorical' %>
-  drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
-<% when 'categorical_vs_categorical' %>
-  drawHighChartScatterChart('<%= @chart_element_id %>', <%= @values %>, <%= options_for_javascript(@defaults) %>);
+  drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>);
 <% end %>
