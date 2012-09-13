@@ -1,5 +1,7 @@
 <% if @query_concept.left_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.left_brackets), 0].max %>px"><%= '('*@query_concept.left_brackets %></div><% end %>
-<div style="position:relative;"><div style="padding-left:<%= 10*@query_concept.level %>px"><div id="record_ids_<%= @query_concept.id %>_display" class="quiet records_found" style="top:0;position:absolute;left:-55px;width:50px;text-align:right" title="Sub Total"></div><%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, onclick: "markQueryConcept('#query_concept_#{@query_concept.id}_checked', #{@query_concept.id});" %>
+<div style="position:relative;line-height:22px"
+    onmouseover="$('#query_concept_<%= @query_concept.id %>_delete_link').show();"
+    onmouseout="$('#query_concept_<%= @query_concept.id %>_delete_link').hide();"><div style="padding-left:<%= 10*@query_concept.level %>px"><div id="record_ids_<%= @query_concept.id %>_display" class="quiet records_found" style="top:0;position:absolute;left:-55px;width:50px;text-align:right" title="Sub Total"></div><%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, onclick: "markQueryConcept('#query_concept_#{@query_concept.id}_checked', #{@query_concept.id});" %>
 <%= link_to edit_query_concept_path(@query_concept), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "query_concept_#{@query_concept.id}_delete_icon" } do %>
 <span style="font-size: 1.2em"><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></span>
 
@@ -17,7 +19,7 @@
   <%= image_tag('icons/gentleface/cursor_H_split_16.png', style: 'vertical-align:text-bottom;cursor:move') %>
 <% end %>
 
-<%= link_to 'remove', @query_concept, method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+<%= link_to 'remove', @query_concept, method: :delete, remote: true, class: 'btn btn-mini btn-danger', id: "query_concept_#{@query_concept.id}_delete_link", style: 'display:none' %>
 </div>
 <div style="padding-left:<%= 10*@query_concept.level %>px"><span id="record_ids_<%= @query_concept.id %>_errors" class="quiet errors_found"></span></div>
 <% if @query_concept.right_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px"><%= ')'*@query_concept.right_brackets %></div><% end %>

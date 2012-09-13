@@ -2,7 +2,7 @@
   <% result_hash = @report.finalize_report_table(current_user) %>
 
   <% if result_hash[:error].blank? %>
-    <%= link_to image_tag("contour/xls.png", alt: '') + 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'btn' %><br /><br />
+    <%= link_to 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'btn' %><br /><br />
     <table class="blank" style="border-collapse:collapse;border:1px solid #777;width:100%">
       <thead>
         <tr class="labels">

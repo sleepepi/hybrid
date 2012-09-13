@@ -1,1 +1,1 @@
-<b><%= @query.display_name %></b> <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '', style: 'vertical-align:text-bottom'), edit_name_query_path(@query), method: :post, remote: true %>
+<b><%= @query.display_name %></b> <%= link_to 'edit', edit_name_query_path(@query), method: :post, remote: true, class: 'btn btn-mini' %>
