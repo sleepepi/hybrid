@@ -106,13 +106,14 @@ class QueriesController < ApplicationController
 
   def index
     # current_user.update_column :queries_per_page, params[:queries_per_page].to_i if params[:queries_per_page].to_i >= 5 and params[:queries_per_page].to_i <= 20
-    @order = ['name', 'created_at'].include?(params[:order].to_s.split(' ').first) ? params[:order] : 'name'
-    # @order = params[:order].blank? ? 'name' : params[:order]
     query_scope = current_user.all_queries
 
     @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| query_scope = query_scope.search(search_term) }
+
+    @order = scrub_order(Query, params[:order], 'queries.created_at DESC')
     query_scope = query_scope.order(@order)
+
     @queries = query_scope.page(params[:page]).per(20) # current_user.queries_per_page)
   end
 

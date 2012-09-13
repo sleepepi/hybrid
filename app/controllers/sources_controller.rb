@@ -108,7 +108,6 @@ class SourcesController < ApplicationController
 
   def index
     # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
-    @order = params[:order].blank? ? 'sources.name' : params[:order]
     if [params[:autocomplete], params[:popup]].include?('true')
       source_scope = Source.available
     else
@@ -116,9 +115,13 @@ class SourcesController < ApplicationController
       # sources that are available or sources that are part of the user.
       source_scope = Source.available_or_creator_id(current_user.id)
     end
+
     @search_terms = (params[:search] || params[:term] || params[:sources_search]).to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| source_scope = source_scope.search(search_term) }
+
+    @order = scrub_order(Source, params[:order], 'sources.name')
     source_scope = source_scope.order(@order)
+
     @sources = source_scope.page(params[:page]).per(20) #params[:page]).per(current_user.sources_per_page)
     @query = current_user.queries.find_by_id(params[:query_id])
     render 'autocomplete' if params[:autocomplete] == 'true'

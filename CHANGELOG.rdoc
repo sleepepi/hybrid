@@ -8,6 +8,9 @@
   * Removed deprecated use of update_attribute for Rails 4.0 compatibility
   * About page reformatted to include links to github and contact information
 
+* Refactoring
+  * Consistent sorting of all objects, (queries, dictionaries, sources, concepts, etc)
+
 * Testing
   * Use ActionDispatch for Integration tests instead of ActionController
 

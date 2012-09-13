@@ -14,11 +14,13 @@ class DictionariesController < ApplicationController
 
   def index
     # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
-    @order = params[:order].blank? ? 'dictionaries.name' : params[:order]
     dictionary_scope = Dictionary.current
     @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| dictionary_scope = dictionary_scope.search(search_term) }
+
+    @order = scrub_order(Dictionary, params[:order], 'dictionaries.name')
     dictionary_scope = dictionary_scope.order(@order)
+
     @dictionaries = dictionary_scope.page(params[:page]).per(20) #(current_user.users_per_page)
   end
 

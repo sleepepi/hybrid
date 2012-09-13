@@ -59,7 +59,7 @@ class ConceptsController < ApplicationController
 
       render 'autocomplete'
     else
-      @order = scrub_order(Concept, params[:order], "concepts.name")
+      @order = scrub_order(Concept, params[:order], "concepts.search_name")
       concept_scope = concept_scope.with_dictionary(params[:dictionary_id].blank? ? 'all' : params[:dictionary_id]).order(@order)
       @concepts = concept_scope.page(params[:page]).per(20) #(current_user.concepts_per_page)
       @dictionary = Dictionary.available.find_by_id(params[:dictionary_id])
