@@ -15,7 +15,7 @@ class QueryConceptsController < ApplicationController
   def mark_selected
     @query = current_user.all_queries.find_by_id(params[:query_id])
     @query_concept = @query.query_concepts.find_by_id(params[:query_concept_id]) if @query
-    @query_concept.update_column :selected, params[:selected] if @query and @query_concept
+    @query_concept.update_column :selected, (params[:selected] == 'true') if @query and @query_concept
     render nothing: true
   end
 
