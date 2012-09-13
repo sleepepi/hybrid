@@ -3,7 +3,7 @@
 <ul>
 <% FileType.available.with_source(source_ids).each_with_index do |file_type| %>
   <% if (file_type.sources.collect{|s| s.id} | source_ids).size == file_type.sources.collect{|s| s.id}.size %>
-    <li><%= link_to file_type.name_and_short_extension, load_file_type_query_path(@query, file_type_id: file_type.id), method: :post, remote: true, onclick: "showWaiting('#popup_info', ' Loading File Information', true)" %><br /><br /></li>
+    <li><%= link_to file_type.name_and_short_extension, load_file_type_query_path(@query, file_type_id: file_type.id), method: :post, remote: true, onclick: "showWaiting('#file_popup_info', ' Loading File Information', true)" %><br /><br /></li>
   <% end %>
 <% end %>
 </ul>
@@ -14,7 +14,7 @@
   <% FileType.available.with_source(source.id).each_with_index do |file_type| %>
     <% unless (file_type.sources.collect{|s| s.id} | source_ids).size == file_type.sources.collect{|s| s.id}.size %>
       <% if source.user_has_action?(current_user, "download files") %>
-        <li><%= link_to file_type.name_and_short_extension, load_file_type_query_path(@query, file_type_id: file_type.id), method: :post, remote: true, onclick: "showWaiting('#popup_info', ' Loading File Information', true)" %><br /><br /></li>
+        <li><%= link_to file_type.name_and_short_extension, load_file_type_query_path(@query, file_type_id: file_type.id), method: :post, remote: true, onclick: "showWaiting('#file_popup_info', ' Loading File Information', true)" %><br /><br /></li>
       <% else %>
         <li><span class="quiet" style="text-decoration: line-through;"><%= file_type.name_and_short_extension %></span><br /><br /></li>
       <% end %>
