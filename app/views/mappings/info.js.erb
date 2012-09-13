@@ -10,7 +10,7 @@ $("#popup_content_left").html("<%= escape_javascript(render("concepts/folder_sea
 
 <% if @concept %>
   <% @query = nil %>
-  $("#popup_info").html("<%= escape_javascript(render("concepts/info")) %>");
+  $("#popup_info").html("<%= escape_javascript(render("concepts/info")) %><div id=\"distribution\"></div>");
 <% end %>
 
 $(document.body).qtip('hide');

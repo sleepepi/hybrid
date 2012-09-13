@@ -88,9 +88,9 @@ class QueryConceptsController < ApplicationController
       chart_params = {}
       width = "100%"
       if @concept.continuous? or @concept.date?
-        chart_params = {title: @concept.human_name, width: width, height: "300px", units: @concept.human_units, legend: 'none', make_selection: true}
+        chart_params = { title: @concept.human_name, width: width, height: "300px", units: @concept.human_units, legend: 'none', make_selection: true }
       elsif @concept.categorical? or @concept.boolean?
-        chart_params = {title: @concept.human_name, width: width, height: "250px", make_selection: true}
+        chart_params = { title: @concept.human_name, width: width, height: "250px", make_selection: true }
       end
 
       result_hash = @concept.graph_values(current_user, chart_params)
