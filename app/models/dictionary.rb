@@ -1,4 +1,5 @@
 class Dictionary < ActiveRecord::Base
+  attr_accessible :name, :description, :visible, :status
 
   STATUS = ["active", "testing", "inactive"].collect{|i| [i,i]}
 

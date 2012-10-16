@@ -33,7 +33,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should create dictionary" do
     assert_difference('Dictionary.count') do
-      post :create, dictionary: {name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true}
+      post :create, dictionary: { name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true }
     end
 
     assert_redirected_to dictionary_path(assigns(:dictionary))
@@ -41,7 +41,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should not create dictionary with blank name" do
     assert_difference('Dictionary.count', 0) do
-      post :create, dictionary: {name: '', description: "Dictionary Test", status: 'active', visible: true}
+      post :create, dictionary: { name: '', description: "Dictionary Test", status: 'active', visible: true }
     end
 
     assert_not_nil assigns(:dictionary)
@@ -51,7 +51,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should create an dictionary from a CSV file" do
     assert_difference('Dictionary.count') do
-      post :create, dictionary: {name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true},
+      post :create, dictionary: { name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true },
                     dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_dictionary.csv')
     end
 
@@ -62,7 +62,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should create an dictionary from a CSV file using test_01.csv" do
     assert_difference('Dictionary.count') do
-      post :create, dictionary: {name: 'Dictionary Test 01 CSV', description: "Dictionary Test", status: 'active', visible: true},
+      post :create, dictionary: { name: 'Dictionary Test 01 CSV', description: "Dictionary Test", status: 'active', visible: true },
                     dictionary_file: fixture_file_upload('../../test/support/dictionaries/test_01.csv')
     end
 
@@ -73,7 +73,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should create empty dictionary with invalid file format" do
     assert_difference('Dictionary.count') do
-      post :create, dictionary: {name: 'Dictionary Four', description: "Dictionary Test", status: 'active', visible: true},
+      post :create, dictionary: { name: 'Dictionary Four', description: "Dictionary Test", status: 'active', visible: true },
                     dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_sleep.sql')
     end
 
@@ -100,7 +100,7 @@ class DictionariesControllerTest < ActionController::TestCase
   end
 
   test "should display errors on update dictionary with blank name" do
-    put :update, id: @dictionary.to_param, dictionary: {name: '', description: 'Description', status: 'active', visible: true}
+    put :update, id: @dictionary.to_param, dictionary: { name: '', description: 'Description', status: 'active', visible: true }
     assert_not_nil assigns(:dictionary)
     assert assigns(:dictionary).errors.size > 0
     assert_template 'edit'

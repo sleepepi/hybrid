@@ -39,7 +39,7 @@ class DictionariesController < ApplicationController
   end
 
   def create
-    @dictionary = current_user.dictionaries.new(params[:dictionary])
+    @dictionary = current_user.dictionaries.new(post_params)
 
     if @dictionary.save
       unless params[:dictionary_file].blank?
@@ -63,7 +63,7 @@ class DictionariesController < ApplicationController
       return
     end
 
-    if @dictionary.update_attributes(params[:dictionary])
+    if @dictionary.update_attributes(post_params)
       unless params[:dictionary_file].blank?
         if params[:dictionary_file].original_filename =~ /.*\.csv/i
           @dictionary.import_csv(params[:dictionary_file].tempfile.path)
@@ -97,5 +97,15 @@ class DictionariesController < ApplicationController
     else
       render nothing: true
     end
+  end
+
+  private
+
+  def post_params
+    params[:dictionary] ||= {}
+
+    params[:dictionary].slice(
+      :name, :description, :visible, :status
+    )
   end
 end
