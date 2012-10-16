@@ -2,6 +2,7 @@
 
 * Bug Fix
   * Fixed a bug that prevented dictionary CSV files from being added to a dictionary
+  * Fixed a bug that prevented users from being granted access to data source rules
 
 == 0.12.0
 
