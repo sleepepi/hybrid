@@ -1,19 +1,11 @@
 <tr style="background-color: #FFFBCD;" class="search_no_border">
   <td>
     <%= hidden_field_tag "mapping_ids[]", @mapping.id %>
-    <%= image_tag('contour/tag_red.png', align: 'absmiddle', title: 'Column Partially Mapped') %>
+    <span class="label label-warning">Partially Mapped</span>
   </td>
   <td style="white-space:nowrap">
-    <%= link_to image_tag('contour/tick.png', style: 'border:none'), '#', data: { object: 'mapping-select', value: "#{@mapping.id}"} %>
-    <%#= link_to image_tag('contour/tick.png', style: 'border:none'), update_multiple_mappings_path(source_id: @mapping.source.id, mapping_ids: [@mapping.id], table: @mapping.table), method: :post, remote: true %>
-    <%# with: "$('mappings_form').serialize()" %>
-    <%= link_to image_tag('contour/cross.png', style: 'border:none'), mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true %>
+    <%= link_to 'save', '#', data: { object: 'mapping-select', value: "#{@mapping.id}"}, class: 'btn btn-mini btn-primary' %>
+    <%= link_to 'cancel', mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, class: 'btn btn-mini' %>
   </td>
   <%= render partial: 'mappings/form' %>
 </tr>
-<% if false %>
-<tr style="background-color: #FFFBCD;">
-  <td colspan="2"></td>
-  <td colspan="2" style="font-size:10px">Comments <%#= text_field_tag "mappings[#{@mapping.id}][comments]", @mapping.comments, style: 'width:98%' %></td>
-</tr>
-<% end %>

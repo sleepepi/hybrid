@@ -1,1 +1,3 @@
 $("#mapping_form_<%= @column.gsub(' ', '_') %>").html("<%= escape_javascript(render("new")) %>");
+
+buildMappingTypeahead('<%= @column.gsub(' ', '_') %>', <%= @source.id %>);

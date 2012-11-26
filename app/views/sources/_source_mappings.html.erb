@@ -6,18 +6,13 @@
 <% elsif @tables.size > 0 %>
 
   <center>
-  <%= form_tag table_columns_source_path(@source), method: :post, id: "table_columns_search", style: 'margin-bottom:0px' do %>
+  <%= form_tag table_columns_source_path(@source), method: :post, remote: true, id: "table_columns_search", style: 'margin-bottom:0px', data: { object: 'form-load' } do %>
     <% if false %>  Search <%= text_field_tag 'search', params[:search] %> <% end %>
     Tables <%= select_tag 'table', options_for_select(@tables.sort.collect{|t| [t,t]}, params[:table]) %>
     <%= check_box_tag "filter_unmapped", '1', params[:filter_unmapped] %> Filter Partially Mapped
   <% end %>
   </center>
 
-  <%= javascript_tag do %>
-    $(function(){
-      $.post($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script");
-    });
-  <% end %>
 <% else %>
   <center><span class="label label-warning">No Tables Retrieved</span></center>
 <% end %>

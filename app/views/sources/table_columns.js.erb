@@ -1,1 +1,6 @@
 $("#table_content").html("<%= escape_javascript(render("table_columns")) %>");
+
+<% @columns.each do |column_data| %>
+  <% @column = column_data[:column] %>
+  buildMappingTypeahead('<%= @column %>', <%= @source.id %>);
+<% end %>

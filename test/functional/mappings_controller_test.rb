@@ -44,20 +44,20 @@ class MappingsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should search available concepts" do
-    post :search_available, source_id: sources(:two).to_param, term: 'gender', format: 'js'
+  test "should get typeahead of available concepts" do
+    post :typeahead, source_id: sources(:two).to_param, search: 'gender', format: 'js'
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:search_terms)
     assert_not_nil assigns(:concepts)
-    assert_template 'search_available'
+    # assert_template 'search_available'
   end
 
-  test "empty search should search available concepts and return no concepts" do
-    post :search_available, source_id: sources(:two).to_param, term: '', format: 'js'
+  test "empty get typeahead of available concepts and return no concepts" do
+    post :typeahead, source_id: sources(:two).to_param, search: '', format: 'js'
     assert_not_nil assigns(:source)
     assert_equal [], assigns(:search_terms)
     assert_equal [], assigns(:concepts)
-    assert_template 'search_available'
+    # assert_template 'search_available'
   end
 
   test "should get expanded for categorical concept" do

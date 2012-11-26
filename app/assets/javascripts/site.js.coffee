@@ -28,18 +28,18 @@ jQuery ->
     false
   )
 
-  # Custom Category output for Autocomplete
-  $.widget( "custom.catcomplete", $.ui.autocomplete,
-    _renderMenu: ( ul, items ) ->
-      self = this
-      currentCategory = "";
-      $.each( items, ( index, item ) ->
-        if item.category != currentCategory
-          ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" )
-          currentCategory = item.category
-        self._renderItem( ul, item ) unless item.category_only == "true"
-      )
-  )
+  # # Custom Category output for Autocomplete
+  # $.widget( "custom.catcomplete", $.ui.autocomplete,
+  #   _renderMenu: ( ul, items ) ->
+  #     self = this
+  #     currentCategory = "";
+  #     $.each( items, ( index, item ) ->
+  #       if item.category != currentCategory
+  #         ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" )
+  #         currentCategory = item.category
+  #       self._renderItem( ul, item ) unless item.category_only == "true"
+  #     )
+  # )
 
   $("#source_rule_user_tokens").tokenInput(root_url + "users.json"
     crossDomain: false

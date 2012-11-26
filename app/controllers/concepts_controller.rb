@@ -57,7 +57,8 @@ class ConceptsController < ApplicationController
         end
       end
 
-      render 'autocomplete'
+      # render 'autocomplete'
+      render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
     else
       @order = scrub_order(Concept, params[:order], "concepts.search_name")
       concept_scope = concept_scope.with_dictionary(params[:dictionary_id].blank? ? 'all' : params[:dictionary_id]).order(@order)

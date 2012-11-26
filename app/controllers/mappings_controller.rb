@@ -29,7 +29,7 @@ class MappingsController < ApplicationController
     render nothing: true unless @concept
   end
 
-  def search_available
+  def typeahead
     @source = Source.find_by_id(params[:source_id])
     @search_terms = (params[:search] || params[:term]).to_s.strip.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
 
@@ -40,6 +40,9 @@ class MappingsController < ApplicationController
       @search_terms.each{|search_term| concept_scope = concept_scope.search(search_term) }
       @concepts = concept_scope.order('dictionary_id')
     end
+
+    # render json: [{ id: '1', value: 'aaa'}, {id: '2', value: 'cat'}]
+    render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
   end
 
   def expanded
@@ -48,9 +51,9 @@ class MappingsController < ApplicationController
     if @mapping
       chart_params = {}
       if @mapping.concept.continuous? or @mapping.concept.date?
-        chart_params = {title: @mapping.concept.human_name, width: 680, height: 300, units: @mapping.human_units, legend: 'none'}
+        chart_params = { title: @mapping.concept.human_name, width: 680, height: 300, units: @mapping.human_units, legend: 'none' }
       elsif @mapping.concept.categorical? or @mapping.concept.boolean?
-        chart_params = {title: @mapping.concept.human_name, width: 450, height: 250}
+        chart_params = { title: @mapping.concept.human_name, width: 450, height: 250 }
       end
 
       result_hash = @mapping.graph_values(current_user, chart_params)

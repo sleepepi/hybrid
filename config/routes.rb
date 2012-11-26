@@ -23,7 +23,7 @@ Hybrid::Application.routes.draw do
   resources :mappings do
     collection do
       post :update_multiple
-      get :search_available
+      get :typeahead
     end
     member do
       post :expanded

@@ -65,6 +65,37 @@
     $(this).removeAttr('checked')
   )
 
+@buildMappingTypeahead = (column, source_id) ->
+  $('[data-object~="mapping-typeahead"]').typeaheadmap(
+    source: (query, process) ->
+      return $.get(root_url + 'mappings/typeahead', { source_id: source_id, search: query }, (data) -> return process(data); );
+    listener: (k,v) ->
+      $("#new_concept_id").val(k)
+      $("#new_column").val(column)
+      $("#new_mapping_form").submit()
+    #,"key": "id", "value": "value"
+  )
+
+@buildQuerySourceTypeahead = () ->
+  $('[data-object~="query-source-typeahead"]').typeaheadmap(
+    source: (query, process) ->
+      return $.get(root_url + 'sources', { autocomplete: 'true', search: query }, (data) -> return process(data); );
+    listener: (k,v) ->
+      $("#selected_source_id").val(k)
+      $("#source").val('')
+      $("#sources_form").submit()
+  )
+
+@buildQueryConceptTypeahead = () ->
+  $('[data-object~="query-concept-typeahead"]').typeaheadmap(
+    source: (query, process) ->
+      return $.get(root_url + 'concepts', { query_id: $('#concept_search_term').data('query-id'), autocomplete: 'true', search: query }, (data) -> return process(data); );
+    listener: (k,v) ->
+      $("#selected_concept_id").val(k)
+      $("#search_form").submit()
+      $("#selected_concept_id").val('')
+  )
+
 jQuery ->
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
@@ -82,3 +113,8 @@ jQuery ->
       $($(this).data('target')).modal( dynamic: true )
       false
     )
+
+  # $('[data-object~="typeaheadmap"]').each( () ->
+  #   $this = $(this)
+  #   $this.typeaheadmap( source: $this.data('source'), "key": "key", "value": "value" )
+  # )
