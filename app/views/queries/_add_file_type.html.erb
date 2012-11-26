@@ -2,7 +2,7 @@
   <span class="large"><strong><%= @file_type.name_and_short_extension %></strong></span>
   <br />
   <span class="quiet">
-    <%= @file_type.description %>
+    <%= simple_format @file_type.description, {}, sanitize: false %>
     <br />
     <br />
     <% @query.file_type_count(current_user, @file_type).each do |source_id, concept_hash| %>
