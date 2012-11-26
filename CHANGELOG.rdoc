@@ -3,6 +3,9 @@
 * Enhancements
   * Gem updates including Rails 3.2.9 and Ruby 1.9.3-p327
 
+* Bug Fix
+  * Create New Rule button from the Source Rules index now correctly directs the user to the New Rule page for the selected data source
+
 == 0.12.1
 
 * Bug Fix

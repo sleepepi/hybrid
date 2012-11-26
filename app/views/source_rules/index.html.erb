@@ -2,7 +2,7 @@
 <div class="page-header">
   <h1>
     <%= link_to @source.name, @source %> &raquo;Rules
-    <%= link_to "Create Source Rule", new_source_rule_path, class: 'btn btn-mini btn-primary' %>
+    <%= link_to "Create Source Rule", new_source_rule_path(source_id: @source.id), class: 'btn btn-mini btn-primary' %>
   </h1>
 </div>
 
