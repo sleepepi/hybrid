@@ -11,7 +11,7 @@
   <div class="control-group">
     <label class="control-label">With</label>
     <div class="controls">
-      <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>'  %>
+      <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'report-concept-typeahead', query_id: @query.id }  %>
       <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id, add_report_id: @report.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
     </div>
   </div>
@@ -31,24 +31,3 @@
 <div id="report_concepts">
   <%= render partial: 'report_concepts/report_concepts' %>
 </div>
-
-
-<%= javascript_tag do %>
-$(function(){
-  return $("#report_concept_search_term").on("keydown", function(event) {
-    if (event.keyCode === $.ui.keyCode.TAB && $(this).data("catcomplete").menu.active) {
-      return event.preventDefault();
-    }
-  }).catcomplete({
-    source: root_url + ("concepts?autocomplete=true&" + (($('#report_concept_search_form').attr('action') || '?').split('?')[1])),
-    html: true,
-    select: function(event, ui) {
-      return $("#selected_report_concept_id").val(ui.item ? ui.item.id : '');
-    },
-    close: function(event, ui) {
-      $("#report_concept_search_form").submit();
-      return $("#selected_report_concept_id").val('');
-    }
-  });
-});
-<% end %>

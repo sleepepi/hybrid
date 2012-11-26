@@ -96,6 +96,16 @@
       $("#selected_concept_id").val('')
   )
 
+@buildReportConceptTypeahead = () ->
+  $('[data-object~="report-concept-typeahead"]').typeaheadmap(
+    source: (query, process) ->
+      return $.get(root_url + 'concepts', { query_id: $('#report_concept_search_term').data('query-id'), autocomplete: 'true', search: query }, (data) -> return process(data); );
+    listener: (k,v) ->
+      $("#selected_report_concept_id").val(k)
+      $("#report_concept_search_form").submit()
+      $("#selected_report_concept_id").val('')
+  )
+
 jQuery ->
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
