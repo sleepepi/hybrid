@@ -1,5 +1,8 @@
 == 0.12.2
 
+* Enhancements
+  * Gem updates including Rails 3.2.9 and Ruby 1.9.3-p327
+
 == 0.12.1
 
 * Bug Fix
