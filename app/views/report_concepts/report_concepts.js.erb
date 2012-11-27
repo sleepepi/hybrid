@@ -9,15 +9,6 @@ $("#report_concepts_num").html("<%= escape_javascript(pluralize(@report.report_c
 
 $("#report_configuration").html("<%= escape_javascript(render("reports/configuration")) %>")
 
-<% if false %>
-$('#accordion').accordion( "activate" , 0 );
-
-<% if params[:action] == 'destroy' %>
-  $('#popup_info').html("<center class='disabled'>Select a concept on the left!</center>");
-  $('#concept_title').html("Concept Information")
-<% end %>
-<% end %>
-
 <% unless @report.is_dataset? %>
   $('#report_table_form').submit();
 <% end %>
