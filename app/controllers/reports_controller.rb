@@ -78,11 +78,7 @@ class ReportsController < ApplicationController
         end
       end
 
-      if params[:is_dataset] == 'true'
-        render "datasets"
-      else
-        render "reports"
-      end
+      render "reports"
     else
       render nothing: true
     end
@@ -93,11 +89,7 @@ class ReportsController < ApplicationController
     @report = @query.reports.find_by_id(params[:id]) if @query
     if @query and @report
       @report.destroy
-      if @report.is_dataset?
-        render "datasets"
-      else
-        render "reports"
-      end
+      render "reports"
     else
       render nothing: true
     end

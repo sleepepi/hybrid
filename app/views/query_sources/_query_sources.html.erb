@@ -1,5 +1,5 @@
 <% @query.query_sources.each do |query_source| %>
-  <div style="display:inline-block; line-height:24px"
+  <div style="display:inline-block; line-height:25px"
     onmouseover="$('#query_source_<%= query_source.id %>_delete_link').show();"
     onmouseout="$('#query_source_<%= query_source.id %>_delete_link').hide();">
     <%= link_to query_source.source.name, query_source, method: :get, remote: true %>

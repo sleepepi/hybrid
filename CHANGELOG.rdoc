@@ -4,6 +4,7 @@
   * Gem updates including Rails 3.2.9 and Ruby 1.9.3-p327
   * File types now allow simple HTML formatting
   * Updated to Contour 1.1.1 and replaced inline JavaScript with Unobtrusive JavaScript
+  * Search boxes for data sources and data concepts now use Select2 JavaScript plugin
 
 * Bug Fix
   * Create New Rule button from the Source Rules index now correctly directs the user to the New Rule page for the selected data source

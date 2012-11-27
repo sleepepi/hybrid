@@ -1,16 +1,16 @@
 jQuery ->
   steps = [
-     { target: $('#source'), title: 'Step 1:', content: 'Type in and select a data source for your search!' }
-     { target: $('#concept_search_term'), title: 'Step 2:', content: 'Specify search concepts here, or browse by clicking the folder icon!' }
+     { target: $('#source_more'), title: 'Step 1:', content: 'Type in and select a data source for your search!' }
+     { target: $('#concept_search_term_more'), title: 'Step 2:', content: 'Specify search concepts here, or browse by clicking the folder icon!' }
      { target: $('#remove_concepts'), title: 'Step 3', content: 'Tool bar to modify your search!', my: 'left center', at: 'right center' }
-     { target: $('#total_records_found_display'), title: 'Step 4:', content: 'View your results!', my: 'top left', at: 'bottom right' }
-     { target: $('#add_dataset_tab'), title: 'Step 5:', content: 'Create and download datasets!', my: 'bottom center', at: 'top center' }
-     { target: $('#add_report_tab'), title: 'Step 6:', content: 'Generate dynamic summary reports!', my: 'bottom center', at: 'top center' }
+     { target: $('#total_records_found_display'), title: 'Step 4:', content: 'View your results!', my: 'top left', at: 'bottom left' }
+     { target: $('#add_dataset_btn'), title: 'Step 5:', content: 'Create and download datasets!', my: 'bottom center', at: 'top center' }
+     { target: $('#add_report_btn'), title: 'Step 6:', content: 'Generate dynamic summary reports!', my: 'bottom center', at: 'top center' }
      { target: $('#query_file_types'), title: 'Step 7:', content: 'Download associated files!', my: 'top center', at: 'bottom center' }
   ]
-  
+
   $('#playpause-img').data('showTipTimer', 0)
-  
+
   $(document.body).qtip(
     id: 'step' # Give it an ID of ui-tooltip-step so we an identify it easily
     content:
@@ -36,7 +36,7 @@ jQuery ->
         # Bind custom custom events we can fire to step forward/back
         tooltip.on('next prev play_first play_last', (event) ->
           # Increase/decrease step depending on the event fired
-          switch event.type 
+          switch event.type
             when 'next'
               api.step += 1
             when 'play_first'
@@ -45,10 +45,10 @@ jQuery ->
               api.step = steps.length - 1
             else
               api.step -= 1
-          
+
           if api.step >= steps.length - 1
             $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') != 0
-          
+
           api.step = Math.min(steps.length - 1, Math.max(0, api.step))
 
           # Set new step properties
@@ -85,16 +85,16 @@ jQuery ->
     style:
       classes: 'ui-tooltip-shadow ui-tooltip-green'
   ).qtip('render')
-  
+
   # $('#ui-tooltip-step').qtip('render')
   # $('#ui-tooltip-step').qtip('toggle', false)
-  
+
   # Setup the next/prev links
   $('#next, #prev, #play_first, #play_last').on('click', (event) ->
      $('#ui-tooltip-step').triggerHandler(this.id);
      event.preventDefault()
   )
-  
+
   $('#playpause').on('click', (event) ->
     if $('#playpause-img').data('showTipTimer') != 0
       $('#playpause-img').attr('src', root_url + 'assets/icons/gentleface/playback_play_16.png')
@@ -107,11 +107,11 @@ jQuery ->
       $('#playpause-img').data('showTipTimer', setInterval("$('#ui-tooltip-step').triggerHandler('next')" , 3000));
     event.preventDefault()
   )
-  
+
   # jQuery(base).data('showTipTimer', setInterval(function(){tt_locateBase(base);} , 3000));
-  # 
+  #
   # clearInterval(jQuery(base).data('showTipTimer'));
-  
+
   # $('#source')
   #   .qtip(
   #     content:

@@ -124,7 +124,7 @@ class SourcesController < ApplicationController
 
     @sources = source_scope.page(params[:page]).per(20) #params[:page]).per(current_user.sources_per_page)
     @query = current_user.queries.find_by_id(params[:query_id])
-    render json: @sources.collect{|s| { id: s.id.to_s, value: s.name }} if params[:autocomplete] == 'true'
+    render json: @sources.collect{|s| { id: s.id.to_s, text: s.name }} if params[:autocomplete] == 'true'
     render 'popup' if params[:popup] == 'true'
   end
 

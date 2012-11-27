@@ -83,7 +83,7 @@ class ReportsControllerTest < ActionController::TestCase
       post :create, query_id: queries(:one).to_param, report: { name: 'Dataset Name' }, is_dataset: 'true', format: 'js'
     end
     assert_not_nil assigns(:report)
-    assert_template 'datasets'
+    assert_template 'reports'
   end
 
   test "should create report with report table" do
@@ -99,7 +99,7 @@ class ReportsControllerTest < ActionController::TestCase
       post :create, query_id: queries(:one).to_param, report: { name: 'Dataset Name' }, is_dataset: 'true', template_report_id: @dataset.to_param, format: 'js'
     end
     assert_not_nil assigns(:report)
-    assert_template 'datasets'
+    assert_template 'reports'
   end
 
   test "should create report with report table with template" do
@@ -144,7 +144,7 @@ class ReportsControllerTest < ActionController::TestCase
       delete :destroy, id: @dataset.to_param, query_id: queries(:one).to_param, format: 'js'
     end
 
-    assert_template 'datasets'
+    assert_template 'reports'
   end
 
   test "should not destroy report without valid report id" do

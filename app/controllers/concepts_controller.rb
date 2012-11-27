@@ -58,7 +58,9 @@ class ConceptsController < ApplicationController
       end
 
       # render 'autocomplete'
-      render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
+      # render json: [{ text: 'hi', children: [{id:1, text: '1'},{ id:2, text:'2'}]}]
+      render json: @concepts.group_by{|c| c.folder}.collect{|folder, concepts| { text: folder, commonly_used: true, children: concepts.collect{|c| { id: c.id, text: c.human_name, commonly_used: c.commonly_used }}}}
+      # render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
     else
       @order = scrub_order(Concept, params[:order], "concepts.search_name")
       concept_scope = concept_scope.with_dictionary(params[:dictionary_id].blank? ? 'all' : params[:dictionary_id]).order(@order)

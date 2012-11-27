@@ -77,3 +77,4 @@ jQuery ->
       $('#query_concept_' + $(this).data('value') + '_rop_select').hide()
       false
     )
+

@@ -19,9 +19,9 @@
       <%= hidden_field_tag 'selected_source_id' %>
       <div class="control-group">
         <label class="control-label">From</label>
-        <div class="controls">
-          <%= text_field_tag :source, '', name: 'search', tabindex: '1', rel: 'tooltip', title: 'Type in a data source and hit <b>[Enter]</b>', data: { object: 'query-source-typeahead' } %>
-          <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' } %>
+        <div class="controls" style="white-space:nowrap">
+          <%= text_field_tag :source, '', name: 'search', tabindex: '1', rel: 'tooltip', title: 'Type in a data source and hit <b>[Enter]</b>', style: 'width:350px' %>
+          <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' }, id: 'source_more' %>
         </div>
       </div>
 
@@ -38,9 +38,9 @@
 
       <div class="control-group">
         <label class="control-label">With</label>
-        <div class="controls">
-          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'query-concept-typeahead', query_id: @query.id } %>
-          <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
+        <div class="controls" style="white-space:nowrap">
+          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'query-concept-typeahead', query_id: @query.id }, style: 'width:350px' %>
+          <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' }, id: 'concept_search_term_more' %>
         </div>
       </div>
     <% end %>
@@ -105,7 +105,7 @@
   <div class="span3">
     <h2 class="about-title" style="text-align:left">
       Datasets
-      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: '#dataset_popup' } %>
+      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: '#dataset_popup' }, id: 'add_dataset_btn' %>
     </h2>
     <div id="datasets_container"><%= render partial: 'reports/datasets' %></div>
   </div>
@@ -113,7 +113,7 @@
   <div class="span3">
     <h2 class="about-title" style="text-align:left">
       Reports
-      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report', data: { object: 'modal-show', target: '#report_popup' } %>
+      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report', data: { object: 'modal-show', target: '#report_popup' }, id: 'add_report_btn' %>
     </h2>
     <div id="reports_container"><%= render partial: 'reports/reports' %></div>
   </div>

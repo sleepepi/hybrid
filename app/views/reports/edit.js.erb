@@ -1,9 +1,2 @@
-<%# If editing below update datasets.js.erb and reports.js.erb also... perhaps put all in javascript partial? %>
-
-$("#inlaid_report").html("<%= escape_javascript(render("reports/edit")) %>");
-
-<% unless @report.is_dataset? %>
-  $('#report_table_form').submit();
-<% end %>
-
-buildReportConceptTypeahead();
+<%# Done this way so reports.js can also use the same partial %>
+<%= render partial: 'reports/load' %>

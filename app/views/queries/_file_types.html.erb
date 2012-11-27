@@ -8,13 +8,14 @@
 <% else %>
   <% unavailable_files = 0 %>
   <% file_types.each_with_index do |file_type| %>
-    <% if file_type.user_can_download?(current_user, @query.sources) %>
-      <%= link_to file_type.name_and_short_extension, data_files_query_path(@query, file_type_id: file_type.id), method: :post, remote: true %>
-    <% else %>
-      <% unavailable_files += 1 %>
-      <span class="quiet" style="text-decoration: line-through;"><%= file_type.name_and_short_extension %></span>
-    <% end %>
-    <br />
+    <div style="line-height:25px">
+      <% if file_type.user_can_download?(current_user, @query.sources) %>
+        <%= link_to file_type.name_and_short_extension, data_files_query_path(@query, file_type_id: file_type.id), method: :post, remote: true %>
+      <% else %>
+        <% unavailable_files += 1 %>
+        <span class="quiet" style="text-decoration: line-through;"><%= file_type.name_and_short_extension %></span>
+      <% end %>
+    </div>
   <% end %>
   <% if unavailable_files > 0 %>
     <br />
