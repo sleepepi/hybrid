@@ -76,20 +76,9 @@
     #,"key": "id", "value": "value"
   )
 
-@formatSourceResult = (source) ->
-  markup = ""
-  # markup += "<div style='font-weight:bold'>"
-  # markup += source.id
-  # markup += "</div><div style='padding-left:5px'>"
-  markup += source.text
-  # markup += "</div>"
-  markup
-
-
 @buildQuerySourceTypeahead = () ->
   $("#source").select2(
     placeholder: "Select a data source"
-    # allowClear: true
     width: 'resolve'
     initSelection: (element, callback) ->
       callback([])
@@ -99,21 +88,12 @@
       data: (term, page) -> { search: term, autocomplete: 'true' }
       results: (data, page) -> # parse the results into the format expected by Select2.
           return results: data
-    formatResult: formatSourceResult
   ).on("change", (e) ->
     if $("#source").val() != ""
       $("#selected_source_id").val(e.val)
       $("#source").select2("val", "")
       $("#sources_form").submit()
   )
-  # $('[data-object~="query-source-typeahead"]').typeaheadmap(
-  #   source: (query, process) ->
-  #     return $.get(root_url + 'sources', { autocomplete: 'true', search: query }, (data) -> return process(data); );
-  #   listener: (k,v) ->
-  #     $("#selected_source_id").val(k)
-  #     $("#source").val('')
-  #     $("#sources_form").submit()
-  # )
 
 @formatConceptResult = (concept) ->
   markup = ""
@@ -125,7 +105,6 @@
 @buildQueryConceptTypeahead = () ->
   $("#concept_search_term").select2(
     placeholder: "Search for a concept, i.e. Age, Gender"
-    # allowClear: true
     minimumInputLength: 1
     width: 'resolve'
     initSelection: (element, callback) ->
@@ -143,19 +122,10 @@
       $("#concept_search_term").select2("val", "")
       $("#search_form").submit()
   )
-  # $('[data-object~="query-concept-typeahead"]').typeaheadmap(
-  #   source: (query, process) ->
-  #     return $.get(root_url + 'concepts', { query_id: $('#concept_search_term').data('query-id'), autocomplete: 'true', search: query }, (data) -> return process(data); );
-  #   listener: (k,v) ->
-  #     $("#selected_concept_id").val(k)
-  #     $("#search_form").submit()
-  #     $("#selected_concept_id").val('')
-  # )
 
 @buildReportConceptTypeahead = () ->
   $("#report_concept_search_term").select2(
     placeholder: "Search for a concept, i.e. Age, Gender"
-    # allowClear: true
     minimumInputLength: 1
     width: 'resolve'
     initSelection: (element, callback) ->
@@ -173,14 +143,6 @@
       $("#report_concept_search_term").select2("val", "")
       $("#report_concept_search_form").submit()
   )
-  # $('[data-object~="report-concept-typeahead"]').typeaheadmap(
-  #   source: (query, process) ->
-  #     return $.get(root_url + 'concepts', { query_id: $('#report_concept_search_term').data('query-id'), autocomplete: 'true', search: query }, (data) -> return process(data); );
-  #   listener: (k,v) ->
-  #     $("#selected_report_concept_id").val(k)
-  #     $("#report_concept_search_form").submit()
-  #     $("#selected_report_concept_id").val('')
-  # )
 
 jQuery ->
   $("input[rel=tooltip]").tooltip()
