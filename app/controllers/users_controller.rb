@@ -101,8 +101,8 @@ class UsersController < ApplicationController
       @user.update_column :system_admin, params[:user][:system_admin]
       @user.update_column :service_account, params[:user][:service_account]
       @user.update_column :status, params[:user][:status]
-      UserMailer.status_activated(@user).deliver if Rails.env.production? and original_status != @user.status and @user.status = 'active'
-      redirect_to(@user, notice: 'User was successfully updated.')
+      UserMailer.status_activated(@user).deliver if Rails.env.production? and original_status != @user.status and @user.status == 'active'
+      redirect_to @user, notice: 'User was successfully updated.'
     elsif @user
       render action: "edit"
     else
@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   def destroy
     @user = User.find_by_id(params[:id])
     @user.destroy
-    redirect_to users_path
+    redirect_to users_path, notice: 'User was successfully deleted.'
   end
 
   private
