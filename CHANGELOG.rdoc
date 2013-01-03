@@ -6,7 +6,7 @@
 * Bug Fix
   * User activation emails are no longer sent out when a user's status is changed from pending to inactive
 
-== 0.12.2
+== 0.12.2 (November 27, 2012)
 
 * Enhancements
   * Gem updates including Rails 3.2.9 and Ruby 1.9.3-p327
@@ -17,13 +17,13 @@
 * Bug Fix
   * Create New Rule button from the Source Rules index now correctly directs the user to the New Rule page for the selected data source
 
-== 0.12.1
+== 0.12.1 (October 16, 2012)
 
 * Bug Fix
   * Fixed a bug that prevented dictionary CSV files from being added to a dictionary
   * Fixed a bug that prevented users from being granted access to data source rules
 
-== 0.12.0
+== 0.12.0 (September 13, 2012)
 
 * Enhancements
   * Major GUI update using Twitter Bootstrap
@@ -39,7 +39,7 @@
 * Testing
   * Use ActionDispatch for Integration tests instead of ActionController
 
-== 0.11.9
+== 0.11.9 (August 24, 2012)
 
 * Enhancements
   * Cleaning up and preparations for upcoming 0.12.0 release
@@ -47,18 +47,18 @@
     * Default application name is now added to the from: field for emails
     * Email subjects no longer include the application name
 
-== 0.11.8
+== 0.11.8 (April 3, 2012)
 
 * Enhancements
   * Allows service accounts to create activated users with a JSON web service request
   * Updated to Rails 3.2.3
 
-== 0.11.7
+== 0.11.7 (March 26, 2012)
 
 * Bug Fix
   * Non-breaking spaces no longer appear when indenting and grouping search concepts
 
-== 0.11.6
+== 0.11.6 (March 20, 2012)
 
 * Enhancements
   * Updated to Rails 3.2.2 and Contour 0.10.2 and Ruby 1.9.3-p125
@@ -72,7 +72,7 @@
 * Refactoring
   * Minor GUI change
 
-== 0.11.4
+== 0.11.4 (February 22, 2012)
 
 * Enhancements
   * Updating style using Contour Minimalist Theme
@@ -88,7 +88,7 @@
 * Bug Fix
   * Creating a report/dataset now correctly configures the popup window
 
-== 0.11.1
+== 0.11.1 (February 3, 2012)
 
 * Enhancements
   * Repositories can now be dynamically added through the Gemfile
@@ -109,7 +109,7 @@
 * Refactoring
   * Updated to Rails 3.2.1
 
-== 0.11.0
+== 0.11.0 (January 24, 2012)
 
 * Enhancements
   * i2b2 Wrapper can now return datasets for searches
@@ -129,7 +129,7 @@
 * Bug Fix
   * Generating reports for partial categorical mappings with NULL values now correctly sorts the array of values
 
-== 0.10.0
+== 0.10.0 (November 17, 2011)
 
 * Enhancements
   * A in-page tutorial has been added that highlights the important sections the search interface
@@ -149,7 +149,7 @@
 * Bug Fix
   * Fixed elastic file downloads for compatibility with Ruby 1.9.3
 
-== 0.9.0
+== 0.9.0 (November 4, 2011)
 
 * Enhancements
   * i2b2 data source wrapper functionality expanded and a researcher can now:
@@ -160,7 +160,7 @@
 * Testing
   * Analyzing test coverage using SimpleCov gem, test coverage now at 82%
 
-== 0.8.0
+== 0.8.0 (October 17, 2011)
 
 * Enhancements
   * Search Concepts can now be selected and unselected which allows:
@@ -180,7 +180,7 @@
 * Testing
   * QueryConceptsController test updated to include actions for selecting, indenting, copying, and removing search concepts
 
-== 0.7.0
+== 0.7.0 (October 10, 2011)
 
 * Enhancements
   * Update to Rails 3.1.1
@@ -219,7 +219,7 @@
   * Reordering Report Concepts tests to make sure the stratified variables (rows) are always put before the other variables (columns)
   * Dictionary controller functional test now tests that CSV files are imported correctly
 
-== 0.6.0
+== 0.6.0 (September 30, 2011)
 
 * Enhancements
   * Categorical and Boolean concepts no longer need to be fully mapped to be available in the search
@@ -233,7 +233,7 @@
   * Reports now correctly render boolean concepts and mappings that contain NULL values that have been mapped to unknown
   * Derived mappings now return correct count results, and are available in datasets and reports
 
-== 0.5.0
+== 0.5.0 (September 8, 2011)
 
 * Enhancements
   * Update to Rails 3.1.0 and Devise 1.4.4
@@ -252,7 +252,7 @@
 * Bug Fix
   * Pie charts that display data from multiple sources now correctly instead of overlapping the data
 
-== 0.4.0
+== 0.4.0 (August 25, 2011)
 
 * Enhancements
   * Query Concepts can now be reordered by dragging and dropping them
@@ -304,7 +304,7 @@
 * Enhancements
   * Elastic file repository support for multiple folder locations
 
-== 0.3.0
+== 0.3.0 (August 12, 2011)
 
 * Enhancements
   * Modified the authentication system so that it can authenticate correctly when behind a reverse proxy and within a firewall.
@@ -314,7 +314,7 @@
 * Bug Fixes
   * Popups for adding a Concept and for adding Source to a Query now correctly add the selected item to the query
 
-== 0.2.0
+== 0.2.0 (July 29, 2011)
 
 * Enhancements
   * 1-Click Multi-File downloading support through Elastic File Service
@@ -329,7 +329,7 @@
   * Boolean and Categorical concepts now correctly return a correct result when negating the elements even with mapped NULLs in the underlying dataset
   * Password fields are no longer discarded when data source meta-information is updated
 
-== 0.1.0
+== 0.1.0 (July 12, 2011)
 
 * Enhancements
   * IE7 JavaScript and CSS fixes and improvements
@@ -349,7 +349,7 @@
     * Deleted users aren't allowed to login
   * FileType and Report tests updated
 
-== 0.0.0
+== 0.0.0 (July 1, 2011)
 
 * Servers can securely register as service accounts in other instances
   * Communication between servers transparent
