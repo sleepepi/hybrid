@@ -12,7 +12,7 @@ jQuery ->
   $('#playpause-img').data('showTipTimer', 0)
 
   $(document.body).qtip(
-    id: 'step' # Give it an ID of ui-tooltip-step so we an identify it easily
+    id: 'step' # Give it an ID of qtip-step so we an identify it easily
     content:
       text: steps[0].content # Use first steps content...
       title:
@@ -32,7 +32,7 @@ jQuery ->
         # Grab tooltip element
         tooltip = api.elements.tooltip;
         # Track the current step in the API
-        api.step = 0;
+        api.step = 0
         # Bind custom custom events we can fire to step forward/back
         tooltip.on('next prev play_first play_last', (event) ->
           # Increase/decrease step depending on the event fired
@@ -53,14 +53,14 @@ jQuery ->
 
           # Set new step properties
           current = steps[api.step]
-          if(current)
+          if current
             api.set('content.text', current.content)
             api.set('content.title.text', current.title)
             api.set('position.target', current.target)
             api.set('position.my', current.my || 'top center')
             api.set('position.at', current.at || 'bottom center')
         )
-      hide: (event, api) ->
+      hide: (event, api) -> api.destroy()
       #   # $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') == 0 and !$('#tutorial_buttons').is(':visible')
       #   $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') != 0 # and $('#tutorial_buttons').is(':visible')
       #   $('#tutorial_buttons').show('slide', { direction: 'right' }, 500)
@@ -69,9 +69,6 @@ jQuery ->
       #   # $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') != 0 and $('#tutorial_buttons').is(':visible')
       #   $('#tutorial_buttons').hide('slide', { direction: 'right' }, 500)
       toggle: (event, api) ->
-        # $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') == 0 and $('#tutorial_link').is(':visible')
-        # $('#playpause').triggerHandler('click') if $('#playpause-img').data('showTipTimer') != 0 and !$('#tutorial_link').is(':visible')
-        # $('#tutorial_buttons').toggle('slide', { direction: 'right' }, 500, () -> $('#tutorial_link').toggle())
         show_later = true
         if $('#playpause-img').data('showTipTimer') == 0 and $('#tutorial_link').is(':visible')
           $('#playpause').triggerHandler('click')
@@ -86,13 +83,10 @@ jQuery ->
       classes: 'ui-tooltip-shadow ui-tooltip-green'
   ).qtip('render')
 
-  # $('#ui-tooltip-step').qtip('render')
-  # $('#ui-tooltip-step').qtip('toggle', false)
-
   # Setup the next/prev links
   $('#next, #prev, #play_first, #play_last').on('click', (event) ->
-     $('#ui-tooltip-step').triggerHandler(this.id);
-     event.preventDefault()
+    $('#qtip-step').triggerHandler(this.id);
+    event.preventDefault()
   )
 
   $('#playpause').on('click', (event) ->
@@ -101,31 +95,9 @@ jQuery ->
       clearInterval(jQuery('#playpause-img').data('showTipTimer'))
       $('#playpause-img').data('showTipTimer', 0)
     else
-      # $('#ui-tooltip-step').triggerHandler('next')
+      # $('#qtip-step').triggerHandler('next')
       $('#playpause-img').attr('src', root_url + 'assets/icons/gentleface/playback_pause_16.png')
       # $(document.body).qtip('show')
-      $('#playpause-img').data('showTipTimer', setInterval("$('#ui-tooltip-step').triggerHandler('next')" , 3000));
+      $('#playpause-img').data('showTipTimer', setInterval("$('#qtip-step').triggerHandler('next')" , 3000));
     event.preventDefault()
   )
-
-  # jQuery(base).data('showTipTimer', setInterval(function(){tt_locateBase(base);} , 3000));
-  #
-  # clearInterval(jQuery(base).data('showTipTimer'));
-
-  # $('#source')
-  #   .qtip(
-  #     content:
-  #       text: 'Text'
-  #       title:
-  #         text: 'Step 1:'
-  #         button: true
-  #     position:
-  #       my: 'top center' # Use the corner...
-  #       at: 'bottom center' # ...and opposite corner
-  #     show:
-  #       event: false # Don't specify a show event...
-  #       ready: true # ... but show the tooltip when ready
-  #     hide: false # Don't specify a hide event either!
-  #     style:
-  #       classes: 'ui-tooltip-shadow'
-  #   )

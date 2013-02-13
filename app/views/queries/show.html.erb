@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1>
     <%= @title %>
-    <%= render partial: 'layouts/tutorial' %>
+    <div style="display:none"><%= render partial: 'layouts/tutorial' %></div>
     <div class="pull-right">
       <%= link_to "History", queries_path, rel: 'tooltip', title: pluralize(current_user.all_queries.size, 'Existing Search'), data: { placement: 'left' }, class: 'btn btn-mini' %>
       <%= link_to "New Search", new_query_path, id: 'new_search_link', class: 'btn btn-mini' %>
