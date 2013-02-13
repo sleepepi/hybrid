@@ -4,6 +4,7 @@
 - Updated Rails to 3.2.12
 
 ### Enhancements
+- Updated to Contour 1.2.0.pre7 with jQuery 1.9.1
 - ActionMailer can now be configured to use the NTLM protocol used by Microsoft Exchange Server
 - Removed references to `.dup` to make Ruby 2.0.0 compatible
 

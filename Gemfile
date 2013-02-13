@@ -9,7 +9,7 @@ gem 'thin',                 '~> 1.5.0',           :platforms => [ :mswin, :mingw
 gem 'eventmachine',         '~> 1.0.0',           :platforms => [ :mswin, :mingw ]
 
 # Gems used by project
-gem 'contour',              '~> 1.1.2'
+gem 'contour',              '~> 1.2.0.pre7'
 gem 'kaminari',             '~> 0.14.1'
 gem 'ruby-ntlm-namespace',  '~> 0.0.1'
 # Builder: For Building XML messages for Web service based data sources
