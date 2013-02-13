@@ -148,6 +148,28 @@ jQuery ->
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
 
+  $("#table_columns_search select, #table_columns_search input").change( () ->
+    $.post($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script")
+    showWaiting('#table_content', ' Loading Table Mappings', true)
+    false
+  )
+
+  $("#source_rule_user_tokens").tokenInput(root_url + "users.json"
+    crossDomain: false
+    prePopulate: $("#source_rule_user_tokens").data("pre")
+    theme: "facebook"
+    preventDuplicates: true
+  )
+
+  # Show and hide a delete icon on mouseover and mouseout for query_concepts
+  $(document)
+    .on('mouseover', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/delete.png'))
+    .on('mouseout', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/blank.png'))
+
+  $(document)
+    .on('mouseover', ".smudge", () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?.png/, '_g1.png')))
+    .on('mouseout', ".smudge",  () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?_g1.png/, '.png')))
+
   $(document)
     .on('click', '[data-object~="submit"]', () ->
       $($(this).data('target')).submit()
@@ -161,8 +183,3 @@ jQuery ->
       $($(this).data('target')).modal( dynamic: true )
       false
     )
-
-  # $('[data-object~="typeaheadmap"]').each( () ->
-  #   $this = $(this)
-  #   $this.typeaheadmap( source: $this.data('source'), "key": "key", "value": "value" )
-  # )
