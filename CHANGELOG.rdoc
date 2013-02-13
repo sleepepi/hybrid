@@ -3,6 +3,9 @@
 * Security Fix
   * Updated Rails to 3.2.12
 
+* Enhancements
+  * ActionMailer can now be configured to use the NTLM protocol used by Microsoft Exchange Server
+
 == 0.12.5 (January 9, 2013)
 
 * Enhancements
