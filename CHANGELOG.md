@@ -161,7 +161,7 @@
 - A search term's categorical values can now be selected using Select All and Deselect All
 
 ### Testing
-  ### Test Coverage now at 90%
+- Test Coverage now at 90%
 
 ## 0.9.1
 
