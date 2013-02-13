@@ -1,4 +1,4 @@
-## 0.12.6
+## 0.12.6 (February 13, 2013)
 
 ### Security Fix
 - Updated Rails to 3.2.12
