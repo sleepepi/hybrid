@@ -68,7 +68,7 @@
   <% found_number = (@terms.size == 0) ? 0 : filtered_children_scope.with_exact_folder_or_subfolder(full_folder).size %>
   <% unless folder_id == "folder_Uncategorized" %>
     <% if folder_hash[:is_queryable] == true %>
-      <div style="float:left"><%= link_to image_tag('contour/information.png', style: 'vertical-align:text-bottom;padding-right:3px'), info_external_concepts_path(name: folder_hash[:name], key: folder_hash[:key], totalnum: folder_hash[:totalnum], source_id: folder_hash[:source_id], query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: folder_hash[:name], onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %></div>
+      <div style="float:left"><%= link_to '<i class="icon-question-sign"></i>'.html_safe, info_external_concepts_path(name: folder_hash[:name], key: folder_hash[:key], totalnum: folder_hash[:totalnum], source_id: folder_hash[:source_id], query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: folder_hash[:name], onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %></div>
     <% end %>
     <div id="<%= folder_id %>_link">
       <% @folder_id = folder_id %>

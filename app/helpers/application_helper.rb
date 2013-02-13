@@ -43,8 +43,7 @@ module ApplicationHelper
   end
 
   def information(message = ' Press Enter to Search')
-    # "<span class=\"quiet small\">#{image_tag('contour/information.png', alt: '', :style=>'vertical-align:text-bottom')}#{message}</span>".html_safe
-    "INFO"
+    "<i class='icon-question-sign'></i> <span class='quiet small'>#{message}</span>".html_safe
   end
 
 end

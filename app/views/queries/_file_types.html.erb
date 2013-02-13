@@ -2,7 +2,7 @@
 
 <% if file_types.blank? %>
   <% if @query.sources.size > 0 %>
-    <%= image_tag('contour/information.png', style: 'vertical-align: text-bottom') %>
+    <i class="icon-question-sign"></i>
     <span class="quiet">No files available for selected <%= @query.sources.size > 1 ? 'source'.pluralize : 'source' %>.</span>
   <% end %>
 <% else %>
