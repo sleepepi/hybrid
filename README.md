@@ -12,29 +12,37 @@ Hybrid is a web-application designed to easily connect across multiple heterogen
 
 Once you have the prerequisites in place, you can proceed to install bundler which will handle most of the remaining dependencies.
 
-  gem install bundler
+```console
+gem install bundler
+```
 
 This README assumes the following installation directory: /var/www/hybrid
 
-  cd /var/www
+```console
+cd /var/www
 
-  git clone git://github.com/sleepepi/hybrid.git
+git clone git://github.com/sleepepi/hybrid.git
 
-  cd hybrid
+cd hybrid
 
-  bundle install
+bundle install
+```
 
 Install default configuration files for database connection, email server connection, server url, and application name.
 
-  ruby lib/initial_setup.rb
+```console
+ruby lib/initial_setup.rb
 
-  bundle exec rake db:migrate RAILS_ENV=production
+bundle exec rake db:migrate RAILS_ENV=production
 
-  bundle exec rake assets:precompile
+bundle exec rake assets:precompile
+```
 
 Run Rails Server (or use Apache or nginx)
 
-  rails s -p80
+```console
+rails s -p80
+```
 
 Open a browser and go to: http://localhost
 
