@@ -9,6 +9,11 @@ class ReportConcept < ActiveRecord::Base
   belongs_to :source
 
 
+  def copyable_attributes
+    self.attributes.reject{|key, val| ['report_id', 'created_at', 'updated_at'].include?(key.to_s)}
+  end
+
+
   def external_concept_information(current_user)
     @external_concept_information ||= begin
       information = {name: self.external_key}

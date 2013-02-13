@@ -373,15 +373,19 @@ class Query < ActiveRecord::Base
     self.update_brackets!
   end
 
+  def copyable_attributes
+    self.attributes.reject{|key, val| ['id', 'user_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
+  end
+
   def copy
-    query_copy = self.dup
+    query_copy = self.user.queries.new(self.copyable_attributes)
     query_copy.name += " Copy"
     query_copy.save
     self.query_sources.each do |qs|
-      query_copy.query_sources << qs.dup
+      query_copy.sources << qs.source
     end
     self.query_concepts.each do |qc|
-      query_copy.query_concepts << qc.dup
+      query_copy.query_concepts << query_copy.query_concepts.create(qc.copyable_attributes)
     end
     query_copy.history = []
     query_copy.history_position = 0

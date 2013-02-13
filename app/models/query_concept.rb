@@ -18,6 +18,10 @@ class QueryConcept < ActiveRecord::Base
 
   # Query Concept Methods
 
+  def copyable_attributes
+    self.attributes.reject{|key, val| ['query_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
+  end
+
   def construct_sql(current_user, source = nil)
     return { conditions: '1 = 0', tables: [], error: "#{self.concept.human_name} in #{source.name} is sensitive and requires <span class='source_rule_text'>view data distribution</span>." } if source and not source.user_has_action?(current_user, 'view data distribution') and self.concept.sensitivity != '0'
 

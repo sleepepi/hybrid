@@ -74,7 +74,7 @@ class ReportsController < ApplicationController
 
       if template_report = current_user.reports.find_by_id(params[:template_report_id])
         template_report.report_concepts.each do |report_concept|
-          @report.report_concepts << ReportConcept.create(report_concept.dup.attributes)
+          @report.report_concepts << ReportConcept.create(report_concept.copyable_attributes)
         end
       end
 

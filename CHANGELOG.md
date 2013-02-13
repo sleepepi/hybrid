@@ -5,6 +5,7 @@
 
 ### Enhancements
 - ActionMailer can now be configured to use the NTLM protocol used by Microsoft Exchange Server
+- Removed references to `.dup` to make Ruby 2.0.0 compatible
 
 ## 0.12.5 (January 9, 2013)
 
