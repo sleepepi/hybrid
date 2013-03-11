@@ -4,19 +4,16 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :timeoutable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :email_notifications
-
   after_create :notify_system_admins
 
   STATUS = ["active", "denied", "inactive", "pending"].collect{|i| [i,i]}
   serialize :email_notifications, Hash
 
   # Named Scopes
-  scope :current, conditions: { deleted: false }
-  scope :status, lambda { |*args|  { conditions: ["users.status IN (?)", args.first] } }
-  scope :search, lambda { |*args| { conditions: [ 'LOWER(first_name) LIKE ? or LOWER(last_name) LIKE ? or LOWER(email) LIKE ?', '%' + args.first.downcase.split(' ').join('%') + '%', '%' + args.first.downcase.split(' ').join('%') + '%', '%' + args.first.downcase.split(' ').join('%') + '%' ] } }
-  scope :system_admins, conditions: { system_admin: true }
+  scope :current, -> { where deleted: false }
+  scope :status, lambda { |arg|  where( status: arg ) }
+  scope :search, lambda { |arg| where( 'LOWER(first_name) LIKE ? or LOWER(last_name) LIKE ? or LOWER(email) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%') ) }
+  scope :system_admins, -> { where system_admin: true }
 
   # Model Validation
   validates_presence_of     :first_name
@@ -27,18 +24,18 @@ class User < ActiveRecord::Base
 
   has_many :file_types
 
-  has_many :dictionaries, conditions: { deleted: false }
+  has_many :dictionaries, -> { where deleted: false }
 
-  has_many :queries, conditions: { deleted: false } #, order: 'updated_at DESC'
+  has_many :queries, -> { where deleted: false } #, order: 'updated_at DESC'
   has_many :query_users
-  has_many :shared_queries, through: :query_users, source: :query, order: 'name', conditions: ['queries.deleted = ?', false]
+  has_many :shared_queries, -> { where deleted: false }, through: :query_users, source: :query, order: 'name'
 
   has_many :reports
 
-  has_many :true_datasets, class_name: "Report", conditions: { is_dataset: true }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
-  has_many :true_reports, class_name: "Report", conditions: { is_dataset: false }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_datasets, -> { where is_dataset: true }, class_name: "Report", order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_reports, -> { where is_dataset: false }, class_name: "Report", order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
 
-  has_many :sources, conditions: { deleted: false }
+  has_many :sources, -> { where deleted: false }
 
   # User Methods
 

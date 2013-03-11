@@ -1,8 +1,8 @@
 class Mapping < ActiveRecord::Base
   # Named Scopes
 
-  scope :current, conditions: { deleted: false }
-  scope :status, lambda { |*args|  { conditions: ["mappings.status IN (?)", args.first] } }
+  scope :current, -> { where deleted: false }
+  scope :status, lambda { |arg| where(status: arg) }
 
   # Model Validation
 

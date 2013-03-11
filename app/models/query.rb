@@ -2,9 +2,9 @@ class Query < ActiveRecord::Base
   serialize :history, Array
 
   # Named Scopes
-  scope :current, where(deleted: false)
-  scope :with_user, lambda { |*args| { conditions: ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", args.first, args.first] } }
-  scope :search, lambda { |*args| {conditions: [ 'LOWER(name) LIKE ?', '%' + args.first.downcase.split(' ').join('%') + '%' ] } }
+  scope :current, -> { where deleted: false }
+  scope :with_user, lambda { |arg| where( ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", arg, arg] ) }
+  scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
 
   # Model Validation
   validates_presence_of :name
@@ -13,16 +13,16 @@ class Query < ActiveRecord::Base
   belongs_to :user
   belongs_to :identifier_concept, class_name: "Concept"
 
-  has_many :query_concepts, conditions: { deleted: false }, order: 'position'
-  has_many :concepts, through: :query_concepts, order: 'query_concepts.position'
+  has_many :query_concepts, -> { where deleted: false }, order: 'position'
+  has_many :concepts, -> { order :position }, through: :query_concepts
 
   has_many :query_sources, dependent: :destroy
-  has_many :sources, through: :query_sources, order: 'name'
+  has_many :sources, -> { order :name }, through: :query_sources
 
   has_many :reports
 
-  has_many :true_datasets, class_name: "Report", conditions: { is_dataset: true }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
-  has_many :true_reports, class_name: "Report", conditions: { is_dataset: false }, order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_datasets, -> { where is_dataset: true }, class_name: "Report", order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
+  has_many :true_reports, -> { where is_dataset: false }, class_name: "Report", order: '(reports.name IS NULL or reports.name = ""), reports.name, reports.id'
 
   # has_many :query_users, dependent: :destroy
   # has_many :users, through: :query_users, order: 'last_name, first_name', conditions: ['users.deleted = ?', false]

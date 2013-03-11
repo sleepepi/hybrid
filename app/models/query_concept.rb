@@ -7,7 +7,7 @@ class QueryConcept < ActiveRecord::Base
   before_update :update_qc_query_history
 
   # Named Scopes
-  scope :current, where(deleted: false)
+  scope :current, -> { where deleted: false }
 
   # Model Relationships
   belongs_to :query #, touch: true # Possibly not needed due to undo/redo actions

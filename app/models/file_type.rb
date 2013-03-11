@@ -1,11 +1,11 @@
 class FileType < ActiveRecord::Base
 
   # Named Scopes
-  scope :current, conditions: {  }  # deleted: false
-  scope :available, conditions: { visible: true }
+  scope :current, -> { all }  # deleted: false
+  scope :available, -> { where visible: true }
 
-  scope :with_report, lambda { |*args| { conditions: ["? = '' or concepts.id in (select concept_id from report_concepts where report_concepts.report_id = ?)", args.first, args.first] }}
-  scope :with_source, lambda { |*args| { conditions: ["file_types.id IN (select file_type_id from source_file_types where source_file_types.source_id IN (?))", args.first] } }
+  scope :with_report, lambda { |arg| where( [ "? = '' or concepts.id in (select concept_id from report_concepts where report_concepts.report_id = ?)", arg, arg ] ) }
+  scope :with_source, lambda { |arg| where( [ "file_types.id IN (select file_type_id from source_file_types where source_file_types.source_id IN (?))", arg ] ) }
 
   # Model Validation
 
@@ -16,7 +16,7 @@ class FileType < ActiveRecord::Base
   belongs_to :dictionary
 
   has_many :source_file_types, dependent: :destroy
-  has_many :sources, through: :source_file_types, order: 'sources.name'
+  has_many :sources, -> { order :name }, through: :source_file_types
 
   # FileType Methods
 

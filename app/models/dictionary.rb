@@ -1,12 +1,12 @@
 class Dictionary < ActiveRecord::Base
-  attr_accessible :name, :description, :visible, :status
+  # attr_accessible :name, :description, :visible, :status
 
   STATUS = ["active", "testing", "inactive"].collect{|i| [i,i]}
 
   # Named Scopes
-  scope :current, conditions: { deleted: false }
-  scope :available, conditions: { deleted: false, visible: true }
-  scope :search, lambda { |*args| {conditions: [ 'LOWER(name) LIKE ?', '%' + args.first.downcase.split(' ').join('%') + '%' ] } }
+  scope :current, -> { where deleted: false }
+  scope :available, -> { where deleted: false, visible: true }
+  scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
 
   # Model Validation
   validates_presence_of :name

@@ -2,7 +2,7 @@ class Report < ActiveRecord::Base
   belongs_to :user
   belongs_to :query
 
-  has_many :report_concepts, order: :position, dependent: :destroy
+  has_many :report_concepts, -> { order :position }, dependent: :destroy
   has_many :concepts, through: :report_concepts
 
   def name

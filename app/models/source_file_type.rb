@@ -1,6 +1,6 @@
 class SourceFileType < ActiveRecord::Base
   # Named Scopes
-  scope :current, conditions: {  }  # deleted: false
+  scope :current, -> { all }  # deleted: false
 
   # Model Validation
   validates_presence_of :file_type_id

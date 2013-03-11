@@ -36,7 +36,7 @@ class MappingsController < ApplicationController
     if @search_terms.blank?
       @concepts = []
     else
-      concept_scope = Concept.searchable.order('search_name').scoped({})
+      concept_scope = Concept.searchable.order('search_name')
       @search_terms.each{|search_term| concept_scope = concept_scope.search(search_term) }
       @concepts = concept_scope.order('dictionary_id')
     end

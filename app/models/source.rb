@@ -4,13 +4,13 @@ class Source < ActiveRecord::Base
   REPOSITORY = Aqueduct.repositories.collect{|a| [a.to_s.split('::').last, a.to_s.split('::').last.downcase]}
 
   # Named Scopes
-  scope :current, conditions: { deleted: false }
-  scope :available, conditions: { deleted: false, visible: true}
-  scope :available_or_creator_id, lambda { |*args|  { conditions: ["sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, args.first] } }
-  scope :local, conditions: { identifier: nil }
-  scope :search, lambda { |*args| {conditions: [ 'LOWER(name) LIKE ?', '%' + args.first.downcase.split(' ').join('%') + '%' ] } }
-  scope :with_concept, lambda { |*args|  { conditions: ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.status IN (?) and mappings.deleted = ?) or '' IN (?)", args.first, ['mapped', 'unmapped', 'derived'], false, args.first] } }
-  scope :with_file_type, lambda { |*args| { conditions: ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", args.first] } }
+  scope :current, -> { where deleted: false }
+  scope :available, -> { where deleted: false, visible: true }
+  scope :available_or_creator_id, lambda { |arg| where( [ "sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, arg ] ) }
+  scope :local, -> { where identifier: nil }
+  scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
+  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.status IN (?) and mappings.deleted = ?) or '' IN (?)", arg, ['mapped', 'unmapped', 'derived'], false, arg] ) }
+  scope :with_file_type, lambda { |arg| where( ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", arg] ) }
 
   # Model Validation
   validates_presence_of :name
@@ -18,7 +18,7 @@ class Source < ActiveRecord::Base
 
   # Model Relationships
   belongs_to :user
-  has_many :mappings, conditions: { deleted: false }
+  has_many :mappings, -> { where deleted: false }
   has_many :concepts, through: :mappings, order: 'concepts.name'
 
   has_many :source_joins, dependent: :destroy

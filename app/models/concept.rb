@@ -5,62 +5,62 @@ class Concept < ActiveRecord::Base
   CONCEPT_TYPE = ['boolean', 'categorical', 'continuous', 'datetime', 'identifier', 'file locator', 'free text'].collect{|i| [i,i]}
 
   # Named Scopes
-  scope :current, conditions: {  }  # deleted: false
-  scope :searchable, lambda { |*args|  { conditions: "concepts.concept_type IS NOT NULL" } }
-  scope :with_concept_type, lambda { |*args|  { conditions: ["concepts.concept_type IN (?) or 'all' IN (?)", args.first, args.first] } }
+  scope :current, -> { all }  # deleted: false
+  scope :searchable, lambda { |*args|  where("concepts.concept_type IS NOT NULL") }
+  scope :with_concept_type, lambda { |*args|  where(["concepts.concept_type IN (?) or 'all' IN (?)", args.first, args.first]) }
 
-  scope :with_source, lambda { |*args|  { conditions: ["concepts.id in (select concept_id from mappings where mappings.source_id IN (?) and mappings.status IN (?) and mappings.deleted = ?)", args.first, ['mapped', 'unmapped', 'derived'], false] } } # TODO: Status of mapping no longer matters
-  scope :with_folder, lambda { |*args| { conditions: ["LOWER(concepts.folder) LIKE ? or ? IS NULL", args.first.to_s + ':%', args.first] } }
-  scope :with_exact_folder, lambda { |*args| { conditions: ["LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first] } }
-  scope :with_exact_folder_or_subfolder, lambda { |*args| { conditions: ["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + ':%', args.first] } }
+  scope :with_source, lambda { |*args|  where(["concepts.id in (select concept_id from mappings where mappings.source_id IN (?) and mappings.status IN (?) and mappings.deleted = ?)", args.first, ['mapped', 'unmapped', 'derived'], false] ) } # TODO: Status of mapping no longer matters
+  scope :with_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ? IS NULL", args.first.to_s + ':%', args.first]) }
+  scope :with_exact_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first]) }
+  scope :with_exact_folder_or_subfolder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + ':%', args.first]) }
 
-  scope :with_dictionary, lambda { |*args| { conditions: ["concepts.dictionary_id IN (?) or 'all' IN (?)", args.first, args.first] } }
-  scope :with_namespace, lambda { |*args| { conditions: ["concepts.namespace IN (?) or '' IN (?)", args.first, args.first] } }
+  scope :with_dictionary, lambda { |*args| where(["concepts.dictionary_id IN (?) or 'all' IN (?)", args.first, args.first]) }
+  scope :with_namespace, lambda { |*args| where(["concepts.namespace IN (?) or '' IN (?)", args.first, args.first]) }
 
-  scope :with_report, lambda { |*args| { conditions: ["? = '' or concepts.id in (select concept_id from report_concepts where report_concepts.report_id = ?)", args.first, args.first] }}
+  scope :with_report, lambda { |*args| where(["? = '' or concepts.id in (select concept_id from report_concepts where report_concepts.report_id = ?)", args.first, args.first]) }
 
-  scope :search, lambda { |*args| {conditions: [ 'LOWER(search_name) LIKE ? or LOWER(search_name) LIKE ? or concepts.id in (select concept_id from terms where LOWER(terms.search_name) LIKE ? or LOWER(terms.search_name) LIKE ?)', args.first + '%', '% ' + args.first + '%', args.first + '%', '% ' + args.first + '%' ] } }
+  scope :search, lambda { |*args| where([ 'LOWER(search_name) LIKE ? or LOWER(search_name) LIKE ? or concepts.id in (select concept_id from terms where LOWER(terms.search_name) LIKE ? or LOWER(terms.search_name) LIKE ?)', args.first + '%', '% ' + args.first + '%', args.first + '%', '% ' + args.first + '%' ]) }
 
-  scope :exactly, lambda { |*args| {conditions: [ 'LOWER(short_name) = ? or LOWER(short_name) = ? or LOWER(search_name) = ? or LOWER(search_name) = ? or concepts.id in (select concept_id from terms where LOWER(terms.search_name) = ? or LOWER(terms.search_name) = ?)', args.first, args[1], args.first, args[1], args.first, args[1] ] } }
+  scope :exactly, lambda { |*args| where([ 'LOWER(short_name) = ? or LOWER(short_name) = ? or LOWER(search_name) = ? or LOWER(search_name) = ? or concepts.id in (select concept_id from terms where LOWER(terms.search_name) = ? or LOWER(terms.search_name) = ?)', args.first, args[1], args.first, args[1], args.first, args[1] ]) }
 
   # Model Validation
   validates_presence_of :name
   validates_uniqueness_of :name
 
   validates_format_of :uri,
-                      with: /^[a-zA-Z]+:\/\/[\w\-.\/]*[\w]$/,
+                      with: /\A[a-zA-Z]+:\/\/[\w\-.\/]*[\w]\Z/,
                       message: "must be a valid URI without a trailing backslash."
 
   validates_format_of :namespace,
-                      with: /^[\w\-.]+$/,
+                      with: /\A[\w\-.]+\Z/,
                       message: "must contain only digits, letters, underscores, periods, and dashes."
 
   validates_format_of :short_name,
-                      with: /^[\w\-]+$/,
+                      with: /\A[\w\-]+\Z/,
                       message: "must contain only letters, digits, underscores, and dashes."
 
   # Model Relationships
 
   has_many :mappings, dependent: :destroy
   belongs_to :dictionary
-  has_many :sources, through: :mappings, order: 'sources.name', conditions: ['sources.deleted = ?', false]
+  has_many :sources, -> { where deleted: false }, through: :mappings, order: 'sources.name'
 
-  has_many :terms, order: :name, dependent: :destroy
-  has_many :external_terms,  class_name: "Term", order: 'terms.name', dependent: :destroy, conditions: {internal: false}
-  has_many :internal_terms,  class_name: "Term", order: 'terms.name', dependent: :destroy, conditions: {internal: true}
+  has_many :terms, -> { order :name }, dependent: :destroy
+  has_many :external_terms, -> { where internal: false }, class_name: "Term", order: 'terms.name', dependent: :destroy
+  has_many :internal_terms, -> { where internal: true }, class_name: "Term", order: 'terms.name', dependent: :destroy
 
-  has_many :concept_property_concepts, foreign_key: 'concept_one_id', order: 'property', dependent: :destroy
-  has_many :parents, through: :concept_property_concepts, source: 'concept_two', conditions: 'concept_property_concepts.property = "is_a"'
-  has_many :includes, through: :concept_property_concepts, source: 'concept_two', conditions: ['concept_property_concepts.property IN (?)', ["includes", "http://purl.org/cpr/includes"]]
+  has_many :concept_property_concepts, -> { order :property }, foreign_key: 'concept_one_id', dependent: :destroy
+  has_many :parents, -> { where property: 'is_a' }, through: :concept_property_concepts, source: 'concept_two'
+  has_many :includes, -> { where property: ["includes", "http://purl.org/cpr/includes"] }, through: :concept_property_concepts, source: 'concept_two'
 
-  has_many :equivalent_concepts_a, through: :concept_property_concepts, source: 'concept_two', conditions: 'concept_property_concepts.property = "equivalent_class"'
-  has_many :similar_concepts_a, through: :concept_property_concepts, source: 'concept_two', conditions: 'concept_property_concepts.property = "similar_class"'
+  has_many :equivalent_concepts_a, -> { where property: 'equivalent_class' }, through: :concept_property_concepts, source: 'concept_two'
+  has_many :similar_concepts_a, -> { where property: 'similar_class' }, through: :concept_property_concepts, source: 'concept_two'
 
-  has_many :reverse_concept_property_concepts, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', order: 'property', dependent: :destroy
-  has_many :children, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: 'concept_property_concepts.property = "is_a"'
-  has_many :included_by, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: ['concept_property_concepts.property IN (?)', ["includes", "http://purl.org/cpr/includes"]]
-  has_many :equivalent_concepts_b, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: 'concept_property_concepts.property = "equivalent_class"'
-  has_many :similar_concepts_b, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: 'concept_property_concepts.property = "similar_class"'
+  has_many :reverse_concept_property_concepts, -> { order :property }, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
+  has_many :children, -> { where property: 'is_a' }, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: 'concept_property_concepts.property = "is_a"'
+  has_many :included_by, -> { where property: ["includes", "http://purl.org/cpr/includes"] }, through: :reverse_concept_property_concepts, source: 'concept_one'
+  has_many :equivalent_concepts_b, -> { where property: 'equivalent_class' }, through: :reverse_concept_property_concepts, source: 'concept_one'
+  has_many :similar_concepts_b, -> { where property: 'similar_class' }, through: :reverse_concept_property_concepts, source: 'concept_one'
 
   has_many :query_concepts, dependent: :destroy
   has_many :queries, through: :query_concepts
