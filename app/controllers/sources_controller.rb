@@ -1,5 +1,5 @@
 class SourcesController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def download_file
     @source = current_user.all_sources.find_by_id(params[:id])

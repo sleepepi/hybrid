@@ -1,5 +1,5 @@
 class ConceptsController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def info
     @concept = Concept.find_by_id(params[:id])

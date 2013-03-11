@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, except: [:new, :create]
-  before_filter :check_system_admin, except: [:new, :create, :settings, :update_settings, :activate]
-  before_filter :check_service_account, only: [:activate]
+  before_action :authenticate_user!, except: [:new, :create]
+  before_action :check_system_admin, except: [:new, :create, :settings, :update_settings, :activate]
+  before_action :check_service_account, only: [:activate]
 
   def settings
   end

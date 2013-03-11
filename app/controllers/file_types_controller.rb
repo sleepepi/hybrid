@@ -1,6 +1,6 @@
 class FileTypesController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :check_system_admin
+  before_action :authenticate_user!
+  before_action :check_system_admin
 
   def index
     @file_types = current_user.file_types.all

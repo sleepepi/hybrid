@@ -1,5 +1,5 @@
 class QuerySourcesController < ApplicationController
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def show
     @query_source = QuerySource.find_by_id(params[:id])

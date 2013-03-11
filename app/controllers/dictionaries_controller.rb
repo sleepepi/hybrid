@@ -1,6 +1,6 @@
 class DictionariesController < ApplicationController
-  before_filter :authenticate_user!
-  before_filter :check_system_admin
+  before_action :authenticate_user!
+  before_action :check_system_admin
 
   def remove_concepts_and_relations
     @dictionary = current_user.all_dictionaries.find_by_id(params[:id])

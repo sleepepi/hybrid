@@ -1,3 +1,3 @@
 class SitesController < ApplicationController
-  before_filter :authenticate_user!, only: [:search]
+  before_action :authenticate_user!, only: [:search]
 end
