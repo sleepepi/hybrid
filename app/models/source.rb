@@ -19,7 +19,7 @@ class Source < ActiveRecord::Base
   # Model Relationships
   belongs_to :user
   has_many :mappings, -> { where deleted: false }
-  has_many :concepts, through: :mappings, order: 'concepts.name'
+  has_many :concepts, -> { order :name }, through: :mappings
 
   has_many :source_joins, dependent: :destroy
   has_many :reverse_source_joins, class_name: 'SourceJoin', foreign_key: 'source_to_id', dependent: :destroy
@@ -28,13 +28,13 @@ class Source < ActiveRecord::Base
   has_many :rev_sources, through: :reverse_source_joins, source: 'source'
 
   has_many :source_file_types, dependent: :destroy
-  has_many :file_types, through: :source_file_types, order: 'file_types.name'
+  has_many :file_types, -> { order :name }, through: :source_file_types
 
   has_many :source_rules, dependent: :destroy
 
   # has_many :database_access_rules, dependent: :destroy
   has_many :query_sources, dependent: :destroy
-  has_many :queries, through: :query_sources, order: 'name'
+  has_many :queries, -> { order :name }, through: :query_sources
 
   # Source Methods
 
