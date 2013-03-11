@@ -1,5 +1,10 @@
 ## 0.13.0
 
+### Enhancements
+- **Gem Changes**
+  - Updated to Rails 4.0.0.beta1
+  - Updated to Contour 2.0.0.beta.3
+
 ## 0.12.6 (February 13, 2013)
 
 ### Security Fix

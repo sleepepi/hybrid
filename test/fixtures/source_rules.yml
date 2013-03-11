@@ -3,11 +3,11 @@
 one:
   source: two
   actions: [edit data source rules, get count]
-  users: [<%= ActiveRecord::Fixtures.identify(:admin) %>]
+  users: [<%= ActiveRecord::FixtureSet.identify(:admin) %>]
   blocked: false
 
 two:
   source: two
   actions: [get count]
-  users: [<%= ActiveRecord::Fixtures.identify(:valid) %>]
+  users: [<%= ActiveRecord::FixtureSet.identify(:valid) %>]
   blocked: true
