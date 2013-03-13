@@ -3,9 +3,8 @@ $("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").html('<div><div id="<%
 $("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").show();
 
 
-
 <% case @chart_type when 'column' %>
-  drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>, <%= ("[" + @categories.join(',') + "]").html_safe %>);
+  drawHighChartHistogramChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
 <% when 'pie' %>
-  drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>);
+  drawHighChartPieChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
 <% end %>

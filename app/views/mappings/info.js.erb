@@ -20,9 +20,9 @@ $(document.body).qtip('hide');
   $("#distribution").html('<div><div id="<%= @chart_element_id %>" style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px"></div></div><%= escape_javascript(@stats.to_s.html_safe) %>');
 
   <% case @chart_type when 'column' %>
-    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>, <%= ("[" + @categories.join(',') + "]").html_safe %>);
+    drawHighChartHistogramChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
   <% when 'pie' %>
-    drawHighChartPieChart('<%= @chart_element_id %>', <%= options_for_javascript(@values).html_safe %>, <%= options_for_javascript(@defaults).html_safe %>);
+    drawHighChartPieChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
   <% end %>
 
 <% end %>
