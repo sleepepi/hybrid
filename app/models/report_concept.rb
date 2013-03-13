@@ -10,7 +10,7 @@ class ReportConcept < ActiveRecord::Base
 
 
   def copyable_attributes
-    self.attributes.reject{|key, val| ['report_id', 'created_at', 'updated_at'].include?(key.to_s)}
+    self.attributes.reject{|key, val| ['id', 'report_id', 'created_at', 'updated_at'].include?(key.to_s)}
   end
 
 
