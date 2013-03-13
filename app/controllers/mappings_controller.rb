@@ -93,7 +93,7 @@ class MappingsController < ApplicationController
 
     @concept = Concept.find_by_id(params[:new_concept_id])
     if @source and @concept
-      @mapping = @source.mappings.find_or_create_by_table_and_column(params[:table], params[:new_column])
+      @mapping = @source.mappings.where( table: params[:table], column: params[:new_column] ).first_or_create
       flash[:notice] = 'Mapping Created'
 
       @mapping.update_attributes(units: @concept.units, concept_id: @concept.id, deleted: false)
@@ -140,9 +140,7 @@ class MappingsController < ApplicationController
               end
               # .gsub('&lt;', '<').gsub('&gt;', '>')
               column_value = column_value.gsub('&#33;', '!').gsub('&#91;', '[').gsub('&#93;', ']').gsub('&#32;', ' ') if column_value
-
-              val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(@mapping.table, @mapping.column, (column_value == nil) ? 'NULL' : column_value.to_s)
-
+              val_mapping = @source.mappings.where( table: @mapping.table, column: @mapping.column, column_value: (column_value == nil ? 'NULL' : column_value.to_s) ).first_or_create
 
               value = value.blank? ? nil : value
               if @mapping.concept
