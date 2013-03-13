@@ -9,6 +9,9 @@ class User < ActiveRecord::Base
   STATUS = ["active", "denied", "inactive", "pending"].collect{|i| [i,i]}
   serialize :email_notifications, Hash
 
+  # Concerns
+  include Contourable
+
   # Named Scopes
   scope :current, -> { where deleted: false }
   scope :status, lambda { |arg|  where( status: arg ) }
@@ -20,10 +23,7 @@ class User < ActiveRecord::Base
   validates_presence_of     :last_name
 
   # Model Relationships
-  has_many :authentications
-
   has_many :file_types
-
   has_many :dictionaries, -> { where deleted: false }
 
   has_many :queries, -> { where deleted: false } #, order: 'updated_at DESC'
@@ -94,17 +94,13 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name} &lsaquo;#{email}&rsaquo;"
   end
 
+  # Override of Contourable
   def apply_omniauth(omniauth)
     unless omniauth['info'].blank?
-      self.email = omniauth['info']['email'] if email.blank?
       self.first_name = omniauth['info']['first_name'] if first_name.blank?
       self.last_name = omniauth['info']['last_name'] if last_name.blank?
     end
-    authentications.build( provider: omniauth['provider'], uid: omniauth['uid'] )
-  end
-
-  def password_required?
-    (authentications.empty? || !password.blank?) && super
+    super
   end
 
   private
