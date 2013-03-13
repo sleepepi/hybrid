@@ -59,7 +59,7 @@ class FileTypesControllerTest < ActionController::TestCase
   test "should not update invalid file type" do
     put :update, id: -1, file_type: @file_type.attributes
     assert_nil assigns(:file_type)
-    assert_redirected_to root_path
+    assert_redirected_to file_types_path
   end
 
   test "should destroy file type" do
@@ -75,6 +75,6 @@ class FileTypesControllerTest < ActionController::TestCase
       delete :destroy, id: -1
     end
     assert_nil assigns(:file_type)
-    assert_redirected_to root_path
+    assert_redirected_to file_types_path
   end
 end
