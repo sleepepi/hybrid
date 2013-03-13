@@ -19,7 +19,7 @@ class QueryConcept < ActiveRecord::Base
   # Query Concept Methods
 
   def copyable_attributes
-    self.attributes.reject{|key, val| ['query_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
+    self.attributes.reject{|key, val| ['id', 'query_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
   end
 
   def construct_sql(current_user, source = nil)

@@ -7,7 +7,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "total records count" do
-    post :total_records_count, id: queries(:query_with_sources).to_param, format: 'js'
+    post :total_records_count, id: queries(:query_with_sources), format: 'js'
     assert_not_nil assigns(:sql_conditions)
     assert_not_nil assigns(:overall_errors)
     assert_not_nil assigns(:overall_totals)
@@ -15,7 +15,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "total records count for a query with sources" do
-    post :total_records_count, id: queries(:query_with_sources).to_param, format: 'js'
+    post :total_records_count, id: queries(:query_with_sources), format: 'js'
     assert_not_nil assigns(:sql_conditions)
     assert_not_nil assigns(:overall_errors)
     assert_not_nil assigns(:overall_totals)
@@ -23,7 +23,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "total records count for a query without sources" do
-    post :total_records_count, id: queries(:three).to_param, format: 'js'
+    post :total_records_count, id: queries(:three), format: 'js'
     assert_not_nil assigns(:sql_conditions)
     assert_not_nil assigns(:overall_errors)
     assert_not_nil assigns(:overall_totals)
@@ -31,7 +31,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "total records count for a query with negated concepts" do
-    post :total_records_count, id: queries(:query_with_negated_concepts).to_param, format: 'js'
+    post :total_records_count, id: queries(:query_with_negated_concepts), format: 'js'
     assert_not_nil assigns(:sql_conditions)
     assert_not_nil assigns(:overall_errors)
     assert_not_nil assigns(:overall_totals)
@@ -44,7 +44,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should reorder query concepts" do
-    post :reorder, id: queries(:query_with_sources).to_param, order: "query_concept_#{query_concepts(:four).to_param},query_concept_#{query_concepts(:three).to_param}", format: 'js'
+    post :reorder, id: queries(:query_with_sources), order: "query_concept_#{query_concepts(:four).to_param},query_concept_#{query_concepts(:three).to_param}", format: 'js'
     assert_equal [[0,query_concepts(:four).to_param],[1,query_concepts(:three).to_param]], assigns(:query).query_concepts.collect{|qc| [qc.position, qc.id.to_s]}
     assert_template 'query_concepts'
   end
@@ -55,7 +55,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should list data files associated with query" do
-    post :data_files, id: queries(:query_with_sources).to_param, file_type_id: 1, format: 'js'
+    post :data_files, id: queries(:query_with_sources), file_type_id: 1, format: 'js'
     assert_template 'data_files'
   end
 
@@ -65,7 +65,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should load data file type" do
-    post :load_file_type, id: queries(:query_with_sources).to_param, file_type_id: 1, format: 'js'
+    post :load_file_type, id: queries(:query_with_sources), file_type_id: 1, format: 'js'
     assert_template 'load_file_type'
   end
 
@@ -75,7 +75,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should popup edit name box" do
-    post :edit_name, id: queries(:query_with_sources).to_param, format: 'js'
+    post :edit_name, id: queries(:query_with_sources), format: 'js'
     assert_template 'edit_name'
   end
 
@@ -85,7 +85,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should save name" do
-    post :save_name, id: queries(:query_with_sources).to_param, query: {name: 'My New Name'}, format: 'js'
+    post :save_name, id: queries(:query_with_sources), query: {name: 'My New Name'}, format: 'js'
     assert_equal 'My New Name', assigns(:query).name
     assert_template 'save_name'
   end
@@ -96,7 +96,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should undo last change" do
-    post :undo, id: queries(:query_with_sources).to_param, format: 'js'
+    post :undo, id: queries(:query_with_sources), format: 'js'
     assert_not_nil assigns(:query)
     assert_template 'query_concepts'
   end
@@ -107,7 +107,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should undo last create action" do
-    post :undo, id: queries(:query_with_history).to_param, format: 'js'
+    post :undo, id: queries(:query_with_history), format: 'js'
     assert_not_nil assigns(:query)
     assert_equal 0, assigns(:query).query_concepts.size
     assert_equal 0, assigns(:query).history_position
@@ -115,7 +115,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should undo last update action" do
-    post :undo, id: queries(:query_with_history_update_change).to_param, format: 'js'
+    post :undo, id: queries(:query_with_history_update_change), format: 'js'
     assert_not_nil assigns(:query)
     assert_nil assigns(:query).query_concepts.first.value
     assert_equal 0, assigns(:query).history_position
@@ -123,13 +123,13 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should redo last change" do
-    post :redo, id: queries(:query_with_sources).to_param, format: 'js'
+    post :redo, id: queries(:query_with_sources), format: 'js'
     assert_not_nil assigns(:query)
     assert_template 'query_concepts'
   end
 
   test "should redo undone create action" do
-    post :redo, id: queries(:query_with_undone_history).to_param, format: 'js'
+    post :redo, id: queries(:query_with_undone_history), format: 'js'
     assert_not_nil assigns(:query)
     assert_equal 1, assigns(:query).query_concepts.size
     assert_equal 1, assigns(:query).history_position
@@ -137,7 +137,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should redo undone update action" do
-    post :redo, id: queries(:query_with_undone_history_update_change).to_param, format: 'js'
+    post :redo, id: queries(:query_with_undone_history_update_change), format: 'js'
     assert_not_nil assigns(:query)
     assert_equal '20', assigns(:query).query_concepts.first.value
     assert_equal 1, assigns(:query).history_position
@@ -170,12 +170,12 @@ class QueriesControllerTest < ActionController::TestCase
   # end
 
   test "should show query" do
-    get :show, id: @query.to_param
+    get :show, id: @query
     assert_response :success
   end
 
   test "should copy query" do
-    post :copy, id: @query.to_param
+    post :copy, id: @query
     assert_not_nil assigns(:query)
     assert_equal @query.query_concepts.size, assigns(:query).query_concepts.size
     assert_equal @query.query_sources.size, assigns(:query).query_sources.size
@@ -191,18 +191,18 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   # test "should get edit" do
-  #   get :edit, id: @query.to_param
+  #   get :edit, id: @query
   #   assert_response :success
   # end
   #
   # test "should update query" do
-  #   put :update, id: @query.to_param, query: @query.attributes
+  #   put :update, id: @query, query: @query.attributes
   #   assert_redirected_to query_path(assigns(:query))
   # end
 
   test "should destroy query" do
     assert_difference('Query.current.count', -1) do
-      delete :destroy, id: @query.to_param
+      delete :destroy, id: @query
     end
 
     assert_redirected_to queries_path
