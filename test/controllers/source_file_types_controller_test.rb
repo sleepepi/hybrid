@@ -29,7 +29,7 @@ class SourceFileTypesControllerTest < ActionController::TestCase
       post :create, source_file_type: { file_type_id: file_types(:three).to_param }, source_id: sources(:two).to_param
     end
 
-    assert_redirected_to source_file_type_path(assigns(:source_file_type))
+    assert_redirected_to source_file_type_path(assigns(:source_file_type), source_id: assigns(:source).id)
   end
 
   test "should not create source file type without valid file type" do
@@ -47,23 +47,22 @@ class SourceFileTypesControllerTest < ActionController::TestCase
     end
     assert_nil assigns(:source)
     assert_nil assigns(:source_file_type)
-    assert_equal "You do not have access to this source.", flash[:alert]
     assert_redirected_to root_path
   end
 
   test "should show source file type" do
-    get :show, id: @source_file_type.to_param
+    get :show, id: @source_file_type, source_id: sources(:two).to_param
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @source_file_type.to_param
+    get :edit, id: @source_file_type, source_id: sources(:two).to_param
     assert_response :success
   end
 
   test "should update source file type" do
     put :update, id: @source_file_type.to_param, source_file_type: { file_type_id: file_types(:four).to_param }, source_id: sources(:two).to_param
-    assert_redirected_to source_file_type_path(assigns(:source_file_type))
+    assert_redirected_to source_file_type_path(assigns(:source_file_type), source_id: assigns(:source).id)
   end
 
   test "should not update source file type with invalid file type" do
@@ -77,7 +76,6 @@ class SourceFileTypesControllerTest < ActionController::TestCase
     put :update, id: -1, source_file_type: { file_type_id: file_types(:four).to_param }, source_id: -1
     assert_nil assigns(:source)
     assert_nil assigns(:source_file_type)
-    assert_equal "Source File Type not found.", flash[:alert]
     assert_redirected_to root_path
   end
 
@@ -97,7 +95,6 @@ class SourceFileTypesControllerTest < ActionController::TestCase
 
     assert_nil assigns(:source)
     assert_nil assigns(:source_file_type)
-    assert_equal "Source File Type not found.", flash[:alert]
     assert_redirected_to root_path
   end
 end

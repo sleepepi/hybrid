@@ -1,94 +1,82 @@
 class SourceFileTypesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_source, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] # [ :index, :show, :new, :edit, :create, :update, :destroy, :copy, :add_grid_variable ]
+  before_action :redirect_without_source, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] # [ :index, :show, :new, :edit, :create, :update, :destroy, :copy, :add_grid_variable ]
+  before_action :set_source_file_type, only: [ :show, :edit, :update, :destroy ]
+  before_action :redirect_without_source_file_type, only: [ :show, :edit, :update, :destroy ]
 
+  # GET /source_file_types
+  # GET /source_file_types.json
   def index
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-
-    respond_to do |format|
-      if @source
-        source_file_type_scope = @source.source_file_types
-
-        @order = scrub_order(SourceFileType, params[:order], 'source_file_types.file_type_id')
-        source_file_type_scope = source_file_type_scope.order(@order)
-
-        @source_file_types = source_file_type_scope.page(params[:page]).per( 20 )
-
-        format.html # index.html.erb
-        format.js
-        format.json { render json: @source_file_types }
-      else
-        format.html { redirect_to root_path }
-        format.js { render nothing: true }
-        format.json { head :no_content }
-      end
-    end
+    @order = scrub_order(SourceFileType, params[:order], 'source_file_types.file_type_id')
+    @source_file_types = @source.source_file_types.order(@order).page(params[:page]).per( 20 )
   end
 
+  # GET /source_file_types/1?source_id=1
+  # GET /source_file_types/1.json?source_id=1
   def show
-    source_file_type = SourceFileType.find_by_id(params[:id])
-    @source = current_user.all_sources.find_by_id(source_file_type.source_id)
-    source = Source.find_by_id(source_file_type.source_id)
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    redirect_to root_path, alert: "Source File Type not found." unless @source and @source_file_type = @source.source_file_types.find(params[:id])
   end
 
+  # GET /source_file_types/new
   def new
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    redirect_to root_path, alert: "You do not have access to this source." unless @source and @source_file_type = @source.source_file_types.new()
+    @source_file_type = @source.source_file_types.new
   end
 
+  # GET /source_file_types/1/edit?source_id=1
   def edit
-    source_file_type = SourceFileType.find_by_id(params[:id])
-    @source = current_user.all_sources.find_by_id(source_file_type.source_id)
-    source = Source.find_by_id(source_file_type.source_id)
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    redirect_to root_path, alert: "Source File Type not found." unless @source and @source_file_type = @source.source_file_types.find(params[:id])
   end
 
+  # POST /source_file_types
+  # POST /source_file_types.json
   def create
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    if @source
-      @source_file_type = @source.source_file_types.new(params[:source_file_type])
-      if @source_file_type.save
-        redirect_to @source_file_type, notice: 'Source File Type was successfully created.'
-      else
-        render action: "new"
-      end
+    @source_file_type = @source.source_file_types.new(source_file_type_params)
+    if @source_file_type.save
+      redirect_to source_file_type_path(@source_file_type, source_id: @source.id), notice: 'Source File Type was successfully created.'
     else
-      redirect_to root_path, alert: "You do not have access to this source."
+      render action: 'new'
     end
   end
 
+  # PUT /source_file_types/1
+  # PUT /source_file_types/1.json
   def update
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    if @source and @source_file_type = @source.source_file_types.find(params[:id])
-      if @source_file_type.update_attributes(params[:source_file_type])
-        redirect_to @source_file_type, notice: 'Source File Type was successfully updated.'
-      else
-        render action: "edit"
-      end
+    if @source_file_type.update(source_file_type_params)
+      redirect_to source_file_type_path(@source_file_type, source_id: @source.id), notice: 'Source File Type was successfully updated.'
     else
-      redirect_to root_path, alert: "Source File Type not found."
+      render action: 'edit'
     end
   end
 
+  # DELETE /source_file_types/1
+  # DELETE /source_file_types/1.json
   def destroy
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-    if @source and @source_file_type = @source.source_file_types.find(params[:id])
-      @source_file_type.destroy
-      redirect_to source_file_types_path(source_id: @source.id), notice: "Source File Type Deleted."
-    else
-      redirect_to root_path, alert: "Source File Type not found."
-    end
+    @source_file_type.destroy
+    redirect_to source_file_types_path(source_id: @source.id), notice: 'Source File Type was successfully deleted.'
   end
+
+  private
+
+    def set_source
+      @source = current_user.all_sources.find_by_id(params[:source_id])
+      source = Source.find_by_id(params[:source_id])
+      @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
+    end
+
+    def redirect_without_source
+      empty_response_or_root_path unless @source
+    end
+
+    def set_source_file_type
+      @source_file_type = @source.source_file_types.find(params[:id])
+    end
+
+    def redirect_without_source_file_type
+      empty_response_or_root_path(source_path(@source)) unless @source_file_type
+    end
+
+    def source_file_type_params
+      params.require(:source_file_type).permit(
+        :file_type_id
+      )
+    end
 end
