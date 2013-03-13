@@ -29,17 +29,14 @@ class ConceptsController < ApplicationController
   end
 
   def index
-    # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
-    concept_scope = Concept.current
     @query = current_user.queries.find_by_id(params[:query_id])
 
-    # @first_terms = params[:term].to_s.split(',')[0..-2]
-    # @search_terms = params[:term].to_s.split(',').last.strip.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-
-    concept_scope = concept_scope.with_concept_type(params[:concept_type] || 'all')
+    concept_scope = Concept.current.with_concept_type(params[:concept_type] || 'all')
     search_string = (params[:search] || params[:term] || params[:concept_search_term]).to_s.strip
+
     @search_terms = search_string.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| concept_scope = concept_scope.search(search_term) }
+
     if params[:autocomplete] == 'true'
       concept_scope = concept_scope.with_source(@query.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.id}) if @query
 
@@ -57,14 +54,11 @@ class ConceptsController < ApplicationController
         end
       end
 
-      # render 'autocomplete'
-      # render json: [{ text: 'hi', children: [{id:1, text: '1'},{ id:2, text:'2'}]}]
       render json: @concepts.group_by{|c| c.folder}.collect{|folder, concepts| { text: folder, commonly_used: true, children: concepts.collect{|c| { id: c.id, text: c.human_name, commonly_used: c.commonly_used }}}}
-      # render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
     else
       @order = scrub_order(Concept, params[:order], "concepts.search_name")
       concept_scope = concept_scope.with_dictionary(params[:dictionary_id].blank? ? 'all' : params[:dictionary_id]).order(@order)
-      @concepts = concept_scope.page(params[:page]).per(20) #(current_user.concepts_per_page)
+      @concepts = concept_scope.page(params[:page]).per(20)
       @dictionary = Dictionary.available.find_by_id(params[:dictionary_id])
     end
   end
@@ -94,17 +88,6 @@ class ConceptsController < ApplicationController
     render 'info'
   end
 
-  # # GET /concepts
-  # # GET /concepts.xml
-  # def index
-  #   @concepts = Concept.all
-  #
-  #   respond_to do |format|
-  #     format.html # index.html.erb
-  #     format.xml  { render xml: @concepts }
-  #   end
-  # end
-
   def show
     @concept = Concept.find_by_id(params[:id])
     unless @concept
@@ -112,63 +95,4 @@ class ConceptsController < ApplicationController
     end
   end
 
-  # # GET /concepts/new
-  # # GET /concepts/new.xml
-  # def new
-  #   @concept = Concept.new
-  #
-  #   respond_to do |format|
-  #     format.html # new.html.erb
-  #     format.xml  { render xml: @concept }
-  #   end
-  # end
-  #
-  # # GET /concepts/1/edit
-  # def edit
-  #   @concept = Concept.find(params[:id])
-  # end
-  #
-  # # POST /concepts
-  # # POST /concepts.xml
-  # def create
-  #   @concept = Concept.new(params[:concept])
-  #
-  #   respond_to do |format|
-  #     if @concept.save
-  #       format.html { redirect_to(@concept, notice: 'Concept was successfully created.') }
-  #       format.xml  { render xml: @concept, status: :created, location: @concept }
-  #     else
-  #       format.html { render action: "new" }
-  #       format.xml  { render xml: @concept.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  #
-  # # PUT /concepts/1
-  # # PUT /concepts/1.xml
-  # def update
-  #   @concept = Concept.find(params[:id])
-  #
-  #   respond_to do |format|
-  #     if @concept.update_attributes(params[:concept])
-  #       format.html { redirect_to(@concept, notice: 'Concept was successfully updated.') }
-  #       format.xml  { head :ok }
-  #     else
-  #       format.html { render action: "edit" }
-  #       format.xml  { render xml: @concept.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
-  #
-  # # DELETE /concepts/1
-  # # DELETE /concepts/1.xml
-  # def destroy
-  #   @concept = Concept.find(params[:id])
-  #   @concept.destroy
-  #
-  #   respond_to do |format|
-  #     format.html { redirect_to(concepts_url) }
-  #     format.xml  { head :ok }
-  #   end
-  # end
 end
