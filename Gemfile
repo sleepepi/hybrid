@@ -17,6 +17,9 @@ gem 'ruby-ntlm-namespace',  '~> 0.0.1'
 # Data File and Data Source connections
 gem 'aqueduct',             '~> 0.2.0.pre',       github: 'remomueller/aqueduct',       ref: '6ca6b08'
 gem 'aqueduct-mysql',       '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mysql', ref: '66f0add'
+gem 'aqueduct-i2b2',        '~> 0.2.0.pre',       github: 'remomueller/aqueduct-i2b2',  ref: 'e607ae5'
+
+
 
 
 # # Builder: For Building XML messages for Web service based data sources
