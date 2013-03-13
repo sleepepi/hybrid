@@ -10,13 +10,13 @@ gem 'eventmachine',         '~> 1.0.0',           platforms: [ :mswin, :mingw ]
 
 # Gems used by project
 gem 'contour',              '2.0.0.beta.3'
-gem 'devise',               '~> 2.2.3',           github: 'plataformatec/devise', ref: 'd29b744'   # , branch: 'rails4'
+gem 'devise',               '~> 2.2.3',           github: 'plataformatec/devise',       ref: 'd29b744'   # , branch: 'rails4'
 gem 'kaminari',             '~> 0.14.1'
 gem 'ruby-ntlm-namespace',  '~> 0.0.1'
 
 # Data File and Data Source connections
-gem 'aqueduct',             '~> 0.2.0.pre',       github: 'remomueller/aqueduct', ref: '6ca6b08'
-
+gem 'aqueduct',             '~> 0.2.0.pre',       github: 'remomueller/aqueduct',       ref: '6ca6b08'
+gem 'aqueduct-mysql',       '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mysql', ref: '66f0add'
 
 
 # # Builder: For Building XML messages for Web service based data sources
