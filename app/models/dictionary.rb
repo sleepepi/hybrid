@@ -1,5 +1,4 @@
 class Dictionary < ActiveRecord::Base
-  # attr_accessible :name, :description, :visible, :status
 
   STATUS = ["active", "testing", "inactive"].collect{|i| [i,i]}
 
@@ -83,7 +82,7 @@ class Dictionary < ActiveRecord::Base
     CSV.foreach(file_name) do |line|
       if not line[0].blank? and line[0].first != '#'
         concept_name = line[0] + '/' + line[1] + '#' + line[2]
-        c = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(concept_name, line[0], line[1], line[2])
+        c = Concept.where( name: concept_name, uri: line[0], namespace: line[1], short_name: line[2]).first_or_create
         c.dictionary_id = self.id
         c.version = dictionary_version
         c.description = line[3]
@@ -102,27 +101,27 @@ class Dictionary < ActiveRecord::Base
 
         c.terms.destroy_all
         line[6].to_s.split(';').each do |label|
-          term = c.terms.find_or_create_by_name_and_internal(label.strip, false)
+          term = c.terms.where( name: label.strip, internal: false ).first_or_create
           term.update_search_name!
         end
 
         line[7].to_s.split(';').each do |internal_label|
-          internal_term = c.terms.find_or_create_by_name_and_internal(internal_label.strip, true)
+          internal_term = c.terms.where( name: internal_label.strip, internal: true ).first_or_create
           internal_term.update_search_name!
         end
 
         line[8].to_s.split(';').each do |parent_name|
           (parent_name, parent_uri, parent_namespace, parent_short_name) = Concept.name_to_uri_and_namespace_and_short_name(parent_name.strip, c.uri, c.namespace)
-          concept_parent = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(parent_name, parent_uri, parent_namespace, parent_short_name)
+          concept_parent = Concept.where(name: parent_name, uri: parent_uri, namespace: parent_namespace, short_name: parent_short_name).first_or_create
           concept_parent.update_column :version, dictionary_version
           concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
           concept_parent.update_status!
-          cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(c.id, concept_parent.id, "is_a")
+          cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id, property: 'is_a' ).first_or_create
         end
 
         line[9].to_s.split(';').each do |child_name|
           (child_name, child_uri, child_namespace, child_short_name) = Concept.name_to_uri_and_namespace_and_short_name(child_name.strip, c.uri, c.namespace)
-          concept_child = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(child_name.strip, child_uri, child_namespace, child_short_name)
+          concept_child = Concept.where(name: child_name.strip, uri: child_uri, namespace: child_namespace, short_name: child_short_name).first_or_create
           concept_child.update_column :version, dictionary_version
           concept_child.update_column :dictionary_id, self.id if concept_child.dictionary_id.blank?
           if c.categorical?
@@ -131,18 +130,18 @@ class Dictionary < ActiveRecord::Base
             concept_child.update_column :concept_type, c.concept_type
           end
           concept_child.update_status!
-          cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(concept_child.id, c.id, "is_a")
+          cpc = ConceptPropertyConcept.where( concept_one_id: concept_child.id, concept_two_id: c.id, property: 'is_a' ).first_or_create
         end
 
         [['equivalent_class', 10], ['similar_class', 11]].each do |property, position|
           line[position].to_s.split(';').each do |relation_name|
             (relation_name, relation_uri, relation_namespace, relation_short_name) = Concept.name_to_uri_and_namespace_and_short_name(relation_name.strip, c.uri, c.namespace)
-            relation_concept = Concept.find_or_create_by_name_and_uri_and_namespace_and_short_name(relation_name.strip, relation_uri, relation_namespace, relation_short_name)
+            relation_concept = Concept.where(name: relation_name.strip, uri: relation_uri, namespace: relation_namespace, short_name: relation_short_name).first_or_create
             relation_concept.update_column :version, dictionary_version
             relation_concept.update_column :dictionary_id, self.id if relation_concept.dictionary_id.blank?
             relation_concept.update_status!
             cpc = ConceptPropertyConcept.find_by_concept_one_id_and_concept_two_id_and_property(c.id, relation_concept.id, property)
-            cpc = ConceptPropertyConcept.find_or_create_by_concept_one_id_and_concept_two_id_and_property(relation_concept.id, c.id, property) unless cpc
+            cpc = ConceptPropertyConcept.where( concept_one_id: relation_concept.id, concept_two_id: c.id, property: property ).first_or_create unless cpc
           end
         end
 
@@ -152,7 +151,7 @@ class Dictionary < ActiveRecord::Base
             child_name = line[9].to_s.split(';')[i]
             (child_name, child_uri, child_namespace, child_short_name) = Concept.name_to_uri_and_namespace_and_short_name(child_name.strip, c.uri, c.namespace)
             concept_child = Concept.find_by_name_and_uri_and_namespace_and_short_name(child_name.strip, child_uri, child_namespace, child_short_name)
-            internal_term = concept_child.terms.find_or_create_by_name_and_internal(field_value.strip, true)
+            internal_term = concept_child.terms.where( name: field_value.strip, internal: true ).first_or_create
             internal_term.update_search_name!
           end
         end
