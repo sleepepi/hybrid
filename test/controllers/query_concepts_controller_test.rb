@@ -151,7 +151,7 @@ class QueryConceptsControllerTest < ActionController::TestCase
   end
 
   test "should get edit for a continuous query concept" do
-    get :edit, id: @query_concept.to_param, format: 'js'
+    get :edit, id: @query_concept, format: 'js'
     assert_not_nil assigns(:query_concept)
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:concept)
@@ -165,7 +165,7 @@ class QueryConceptsControllerTest < ActionController::TestCase
   end
 
   test "should get edit for a categorical query concept" do
-    get :edit, id: query_concepts(:categorical).to_param, format: 'js'
+    get :edit, id: query_concepts(:categorical), format: 'js'
     assert_not_nil assigns(:query_concept)
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:concept)
@@ -179,28 +179,28 @@ class QueryConceptsControllerTest < ActionController::TestCase
   end
 
   test "should update query concept" do
-    put :update, id: @query_concept.to_param, query_concept: @query_concept.attributes, format: 'js'
+    put :update, id: @query_concept, query_concept: @query_concept.attributes, format: 'js'
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:query_concept)
     assert_template 'query_concepts'
   end
 
   test "should update query concept for categorical concept" do
-    put :update, id: query_concepts(:categorical).to_param, query_concept: query_concepts(:categorical).attributes, format: 'js'
+    put :update, id: query_concepts(:categorical), query_concept: query_concepts(:categorical).attributes, format: 'js'
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:query_concept)
     assert_template 'query_concepts'
   end
 
   test "should update query concept for categorical concept with value ids" do
-    put :update, id: query_concepts(:categorical).to_param, query_concept: query_concepts(:categorical).attributes, value_ids: { '11' => '1', '14' => '1' }, format: 'js' # TODO: Replace hardcoded values
+    put :update, id: query_concepts(:categorical), query_concept: query_concepts(:categorical).attributes, value_ids: { '11' => '1', '14' => '1' }, format: 'js' # TODO: Replace hardcoded values
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:query_concept)
     assert_template 'query_concepts'
   end
 
   test "should update query concept for date concept" do
-    put :update, id: query_concepts(:date_concept).to_param, query_concept: query_concepts(:date_concept).attributes, start_date: '01/01/2011', format: 'js'
+    put :update, id: query_concepts(:date_concept), query_concept: query_concepts(:date_concept).attributes, start_date: '01/01/2011', format: 'js'
     assert_not_nil assigns(:query)
     assert_not_nil assigns(:query_concept)
     assert_template 'query_concepts'
@@ -215,7 +215,7 @@ class QueryConceptsControllerTest < ActionController::TestCase
 
   test "should destroy query concept" do
     assert_difference('QueryConcept.current.count', -1) do
-      delete :destroy, id: @query_concept.to_param, format: 'js'
+      delete :destroy, id: @query_concept, format: 'js'
     end
 
     assert_not_nil assigns(:query)

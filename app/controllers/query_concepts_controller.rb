@@ -24,10 +24,7 @@ class QueryConceptsController < ApplicationController
     if @query and @query.query_concepts.where(selected: true).size > 0
       @query.query_concepts.where(selected: true).each do |query_concept|
 
-        qc_attributes = query_concept.attributes
-        qc_attributes.delete(:id)
-        qc_attributes.delete(:created_at)
-        qc_attributes.delete(:updated_at)
+        qc_attributes = query_concept.copyable_attributes
         qc_attributes[:position] = @query.query_concepts.size
         qc_attributes[:selected] = false
         @query.query_concepts.create(qc_attributes)
@@ -145,7 +142,7 @@ class QueryConceptsController < ApplicationController
       elsif not params[:value_ids].blank?
         params[:query_concept][:value] = params[:value_ids].keys.join(',')
       end
-      @query_concept.update_attributes(params[:query_concept])
+      @query_concept.update_attributes(query_concept_params)
       render 'query_concepts/query_concepts'
       # render "show"
     else
@@ -164,4 +161,12 @@ class QueryConceptsController < ApplicationController
       render nothing: true
     end
   end
+
+  private
+
+    def query_concept_params
+      params.require(:query_concept).permit(
+        :value, :right_operator, :negated
+      )
+    end
 end
