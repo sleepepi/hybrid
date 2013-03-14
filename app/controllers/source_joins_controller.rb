@@ -1,68 +1,86 @@
 class SourceJoinsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_system_admin
+  before_action :set_source,                    only: [ :index ]
+  before_action :set_source_join,               only: [ :show, :edit, :update, :destroy ]
+  before_action :redirect_without_source_join,  only: [ :show, :edit, :update, :destroy ]
+
 
   # TODO Make SourceJoins available to user with appropriate source_rules.
 
+  # GET /source_joins
+  # GET /source_joins.json
   def index
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-
-    # current_user.update_column :source_joins_per_page, params[:source_joins_per_page].to_i if params[:source_joins_per_page].to_i >= 10 and params[:source_joins_per_page].to_i <= 200
-
-    source_join_scope = SourceJoin.current
-    source_join_scope = source_join_scope.with_source(@source.id) if @source
-    @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-    @search_terms.each{|search_term| source_join_scope = source_join_scope.search(search_term) }
-
     @order = scrub_order(SourceJoin, params[:order], 'source_joins.source_id')
-    source_join_scope = source_join_scope.order(@order)
-
-    @source_joins = source_join_scope.page(params[:page]).per(20) #(current_user.source_joins_per_page)
+    source_join_scope = SourceJoin.current.search(params[:search])
+    source_join_scope = source_join_scope.with_source(@source.id) if @source
+    @source_joins = source_join_scope.order(@order).page(params[:page]).per( 20 )
   end
 
+  # GET /source_joins/1
+  # GET /source_joins/1.json
   def show
-    @source_join = SourceJoin.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @source_join }
-    end
   end
 
+  # GET /source_joins/new
   def new
     @source_join = SourceJoin.new({ source_id: params[:source_id] })
   end
 
+  # GET /source_joins/1/edit
   def edit
-    @source_join = SourceJoin.find(params[:id])
   end
 
+  # POST /source_joins
+  # POST /source_joins.json
   def create
-    @source_join = SourceJoin.new(params[:source_join])
+    @source_join = SourceJoin.new(source_join_params)
 
     if @source_join.save
-      redirect_to(@source_join, notice: 'Join was successfully created.')
+      redirect_to @source_join, notice: 'Join was successfully created.'
     else
-      render action: "new"
+      render action: 'new'
     end
   end
 
+  # PUT /source_joins/1
+  # PUT /source_joins/1.json
   def update
-    @source_join = SourceJoin.find(params[:id])
-
-    if @source_join.update_attributes(params[:source_join])
-      redirect_to(@source_join, notice: 'Join was successfully updated.')
+    if @source_join.update(source_join_params)
+      redirect_to @source_join, notice: 'Join was successfully updated.'
     else
-      render action: "edit"
+      render action: 'edit'
     end
   end
 
+  # DELETE /source_joins/1
+  # DELETE /source_joins/1.json
   def destroy
-    @source_join = SourceJoin.find(params[:id])
     @source_join.destroy
-
-    redirect_to(source_joins_url)
+    redirect_to source_joins_path
   end
+
+  private
+
+    def set_source
+      @source = current_user.all_sources.find_by_id(params[:source_id])
+      source = Source.find_by_id(params[:source_id])
+      @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
+    end
+
+    def set_source_join
+      @source_join = SourceJoin.find_by_id(params[:id])
+    end
+
+    def redirect_without_source_join
+      empty_response_or_root_path(source_joins_path) unless @source_join
+    end
+
+    def source_join_params
+      params.require(:source_join).permit(
+        :source_id,    :from_table, :from_column,
+        :source_to_id, :to_table,   :to_column
+      )
+    end
+
 end

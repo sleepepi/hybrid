@@ -27,7 +27,7 @@ class SourceJoinsControllerTest < ActionController::TestCase
 
   test "should not create source join with blank parameters" do
     assert_difference('SourceJoin.count', 0) do
-      post :create, source_join: {}
+      post :create, source_join: { source_id: '', from_table: '', from_column: '', source_to_id: '', to_table: '', to_column: '' }
     end
 
     assert_not_nil assigns(:source_join)
@@ -35,29 +35,37 @@ class SourceJoinsControllerTest < ActionController::TestCase
   end
 
   test "should show source join" do
-    get :show, id: @source_join.to_param
+    get :show, id: @source_join
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @source_join.to_param
+    get :edit, id: @source_join
     assert_response :success
   end
 
   test "should update source join" do
-    put :update, id: @source_join.to_param, source_join: @source_join.attributes
+    put :update, id: @source_join, source_join: @source_join.attributes
     assert_redirected_to source_join_path(assigns(:source_join))
   end
 
   test "should not update source join with blank parameters" do
-    put :update, id: @source_join.to_param, source_join: { source_id: nil }
+    put :update, id: @source_join, source_join: { source_id: nil }
     assert_not_nil assigns(:source_join)
     assert_template 'edit'
   end
 
   test "should destroy source join" do
     assert_difference('SourceJoin.count', -1) do
-      delete :destroy, id: @source_join.to_param
+      delete :destroy, id: @source_join
+    end
+
+    assert_redirected_to source_joins_path
+  end
+
+  test "should not destroy invalid source join" do
+    assert_difference('SourceJoin.count', 0) do
+      delete :destroy, id: -1
     end
 
     assert_redirected_to source_joins_path
