@@ -1,8 +1,8 @@
 class SourceFileTypesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] # [ :index, :show, :new, :edit, :create, :update, :destroy, :copy, :add_grid_variable ]
-  before_action :redirect_without_source, only: [ :index, :show, :new, :edit, :create, :update, :destroy ] # [ :index, :show, :new, :edit, :create, :update, :destroy, :copy, :add_grid_variable ]
-  before_action :set_source_file_type, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_source,                        only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+  before_action :redirect_without_source,           only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+  before_action :set_source_file_type,              only: [ :show, :edit, :update, :destroy ]
   before_action :redirect_without_source_file_type, only: [ :show, :edit, :update, :destroy ]
 
   # GET /source_file_types
@@ -67,7 +67,7 @@ class SourceFileTypesController < ApplicationController
     end
 
     def set_source_file_type
-      @source_file_type = @source.source_file_types.find(params[:id])
+      @source_file_type = @source.source_file_types.find_by_id(params[:id])
     end
 
     def redirect_without_source_file_type
@@ -79,4 +79,5 @@ class SourceFileTypesController < ApplicationController
         :file_type_id
       )
     end
+
 end
