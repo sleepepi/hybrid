@@ -405,22 +405,22 @@ class Mapping < ActiveRecord::Base
       column_values = self.column_values(current_user)
       column_values.each do |column_value|
         if column_value == nil
-          val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], 'NULL')
+          val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: 'NULL' ).first_or_create
           val_mapping.update_attributes(concept_id: c.id, value: 'unknown', status: 'mapped', deleted: false)
         else
           internal_term_found = false
           c.recommended_concepts.each do |recommended_concept|
             recommended_concept.internal_terms.each do |internal_term|
               if internal_term.name.downcase == column_value.to_s.downcase and not internal_term_found
-                 val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], column_value.to_s)
-                 val_mapping.update_attributes(concept_id: recommended_concept.id, value: nil, status: 'mapped', deleted: false)
-                 internal_term_found = true
+                val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: column_value.to_s ).first_or_create
+                val_mapping.update_attributes(concept_id: recommended_concept.id, value: nil, status: 'mapped', deleted: false)
+                internal_term_found = true
               end
             end
           end
 
           unless internal_term_found
-            val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], column_value.to_s)
+            val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: column_value.to_s ).first_or_create
             val_mapping.update_attributes(concept_id: c.id, value: nil, status: 'unmapped', deleted: false)
           end
         end
@@ -428,19 +428,26 @@ class Mapping < ActiveRecord::Base
     elsif c.boolean?
       column_values = self.column_values(current_user)
       column_values.each do |column_value|
+        status = 'mapped'
+        value = nil # Important, nil value is different than "unknown"
+
         if column_value == nil or ['-1'].include?(column_value.to_s.downcase)
-          val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], (column_value == nil) ? 'NULL' : column_value.to_s)
-          val_mapping.update_attributes(concept_id: c.id, value: 'unknown', status: 'mapped', deleted: false)
+          cv = (column_value == nil ? 'NULL' : column_value.to_s)
+          value = 'unknown'
         elsif ['0','f', 'false'].include?(column_value.to_s.downcase)
-          val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], column_value.to_s)
-          val_mapping.update_attributes(concept_id: c.id, value: 'false', status: 'mapped', deleted: false)
+          cv = column_value.to_s
+          value = 'false'
         elsif ['1','t', 'true'].include?(column_value.to_s.downcase)
-          val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], column_value.to_s)
-          val_mapping.update_attributes(concept_id: c.id, value: 'true', status: 'mapped', deleted: false)
+          cv = column_value.to_s
+          value = 'true'
         else
-          val_mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], column_value.to_s)
-          val_mapping.update_attributes(concept_id: c.id, value: nil, status: 'unmapped', deleted: false)
+          cv = column_value.to_s
+          # value = nil # This is essentially set here.
+          status = 'unmapped'
         end
+
+        val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: cv ).first_or_create
+        val_mapping.update_attributes(concept_id: c.id, value: value, status: status, deleted: false)
       end
     end
 

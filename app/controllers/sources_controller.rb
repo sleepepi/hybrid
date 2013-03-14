@@ -1,6 +1,12 @@
 class SourcesController < ApplicationController
   before_action :authenticate_user!
 
+  before_action :set_source, only: [ :destroy ]
+  before_action :set_source_with_edit_data_source_connection_information, only: [ :edit, :update ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings ]
+  before_action :set_source_with_view_or_edit_data_source_mappings, only: [ :table_columns ]
+  before_action :redirect_without_source, only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings ]
+
   def download_file
     @source = current_user.all_sources.find_by_id(params[:id])
     source = Source.find_by_id(params[:id])
@@ -20,16 +26,6 @@ class SourcesController < ApplicationController
   end
 
   def auto_map
-    @source = current_user.all_sources.find_by_id(params[:id])
-
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-
-    unless @source
-      render nothing: true
-      return
-    end
-
     if params[:table].blank?
       result_hash = @source.tables(current_user)
       tables = result_hash[:result] || []
@@ -71,32 +67,11 @@ class SourcesController < ApplicationController
   end
 
   def remove_all_mappings
-    @source = current_user.all_sources.find_by_id(params[:id])
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-
-    if @source
-      @source.mappings.destroy_all
-      redirect_to @source
-    else
-      if source
-        redirect_to source
-      else
-        redirect_to root_path
-      end
-    end
+    @source.mappings.destroy_all
+    redirect_to @source
   end
 
   def table_columns
-    @source = current_user.all_sources.find_by_id(params[:id])
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and (source.user_has_action?(current_user, "edit data source mappings") or source.user_has_action?(current_user, "view data source mappings"))
-
-    unless @source
-      render 'mapping_privilege'
-      return
-    end
-
     params[:page] = 1 if params[:page].blank?
 
     result_hash = @source.table_columns(current_user, params[:table], params[:page].to_i, 20, params[:filter_unmapped] == '1')
@@ -106,28 +81,30 @@ class SourcesController < ApplicationController
     params[:page] = result_hash[:page] unless result_hash[:page].blank?
   end
 
+  # GET /sources
+  # GET /sources.json
   def index
-    # current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
+    @order = scrub_order(Source, params[:order], 'sources.name')
+
     if [params[:autocomplete], params[:popup]].include?('true')
       source_scope = Source.available
     else
-      # source_scope = current_user.all_sources
-      # sources that are available or sources that are part of the user.
       source_scope = Source.available_or_creator_id(current_user.id)
     end
 
     @search_terms = (params[:search] || params[:term] || params[:sources_search]).to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
     @search_terms.each{|search_term| source_scope = source_scope.search(search_term) }
 
-    @order = scrub_order(Source, params[:order], 'sources.name')
     source_scope = source_scope.order(@order)
 
-    @sources = source_scope.page(params[:page]).per(20) #params[:page]).per(current_user.sources_per_page)
+    @sources = source_scope.page(params[:page]).per( 20 )
     @query = current_user.queries.find_by_id(params[:query_id])
     render json: @sources.collect{|s| { id: s.id.to_s, text: s.name }} if params[:autocomplete] == 'true'
     render 'popup' if params[:popup] == 'true'
   end
 
+  # GET /sources/1
+  # GET /sources/1.json
   def show
     if params[:popup] == 'true'
       @source = Source.available.find_by_id(params[:id])
@@ -147,53 +124,81 @@ class SourcesController < ApplicationController
     redirect_to root_path unless @source
   end
 
+  # GET /sources/new
   def new
     @source = current_user.sources.new
   end
 
+  # GET /sources/1/edit
   def edit
-    @source = current_user.all_sources.find_by_id(params[:id])
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source connection information")
-    redirect_to root_path unless @source
   end
 
+  # POST /sources
+  # POST /sources.json
   def create
-    @source = current_user.sources.new(params[:source])
+    @source = current_user.sources.new(source_params)
 
     if @source.save
-      flash[:notice] = 'Database was successfully created.'
-      redirect_to(@source)
+      redirect_to @source, notice: 'Database was successfully created.'
     else
-      render action: "new"
+      render action: 'new'
     end
   end
 
+  # PUT /sources/1
+  # PUT /sources/1.json
   def update
-    @source = current_user.all_sources.find_by_id(params[:id])
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source connection information")
-
-    unless @source
-      redirect_to root_path
-      return
-    end
-
-    if @source.update_attributes(params[:source])
+    if @source.update(source_params)
       flash[:notice] = 'Source was successfully updated.'
       redirect_to(@source)
     else
-      render action: "edit"
+      render action: 'edit'
     end
   end
 
+  # DELETE /sources/1
+  # DELETE /sources/1.json
   def destroy
-    @source = current_user.all_sources.find_by_id(params[:id])
-    if @source
-      @source.destroy
-      redirect_to sources_path
-    else
-      redirect_to root_path
-    end
+    @source.destroy
+    redirect_to sources_path
   end
+
+  private
+
+    def set_source
+      set_source_with_actions
+    end
+
+    def set_source_with_edit_data_source_connection_information
+      set_source_with_actions(["edit data source connection information"])
+    end
+
+    def set_source_with_edit_data_source_mappings
+      set_source_with_actions(["edit data source mappings"])
+    end
+
+    def set_source_with_view_or_edit_data_source_mappings
+      set_source_with_actions(["view data source mappings", "edit data source mappings"])
+      unless @source
+        render 'mapping_privilege'
+        return
+      end
+    end
+
+    def set_source_with_actions(actions = [])
+      @source = current_user.all_sources.find_by_id(params[:id])
+      source = Source.find_by_id(params[:id])
+      @source = source if (not @source) and source and source.user_has_one_or_more_actions?(current_user, actions)
+    end
+
+    def redirect_without_source
+      empty_response_or_root_path(sources_path) unless @source
+    end
+
+    def source_params
+      params.require(:source).permit(
+        :name, :description, :host, :port, :wrapper, :database, :username, :password, :visible, :repository, :file_server_host, :file_server_login, :file_server_password, :file_server_path
+      )
+    end
+
 end
