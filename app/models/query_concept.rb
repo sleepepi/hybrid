@@ -39,7 +39,7 @@ class QueryConcept < ActiveRecord::Base
       # If the concept itself is categorical, then we want to immediately figure out which "children concepts" of the concept are specified in the values
       mapped_descendants = []
       if self.concept.categorical?
-        mapped_descendants = source.mappings.where(concept_id: self.concept_id, status: 'mapped')
+        mapped_descendants = source.mappings.where(concept_id: self.concept_id, status: 'mapped').to_a
         # Other concepts such as Male or Female might be mapped elsewhere too, so check for these also.
         self.value.to_s.split(',').each do |concept_id|
           if sub_concept = Concept.find_by_id(concept_id)

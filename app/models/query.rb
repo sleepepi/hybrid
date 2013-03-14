@@ -13,7 +13,7 @@ class Query < ActiveRecord::Base
   belongs_to :user
   belongs_to :identifier_concept, class_name: "Concept"
 
-  has_many :query_concepts, -> { where deleted: false }, order: 'position'
+  has_many :query_concepts, -> { where(deleted: false).order('position') }
   has_many :concepts, -> { order :position }, through: :query_concepts
 
   has_many :query_sources, dependent: :destroy
