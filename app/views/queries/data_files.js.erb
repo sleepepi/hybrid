@@ -6,5 +6,5 @@ showWaiting('#file_popup_info', ' Loading File Information', true);
 
 $.post("<%= request.script_name + '/queries/' + @query.id.to_s + '/load_file_type?file_type_id=' + (@file_type ? @file_type.id.to_s : '') %>", null, null, "script")
 
-$(document.body).qtip('hide');loadPopup();
+loadPopup();
 centerPopup();

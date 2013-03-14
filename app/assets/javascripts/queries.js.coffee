@@ -23,10 +23,6 @@ jQuery ->
       $(this).hide()
       false
     )
-    .on('click', '[data-object~="launch-tutorial"]', () ->
-      $(document.body).qtip('toggle')
-      false
-    )
     .on('click', '[data-object~="categorical-check-all"]', () ->
       checkAllCategoricalValues()
       false

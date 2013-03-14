@@ -14,9 +14,6 @@ $("#query_concepts_left").html("<%= escape_javascript(render("edit")) %>");
   $("#query_concepts_right").html("<%= escape_javascript(render("concepts/info")) %><div id=\"distribution_qc_popup\"></div>");
 <% end %>
 
-
-$(document.body).qtip('hide');
-
 <% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
   <% width = @defaults[:width].to_s.gsub("'", '') %>
   <% height = @defaults[:height].to_s.gsub("'", '') %>

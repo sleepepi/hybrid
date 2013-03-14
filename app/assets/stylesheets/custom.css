@@ -199,17 +199,6 @@ tr.overall td.total {
   padding-right: 10px;
 }
 
-.tutorial {
-  position: absolute;
-  top: 85px;
-/*  width: 956px;
-  margin:0 auto;
-*/  z-index: 0;
-  text-align: right;
-/*  background-color: white;*/
-/*  border: 1px solid black;*/
-}
-
 .nolink {
   color: #404040;
 }

@@ -1,10 +1,5 @@
 $("#concepts_popup").modal({ dynamic: true });
 $("#concepts_popup").modal('show');
 
-// $("#concepts_content").html("<div id='popup_content_left'>Left</div><div id='popup_content_right' style='width:412px'><div id='popup_info'></div></div><div style='clear:both'></div>");
-
 $("#concept_folder_search").html("<%= escape_javascript(render("concepts/folder_search")) %>");
 $("#concept_folders").html("<%= escape_javascript(render("concepts/folders")) %>");
-
-// $("#popup_content_left").html("<%= escape_javascript(render("concepts/folder_search") + '<div id="concept_folders">'.html_safe + render("concepts/folders") + '</div>'.html_safe) %>");
-$(document.body).qtip('hide');
