@@ -14,13 +14,13 @@
   <% @source_rules.each do |source_rule| %>
     <tr>
       <td style="text-align:center"><%= check_box_tag :source_rule, :blocked, source_rule.blocked, disabled: true %></td>
-      <td><%= link_to source_rule.name, source_rule %></td>
+      <td><%= link_to source_rule.name, source_rule_path(source_rule, source_id: @source.id) %></td>
       <td style="<%= 'text-decoration:line-through' if source_rule.blocked %>"><%= (source_rule.actions || []).join(', ') %></td>
       <td>
         <%= (source_rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| link_to u.name, u}.join(', ').html_safe %>
       </td>
       <td>
-        <%= link_to 'Edit', edit_source_rule_path(source_rule), class: 'btn btn-mini' %>
+        <%= link_to 'Edit', edit_source_rule_path(source_rule, source_id: @source.id), class: 'btn btn-mini' %>
         <%= link_to 'Delete', source_rule_path(source_rule, source_id: @source.id), data: { confirm: "Are you sure you want to delete Source Rule #{source_rule.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
       </td>
     </tr>

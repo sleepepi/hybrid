@@ -3,7 +3,6 @@ class SourceRule < ActiveRecord::Base
   serialize :actions, Array
   serialize :users, Array
 
-  # attr_accessible :name, :description, :user_tokens, :actions, :blocked
   attr_reader :user_tokens
 
   ACTION_GROUPS = [["All Read", ["view data source general information", "view data source mappings"]],
