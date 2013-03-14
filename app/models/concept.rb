@@ -43,11 +43,11 @@ class Concept < ActiveRecord::Base
 
   has_many :mappings, dependent: :destroy
   belongs_to :dictionary
-  has_many :sources, -> { where deleted: false }, through: :mappings, order: 'sources.name'
+  has_many :sources, -> { where(deleted: false).order('sources.name') }, through: :mappings
 
   has_many :terms, -> { order :name }, dependent: :destroy
-  has_many :external_terms, -> { where internal: false }, class_name: "Term", order: 'terms.name', dependent: :destroy
-  has_many :internal_terms, -> { where internal: true }, class_name: "Term", order: 'terms.name', dependent: :destroy
+  has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy
+  has_many :internal_terms, -> { where(internal: true).order('terms.name') }, class_name: "Term", dependent: :destroy
 
   has_many :concept_property_concepts, -> { order :property }, foreign_key: 'concept_one_id', dependent: :destroy
   has_many :parents, -> { where("concept_property_concepts.property = 'is_a'") }, through: :concept_property_concepts, source: 'concept_two'
@@ -57,7 +57,7 @@ class Concept < ActiveRecord::Base
   has_many :similar_concepts_a, -> { where("concept_property_concepts.property = 'similar_class'") }, through: :concept_property_concepts, source: 'concept_two'
 
   has_many :reverse_concept_property_concepts, -> { order :property }, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
-  has_many :children, -> { where("concept_property_concepts.property = 'is_a'") }, through: :reverse_concept_property_concepts, source: 'concept_one', conditions: 'concept_property_concepts.property = "is_a"'
+  has_many :children, -> { where("concept_property_concepts.property = 'is_a'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
   has_many :included_by, -> { where( ["concept_property_concepts.property IN (?)", ["includes", "http://purl.org/cpr/includes"] ] ) }, through: :reverse_concept_property_concepts, source: 'concept_one'
   has_many :equivalent_concepts_b, -> { where("concept_property_concepts.property = 'equivalent_class'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
   has_many :similar_concepts_b, -> { where("concept_property_concepts.property = 'similar_class'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
