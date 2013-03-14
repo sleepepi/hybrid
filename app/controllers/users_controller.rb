@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
-  before_action :check_system_admin, except: [:new, :create, :settings, :update_settings, :activate]
-  before_action :check_service_account, only: [:activate]
+  before_action :authenticate_user!
+  before_action :check_system_admin, except: [ :index, :settings, :update_settings, :activate ]
+  before_action :check_service_account, only: [ :activate ]
+  before_action :set_user, only: [ :show, :edit, :update, :destroy ]
+  before_action :redirect_without_user, only: [ :show, :edit, :update, :destroy ]
 
   def settings
   end
@@ -23,63 +25,29 @@ class UsersController < ApplicationController
     end
     current_user.update_column :users_per_page, params[:users_per_page].to_i if params[:users_per_page].to_i >= 10 and params[:users_per_page].to_i <= 200
 
-    user_scope = User.current
-    @search_terms = (params[:search] || params[:q]).to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-    @search_terms.each{|search_term| user_scope = user_scope.search(search_term) }
-
     @order = scrub_order(User, params[:order], 'users.current_sign_in_at DESC')
-    user_scope = user_scope.order(@order)
-
-    @count = user_scope.count
-    @users = user_scope.page(params[:page]).per(current_user.users_per_page)
+    @users = User.current.search(params[:search] || params[:q]).order(@order).page(params[:page]).per( current_user.users_per_page )
 
     respond_to do |format|
       format.html
       format.js
-      format.json { render json: params[:q].to_s.split(',').collect{|u| (u.strip.downcase == 'me') ? { name: current_user.name_and_email, id: current_user.id } : nil }.compact + @users.collect{|u| { name: u.name_and_email, id: u.id }}}
+      format.json do # TODO: Put into jbuilder instead!
+        render json: params[:q].to_s.split(',').collect{ |u| (u.strip.downcase == 'me') ? { name: current_user.name, id: current_user.name } : { name: u.strip.titleize, id: u.strip.titleize } } + @users.collect{ |u| { name: u.name, id: u.name } }
+      end
     end
   end
 
   def show
-    @user = User.find_by_id(params[:id])
   end
-
-  # # GET /users/new
-  # # GET /users/new.xml
-  # def new
-  #   @user = User.new
-  #
-  #   respond_to do |format|
-  #     format.html # new.html.erb
-  #     format.xml  { render xml: @user }
-  #   end
-  # end
 
   def edit
-    @user = User.find_by_id(params[:id])
   end
-
-  # # POST /users
-  # # POST /users.xml
-  # def create
-  #   @user = User.new(params[:user])
-  #
-  #   respond_to do |format|
-  #     if @user.save
-  #       format.html { redirect_to(@user, notice: 'User was successfully created.') }
-  #       format.xml  { render xml: @user, status: :created, location: @user }
-  #     else
-  #       format.html { render action: "new" }
-  #       format.xml  { render xml: @user.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
 
   # Post /users/activate.json
   def activate
     params[:user] ||= {}
     params[:user][:password] = params[:user][:password_confirmation] = Digest::SHA1.hexdigest(Time.now.usec.to_s)[0..19] if params[:user][:password].blank? and params[:user][:password_confirmation].blank?
-    @user = User.new(params[:user])
+    @user = User.new(params.require(:user).permit( :first_name, :last_name, :email, :password, :password_confirmation ))
     if @user.save
       @user.update_column :status, 'active'
       respond_to do |format|
@@ -88,41 +56,43 @@ class UsersController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    @user = User.find_by_id(params[:id])
-    if @user.update_attributes(post_params)
-      original_status = @user.status
-      @user.update_column :system_admin, params[:user][:system_admin]
-      @user.update_column :service_account, params[:user][:service_account]
-      @user.update_column :status, params[:user][:status]
+    original_status = @user.status
+    if @user.update(user_params)
       UserMailer.status_activated(@user).deliver if Rails.env.production? and original_status != @user.status and @user.status == 'active'
       redirect_to @user, notice: 'User was successfully updated.'
-    elsif @user
-      render action: "edit"
     else
-      redirect_to users_path
+      render action: 'edit'
     end
   end
 
   def destroy
-    @user = User.find_by_id(params[:id])
     @user.destroy
     redirect_to users_path, notice: 'User was successfully deleted.'
   end
 
   private
 
-  def post_params
-    params[:user] ||= {}
+    def set_user
+      @user = User.current.find_by_id(params[:id])
+    end
 
-    params[:user].slice(
-      :first_name, :last_name, :email
-    )
-  end
+    def redirect_without_user
+      empty_response_or_root_path(users_path) unless @user
+    end
+
+    def user_params
+      if current_user.system_admin?
+        params.require(:user).permit( :first_name, :last_name, :email, :system_admin, :service_account, :status )
+      else
+        params.require(:user).permit( :first_name, :last_name, :email )
+      end
+    end
+
 end
