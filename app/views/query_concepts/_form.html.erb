@@ -17,37 +17,25 @@
       </div>
 
       <%= javascript_tag do %>
-        $('#query_concept_value')
-          .qtip({
-            content:{
-              text: '<table><thead><tr><th>Format</th><th>Values Returned</th><th style="border-top:1px solid transparent;border-bottom:1px solid transparent"></th><th>Format</th><th>Values Returned</th></tr></thead>\
+        $('#query_concept_value').popover({
+          html: true,
+          placement: 'bottom',
+          trigger: 'hover',
+          title: 'Value Formats',
+          content: '<table style="font-size:0.8em" class="table table-condensed table-striped"><thead><tr><th>Format</th><th>Values Returned</th></tr></thead>\
                        <tbody>\
-                         <tr><td>&gt; x</td><td>greater than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
-                           <td>[x:y]</td><td><em style="text-decoration:underline">Including Endpoints</em><br />greater than or equal to <strong>x</strong> and <br />less than or equal to <strong>y</strong></td></tr>\
-                         <tr><td>&gt;= x</td><td>greater than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
-                           <td>(x:y)</td><td><em style="text-decoration:underline">Excluding Endpoints</em><br />greater than <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
-                         <tr><td>&lt; x</td><td>less than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
-                           <td>[x:y)</td><td>greater than or equal to <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
-                         <tr><td>&lt;= x</td><td>less than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
-                           <td>(x:y]</td><td>greater than <strong>x</strong> and <br />less than and equal to <strong>y</strong></td></tr>\
-                         <tr><td>x</td><td>exactly equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td>\
-                           <td style="white-space:nowrap">(a:b), &gt; c</td><td><em style="text-decoration:underline">Combining Formats</em><br /> (greater than <strong>a</strong> and less than <strong>b</strong>) or <br />greater than <strong>c</strong></td></tr>\
-                       </tbody></table>',
-              title:{
-                text: 'Value Formats:'
-              }
-            },
-            position:{
-              my: 'top left',
-              at: 'bottom left',
-//              my: 'left center',
-//              at: 'right center',
-              viewport: $(window)
-            },
-            style:{
-              classes: 'ui-tooltip-shadow'
-            }
-          });
+                         <tr><td>&gt; x</td><td>greater than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
+                         <tr><td>[x:y]</td><td><em style="text-decoration:underline">Including Endpoints</em><br />greater than or equal to <strong>x</strong> and <br />less than or equal to <strong>y</strong></td></tr>\
+                         <tr><td>&gt;= x</td><td>greater than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
+                         <tr><td>(x:y)</td><td><em style="text-decoration:underline">Excluding Endpoints</em><br />greater than <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
+                         <tr><td>&lt; x</td><td>less than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
+                         <tr><td>[x:y)</td><td>greater than or equal to <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
+                         <tr><td>&lt;= x</td><td>less than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
+                         <tr><td>(x:y]</td><td>greater than <strong>x</strong> and <br />less than and equal to <strong>y</strong></td></tr>\
+                         <tr><td>x</td><td>exactly equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
+                         <tr><td style="white-space:nowrap">(a:b), &gt; c</td><td><em style="text-decoration:underline">Combining Formats</em><br /> (greater than <strong>a</strong> and less than <strong>b</strong>) or <br />greater than <strong>c</strong></td></tr>\
+                       </tbody></table>'
+        });
       <% end %>
 
     <% elsif @query_concept.concept.categorical? %>
