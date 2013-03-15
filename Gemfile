@@ -21,7 +21,7 @@ gem 'aqueduct-ftp',         '~> 0.2.0.pre',       github: 'remomueller/aqueduct-
 gem 'aqueduct-mounted',     '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mounted',     ref: '026b74c'
 gem 'aqueduct-mysql',       '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mysql',       ref: '66f0add'
 gem 'aqueduct-i2b2',        '~> 0.2.0.pre',       github: 'remomueller/aqueduct-i2b2',        ref: 'a55788a'
-gem 'aqueduct-postgresql',  '~> 0.2.0.pre',       github: 'remomueller/aqueduct-postgresql',  ref: '06ff632'
+gem 'aqueduct-postgresql',  '~> 0.2.0.pre',       github: 'remomueller/aqueduct-postgresql',  ref: 'ba62b89'
 gem 'pg',                   '0.14.1'
 # gem 'aqueduct-mssql2008',   '~> 0.1.0'
 

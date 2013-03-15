@@ -191,7 +191,7 @@ class Mapping < ActiveRecord::Base
             if m.column_value == 'NULL'
               result << nil
             else
-              result << m.column_value
+              result << "'" + m.column_value + "'"
             end
           end
         else
