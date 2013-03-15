@@ -327,7 +327,7 @@ class Mapping < ActiveRecord::Base
         values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
           orig_key = key
           key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_array << "{name:'#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')}', y:#{array.size}, id:'#{uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')}'}" # [(key == nil ? "NULL" : key.to_s.gsub('&lt;![CDATA[', '"').gsub(']]&gt;', '"').gsub(' ', '_').gsub("'", '\\\\\'')) + ': ' + self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')] = array.size
+          value_array << { name: "#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')}", y: array.size, id: uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'') }
         end
       else
         error += ": No Chart for #{self.concept.concept_type} Concepts Provided"
@@ -343,32 +343,19 @@ class Mapping < ActiveRecord::Base
 
     if self.concept.continuous? or self.concept.date?
       chart_type = "column"
-      values = {key_name => values}
+      values = { key_name => values }
       chart_element_id = "column_chart_#{self.concept.id}"
     elsif self.concept.categorical? or self.concept.boolean?
       chart_type = "pie"
       # values = value_hash
-      values = {key_name => "[" + value_array.join(',') + "]"}
+      values = { key_name => value_array }
       chart_element_id = "pie_chart_#{self.concept.id}"
     end
 
     defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
 
     defaults.merge!(chart_params)
-    defaults.each do |k, v|
-      defaults[k] = array_or_string_for_javascript(v) if v.kind_of?(String) or v.kind_of?(Array)
-    end
 
-    values.each do |k, v|
-      values[k] = array_or_string_for_javascript(v) if v.kind_of?(Array)
-    end
-
-    @new_values = {}
-    values.each do |k, v|
-      @new_values[array_or_string_for_javascript(k)] = v
-    end
-
-    values = @new_values
 
     { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: stats }
   end
