@@ -271,7 +271,7 @@ class Mapping < ActiveRecord::Base
         values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
           orig_key = key
           key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_array << "{name:'#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')} in #{self.source.name.gsub("'", '\\\\\'')}', y:#{array.size}, id:'#{uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')}'}".html_safe # [(key == nil ? "NULL" : key.to_s.gsub('&lt;![CDATA[', '"').gsub(']]&gt;', '"').gsub(' ', '_').gsub("'", '\\\\\'')) + ': ' + self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')] = array.size
+          value_array << { name: "#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')} in #{self.source.name.gsub("'", '\\\\\'')}", y: array.size, id: uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'') }
         end
       else
         error += ": No Chart for #{self.concept.concept_type} Concepts Provided"
@@ -280,7 +280,7 @@ class Mapping < ActiveRecord::Base
       error += ": No Values In Database For this Column"
     end
 
-    {local_values: values, value_array: value_array, error: error}
+    { local_values: values, value_array: value_array, error: error }
   end
 
   def graph_values(current_user, chart_params)

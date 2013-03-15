@@ -106,7 +106,7 @@ class Concept < ActiveRecord::Base
         if self.continuous? or self.date?
           mapping_values << local_values
         elsif self.categorical? or self.boolean?
-          mapping_values << "[" + value_array.join(',') + "]"
+          mapping_values << value_array # "[" + value_array.join(',') + "]"
         end
       else
         mapping_values << []
@@ -129,7 +129,7 @@ class Concept < ActiveRecord::Base
         val_max = bucket_size * (bucket + 1) + minimum
         # Greater or equal to val_min, less than val_max
         # categories << "'#{val_min} to #{val_max}'"
-        categories << "'#{val_min.round}'"
+        categories << "#{val_min.round}"
       end
 
       self.mappings.each_with_index do |mapping, index|
@@ -169,20 +169,6 @@ class Concept < ActiveRecord::Base
     defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
 
     defaults.merge!(chart_params)
-    defaults.each do |k, v|
-      defaults[k] = array_or_string_for_javascript(v) if v.kind_of?(String) or v.kind_of?(Array)
-    end
-
-    values.each do |k, v|
-      values[k] = array_or_string_for_javascript(v) if v.kind_of?(Array)
-    end
-
-    @new_values = {}
-    values.each do |k, v|
-      @new_values[array_or_string_for_javascript(k)] = v
-    end
-
-    values = @new_values
 
     { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: all_stats.join('<br />') }
   end
