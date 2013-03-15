@@ -42,6 +42,10 @@ module ApplicationHelper
     end
   end
 
+  def simple_check(checked)
+    image_tag("gentleface/16/#{checked ? 'checkbox_checked' : 'checkbox_unchecked'}.png", alt: '', style: 'vertical-align:text-bottom')
+  end
+
   def information(message = ' Press Enter to Search')
     "<i class='icon-question-sign'></i> <span class='quiet small'>#{message}</span>".html_safe
   end

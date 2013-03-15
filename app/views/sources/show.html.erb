@@ -57,7 +57,7 @@
       <dd><%= link_to @source.user.name, @source.user if @source.user %></dd>
 
       <dt>Visible</dt>
-      <dd><%= check_box_tag 'source', 'visible', @source.visible?, disabled: true %></dd>
+      <dd><%= simple_check @source.visible? %></dd>
 
       <dt>Description</dt>
       <dd><%= sanitize @source.description, attributes: %w(href target) %></dd>
