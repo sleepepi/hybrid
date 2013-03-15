@@ -4,6 +4,7 @@
 - **Gem Changes**
   - Updated to Rails 4.0.0.beta1
   - Updated to Contour 2.0.0.beta.3
+- Sources can now additionally be specified as PostgreSQL databases
 
 ## 0.12.6 (February 13, 2013)
 
