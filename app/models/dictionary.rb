@@ -182,16 +182,6 @@ class Dictionary < ActiveRecord::Base
     end
   end
 
-  def print_difference(difference, item)
-    if difference < 0
-      # puts "The number of #{item.pluralize} increased by #{pluralize(-1*difference, item)}."
-    elsif difference > 0
-      # puts "The number of #{item.pluralize} decreased by #{pluralize(difference, item)}."
-    else
-      # puts "The number of #{item.pluralize} stayed the same."
-    end
-  end
-
   def status_update_for_all_concepts
     # puts "Updating Status For All Concepts"
     self.reload
