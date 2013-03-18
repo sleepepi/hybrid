@@ -34,6 +34,18 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :unprocessable_entity
   end
 
+  test "should not create and activate user without service account" do
+    login(users(:valid))
+    assert_difference('User.count', 0) do
+      post :activate, user: { first_name: '', last_name: 'New Last Name', email: 'new_activated_user@example.com' }, format: 'json'
+    end
+    assert_nil assigns(:user)
+
+    object = JSON.parse(@response.body)
+    assert_equal 'Only Service Accounts have access to this web service. Make sure your account is properly flagged as a service account.', object['error']
+    assert_response :success
+  end
+
   test "should update settings and enable email" do
     post :update_settings, id: users(:admin), email: { send_email: '1' }
     users(:admin).reload # Needs reload to avoid stale object

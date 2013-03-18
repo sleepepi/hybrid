@@ -14,13 +14,9 @@ class ApplicationController < ActionController::Base
     unless current_user.service_account?
       respond_to do |format|
         format.html { redirect_to root_path, alert: "You do not have sufficient privileges to access that page." }
-        format.json { render json: { error: 'Only Service Accounts have access to this web service. Make sure your account is properly flagged as a service account.'} }
+        format.json { render json: { error: 'Only Service Accounts have access to this web service. Make sure your account is properly flagged as a service account.' } }
       end
     end
-  end
-
-  def parse_date(date_string, default_date = '')
-    date_string.to_s.split('/').last.size == 2 ? Date.strptime(date_string, "%m/%d/%y") : Date.strptime(date_string, "%m/%d/%Y") rescue default_date
   end
 
   def scrub_order(model, params_order, default_order)
