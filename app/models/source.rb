@@ -3,12 +3,13 @@ class Source < ActiveRecord::Base
   WRAPPER = Aqueduct.wrappers.collect{|a| [a.to_s.split('::').last, a.to_s.split('::').last.downcase]}
   REPOSITORY = Aqueduct.repositories.collect{|a| [a.to_s.split('::').last, a.to_s.split('::').last.downcase]}
 
+  # Concerns
+  include Searchable, Deletable
+
   # Named Scopes
-  scope :current, -> { where deleted: false }
   scope :available, -> { where deleted: false, visible: true }
   scope :available_or_creator_id, lambda { |arg| where( [ "sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, arg ] ) }
   scope :local, -> { where identifier: nil }
-  scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
   scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.status IN (?) and mappings.deleted = ?) or '' IN (?)", arg, ['mapped', 'unmapped', 'derived'], false, arg] ) }
   scope :with_file_type, lambda { |arg| where( ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", arg] ) }
 
@@ -198,7 +199,7 @@ class Source < ActiveRecord::Base
         end
       end
     end
-    {result: result, errors: errors}
+    { result: result, errors: errors }
   end
 
   def derived_concepts
@@ -213,10 +214,6 @@ class Source < ActiveRecord::Base
 
   def count(current_user, query_concepts, conditions, tables, join_conditions, select_identifier_concept)
     Aqueduct::Builder.wrapper(self, current_user).count(query_concepts, conditions, tables, join_conditions, select_identifier_concept ? select_identifier_concept.mapped_name(current_user, self) : nil)
-  end
-
-  def destroy
-    update_column :deleted, true
   end
 
   def table_columns_mapped(current_user, table)

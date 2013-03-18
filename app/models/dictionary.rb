@@ -3,11 +3,10 @@ class Dictionary < ActiveRecord::Base
   STATUS = ["active", "testing", "inactive"].collect{|i| [i,i]}
 
   # Concerns
-  include Deletable
+  include Searchable, Deletable
 
   # Named Scopes
   scope :available, -> { where deleted: false, visible: true }
-  scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
 
   # Model Validation
   validates_presence_of :name
