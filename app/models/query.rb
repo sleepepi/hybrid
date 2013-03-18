@@ -1,8 +1,10 @@
 class Query < ActiveRecord::Base
   serialize :history, Array
 
+  # Concerns
+  include Deletable
+
   # Named Scopes
-  scope :current, -> { where deleted: false }
   scope :with_user, lambda { |arg| where( ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", arg, arg] ) }
   scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
 
@@ -250,10 +252,6 @@ class Query < ActiveRecord::Base
 
     error = "You do not have #{actions_required.collect{|a| '<span class="source_rule_text">'+a+'</span>'}.join(' or ')} in any of you selected data sources: <ul>#{selected_sources.collect{|s| "<li><b><i>#{s.name}</i></b></li>"}.join}</ul>" if available_sources.size == 0
     return { result: result, error: error }
-  end
-
-  def destroy
-    update_column :deleted, true
   end
 
   def reorder(query_concept_ids)

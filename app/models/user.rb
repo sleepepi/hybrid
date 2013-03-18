@@ -10,10 +10,9 @@ class User < ActiveRecord::Base
   serialize :email_notifications, Hash
 
   # Concerns
-  include Contourable
+  include Deletable, Contourable
 
   # Named Scopes
-  scope :current, -> { where deleted: false }
   scope :status, lambda { |arg|  where( status: arg ) }
   scope :search, lambda { |arg| where( 'LOWER(first_name) LIKE ? or LOWER(last_name) LIKE ? or LOWER(email) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%') ) }
   scope :system_admins, -> { where system_admin: true }
@@ -69,7 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def destroy
-    update_column :deleted, true
+    super
     update_column :status, 'inactive'
     update_column :updated_at, Time.now
   end
@@ -84,10 +83,6 @@ class User < ActiveRecord::Base
 
   def reverse_name
     "#{last_name}, #{first_name}"
-  end
-
-  def nickname
-    "#{first_name} #{last_name.first}"
   end
 
   def name_and_email

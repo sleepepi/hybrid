@@ -1,6 +1,6 @@
 class Mapping < ActiveRecord::Base
-  # Named Scopes
 
+  # Named Scopes
   scope :current, -> { where deleted: false }
   scope :status, lambda { |arg| where(status: arg) }
 

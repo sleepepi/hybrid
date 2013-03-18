@@ -2,8 +2,10 @@ class Dictionary < ActiveRecord::Base
 
   STATUS = ["active", "testing", "inactive"].collect{|i| [i,i]}
 
+  # Concerns
+  include Deletable
+
   # Named Scopes
-  scope :current, -> { where deleted: false }
   scope :available, -> { where deleted: false, visible: true }
   scope :search, lambda { |arg| where('LOWER(name) LIKE ?', arg.to_s.downcase.gsub(/^| |$/, '%')) }
 
@@ -18,10 +20,6 @@ class Dictionary < ActiveRecord::Base
   has_many :concept_property_concepts, through: :concepts
 
   # Methods
-
-  def destroy
-    update_column :deleted, true
-  end
 
   # This function is run after an dictionary is imported or destroyed.
   # Removes all concepts in the dictionary that aren't the same version as well as cleaning up any terms that are no longer associated with any concept.

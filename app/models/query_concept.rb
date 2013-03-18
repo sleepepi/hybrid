@@ -6,8 +6,8 @@ class QueryConcept < ActiveRecord::Base
   after_create :create_qc_query_history
   before_update :update_qc_query_history
 
-  # Named Scopes
-  scope :current, -> { where deleted: false }
+  # Concerns
+  include Deletable
 
   # Model Relationships
   belongs_to :query #, touch: true # Possibly not needed due to undo/redo actions
@@ -276,6 +276,7 @@ class QueryConcept < ActiveRecord::Base
     end
   end
 
+  # Overwrites deletable since it relies on callbacks
   def destroy
     update_attributes deleted: true
     self.query.update_positions if self.query
