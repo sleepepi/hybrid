@@ -141,10 +141,10 @@
               if params['make_selection']
                 el_id = "#value_ids_" + this.id
                 if $(el_id).is(':checked')
-                  $(el_id).removeAttr('checked')
+                  $(el_id).prop('checked',false)
                   $(el_id).parent().effect("highlight", {color:'#ff9999'}, 1000)
                 else
-                  $(el_id).attr('checked','checked')
+                  $(el_id).prop('checked',true)
                   $(el_id).parent().effect("highlight", {color:'#99ff99'}, 1000)
                 false
     # legend: {

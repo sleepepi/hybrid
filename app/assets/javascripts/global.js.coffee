@@ -24,7 +24,7 @@
 @toggleCheckboxGroup = (index) ->
   mode = $('.rule_group_'+index+'_parent').is(':checked');
   $('.rule_group_'+index).each( () ->
-    if mode then $(this).attr('checked','checked') else $(this).removeAttr('checked')
+    $(this).prop('checked', mode)
   )
 
 @toggleCheckboxGroupParent = (index) ->
@@ -33,7 +33,7 @@
     unless $(this).is(':checked')
       mode = false
   )
-  if mode then $('.rule_group_'+index+'_parent').attr('checked','checked') else $('.rule_group_'+index+'_parent').removeAttr('checked')
+  $('.rule_group_'+index+'_parent').prop('checked',mode)
 
 @markQueryConcept = (element, index) ->
   element = $(element)
@@ -57,12 +57,12 @@
 
 @checkAllCategoricalValues = () ->
   elements = $('.categorical_values').each( () ->
-    $(this).attr('checked','checked')
+    $(this).prop('checked', true)
   )
 
 @uncheckAllCategoricalValues = () ->
   elements = $('.categorical_values').each( () ->
-    $(this).removeAttr('checked')
+    $(this).prop('checked', false)
   )
 
 @buildMappingTypeahead = (column, source_id) ->
