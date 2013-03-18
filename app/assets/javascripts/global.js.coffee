@@ -144,6 +144,13 @@
       $("#report_concept_search_form").submit()
   )
 
+@showContourModal = () ->
+  $("#contour-backdrop, .contour-modal-wrapper").show()
+  # $('html, body').animate({ scrollTop: $(".contour-modal-wrapper").offset().top - 40 }, 'fast');
+
+@hideContourModal = () ->
+  $("#contour-backdrop, .contour-modal-wrapper").hide()
+
 jQuery ->
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
@@ -181,5 +188,16 @@ jQuery ->
     )
     .on('click', '[data-object~="modal-show"]', () ->
       $($(this).data('target')).modal( dynamic: true )
+      false
+    )
+    .on('click', "#contour-backdrop", (e) ->
+      hideContourModal() if e.target.id = "contour-backdrop"
+    )
+    .on('click', '[data-object~="show-contour-modal"]', () ->
+      showContourModal()
+      false
+    )
+    .on('click', '[data-object~="hide-contour-modal"]', () ->
+      hideContourModal()
       false
     )

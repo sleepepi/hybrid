@@ -11,6 +11,16 @@
   </h1>
 </div>
 
+<div id="contour-backdrop" style="display:none"></div>
+
+<div class="contour-modal-wrapper" data-object="contour_modal_wrapper" style="display:none">
+  <div class="contour-modal" data-object="contour_modal_container">
+    <%#= render partial: 'popup' %>
+  </div>
+</div>
+
+<%#= link_to 'Export', '#', class: 'btn', data: { object: 'show-contour-modal' } %>
+
 <div class="row">
   <div class="span6">
 
@@ -132,9 +142,6 @@
 
 <div id="inlaid_report"></div>
 
-<%= render partial: 'sources/modal' %>
-<%= render partial: 'concepts/modal' %>
 <%= render partial: 'reports/report_modal' %>
 <%= render partial: 'reports/dataset_modal' %>
-<%= render partial: 'query_concepts/modal' %>
 <%= render partial: 'source_file_types/modal' %>

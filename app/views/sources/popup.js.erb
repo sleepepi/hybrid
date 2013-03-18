@@ -1,9 +1,7 @@
-$("#sources_popup").modal({ dynamic: true });
-$("#sources_popup").modal('show');
+$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("sources/popup")) %>");
+showContourModal();
 
 $('#sources_search').focus();
-
-$("#sources").html("<%= escape_javascript(render("sources/sources_popup")) %>");
 
 <% if @source %>
   $("#source_info").html("<%= escape_javascript(render("sources/info")) %>");

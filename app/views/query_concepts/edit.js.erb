@@ -1,13 +1,5 @@
-
-$("#query_concepts_popup").modal({ dynamic: true });
-$("#query_concepts_popup").modal('show');
-
-
-$("#query_concepts_popup_title").html("<%= escape_javascript(image_tag('gentleface/16/doc_edit.png', align: 'absmiddle', alt: '')) %> Edit");
-
-$("#query_concepts_left").html("<%= escape_javascript(render("edit")) %>");
-
-
+$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("query_concepts/popup")) %>");
+showContourModal();
 
 <% if @concept %>
   <% @query = nil %>

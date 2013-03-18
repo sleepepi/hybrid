@@ -1,4 +1,4 @@
 <%= form_tag sources_path(popup: true, query_id: @query.id), method: :get, remote: true, onsubmit: "showWaiting('#concept_folders', ' Loading Sources', true)", id: "sources_form" do %>
   <%= hidden_field_tag :order %>
-  <%= text_field_tag 'sources_search', params[:sources_search], style: 'width:355px', placeholder: 'Enter source name to filter list.' %>
+  <%= text_field_tag 'sources_search', params[:sources_search], class: 'span12', placeholder: 'Enter source name to filter list.' %>
 <% end %>

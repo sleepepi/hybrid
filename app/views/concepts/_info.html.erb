@@ -10,7 +10,7 @@
   <% else %>
     <span class="large"><strong><%= @concept.human_name %></strong></span>
     <br />
-    <%= link_to "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary', onclick: '$("#concepts_popup").modal("hide");' %>
+    <%= link_to "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary', onclick: 'hideContourModal();' %>
   <% end %>
 <% else %>
   <span class="large"><strong><%= @concept.human_name %></strong></span>

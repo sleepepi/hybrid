@@ -1,7 +1,3 @@
-<div class="page-header">
-  <h4><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></h4>
-</div>
-
 <%= form_for @query_concept, remote: true, html: { class: 'form-horizontal' } do |f| %>
   <% form_name = @query_concept.new_record? ? 'new_query_concept' : "edit_query_concept_#{@query_concept.id}" %>
 
@@ -12,7 +8,7 @@
       <div class="control-group">
         <%= f.label :value, nil, class: 'control-label' %>
         <div class="controls">
-          <%= f.text_field :value, class: 'input-medium', placeholder: 'Drag and select a range on the graph!' %>
+          <%= f.text_field :value, class: 'span12', placeholder: 'Drag and select a range on the graph!' %>
         </div>
       </div>
 
@@ -91,8 +87,8 @@
     </div>
 
   <div class="form-actions">
-    <%= link_to 'Update', '#', class: 'btn btn-primary btn-mini', data: { object: 'submit', target: "##{form_name}" } %>
-    <%= link_to 'Cancel', '#', class: 'btn btn-mini', data: { dismiss: 'modal' } %>
-    <%= link_to 'Remove', @query_concept, method: 'delete', remote: true, class: 'btn btn-danger btn-mini' %>
+    <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "##{form_name}" } %>
+    <%= link_to 'Cancel', '#', class: 'btn', data: { object: 'hide-contour-modal' } %>
+    <%= link_to 'Remove', @query_concept, method: 'delete', remote: true, class: 'btn btn-danger' %>
   </div>
 <% end %>
