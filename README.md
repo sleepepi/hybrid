@@ -4,7 +4,7 @@
 [![Dependency Status](https://gemnasium.com/sleepepi/hybrid.png)](https://gemnasium.com/sleepepi/hybrid)
 [![Code Climate](https://codeclimate.com/github/sleepepi/hybrid.png)](https://codeclimate.com/github/sleepepi/hybrid)
 
-Hybrid is a web-application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. Hybrid also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. Hybrid uses a data dictionary approach to define data and database relationships. Using Rails 4.0+ and Ruby 1.9.3+.
+Hybrid is a web-application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. Hybrid also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. Hybrid uses a data dictionary approach to define data and database relationships. Using Rails 4.0+ and Ruby 2.0.0+.
 
 ## Installation
 

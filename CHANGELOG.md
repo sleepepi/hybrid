@@ -1,6 +1,7 @@
 ## 0.13.0
 
 ### Enhancements
+- Use of Ruby 2.0.0-p0 is now recommended
 - **Gem Changes**
   - Updated to Rails 4.0.0.beta1
   - Updated to Contour 2.0.0.beta.3
