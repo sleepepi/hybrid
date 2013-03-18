@@ -1,4 +1,4 @@
-<span onclick="$('#<%= @folder_id %>_content').toggle();if($('#<%= @folder_id %>_content').is(':visible')){$('#<%= @folder_id %>_link_img').attr('src', '<%= request.script_name %>/assets/icons/open2.png');}else{$('#<%= @folder_id %>_link_img').attr('src', '<%= request.script_name %>/assets/icons/closed.png');}" style="cursor:pointer;">
-  <%= image_tag('icons/open2.png', style: "vertical-align:text-bottom", id: "#{@folder_id}_link_img") %>
-  <%= image_tag 'icons/folder.png', style: "vertical-align:text-bottom" %> <span class="nolink"><%= @folder_title %></span>
+<span onclick="$('#<%= @folder_id %>_content').toggle();if($('#<%= @folder_id %>_content').is(':visible')){$('#<%= @folder_id %>_link_img').attr('class', 'icon-folder-open');}else{$('#<%= @folder_id %>_link_img').attr('class', 'icon-folder-close');}" style="cursor:pointer;">
+  <i class="icon-folder-open" id="<%= @folder_id %>_link_img"></i>
+  <span class="nolink"><%= @folder_title %></span>
 </span>

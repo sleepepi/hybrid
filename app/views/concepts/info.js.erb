@@ -1,5 +1,7 @@
 $("#concept_info").html("<%= escape_javascript(render("info")) %>");
 
+$('html, body').animate({ scrollTop: $(".contour-modal-wrapper").offset().top - 40 }, 'fast');
+
 
 <% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
   <% width = @defaults[:width].to_s.gsub("'", '') %>

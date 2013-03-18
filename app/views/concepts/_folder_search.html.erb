@@ -1,3 +1,3 @@
 <%= form_tag search_folder_concepts_path(query_id: @query.id, add_report_id: params[:add_report_id]), remote: true, method: :post, onsubmit: "showWaiting('#concept_folders', ' Loading Concepts', true)", id: "concept_search_form" do %>
-  <%= text_field_tag 'concept_search', params[:concept_search], placeholder: 'Enter concept name or navigate folders.' %>
+  <%= text_field_tag 'concept_search', params[:concept_search], class: 'span12', placeholder: 'Enter concept name or navigate folders.' %>
 <% end %>

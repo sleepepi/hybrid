@@ -77,11 +77,9 @@
       <% if found_number > 0 %>
         <%= render partial: 'concepts/folders_toggle_link' %>
       <% else %>
-        <%#= image_tag 'icons/closed.png', size: '16x16', align: 'absmiddle', style: "cursor:pointer", before: "showWaiting('#{folder_id}_content');" + remote_function(url: open_folder_concepts_path(query_id: @query.id, report_id: params[:report_id], folder_name: full_folder, folder_id: folder_id, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0')), method: :post, with: "$('concept_search').serialize()")  %>
-        <%#= image_tag 'icons/closed.png', size: '16x16', align: 'absmiddle', style: "cursor:pointer", onclick: "showWaiting('#{folder_id}_content');" + remote_function(url: open_folder_concepts_path(folder_name: full_folder, folder_id: folder_id, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0')), method: :post, with: "'&concept_search='+$('#search').val()")  %>
         <%= link_to open_folder_concepts_path(query_id: @query.id, folder_name: full_folder, folder_id: folder_id, display_folder_name: @folder_title, prefix: @folder, analysis_concepts: (params[:analysis_concepts] || '0'), concept_type: params[:concept_type], identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), onclick: "showWaiting('##{folder_id}_content', '', false);", method: :post, remote: true, style: "text-decoration:none" do %>
-          <%= image_tag('icons/closed.png', style: "cursor:pointer;vertical-align:text-bottom") %>
-          <%= image_tag 'icons/folder.png', style: "vertical-align:text-bottom" %> <span class="nolink"><%= @folder_title %></span>
+          <i class="icon-folder-close"></i>
+          <span class="nolink"><%= @folder_title %></span>
         <% end %>
       <% end %>
     </div>

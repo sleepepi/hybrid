@@ -176,7 +176,8 @@ tr.overall td.total {
 }
 
 .common a {
-  font-size:1.4em;
+  /*font-size:1.4em;*/
+  font-weight: bold;
   color: #094E63;
 }
 
@@ -186,6 +187,10 @@ tr.overall td.total {
 
 .uncommon a {
   color: #057080;
+}
+
+.highlight {
+  background-color: #ffffd4;
 }
 
 .source_rule_text {
