@@ -6,6 +6,7 @@
   - Updated to Rails 4.0.0.beta1
   - Updated to Contour 2.0.0.beta.3
 - Sources can now additionally be specified as PostgreSQL databases
+- Dictionary imports simplified, `similar_concepts`, and `equivalent_concepts` columns removed
 
 ## 0.12.6 (February 13, 2013)
 
@@ -241,8 +242,8 @@
 - Reports for queries that return an empty set now generate an error message that states that the underlying query needs to be modified to generate a report table
 
 ### Documentation
-- Added a sample dictionary file (CSV) to `doc/dictionary/tiny_dictionary.csv`
-- Added a sample database file (SQL Dump) to `doc/dictionary/tiny_sleep.sql`
+- Added a sample dictionary file (CSV) to `test/support/dictionaries/tiny_dictionary.csv`
+- Added a sample database file (SQL Dump) to `test/support/dictionaries/tiny_sleep.sql`
 
 ### Testing
 - Updated Report Concept tests to assure that the positions are correctly updated when a report is modified

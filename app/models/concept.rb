@@ -49,18 +49,11 @@ class Concept < ActiveRecord::Base
   has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy
   has_many :internal_terms, -> { where(internal: true).order('terms.name') }, class_name: "Term", dependent: :destroy
 
-  has_many :concept_property_concepts, -> { order :property }, foreign_key: 'concept_one_id', dependent: :destroy
-  has_many :parents, -> { where("concept_property_concepts.property = 'is_a'") }, through: :concept_property_concepts, source: 'concept_two'
-  has_many :includes, -> { where( ["concept_property_concepts.property IN (?)", ["includes", "http://purl.org/cpr/includes"] ] ) }, through: :concept_property_concepts, source: 'concept_two'
+  has_many :concept_property_concepts, foreign_key: 'concept_one_id', dependent: :destroy
+  has_many :parents, through: :concept_property_concepts, source: 'concept_two'
 
-  has_many :equivalent_concepts_a, -> { where("concept_property_concepts.property = 'equivalent_class'") }, through: :concept_property_concepts, source: 'concept_two'
-  has_many :similar_concepts_a, -> { where("concept_property_concepts.property = 'similar_class'") }, through: :concept_property_concepts, source: 'concept_two'
-
-  has_many :reverse_concept_property_concepts, -> { order :property }, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
-  has_many :children, -> { where("concept_property_concepts.property = 'is_a'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
-  has_many :included_by, -> { where( ["concept_property_concepts.property IN (?)", ["includes", "http://purl.org/cpr/includes"] ] ) }, through: :reverse_concept_property_concepts, source: 'concept_one'
-  has_many :equivalent_concepts_b, -> { where("concept_property_concepts.property = 'equivalent_class'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
-  has_many :similar_concepts_b, -> { where("concept_property_concepts.property = 'similar_class'") }, through: :reverse_concept_property_concepts, source: 'concept_one'
+  has_many :reverse_concept_property_concepts, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
+  has_many :children, through: :reverse_concept_property_concepts, source: 'concept_one'
 
   has_many :query_concepts, dependent: :destroy
   has_many :queries, through: :query_concepts
@@ -207,10 +200,6 @@ class Concept < ActiveRecord::Base
 
   def recommended_concepts
     result = []
-    self.includes.each do |group_concept|
-      result << group_concept.descendants
-      result.flatten!.uniq!
-    end
     self.children.each do |child|
       result << child
     end
@@ -285,7 +274,7 @@ class Concept < ActiveRecord::Base
         result = 'partial' if self.read_attribute(continuous_property).blank?
       end
     elsif self.categorical?
-      result = (self.includes.size + self.children.size > 0) ? 'complete' : 'partial'
+      result = (self.children.size > 0 ? 'complete' : 'partial')
     elsif self.boolean?
       result = 'complete'
     elsif self.date?

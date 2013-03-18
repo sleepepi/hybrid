@@ -53,7 +53,7 @@ class DictionariesControllerTest < ActionController::TestCase
   test "should create an dictionary from a CSV file" do
     assert_difference('Dictionary.count') do
       post :create, dictionary: { name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true },
-                    dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_dictionary.csv')
+                    dictionary_file: fixture_file_upload('../../test/support/dictionaries/tiny_dictionary.csv')
     end
 
     assert_not_nil assigns(:dictionary)
@@ -68,14 +68,14 @@ class DictionariesControllerTest < ActionController::TestCase
     end
 
     assert_not_nil assigns(:dictionary)
-    assert_equal 11, assigns(:dictionary).concepts.size
+    assert_equal 9, assigns(:dictionary).concepts.size
     assert_redirected_to dictionary_path(assigns(:dictionary))
   end
 
   test "should create empty dictionary with invalid file format" do
     assert_difference('Dictionary.count') do
       post :create, dictionary: { name: 'Dictionary Four', description: "Dictionary Test", status: 'active', visible: true },
-                    dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_sleep.sql')
+                    dictionary_file: fixture_file_upload('../../test/support/dictionaries/tiny_sleep.sql')
     end
 
     assert_not_nil assigns(:dictionary)
@@ -115,7 +115,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should update dictionary from a CSV file" do
     put :update, id: @dictionary, dictionary: @dictionary.attributes,
-                 dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_dictionary.csv')
+                 dictionary_file: fixture_file_upload('../../test/support/dictionaries/tiny_dictionary.csv')
 
     assert_not_nil assigns(:dictionary)
     assert_equal 7, assigns(:dictionary).concepts.size
@@ -124,7 +124,7 @@ class DictionariesControllerTest < ActionController::TestCase
 
   test "should update dictionary with invalid file format" do
     put :update, id: @dictionary, dictionary: @dictionary.attributes,
-                 dictionary_file: fixture_file_upload('../../doc/dictionary/tiny_sleep.sql')
+                 dictionary_file: fixture_file_upload('../../test/support/dictionaries/tiny_sleep.sql')
 
     assert_not_nil assigns(:dictionary)
     assert_equal "Unsupported dictionary file format!", flash[:alert]

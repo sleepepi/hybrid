@@ -34,7 +34,7 @@ class Dictionary < ActiveRecord::Base
   def export_csv
     csv_string = CSV.generate do |csv|
       # header row
-      csv << ["#URI", "Namespace", "Short Name", "Description", "Concept Type", "Units", "Terms", "Internal Terms", "Parents", "Children", "Equivalent Concepts", "Similar Concepts", "Field Values", "Sensitivity", "Display Name", "Commonly Used", "Folder", "Calculation", "Source Name", "Source File", "Source Description"]
+      csv << ["#URI", "Namespace", "Short Name", "Description", "Concept Type", "Units", "Terms", "Internal Terms", "Parents", "Children", "Field Values", "Sensitivity", "Display Name", "Commonly Used", "Folder", "Calculation", "Source Name", "Source File", "Source Description"]
 
       # data rows
       self.concepts.each do |c|
@@ -60,8 +60,6 @@ class Dictionary < ActiveRecord::Base
                 c.internal_terms.collect{|t| t.name}.join('; '),
                 c.parents.collect{|t| (t.uri == c.uri and t.namespace == c.namespace) ? "##{t.short_name}" : t.name}.join('; '),
                 c.children.collect{|t| (t.uri == c.uri and t.namespace == c.namespace) ? "##{t.short_name}" : t.name}.join('; '),
-                c.equivalent_concepts.collect{|t| (t.uri == c.uri and t.namespace == c.namespace) ? "##{t.short_name}" : t.name}.join('; '),
-                c.similar_concepts.collect{|t| (t.uri == c.uri and t.namespace == c.namespace) ? "##{t.short_name}" : t.name}.join('; '),
                 field_values.join('; '),
                 c.sensitivity,
                 c.display_name,
@@ -89,14 +87,14 @@ class Dictionary < ActiveRecord::Base
         c.concept_type = line[4]
         c.units = line[5]
 
-        c.sensitivity = Concept::SENSITIVITY.collect{|s| s[1]}.include?(line[13]) ? line[13] : '0'
-        c.display_name = line[14]
-        c.commonly_used = (line[15] == '1')
-        c.folder = line[16]
-        c.formula = line[17]
-        c.source_name = line[18]
-        c.source_file = line[19]
-        c.source_description = line[20]
+        c.sensitivity = Concept::SENSITIVITY.collect{|s| s[1]}.include?(line[11]) ? line[11] : '0'
+        c.display_name = line[12]
+        c.commonly_used = (line[13] == '1')
+        c.folder = line[14]
+        c.formula = line[15]
+        c.source_name = line[16]
+        c.source_file = line[17]
+        c.source_description = line[18]
         c.save
 
         c.terms.destroy_all
@@ -116,7 +114,7 @@ class Dictionary < ActiveRecord::Base
           concept_parent.update_column :version, dictionary_version
           concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
           concept_parent.update_status!
-          cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id, property: 'is_a' ).first_or_create
+          cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id ).first_or_create
         end
 
         line[9].to_s.split(';').each do |child_name|
@@ -130,23 +128,11 @@ class Dictionary < ActiveRecord::Base
             concept_child.update_column :concept_type, c.concept_type
           end
           concept_child.update_status!
-          cpc = ConceptPropertyConcept.where( concept_one_id: concept_child.id, concept_two_id: c.id, property: 'is_a' ).first_or_create
-        end
-
-        [['equivalent_class', 10], ['similar_class', 11]].each do |property, position|
-          line[position].to_s.split(';').each do |relation_name|
-            (relation_name, relation_uri, relation_namespace, relation_short_name) = Concept.name_to_uri_and_namespace_and_short_name(relation_name.strip, c.uri, c.namespace)
-            relation_concept = Concept.where(name: relation_name.strip, uri: relation_uri, namespace: relation_namespace, short_name: relation_short_name).first_or_create
-            relation_concept.update_column :version, dictionary_version
-            relation_concept.update_column :dictionary_id, self.id if relation_concept.dictionary_id.blank?
-            relation_concept.update_status!
-            cpc = ConceptPropertyConcept.find_by_concept_one_id_and_concept_two_id_and_property(c.id, relation_concept.id, property)
-            cpc = ConceptPropertyConcept.where( concept_one_id: relation_concept.id, concept_two_id: c.id, property: property ).first_or_create unless cpc
-          end
+          cpc = ConceptPropertyConcept.where( concept_one_id: concept_child.id, concept_two_id: c.id ).first_or_create
         end
 
         # Field values for categoricals may be referencing children in line[11]
-        line[12].to_s.split(';').each_with_index do |field_value, i|
+        line[10].to_s.split(';').each_with_index do |field_value, i|
           if c.categorical? and not line[9].to_s.split(';')[i].blank?
             child_name = line[9].to_s.split(';')[i]
             (child_name, child_uri, child_namespace, child_short_name) = Concept.name_to_uri_and_namespace_and_short_name(child_name.strip, c.uri, c.namespace)
