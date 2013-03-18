@@ -10,12 +10,28 @@ class UsersControllerTest < ActionController::TestCase
 
   test "should create and activate user" do
     login(users(:service_account))
-    post :activate, user: { first_name: 'New First Name', last_name: 'New Last Name', email: 'new_activated_user@example.com' }
+    assert_difference('User.count') do
+      post :activate, user: { first_name: 'New First Name', last_name: 'New Last Name', email: 'new_activated_user@example.com' }, format: 'json'
+    end
     assert_not_nil assigns(:user)
     assert_equal "New First Name", assigns(:user).first_name
     assert_equal "New Last Name", assigns(:user).last_name
     assert_equal 'new_activated_user@example.com', assigns(:user).email
     assert_equal 'active', assigns(:user).status
+  end
+
+  test "should not create and activate user with missing parameters" do
+    login(users(:service_account))
+    assert_difference('User.count', 0) do
+      post :activate, user: { first_name: '', last_name: 'New Last Name', email: 'new_activated_user@example.com' }, format: 'json'
+    end
+    assert_not_nil assigns(:user)
+    assert_equal "", assigns(:user).first_name
+    assert_equal "New Last Name", assigns(:user).last_name
+    assert_equal 'new_activated_user@example.com', assigns(:user).email
+    assert_equal 'pending', assigns(:user).status
+    assert_equal 1, assigns(:user).errors.size
+    assert_response :unprocessable_entity
   end
 
   test "should update settings and enable email" do
@@ -44,6 +60,29 @@ class UsersControllerTest < ActionController::TestCase
     get :index, format: 'js'
     assert_not_nil assigns(:users)
     assert_template 'index'
+  end
+
+  test "should get index for autocomplete" do
+    login(users(:valid))
+    get :index, format: 'json'
+    assert_not_nil assigns(:users)
+    assert_response :success
+  end
+
+  test "should not get index for non-system admin" do
+    login(users(:valid))
+    get :index
+    assert_nil assigns(:users)
+    assert_equal "You do not have sufficient privileges to access that page.", flash[:alert]
+    assert_redirected_to root_path
+  end
+
+  test "should not get index with pagination for non-system admin" do
+    login(users(:valid))
+    get :index, format: 'js'
+    assert_nil assigns(:users)
+    assert_equal "You do not have sufficient privileges to access that page.", flash[:alert]
+    assert_redirected_to root_path
   end
 
   # test "should get new" do

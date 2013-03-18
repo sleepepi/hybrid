@@ -50,21 +50,15 @@ class UsersController < ApplicationController
     @user = User.new(params.require(:user).permit( :first_name, :last_name, :email, :password, :password_confirmation ))
     if @user.save
       @user.update_column :status, 'active'
-      respond_to do |format|
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render json: @user, only: [:id, :first_name, :last_name, :email, :status], status: :created, location: @user }
-      end
+      render json: @user, only: [:id, :first_name, :last_name, :email, :status], status: :created, location: @user
     else
-      respond_to do |format|
-        format.html { render action: 'new' }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
   def update
     original_status = @user.status
-    if @user.update(user_params)
+    if @user.update(params.require(:user).permit( :first_name, :last_name, :email, :system_admin, :service_account, :status ))
       UserMailer.status_activated(@user).deliver if Rails.env.production? and original_status != @user.status and @user.status == 'active'
       redirect_to @user, notice: 'User was successfully updated.'
     else
@@ -85,14 +79,6 @@ class UsersController < ApplicationController
 
     def redirect_without_user
       empty_response_or_root_path(users_path) unless @user
-    end
-
-    def user_params
-      if current_user.system_admin?
-        params.require(:user).permit( :first_name, :last_name, :email, :system_admin, :service_account, :status )
-      else
-        params.require(:user).permit( :first_name, :last_name, :email )
-      end
     end
 
 end
