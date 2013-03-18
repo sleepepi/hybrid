@@ -207,12 +207,4 @@ class Dictionary < ActiveRecord::Base
     end
   end
 
-  def xml_escape(input)
-    return '' if input.blank?
-    input.gsub!(/[&<>'"]/) do | match |
-      {'&' => '&amp;', '<' => '&lt;', '>' => '&gt;', "'" => '&apos;', '"' => '&quot;'}[match]
-    end
-    return input
-  end
-
 end
