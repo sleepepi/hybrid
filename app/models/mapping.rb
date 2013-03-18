@@ -468,12 +468,4 @@ class Mapping < ActiveRecord::Base
     Math.sqrt(variance(population))
   end
 
-  # include ActionView::Helpers::UrlHelper # For array_or_string_for_javascript  (also in ScriptaculousHelper)
-  def array_or_string_for_javascript(option)
-    if option.kind_of?(Array)
-      "['#{option.join('\',\'')}']"
-    elsif !option.nil?
-      "'#{option}'"
-    end
-  end
 end
