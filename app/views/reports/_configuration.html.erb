@@ -1,32 +1,26 @@
 <div style="clear:both"></div>
-<table class="blank padded"><col width="529px"/><col width="529px"/>
-  <thead>
-    <tr>
-      <th style="text-align:center;padding-bottom:2px">Column</th>
-      <th style="text-align:center;padding-bottom:2px">Row (Group By)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="vertical-align:top;">
-        <ul id="sortable1" class="connectedSortable" style="margin-left:0px">
-        <% @report.report_concepts.where(strata: false).each do |report_concept| %>
-          <% @report_concept = report_concept %>
-          <%= render partial: 'report_concepts/statistics' %>
-        <% end %>
-        </ul>
-      </td>
-      <td style="vertical-align:top;">
-        <ul id="sortable2" class="connectedSortable" style="margin-left:0px">
-        <% @report.report_concepts.where(strata: true).each do |report_concept| %>
-          <% @report_concept = report_concept %>
-          <%= render partial: 'report_concepts/statistics' %>
-        <% end %>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+
+<div class="row-fluid">
+  <div class="span6">
+    <h3>Column</h3>
+    <ul id="sortable1" class="connectedSortable" style="margin-left:0px">
+      <% @report.report_concepts.where(strata: false).each do |report_concept| %>
+        <% @report_concept = report_concept %>
+        <%= render partial: 'report_concepts/statistics' %>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="span6">
+    <h3>Row (Group By)</h3>
+    <ul id="sortable2" class="connectedSortable" style="margin-left:0px">
+      <% @report.report_concepts.where(strata: true).each do |report_concept| %>
+        <% @report_concept = report_concept %>
+        <%= render partial: 'report_concepts/statistics' %>
+      <% end %>
+    </ul>
+  </div>
+</div>
 
 <%= form_tag report_table_report_path(@report, query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#report_table', ' Loading Report', true)", id: 'report_table_form', style: 'display:inline' do %>
 <% end %>
@@ -35,11 +29,13 @@
 
 <%= javascript_tag "
   $('#sortable1, #sortable2').sortable({
-    placeholder: 'ui-state-highlight',
+    placeholder: 'bubble-faded',
 		connectWith: '.connectedSortable',
+    activeClass: 'droppable-hover',
 		stop: function() { columns = $('#sortable1').sortable('toArray').toString();
 		  rows = $('#sortable2').sortable('toArray').toString();
 		  $.post($('#reorder_report_form').attr('action'), '&columns='+columns+'&rows='+rows, null, 'script');
 		  showWaiting('#report_table', ' Loading Report', true);
 		}
-	}).disableSelection();" %>
+	}).disableSelection();
+  $('#sortable1, #sortable2').droppable({ activeClass: 'droppable-hover' });" %>

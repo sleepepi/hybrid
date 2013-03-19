@@ -3,16 +3,16 @@
 
   <% if result_hash[:error].blank? %>
     <%= link_to 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'btn' %><br /><br />
-    <table class="blank" style="border-collapse:collapse;border:1px solid #777;width:100%">
+    <table class="table table-hover">
       <thead>
-        <tr class="labels">
+        <tr>
           <% result_hash[:result][0].each_with_index do |item, position| %>
             <th class="<%= (result_hash[:result][0].size - position <= 2) ? 'total' : '' %>">
               <%= item.to_s.split(' - ')[0..-2].join(' - ') %>
             </th>
           <% end %>
         </tr>
-        <tr class="labels">
+        <tr>
           <% result_hash[:result][0].each_with_index do |item, position| %>
             <th class="<%= (result_hash[:result][0].size - position <= 2) ? 'total' : '' %>">
               <% if item.to_s.split(' - ').last == 'Count' %>
@@ -26,7 +26,7 @@
       </thead>
       <tbody>
         <% result_hash[:result][1..-1].each do |row_values| %>
-          <tr class="<%= row_values.first == 'Total' ? 'overall' : cycle('even', 'odd') %>">
+          <tr class="<%= row_values.first == 'Total' ? 'overall' : '' %>">
             <% row_values.each_with_index do |item, position| %>
               <td class="<%= (row_values.size - position <= 2) ? 'total' : '' %>" style="text-align:center">
                 <%= item.to_s.html_safe %>

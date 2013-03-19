@@ -95,84 +95,53 @@ ul.ui-autocomplete {
   width: 143px;
 }*/
 
+ul.droppable-hover {
+  background-color: #ffffd4;
+}
+
 ul.connectedSortable{
   list-style-type: none;
   padding: 2px 4px;
-  background:#FFF6BF;
-  border: 1px solid #FFD324;
+  /*background:#FFF6BF;*/
+  /*border: 1px solid #FFD324;*/
   min-height: 32px;
 }
 
-ul.connectedSortable li {
+ul.connectedSortable li.bubble, ul.connectedSortable li.bubble-faded {
   padding: 5px;
   margin: 2px 0px;
   cursor: move;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+ul.connectedSortable li.bubble-faded {
+  background-color: #eee;
+  border: 1px dotted #ddd;
+  height: 1.2em;
 }
 
 .ui-state-highlight {
   height: 1.2em;
 }
 
-tr.labels th {
-  border: 1px solid #777;
-  padding: 5px;
-  background-color: #DFEFFC;
-}
-
-tr.labels th.total {
-  border-left: 2px solid #333;
+.table th {
   text-align: center;
 }
 
-tr.even td, tr.odd td {
-  border: 1px solid #777;
-}
-
-tr.even td.total, tr.odd td.total {
-  border-left: 2px solid #333;
-}
-
-tr.even td {
-  background-color: #EFFFE2;
-}
-
-tr.even td.total {
-  background-color: #D2E0C7;
-}
-
-tr.odd td {
-/*  background-color: white;*/
-}
-
-tr.even-borderless td {
-  background-color: #FBFBFB;
-}
-
-tr.odd-borderless td {
-/*  background-color: white;*/
-}
-
-tr.odd td.total {
+th.total, td.total {
   background-color: #EDEDED;
 }
 
 tr.overall {
   font-weight: bold;
-  border: 2px solid #333;
-/*  border-right: 2px solid #333;*/
 }
 
 tr.overall td {
-  border-top: 2px solid #333;
-  border-left: 1px solid #777;
-  border-right: 1px solid #777;
   background-color: #EDEDED;
-  padding: 5px;
-}
-
-tr.overall td.total {
-  background-color: #E0E0E0;
-  border-left: 2px solid #333;
 }
 
 .common a {
