@@ -124,7 +124,7 @@ class QueryConcept < ActiveRecord::Base
     result = ''
     if self.concept and self.concept.continuous?
       result = token_ranges
-    elsif self.concept and  self.concept.categorical?
+    elsif self.concept and self.concept.categorical?
       result = self.value.to_s.split(',').collect{|c_id| Concept.find_by_id(c_id)}.compact().collect{|c| "#{c.human_name}"}.join(' <span class="nolink">or</span> ').html_safe
     elsif self.concept and self.concept.boolean?
       result = self.value.to_s.split(',').collect{|c| "#{c}"}.join(' <span class="nolink">or</span> ').html_safe
