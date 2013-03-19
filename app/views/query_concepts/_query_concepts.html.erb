@@ -5,14 +5,14 @@
       <%= render partial: 'query_concepts/show' %>
     </div>
       <% if @query_concept.position < @query_concept.query.query_concepts.size - 1 %>
-        <div class="qc-cancel" style="line-height:21px;height:21px">
+        <div class="qc-cancel" style="line-height:30px;height:30px">
           <span id="query_concept_<%= @query_concept.id %>_rop_text" class="quiet" onmouseover="$('#query_concept_<%= @query_concept.id %>_right_operator_edit_icon').show();" onmouseout="$('#query_concept_<%= @query_concept.id %>_right_operator_edit_icon').hide();" style="padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px">
             <%= link_to @query_concept.right_operator, '#', style: 'color:#404040;text-decoration:none', data: { object: 'operand-edit', value: "#{@query_concept.id}" } %>
-            <%= link_to image_tag('gentleface/16/doc_edit.png', alt: '', style: 'vertical-align:text-bottom'), '#', data: { object: 'operand-edit', value: "#{@query_concept.id}" }, id: "query_concept_#{@query_concept.id}_right_operator_edit_icon", style: 'display:none' %>
+            <%= link_to 'edit', '#', data: { object: 'operand-edit', value: "#{@query_concept.id}" }, id: "query_concept_#{@query_concept.id}_right_operator_edit_icon", style: 'display:none', class: 'btn btn-mini' %>
           </span>
           <span id="query_concept_<%= @query_concept.id %>_rop_select" style="display:none;padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px">
             <%= select_tag "query_concept_#{@query_concept.id}_right_operator", options_for_select(['and', 'or'].collect{|a| [a,a]}, @query_concept.right_operator), style: 'vertical-align:middle', name: 'right_operator', onchange: "changeRightOperator('#query_concept_#{@query_concept.id}_right_operator', #{@query_concept.id});" %>
-            <%= link_to 'cancel', '#', data: { object: 'operand-hide', value: "#{@query_concept.id}" }, class: 'btn btn-mini' %>
+            <%= link_to 'cancel', '#', data: { object: 'operand-hide', value: "#{@query_concept.id}" }, class: 'btn btn-mini', style: 'margin-top:-10px' %>
           </span>
           <br />
         </div>

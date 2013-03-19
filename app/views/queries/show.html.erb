@@ -17,7 +17,7 @@
   <div class="contour-modal" data-object="contour_modal_container"></div>
 </div>
 
-<div class="row">
+<div class="row-fluid">
   <div class="span6">
 
     <%= form_tag query_sources_path(query_id: @query), method: :post, remote: true, onsubmit: "showWaiting('#query_sources', 'Loading Sources', false)", id: "sources_form", class: 'form-horizontal' do %>
@@ -25,7 +25,7 @@
       <div class="control-group">
         <label class="control-label">From</label>
         <div class="controls" style="white-space:nowrap">
-          <%= text_field_tag :source, '', name: 'search', tabindex: '1', rel: 'tooltip', title: 'Type in a data source and hit <b>[Enter]</b>', style: 'width:350px' %>
+          <%= text_field_tag :source, '', name: 'search', tabindex: '1', rel: 'tooltip', title: 'Type in a data source and hit <b>[Enter]</b>', style: 'width:80%' %>
           <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' }, id: 'source_more' %>
         </div>
       </div>
@@ -44,7 +44,7 @@
       <div class="control-group">
         <label class="control-label">With</label>
         <div class="controls" style="white-space:nowrap">
-          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'query-concept-typeahead', query_id: @query.id }, style: 'width:350px' %>
+          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'query-concept-typeahead', query_id: @query.id }, style: 'width:80%' %>
           <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' }, id: 'concept_search_term_more' %>
         </div>
       </div>
@@ -52,8 +52,7 @@
   </div>
 
   <div class="span6" style="text-align:right">
-
-        <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
+    <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
   </div>
 </div>
 

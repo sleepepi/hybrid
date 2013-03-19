@@ -15,6 +15,8 @@ jQuery ->
         order = $(this).sortable('toArray').toString()
         $.post($("#query_concepts_form").attr("action"), "&order=#{order}", null, "script")
       cancel: 'span.errors_found, div.qc-cancel'
+      helper: (event, draggable) ->
+        "<div>"+draggable.children('[data-object~="query-draggable-helper"]').first().html()+"</div>"
     )
 
   $(document)

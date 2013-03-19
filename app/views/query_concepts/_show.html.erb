@@ -1,7 +1,7 @@
 <% if @query_concept.left_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.left_brackets), 0].max %>px"><%= '('*@query_concept.left_brackets %></div><% end %>
 <div style="position:relative;line-height:25px"
     onmouseover="$('#query_concept_<%= @query_concept.id %>_delete_link').show();"
-    onmouseout="$('#query_concept_<%= @query_concept.id %>_delete_link').hide();"><div style="padding-left:<%= 10*@query_concept.level %>px"><div id="record_ids_<%= @query_concept.id %>_display" class="quiet records_found" style="top:0;position:absolute;left:-55px;width:50px;text-align:right" title="Sub Total"></div><%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, onclick: "markQueryConcept('#query_concept_#{@query_concept.id}_checked', #{@query_concept.id});" %>
+    onmouseout="$('#query_concept_<%= @query_concept.id %>_delete_link').hide();"><div style="padding-left:<%= 10*@query_concept.level %>px"><div id="record_ids_<%= @query_concept.id %>_display" class="quiet records_found" style="top:0;position:absolute;left:-55px;width:50px;text-align:right" title="Sub Total"></div><%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, onclick: "markQueryConcept('#query_concept_#{@query_concept.id}_checked', #{@query_concept.id});", style: 'margin-top: -3px;' %>
 <%= link_to edit_query_concept_path(@query_concept), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "query_concept_#{@query_concept.id}_delete_icon" } do %>
 <span style="font-size: 1.2em"><%= @query_concept.concept ? @query_concept.concept.human_name : @query_concept.external_concept_information(current_user)[:name] %></span>
 
@@ -24,3 +24,8 @@
 <div style="padding-left:<%= 10*@query_concept.level %>px"><span id="record_ids_<%= @query_concept.id %>_errors" class="quiet errors_found"></span></div>
 <% if @query_concept.right_brackets > 0 %><div style="padding-left:<%= [10*(@query_concept.level - @query_concept.right_brackets), 0].max %>px"><%= ')'*@query_concept.right_brackets %></div><% end %>
 </div>
+<div style="display:none" data-object="query-draggable-helper">
+  <div class='query-concept-box'><b><%= @query_concept.concept.human_name %></b><% unless @query_concept.human_value.blank? %> is <% if @query_concept.negated? %>not <% end %><b><%= @query_concept.human_value %></b><% end %></div>
+</div>
+
+
