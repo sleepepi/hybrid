@@ -94,6 +94,17 @@
     </dd>
   <% end %>
 
+  <% if @concept.sources.size > 0 %>
+    <dt>Sources</dt>
+    <dd>
+      <ul>
+        <% @concept.sources.each do |source| %>
+          <li><%= link_to source.name, source %></li>
+        <% end %>
+      </ul>
+    </dd>
+  <% end %>
+
 </dl>
 
 <%= render partial: 'concepts/info' %>
