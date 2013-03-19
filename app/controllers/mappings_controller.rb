@@ -1,5 +1,7 @@
 class MappingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_mapping, only: [ :expanded, :show, :edit, :destroy ]
+  before_action :redirect_without_mapping, only: [ :expanded, :show, :edit, :destroy ]
 
   def info
     @mapping = Mapping.find_by_id(params[:id])
@@ -46,46 +48,32 @@ class MappingsController < ApplicationController
   end
 
   def expanded
-    @mapping = Mapping.find_by_id(params[:id])
-    @mapping = nil if @mapping and not (current_user.all_sources.include?(@mapping.source) or @mapping.source.user_has_action?(current_user, "edit data source mappings") or @mapping.source.user_has_action?(current_user, "view data source mappings"))
-    if @mapping
-      chart_params = {}
-      if @mapping.concept.continuous? or @mapping.concept.date?
-        chart_params = { title: @mapping.concept.human_name, width: 680, height: 300, units: @mapping.human_units, legend: 'none' }
-      elsif @mapping.concept.categorical? or @mapping.concept.boolean?
-        chart_params = { title: @mapping.concept.human_name, width: 450, height: 250 }
-      end
-
-      result_hash = @mapping.graph_values(current_user, chart_params)
-      @values = result_hash[:values]
-      @categories = result_hash[:categories]
-      @chart_type = result_hash[:chart_type]
-      @chart_element_id = result_hash[:chart_element_id]
-      @stats = result_hash[:stats]
-      @defaults = result_hash[:defaults]
-    else
-      render nothing: true
+    chart_params = {}
+    if @mapping.concept.continuous? or @mapping.concept.date?
+      chart_params = { title: @mapping.concept.human_name, width: 680, height: 300, units: @mapping.human_units, legend: 'none' }
+    elsif @mapping.concept.categorical? or @mapping.concept.boolean?
+      chart_params = { title: @mapping.concept.human_name, width: 450, height: 250 }
     end
+
+    result_hash = @mapping.graph_values(current_user, chart_params)
+    @values = result_hash[:values]
+    @categories = result_hash[:categories]
+    @chart_type = result_hash[:chart_type]
+    @chart_element_id = result_hash[:chart_element_id]
+    @stats = result_hash[:stats]
+    @defaults = result_hash[:defaults]
   end
 
+  # GET /mappings/1
   def show
-    @mapping = Mapping.find_by_id(params[:id])
-    @mapping = nil if @mapping and not (current_user.all_sources.include?(@mapping.source) or @mapping.source.user_has_action?(current_user, "edit data source mappings") or @mapping.source.user_has_action?(current_user, "view data source mappings"))
-    if @mapping
-      @mapping.set_status!(current_user)
-    else
-      render nothing: true
-    end
+    @mapping.set_status!(current_user)
   end
 
   # GET /mappings/1/edit
   def edit
-    @mapping = Mapping.find(params[:id])
-    @mapping = nil if @mapping and not (current_user.all_sources.include?(@mapping.source) or @mapping.source.user_has_action?(current_user, "edit data source mappings"))
-    render nothing: true unless @mapping
   end
 
-
+  # POST /mappings
   def create
     @source = current_user.all_sources.find_by_id(params[:source_id])
     source = Source.find_by_id(params[:source_id])
@@ -173,24 +161,30 @@ class MappingsController < ApplicationController
     end
   end
 
+  # DELETE /mappings/1.js
   def destroy
-    @mapping = Mapping.find_by_id(params[:id])
-    # TODO: Simplify if condition for deleting mappings.
-    @mapping = nil if @mapping and not @mapping.source.user_has_action?(current_user, "edit data source mappings")
-    if @mapping
-      flash[:notice] = 'Database Concept was deleted.'
+    flash[:notice] = 'Database Concept was deleted.'
 
-      @column = @mapping.column
-      @source = @mapping.source
-      @table = @mapping.table
-      @mapping_id = @mapping.id
+    @column = @mapping.column
+    @source = @mapping.source
+    @table = @mapping.table
+    @mapping_id = @mapping.id
 
-      @mapping.destroy
+    @mapping.destroy
 
-      # TODO: Update number of mapped concepts
-      render "new"
-    else
-      render nothing: true
-    end
+    # TODO: Update number of mapped concepts
+    render 'new'
   end
+
+  private
+
+    def set_mapping
+      @mapping = Mapping.find_by_id(params[:id])
+      @mapping = nil if @mapping and not @mapping.source.user_has_action?(current_user, "edit data source mappings")
+    end
+
+    def redirect_without_mapping
+      empty_response_or_root_path unless @mapping
+    end
+
 end

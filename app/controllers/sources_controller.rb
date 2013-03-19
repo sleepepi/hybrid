@@ -178,7 +178,7 @@ class SourcesController < ApplicationController
     end
 
     def set_source_with_view_or_edit_data_source_mappings
-      set_source_with_actions(["view data source mappings", "edit data source mappings"])
+      set_source_with_actions(["edit data source mappings"])
       unless @source
         render 'mapping_privilege'
         return

@@ -8,6 +8,7 @@
 - Sources can now additionally be specified as PostgreSQL databases
 - Dictionary imports simplified, `similar_concepts`, and `equivalent_concepts` columns removed
 - Updated popup used for searching and viewing data sources and concepts
+- Removed unused `view data source mappings` rule
 
 ## 0.12.6 (February 13, 2013)
 

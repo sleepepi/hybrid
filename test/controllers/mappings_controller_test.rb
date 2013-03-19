@@ -109,7 +109,7 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should create mapping and show additional options to complete mapping" do
     assert_difference('Mapping.count') do
-      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:boolean).to_param, table: 'table1', column: 'column3'
+      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:boolean).to_param, table: 'table1', new_column: 'column3', format: 'js'
     end
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:mapping)
@@ -118,7 +118,7 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should create mapping and show completed mapping" do
     assert_difference('Mapping.count') do
-      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:datetime).to_param, table: 'table1', column: 'column10'
+      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:datetime).to_param, table: 'table1', new_column: 'column10', format: 'js'
     end
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:mapping)
@@ -127,7 +127,7 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should not create mapping for invalid source" do
     assert_difference('Mapping.count', 0) do
-      post :create, source_id: -1, new_concept_id: concepts(:datetime).to_param, table: 'table1', column: 'column10'
+      post :create, source_id: -1, new_concept_id: concepts(:datetime).to_param, table: 'table1', new_column: 'column10', format: 'js'
     end
     assert_nil assigns(:source)
     assert_nil assigns(:mapping)
@@ -135,19 +135,19 @@ class MappingsControllerTest < ActionController::TestCase
   end
 
   test "should show mapping" do
-    get :show, id: @mapping.to_param
+    get :show, id: @mapping, format: 'js'
     assert_not_nil assigns(:mapping)
     assert_response :success
   end
 
   test "should not show invalid mapping" do
-    get :show, id: -1
+    get :show, id: -1, format: 'js'
     assert_nil assigns(:mapping)
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @mapping.to_param
+    get :edit, id: @mapping, format: 'js'
     assert_response :success
   end
 
@@ -167,15 +167,15 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should destroy mapping" do
     assert_difference('Mapping.current.count', -1) do
-      delete :destroy, id: @mapping.to_param
+      delete :destroy, id: @mapping, format: 'js'
     end
 
-    assert_template "new"
+    assert_template 'new'
   end
 
   test "should not destroy mapping without id" do
     assert_difference('Mapping.current.count', 0) do
-      delete :destroy, id: -1
+      delete :destroy, id: -1, format: 'js'
     end
     assert_nil assigns(:mapping)
     assert_response :success

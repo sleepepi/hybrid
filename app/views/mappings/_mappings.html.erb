@@ -31,8 +31,6 @@
             <% else %>
               <%= render partial: 'mappings/new' %>
             <% end %>
-          <% elsif @source.user_has_action?(current_user, "view data source mappings") %>
-            <%= render partial: 'mappings/show' if @mapping %>
           <% end %>
         </tbody>
       <% end %>

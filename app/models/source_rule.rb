@@ -5,7 +5,7 @@ class SourceRule < ActiveRecord::Base
 
   attr_reader :user_tokens
 
-  ACTION_GROUPS = [["All Read", ["view data source general information", "view data source mappings"]],
+  ACTION_GROUPS = [["All Read", ["view data source general information"]],
                    ["All Write", ["edit data source connection information", "edit data source mappings", "edit data source rules"]],
                    ["All Data", ["get count", "view limited data distribution", "view data distribution", "download limited dataset", "download dataset", "download files"]]]
 
