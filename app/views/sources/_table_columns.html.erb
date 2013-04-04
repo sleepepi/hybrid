@@ -30,26 +30,28 @@
     <% end %>
   <% end %>
 
-  <center>
-    <% if params[:page].to_i == 1 %>
-      <span class="quiet">&lsaquo; Previous</span>
-    <% else %>
-      <%= link_to '&lsaquo; Previous'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i - 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
+  <div class="pagination pagination-centered">
+    <ul>
+      <% if params[:page].to_i == 1 %>
+        <li class="disabled"><a href="#">&laquo;</a></li>
+      <% else %>
+        <li><%= link_to '&laquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i - 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
+      <% end %>
+    <% page_list.each do |page_number| %>
+      <% if page_number == nil %>
+        <li class="disabled"><a href="#">&hellip;</a></li>
+      <% elsif params[:page].to_i == page_number %>
+        <li class="active"><a href="#"><%= page_number %></a></li>
+      <% else %>
+        <li><%= link_to page_number, table_columns_source_path(@source, table: params[:table], page: page_number, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
+      <% end %>
     <% end %>
-  <% page_list.each do |page_number| %>
-    <% if page_number == nil %>
-      <span class="gap">&hellip;</span>
-    <% elsif params[:page].to_i == page_number %>
-      <%= page_number %>
-    <% else %>
-      <%= link_to page_number, table_columns_source_path(@source, table: params[:table], page: page_number, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
-    <% end %>
-  <% end %>
-    <% if params[:page].to_i == @max_pages %>
-      <span class="quiet">Next &rsaquo;</span>
-    <% else %>
-      <%= link_to 'Next &rsaquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i + 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %>
-    <% end %>
-  </center>
+      <% if params[:page].to_i == @max_pages %>
+        <li class="disabled"><a href="#">&raquo;</a></li>
+      <% else %>
+        <li><%= link_to '&raquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i + 1, filter_unmapped: params[:filter_unmapped]), method: :post, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
+      <% end %>
+    </ul>
+  </div>
 
 <% end %>
