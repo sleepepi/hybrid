@@ -99,6 +99,7 @@ Hybrid::Application.routes.draw do
 
   get "/about" => "application#about", as: :about
   get "/settings" => "users#settings", as: :settings
+  get "/matching" => "matching#matching", as: :matching
 
   root to: "queries#show"
 

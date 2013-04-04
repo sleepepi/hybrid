@@ -213,7 +213,7 @@ class Query < ActiveRecord::Base
   def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
     result = [[]]
     error = ''
-    return {result: result, error: error} if temp_query_concepts.blank?
+    return { result: result, error: error } if temp_query_concepts.blank?
 
     available_sources = []
     selected_sources.each do |source|

@@ -1,0 +1,53 @@
+<% cases_matrix = [] %>
+<% controls_matrix = [] %>
+
+<% if @cases and @controls %>
+
+  <% common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first %>
+  <% common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: params[:criteria_id])}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: params[:criteria_id])}.flatten.uniq) %>
+
+  <% cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [common_identifier] + common_criteria ) %>
+
+  <% controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [common_identifier] + common_criteria ) %>
+
+  <% matches = [] %>
+
+  <%# cases_matrix[:result][0] %>
+
+  <% cases_matrix[:result][1..-1].each do |case_info| %>
+    <% id = case_info[0] %>
+
+    <%# Select matching IDs %>
+    <% criteria = case_info[1..-1] %>
+    <% matching_ids = controls_matrix[:result].select{|control| control[1..-1] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] %>
+    <%# Remove matching IDs from controls_matrix so they aren't reused %>
+    <% controls_matrix[:result].delete_if{|control| matching_ids.include?(control[0])} %>
+
+    <% matches << { id: id, matching_ids: matching_ids, criteria: criteria } %>
+  <% end %>
+
+  <table class="table table-striped table-hover" style="width:100%">
+    <thead>
+      <tr>
+        <th>Case ID</th>
+        <th>Control IDs</th>
+        <th>Matched on</th>
+      </tr>
+      <tr>
+        <th><%= matches.collect{|i| i[:id]}.count %></th>
+        <th><%= matches.collect{|i| i[:matching_ids]}.flatten.count %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% matches.each do |match| %>
+      <tr class="<%= (match[:matching_ids].count == 0) ? 'error' : (match[:matching_ids].count < @controls_per_case ? 'warning' : nil) %>">
+        <td><%= match[:id] %></td>
+        <td><%= match[:matching_ids] %></td>
+        <td><%= match[:criteria] %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+<% end %>

@@ -1,0 +1,37 @@
+<%= form_tag matching_path, method: :get, remote: true, class: 'form-horizontal', data: { object: 'form-load' } do %>
+  <div class="control-group">
+    <div class="control-label">Cases</div>
+    <div class="controls">
+      <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="control-label">Controls</div>
+    <div class="controls">
+      <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="control-label">Match on</div>
+    <div class="controls">
+      <%= select_tag :criteria_id, options_for_select([['---'], nil] + @concepts, params[:criteria_id]) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="control-label">Controls Per Case</div>
+    <div class="controls">
+      <%= select_tag :controls_per_case, options_for_select([['1',1],['2',2],['3',3],['4',4]], @controls_per_case) %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= submit_tag "Refresh", class: 'btn btn-primary' %>
+  </div>
+<% end %>
+
+<hr />
+
+<div id="matching"><div class="center"><%= image_tag "contour/ajax-loader.gif" %></div></div>
