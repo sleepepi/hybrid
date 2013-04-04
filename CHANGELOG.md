@@ -1,4 +1,4 @@
-## 0.13.2
+## 0.13.2 (April 4, 2013)
 
 ### Bug Fix
 - Fixed a bug preventing new users from being added to source rules
