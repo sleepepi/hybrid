@@ -57,7 +57,7 @@ class MatchingController < ApplicationController
       controls_matrix = []
 
       if @cases and @controls
-        common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first
+        @common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first
 
         all_criteria = (params[:criteria_ids] || []).compact.uniq
         concept_ids = (params[:variable_ids] || []).compact.uniq
@@ -65,9 +65,9 @@ class MatchingController < ApplicationController
         common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
         extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
 
-        cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [common_identifier] + common_criteria + extra_concepts )
+        cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [@common_identifier] + common_criteria + extra_concepts )
 
-        controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [common_identifier] + common_criteria + extra_concepts )
+        controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [@common_identifier] + common_criteria + extra_concepts )
 
         extra_start_index = common_criteria.size + 1
 
