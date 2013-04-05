@@ -1,4 +1,4 @@
-<div class="modal hide modal-large" id="dataset_popup">
+<div class="modal hide modal-large" id="query_<%= @query.id %>_dataset_popup">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>New Dataset</h3>
@@ -15,7 +15,7 @@
 
       <div class="control-group">
         <%= label :report, :template_id, "Template", class: 'control-label' %>
-        <div class="controls" id="datasets_list">
+        <div class="controls" id="query_<%= @query.id %>_datasets_list">
           <%= render partial: 'reports/datasets_list' %>
         </div>
       </div>

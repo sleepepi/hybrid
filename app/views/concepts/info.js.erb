@@ -1,4 +1,12 @@
 showContourModal();
+
+if ($("#concept_info").length == 0) {
+  $("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("concepts/popup")) %>");
+  $("#concept_folder_search").html("<%= escape_javascript(render("concepts/folder_search")) %>");
+  $("#concept_folders").html("<%= escape_javascript(render("concepts/folders")) %>");
+}
+
+
 $("#concept_info").html("<%= escape_javascript(render("info")) %>");
 
 $('html, body').animate({ scrollTop: $(".contour-modal-wrapper").offset().top - 40 }, 'fast');

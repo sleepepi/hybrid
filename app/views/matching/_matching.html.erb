@@ -1,33 +1,33 @@
-<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
-
-<% cases_matrix = [] %>
-<% controls_matrix = [] %>
-
 <div class="row">
-  <% if @cases and @cases.true_datasets.size > 0 %>
-    <div class="span3">
+  <% [@cases, @controls].compact.each do |query| %>
+    <% @query = query %>
+    <div class="span6">
       <h2 class="about-title" style="text-align:left">
-        Available Cases Datasets
+        Available <%= @query == @cases ? 'Cases' : 'Controls' %> Datasets
+        <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: "#query_#{@query.id}_dataset_popup" } %>
       </h2>
-      <div id="datasets_container"><%= @query = @cases; render partial: 'reports/datasets' %></div>
-    </div>
-  <% end %>
-
-  <% if @controls and @controls.true_datasets.size > 0 %>
-    <div class="span3">
-      <h2 class="about-title" style="text-align:left">
-        Available Controls Datasets
-      </h2>
-      <div id="datasets_container"><%= @query = @controls; render partial: 'reports/datasets' %></div>
+      <div id="query_<%= @query.id %>_datasets_container"><%= render partial: 'reports/datasets' %></div>
+      <%= render partial: 'reports/dataset_modal' %>
     </div>
   <% end %>
 </div>
 
 <div style="clear:both"></div>
 
+<div id="contour-backdrop" style="display:none"></div>
+
+<div class="contour-modal-wrapper" data-object="contour_modal_wrapper" style="display:none">
+  <div class="contour-modal" data-object="contour_modal_container"></div>
+</div>
+
 <div id="inlaid_report"></div>
 
 <hr />
+
+<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
+
+<% cases_matrix = [] %>
+<% controls_matrix = [] %>
 
 <% if @cases and @controls %>
 

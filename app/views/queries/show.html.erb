@@ -109,9 +109,9 @@
   <div class="span3">
     <h2 class="about-title" style="text-align:left">
       Datasets
-      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: '#dataset_popup' }, id: 'add_dataset_btn' %>
+      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: "#query_#{@query.id}_dataset_popup" } %>
     </h2>
-    <div id="datasets_container"><%= render partial: 'reports/datasets' %></div>
+    <div id="query_<%= @query.id %>_datasets_container"><%= render partial: 'reports/datasets' %></div>
   </div>
 
   <div class="span3">
