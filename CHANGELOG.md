@@ -3,6 +3,9 @@
 ### Enhancements
 - Added a tool to perform frequency-based matching
 
+### Bug Fix
+- Dataset concepts now properly show concept popup information when clicked
+
 ## 0.13.2 (April 4, 2013)
 
 ### Bug Fix
