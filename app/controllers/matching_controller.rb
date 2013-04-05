@@ -60,7 +60,6 @@ class MatchingController < ApplicationController
 
         cases_matrix[:result][1..-1].each do |case_info|
           id = case_info[0]
-
           # Select matching IDs
           criteria = case_info[1..common_criteria.size]
 

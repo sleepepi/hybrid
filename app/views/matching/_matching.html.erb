@@ -1,9 +1,24 @@
+<% if @cases and @controls %>
+  <% total = @matches.count %>
+  <% matched = @matches.select{|match| match[:matching_ids].count == @controls_per_case}.count %>
+  <% partial = @matches.select{|match| match[:matching_ids].count > 0 and match[:matching_ids].count < @controls_per_case}.count %>
+  <% unmatched = @matches.select{|match| match[:matching_ids].count == 0}.count %>
+
+  <% if total > 0 %>
+    <div class="progress">
+      <div class="bar bar-success" style="width: <%= "%0.04f" % (matched * 100.0 / total) %>%;"><%= "%0.01f" % (matched * 100.0 / total) %>%</div>
+      <div class="bar bar-warning" style="width: <%= "%0.04f" % (partial * 100.0 / total) %>%;"><%= "%0.01f" % (partial * 100.0 / total) %>%</div>
+      <div class="bar bar-danger" style="width: <%= "%0.04f" % (unmatched * 100.0 / total) %>%;"><%= "%0.01f" % (unmatched * 100.0 / total) %>%</div>
+    </div>
+  <% end %>
+<div style="clear:both"></div>
+<% end %>
+
 <%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
 
 <%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
 
 <% if @cases and @controls %>
-
   <table class="table table-striped table-hover" style="width:100%">
     <thead>
       <tr>
@@ -13,7 +28,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @matches.each do |match| %>
+      <% @matches.sort{ |a,b| a[:matching_ids].count <=> b[:matching_ids].count }.each do |match| %>
       <tr class="<%= (match[:matching_ids].count == 0) ? 'error' : (match[:matching_ids].count < @controls_per_case ? 'warning' : nil) %>">
         <td><%= match[:id] %></td>
         <td><%= match[:matching_ids].join(', ') %></td>
