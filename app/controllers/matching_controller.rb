@@ -1,9 +1,8 @@
 class MatchingController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_queries, only: [ :matching, :add_variable, :add_criteria ]
 
   def matching
-    load_queries_and_concepts
-
     respond_to do |format|
       format.csv do
         create_matches(true)
@@ -12,28 +11,43 @@ class MatchingController < ApplicationController
       format.js do
         create_matches(false)
       end
-      format.html
+      format.html do
+        load_criteria_concepts
+        load_extra_concepts
+      end
     end
   end
 
   def add_variable
-    load_queries_and_concepts
+    load_extra_concepts
+  end
+
+  def add_criteria
+    load_criteria_concepts
   end
 
   private
 
-    def load_queries_and_concepts
+    def set_queries
       @cases = current_user.all_queries.find_by_id(params[:cases_id])
       @controls = current_user.all_queries.find_by_id(params[:controls_id])
       @controls_per_case = (params[:controls_per_case].to_i <= 4 and params[:controls_per_case].to_i >= 1) ? params[:controls_per_case].to_i : 1
       @sources = (@cases ? @cases.sources.to_a : []) & (@controls ? @controls.sources.to_a : [])
-      all_concepts = []
+    end
+
+    def load_criteria_concepts
       concepts = []
       @sources.each do |s|
         concepts += (concepts + s.concepts.where(concept_type: 'categorical').collect{|c| [c.display_name, c.id]}).uniq
-        all_concepts += (all_concepts + s.concepts.collect{|c| [c.display_name, c.id]}).uniq
       end
       @concepts = concepts.sort{|a,b| a[0].to_s <=> b[0].to_s}
+    end
+
+    def load_extra_concepts
+      all_concepts = []
+      @sources.each do |s|
+        all_concepts += (all_concepts + s.concepts.where("folder != '' and folder IS NOT NULL").collect{|c| [c.display_name, c.id]}).uniq
+      end
       @all_concepts = all_concepts.sort{|a,b| a[0].to_s <=> b[0].to_s}
     end
 
@@ -44,8 +58,8 @@ class MatchingController < ApplicationController
 
       if @cases and @controls
         common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first
-        params[:criteria_ids] = [params[:criteria_id], params[:criteria_two_id], params[:criteria_three_id]]
-        all_criteria = params[:criteria_ids].compact.uniq
+
+        all_criteria = (params[:criteria_ids] || []).compact.uniq
         concept_ids = (params[:variable_ids] || []).compact.uniq
 
         common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)

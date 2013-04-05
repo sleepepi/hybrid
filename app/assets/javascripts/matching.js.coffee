@@ -8,6 +8,22 @@ jQuery ->
       $.post(root_url + 'matching/add_variable', $("#matching-form").serialize(), null, "script")
       false
     )
+    .on('click', '[data-object~="criteria_add"]', () ->
+      $.post(root_url + 'matching/add_criteria', $("#matching-form").serialize(), null, "script")
+      false
+    )
     .on('change', '[data-object~="matching-form-option"]', () ->
+      showWaiting("#matching", "", true)
       $("#matching-form").submit()
+    )
+    .on('click', '[data-object~="refresh-matches"]', () ->
+      showWaiting("#matching", "", true)
+      $("#matching-form").submit()
+      false
+    )
+    .on('click', '[data-object~="remove-matching-group"]', () ->
+      $(this).closest('[data-object~="remove-matching-group-parent"]').remove()
+      showWaiting("#matching", "", true)
+      $("#matching-form").submit()
+      false
     )

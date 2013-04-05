@@ -101,6 +101,7 @@ Hybrid::Application.routes.draw do
   get "/settings" => "users#settings", as: :settings
   get "/matching" => "matching#matching", as: :matching
   post "/matching/add_variable" => "matching#add_variable", as: :add_variable
+  post "/matching/add_criteria" => "matching#add_criteria", as: :add_criteria
 
   root to: "queries#show"
 

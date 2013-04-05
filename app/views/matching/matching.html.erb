@@ -16,9 +16,14 @@
   <div class="control-group">
     <div class="control-label">Match on</div>
     <div class="controls">
-      <%= select_tag :criteria_id, options_for_select([['---', nil]] + @concepts, params[:criteria_id]), data: { object: 'matching-form-option' } %>
-      <%= select_tag :criteria_two_id, options_for_select([['---', nil]] + @concepts, params[:criteria_two_id]), data: { object: 'matching-form-option' } %>
-      <%= select_tag :criteria_three_id, options_for_select([['---', nil]] + @concepts, params[:criteria_three_id]), data: { object: 'matching-form-option' } %>
+      <div id="matching_criteria_ids">
+        <% (params[:criteria_ids].blank? ? [nil,nil,nil] : params[:criteria_ids]).each do |criteria_id| %>
+          <%= render partial: 'matching/criteria', locals: { criteria_id: criteria_id } %>
+        <% end %>
+      </div>
+      <div style="margin-top:2px">
+        <%= link_to 'add more', '#', data: { object: 'criteria_add' }, class: 'btn btn-mini' %>
+      </div>
     </div>
   </div>
 
@@ -46,7 +51,7 @@
   </div>
 
   <div class="form-actions">
-    <%= submit_tag "Refresh", class: 'btn btn-primary' %>
+    <%= link_to "Refresh", '#', data: { object: 'refresh-matches' }, class: 'btn btn-primary' %>
   </div>
 <% end %>
 
