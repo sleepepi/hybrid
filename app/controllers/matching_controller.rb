@@ -4,11 +4,14 @@ class MatchingController < ApplicationController
   def matching
     load_queries_and_concepts
 
-    create_matches unless params[:format] == 'html'
-
     respond_to do |format|
-      format.csv { send_data csv_string, type: 'text/csv; charset=iso-8859-1; header=present', disposition: "attachment; filename=\"Matching #{Time.now.strftime("%Y.%m.%d %Ih%M %p")}.csv\"" }
-      format.js
+      format.csv do
+        create_matches(true)
+        send_data csv_string, type: 'text/csv; charset=iso-8859-1; header=present', disposition: "attachment; filename=\"Matching #{Time.now.strftime("%Y.%m.%d %Ih%M %p")}.csv\""
+      end
+      format.js do
+        create_matches(false)
+      end
       format.html
     end
   end
@@ -34,7 +37,7 @@ class MatchingController < ApplicationController
       @all_concepts = all_concepts.sort{|a,b| a[0].to_s <=> b[0].to_s}
     end
 
-    def create_matches
+    def create_matches(include_extra)
       @matches = []
       cases_matrix = []
       controls_matrix = []
@@ -46,7 +49,7 @@ class MatchingController < ApplicationController
         concept_ids = (params[:variable_ids] || []).compact.uniq
 
         common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
-        extra_concepts = (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq)
+        extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
 
         cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [common_identifier] + common_criteria + extra_concepts )
 
