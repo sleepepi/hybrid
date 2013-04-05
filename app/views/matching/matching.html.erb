@@ -30,7 +30,9 @@
           <%= render partial: 'matching/variable_selection', locals: { variable_id: variable_id } %>
         <% end %>
       </div>
-      <%= link_to 'add more', '#', data: { object: 'variable_add' } %>
+      <div style="margin-top:2px">
+        <%= link_to 'add more', '#', data: { object: 'variable_add' }, class: 'btn btn-mini' %>
+      </div>
     </div>
   </div>
 

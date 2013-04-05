@@ -14,9 +14,9 @@
 <div style="clear:both"></div>
 <% end %>
 
-<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
+<%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn' %>
 
-<%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
+<%= link_to 'Copy Configuration to URL Bar', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn' %>
 
 <% if @cases and @controls %>
   <table class="table table-striped table-hover" style="width:100%">
