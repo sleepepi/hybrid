@@ -2,23 +2,23 @@
   <div class="control-group">
     <div class="control-label">Cases</div>
     <div class="controls">
-      <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil) %>
+      <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Controls</div>
     <div class="controls">
-      <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil) %>
+      <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Match on</div>
     <div class="controls">
-      <%= select_tag :criteria_id, options_for_select([['---', nil]] + @concepts, params[:criteria_id]) %>
-      <%= select_tag :criteria_two_id, options_for_select([['---', nil]] + @concepts, params[:criteria_two_id]) %>
-      <%= select_tag :criteria_three_id, options_for_select([['---', nil]] + @concepts, params[:criteria_three_id]) %>
+      <%= select_tag :criteria_id, options_for_select([['---', nil]] + @concepts, params[:criteria_id]), data: { object: 'matching-form-option' } %>
+      <%= select_tag :criteria_two_id, options_for_select([['---', nil]] + @concepts, params[:criteria_two_id]), data: { object: 'matching-form-option' } %>
+      <%= select_tag :criteria_three_id, options_for_select([['---', nil]] + @concepts, params[:criteria_three_id]), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
@@ -38,7 +38,7 @@
     <div class="control-label">Controls Per Case</div>
     <div class="controls sheet-container">
       <% [1,2,3,4].each do |count| %>
-        <label class="radio inline <%= 'selected' if @controls_per_case == count %>"><%= radio_button_tag :controls_per_case, count, @controls_per_case == count %> <%= count %></label>
+        <label class="radio inline <%= 'selected' if @controls_per_case == count %>"><%= radio_button_tag :controls_per_case, count, @controls_per_case == count, data: { object: 'matching-form-option' } %> <%= count %></label>
       <% end %>
     </div>
   </div>

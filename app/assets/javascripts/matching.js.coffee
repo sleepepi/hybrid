@@ -8,3 +8,6 @@ jQuery ->
       $.post(root_url + 'matching/add_variable', $("#matching-form").serialize(), null, "script")
       false
     )
+    .on('change', '[data-object~="matching-form-option"]', () ->
+      $("#matching-form").submit()
+    )
