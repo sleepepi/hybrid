@@ -16,21 +16,21 @@
   <div class="control-group">
     <div class="control-label">Match on</div>
     <div class="controls">
-      <%= select_tag :criteria_id, options_for_select([['---'], nil] + @concepts, params[:criteria_id]) %>
+      <%= select_tag :criteria_id, options_for_select([['---', nil]] + @concepts, params[:criteria_id]) %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Match on</div>
     <div class="controls">
-      <%= select_tag :criteria_two_id, options_for_select([['---'], nil] + @concepts, params[:criteria_two_id]) %>
+      <%= select_tag :criteria_two_id, options_for_select([['---', nil]] + @concepts, params[:criteria_two_id]) %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Match on</div>
     <div class="controls">
-      <%= select_tag :criteria_three_id, options_for_select([['---'], nil] + @concepts, params[:criteria_three_id]) %>
+      <%= select_tag :criteria_three_id, options_for_select([['---', nil]] + @concepts, params[:criteria_three_id]) %>
     </div>
   </div>
 

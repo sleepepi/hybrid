@@ -49,7 +49,7 @@
 
     <%# Select matching IDs %>
     <% criteria = case_info[1..-1] %>
-    <% matching_ids = controls_matrix[:result].select{|control| control[1..-1] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] %>
+    <% matching_ids = controls_matrix[:result][1..-1].select{|control| control[1..-1] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] %>
     <%# Remove matching IDs from controls_matrix so they aren't reused %>
     <% controls_matrix[:result].delete_if{|control| matching_ids.include?(control[0])} %>
 
@@ -69,7 +69,7 @@
       <tr class="<%= (match[:matching_ids].count == 0) ? 'error' : (match[:matching_ids].count < @controls_per_case ? 'warning' : nil) %>">
         <td><%= match[:id] %></td>
         <td><%= match[:matching_ids].join(', ') %></td>
-        <td><%= match[:criteria] %></td>
+        <td><%= match[:criteria].join(', ') %></td>
       </tr>
       <% end %>
     </tbody>
