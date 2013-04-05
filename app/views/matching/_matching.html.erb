@@ -1,10 +1,40 @@
+<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
+
 <% cases_matrix = [] %>
 <% controls_matrix = [] %>
+
+<div class="row">
+  <% if @cases and @cases.true_datasets.size > 0 %>
+    <div class="span3">
+      <h2 class="about-title" style="text-align:left">
+        Available Cases Datasets
+      </h2>
+      <div id="datasets_container"><%= @query = @cases; render partial: 'reports/datasets' %></div>
+    </div>
+  <% end %>
+
+  <% if @controls and @controls.true_datasets.size > 0 %>
+    <div class="span3">
+      <h2 class="about-title" style="text-align:left">
+        Available Controls Datasets
+      </h2>
+      <div id="datasets_container"><%= @query = @controls; render partial: 'reports/datasets' %></div>
+    </div>
+  <% end %>
+</div>
+
+<div style="clear:both"></div>
+
+<div id="inlaid_report"></div>
+
+<hr />
 
 <% if @cases and @controls %>
 
   <% common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first %>
-  <% common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: params[:criteria_id])}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: params[:criteria_id])}.flatten.uniq) %>
+  <% params[:criteria_ids] = [params[:criteria_id], params[:criteria_two_id], params[:criteria_three_id]] %>
+  <% all_criteria = params[:criteria_ids].compact.uniq %>
+  <% common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq) %>
 
   <% cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [common_identifier] + common_criteria ) %>
 
@@ -29,21 +59,16 @@
   <table class="table table-striped table-hover" style="width:100%">
     <thead>
       <tr>
-        <th>Case ID</th>
-        <th>Control IDs</th>
+        <th>Case ID (<%= matches.collect{|i| i[:id]}.count %>)</th>
+        <th>Control ID<%= 's' if @controls_per_case > 1 %> (<%= matches.collect{|i| i[:matching_ids]}.flatten.count %>)</th>
         <th>Matched on</th>
-      </tr>
-      <tr>
-        <th><%= matches.collect{|i| i[:id]}.count %></th>
-        <th><%= matches.collect{|i| i[:matching_ids]}.flatten.count %></th>
-        <th></th>
       </tr>
     </thead>
     <tbody>
       <% matches.each do |match| %>
       <tr class="<%= (match[:matching_ids].count == 0) ? 'error' : (match[:matching_ids].count < @controls_per_case ? 'warning' : nil) %>">
         <td><%= match[:id] %></td>
-        <td><%= match[:matching_ids] %></td>
+        <td><%= match[:matching_ids].join(', ') %></td>
         <td><%= match[:criteria] %></td>
       </tr>
       <% end %>

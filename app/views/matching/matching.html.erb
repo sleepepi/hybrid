@@ -21,6 +21,20 @@
   </div>
 
   <div class="control-group">
+    <div class="control-label">Match on</div>
+    <div class="controls">
+      <%= select_tag :criteria_two_id, options_for_select([['---'], nil] + @concepts, params[:criteria_two_id]) %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="control-label">Match on</div>
+    <div class="controls">
+      <%= select_tag :criteria_three_id, options_for_select([['---'], nil] + @concepts, params[:criteria_three_id]) %>
+    </div>
+  </div>
+
+  <div class="control-group">
     <div class="control-label">Controls Per Case</div>
     <div class="controls">
       <%= select_tag :controls_per_case, options_for_select([['1',1],['2',2],['3',3],['4',4]], @controls_per_case) %>
