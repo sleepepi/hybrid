@@ -1,71 +1,19 @@
-<div class="row">
-  <% [@cases, @controls].compact.each do |query| %>
-    <% @query = query %>
-    <div class="span6">
-      <h2 class="about-title" style="text-align:left">
-        Available <%= @query == @cases ? 'Cases' : 'Controls' %> Datasets
-        <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: "#query_#{@query.id}_dataset_popup" } %>
-      </h2>
-      <div id="query_<%= @query.id %>_datasets_container"><%= render partial: 'reports/datasets' %></div>
-      <%= render partial: 'reports/dataset_modal' %>
-    </div>
-  <% end %>
-</div>
+<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
 
-<div style="clear:both"></div>
-
-<div id="contour-backdrop" style="display:none"></div>
-
-<div class="contour-modal-wrapper" data-object="contour_modal_wrapper" style="display:none">
-  <div class="contour-modal" data-object="contour_modal_container"></div>
-</div>
-
-<div id="inlaid_report"></div>
-
-<hr />
-
-<%= link_to 'current configuration', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
-
-<% cases_matrix = [] %>
-<% controls_matrix = [] %>
+<%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_id: params[:criteria_id], criteria_two_id: params[:criteria_two_id], criteria_three_id: params[:criteria_three_id], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn pull-right' %>
 
 <% if @cases and @controls %>
-
-  <% common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first %>
-  <% params[:criteria_ids] = [params[:criteria_id], params[:criteria_two_id], params[:criteria_three_id]] %>
-  <% all_criteria = params[:criteria_ids].compact.uniq %>
-  <% common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq) %>
-
-  <% cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [common_identifier] + common_criteria ) %>
-
-  <% controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [common_identifier] + common_criteria ) %>
-
-  <% matches = [] %>
-
-  <%# cases_matrix[:result][0] %>
-
-  <% cases_matrix[:result][1..-1].each do |case_info| %>
-    <% id = case_info[0] %>
-
-    <%# Select matching IDs %>
-    <% criteria = case_info[1..-1] %>
-    <% matching_ids = controls_matrix[:result][1..-1].select{|control| control[1..-1] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] %>
-    <%# Remove matching IDs from controls_matrix so they aren't reused %>
-    <% controls_matrix[:result].delete_if{|control| matching_ids.include?(control[0])} %>
-
-    <% matches << { id: id, matching_ids: matching_ids, criteria: criteria } %>
-  <% end %>
 
   <table class="table table-striped table-hover" style="width:100%">
     <thead>
       <tr>
-        <th>Case ID (<%= matches.collect{|i| i[:id]}.count %>)</th>
-        <th>Control ID<%= 's' if @controls_per_case > 1 %> (<%= matches.collect{|i| i[:matching_ids]}.flatten.count %>)</th>
+        <th>Case ID (<%= @matches.collect{|i| i[:id]}.count %>)</th>
+        <th>Control ID<%= 's' if @controls_per_case > 1 %> (<%= @matches.collect{|i| i[:matching_ids]}.flatten.count %>)</th>
         <th>Matched on</th>
       </tr>
     </thead>
     <tbody>
-      <% matches.each do |match| %>
+      <% @matches.each do |match| %>
       <tr class="<%= (match[:matching_ids].count == 0) ? 'error' : (match[:matching_ids].count < @controls_per_case ? 'warning' : nil) %>">
         <td><%= match[:id] %></td>
         <td><%= match[:matching_ids].join(', ') %></td>
