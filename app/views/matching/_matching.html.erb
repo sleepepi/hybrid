@@ -92,24 +92,24 @@
             </tr>
           </thead>
           <tbody>
-            <% @overall_min = array_min(case_values + control_values) %>
-            <% @overall_max = array_max(case_values + control_values) %>
+            <% @overall_min = array_min(case_values.compact + control_values.compact) %>
+            <% @overall_max = array_max(case_values.compact + control_values.compact) %>
             <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
               <tr>
                 <td><span data-object="sparkline" data-type="box" data-values="<%= values.to_json %>" data-min="<%= @overall_min %>" data-max="<%= @overall_max %>" style="display:none"></span></td>
                 <td><%= name %></td>
                 <td><%= values.compact.count %></td>
                 <td>
-                  <% mean = array_mean(values) %>
+                  <% mean = array_mean(values.compact) %>
                   <%= "%0.02f" % mean if mean %>
                 </td>
                 <td>
-                  <% stdev = array_standard_deviation(values) %>
+                  <% stdev = array_standard_deviation(values.compact) %>
                   <%= ("&plusmn; %0.02f" % stdev).html_safe if stdev %>
                 </td>
-                <td><%= array_median(values) %></td>
-                <td><%= array_min(values) %></td>
-                <td><%= array_max(values) %></td>
+                <td><%= "%0.02f" % array_median(values.compact) %></td>
+                <td><%= "%0.02f" % array_min(values.compact) %></td>
+                <td><%= "%0.02f" % array_max(values.compact) %></td>
                 <td><%= (values.compact.count == values.count) ? '-' : values.count - values.compact.count %></td>
                 <td><%= values.count %></td>
               </tr>
