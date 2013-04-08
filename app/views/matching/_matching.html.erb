@@ -23,75 +23,86 @@
   <%= link_to 'Copy Configuration to URL Bar', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_ids: params[:criteria_ids], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn' %>
 
 
-<%#= @extra_concepts.inspect %>
+  <hr class="soften" style="margin: 20px 0px">
 
-<hr class="soften" style="margin: 20px 0px">
+  <% sliceColors = ['#3366cc', '#dc3912', '#ff9900', '#109618', '#66aa00', '#dd4477', '#0099c6', '#990099'] %>
 
-<% @extra_concepts.each_with_index do |concept, index| %>
-  <div>
-    <% case_values = @matches.collect{|m| m[:case_extra][index]} %>
-    <% control_values = @matches.collect{|m| m[:extra].collect{|arr| arr[index]}}.flatten %>
-    <% if concept.categorical? or concept.boolean? %>
-      <table class="table table-striped table-hover" style="width:100%">
-        <thead>
-          <tr>
-            <th style="text-align:left"><%= concept.human_name %></th>
-            <th style="text-align:left">Cases</th>
-            <th style="text-align:left">Controls</th>
-            <th style="text-align:left">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% (case_values.uniq | control_values.uniq).sort.each do |val| %>
+  <% @extra_concepts.each_with_index do |concept, index| %>
+    <div>
+      <% case_values = @matches.collect{|m| m[:case_extra][index]} %>
+      <% control_values = @matches.collect{|m| m[:extra].collect{|arr| arr[index]}}.flatten %>
+      <% if concept.categorical? or concept.boolean? %>
+        <% all_unique_values = (case_values.uniq | control_values.uniq).sort %>
+        <table class="table table-striped table-hover" style="width:100%">
+          <thead>
             <tr>
-              <td><%= val %></td>
-              <td><%= case_values.select{|v| v == val}.count %></td>
-              <td><%= control_values.select{|v| v == val}.count %></td>
-              <td><%= case_values.select{|v| v == val}.count + control_values.select{|v| v == val}.count %></td>
+              <th></th>
+              <th style="text-align:left"><%= concept.human_name %></th>
+              <% all_unique_values.each do |val| %>
+                <th style="text-align:left" class="<%= 'muted' unless val %>"><%= val ? val : '-' %></th>
+              <% end %>
+              <th style="text-align:left">Total</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% elsif concept.continuous? %>
-      <table class="table table-striped table-hover" style="width:100%">
-        <thead>
-          <tr>
-            <th style="text-align:left"><%= concept.human_name %></th>
-            <th style="text-align:left">N</th>
-            <th style="text-align:left">Mean</th>
-            <th style="text-align:left">StdDev</th>
-            <th style="text-align:left">Median</th>
-            <th style="text-align:left">Min</th>
-            <th style="text-align:left">Max</th>
-            <th style="text-align:left;" class="muted">Unknown</th>
-            <th style="text-align:left">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
+          </thead>
+          <tbody>
+            <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
             <tr>
+              <% counts = all_unique_values.collect{|val| values.select{|v| v == val}.count} %>
+              <td><span data-object="sparkline" data-type="pie" data-values="<%= counts.to_json %>" style="display:none"></span></td>
               <td><%= name %></td>
-              <td><%= values.compact.count %></td>
-              <td>
-                <% mean = array_mean(values) %>
-                <%= "%0.02f" % mean if mean %>
-              </td>
-              <td>
-                <% stdev = array_standard_deviation(values) %>
-                <%= "%0.02f" % stdev if stdev %>
-              </td>
-              <td><%= array_median(values) %></td>
-              <td><%= array_min(values) %></td>
-              <td><%= array_max(values) %></td>
-              <td><%= (values.compact.count == values.count) ? '-' : values.count - values.compact.count %></td>
+              <% counts.each_with_index do |count, index| %>
+                <td><span style="background-color: <%= sliceColors[index % sliceColors.size] %>">&nbsp;</span> <%= count %></td>
+              <% end %>
               <td><%= values.count %></td>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-  </div>
-<% end %>
+            <% end %>
+          </tbody>
+        </table>
+
+      <% elsif concept.continuous? %>
+        <table class="table table-striped table-hover" style="width:100%">
+          <thead>
+            <tr>
+              <th></th>
+              <th style="text-align:left"><%= concept.human_name %></th>
+              <th style="text-align:left">N</th>
+              <th style="text-align:left">Mean</th>
+              <th style="text-align:left">StdDev</th>
+              <th style="text-align:left">Median</th>
+              <th style="text-align:left">Min</th>
+              <th style="text-align:left">Max</th>
+              <th style="text-align:left;" class="muted">Unknown</th>
+              <th style="text-align:left">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @overall_min = array_min(case_values + control_values) %>
+            <% @overall_max = array_max(case_values + control_values) %>
+            <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
+              <tr>
+                <td><span data-object="sparkline" data-type="box" data-values="<%= values.to_json %>" data-min="<%= @overall_min %>" data-max="<%= @overall_max %>" style="display:none"></span></td>
+                <td><%= name %></td>
+                <td><%= values.compact.count %></td>
+                <td>
+                  <% mean = array_mean(values) %>
+                  <%= "%0.02f" % mean if mean %>
+                </td>
+                <td>
+                  <% stdev = array_standard_deviation(values) %>
+                  <%= "%0.02f" % stdev if stdev %>
+                </td>
+                <td><%= array_median(values) %></td>
+                <td><%= array_min(values) %></td>
+                <td><%= array_max(values) %></td>
+                <td><%= (values.compact.count == values.count) ? '-' : values.count - values.compact.count %></td>
+                <td><%= values.count %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  <% end %>
 
 
 <% if false %>

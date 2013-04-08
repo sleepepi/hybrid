@@ -60,7 +60,7 @@ class MatchingController < ApplicationController
         @common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first
 
         all_criteria = (params[:criteria_ids] || []).compact.uniq
-        concept_ids = (params[:variable_ids] || []).compact.uniq
+        concept_ids = (params[:variable_ids] || []).compact.uniq - all_criteria
 
         @matching_concepts = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
         @extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
