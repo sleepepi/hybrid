@@ -33,17 +33,17 @@
   <% @matching_concepts.each_with_index do |concept, index| %>
     <% case_values = @matches.collect{|m| m[:criteria][index]} %>
     <% control_values = @matches.collect{|m| [m[:criteria][index]] * m[:matching_ids].count}.flatten %>
-    <% concepts_with_values << [concept, case_values, control_values] %>
+    <% concepts_with_values << [concept, case_values, control_values, 'match'] %>
   <% end %>
 
   <% @extra_concepts.each_with_index do |concept, index| %>
     <% case_values = @matches.collect{|m| m[:case_extra][index]} %>
     <% control_values = @matches.collect{|m| m[:extra].collect{|arr| arr[index]}}.flatten %>
-    <% concepts_with_values << [concept, case_values, control_values] %>
+    <% concepts_with_values << [concept, case_values, control_values, 'extra'] %>
   <% end %>
 
 
-  <% concepts_with_values.each do |concept, case_values, control_values| %>
+  <% concepts_with_values.each do |concept, case_values, control_values, type| %>
     <div>
       <% if concept.categorical? or concept.boolean? %>
         <% all_unique_values = (case_values.uniq | control_values.uniq).sort %>
@@ -63,11 +63,15 @@
           <tbody>
             <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
             <tr>
+              <% case_value_counts = all_unique_values.collect{|val| case_values.select{|v| v == val}.count} %>
               <% counts = all_unique_values.collect{|val| values.select{|v| v == val}.count} %>
               <td><span data-object="sparkline" data-type="pie" data-values="<%= counts.to_json %>" style="display:none"></span></td>
               <td><%= name %></td>
               <% counts.each_with_index do |count, count_index| %>
-                <td><span style="background-color: <%= sliceColors[count_index % sliceColors.size] %>">&nbsp;</span> <%= count %></td>
+                <td class="<%= (type == 'match' and name == "Controls" and case_value_counts[count_index] != 0 and count == 0) ? 'error' : (type == 'match' and name == "Controls" and case_value_counts[count_index] * @controls_per_case != count ? 'warning' : '') %>">
+                  <span style="background-color: <%= sliceColors[count_index % sliceColors.size] %>">&nbsp;</span> <%= count %>
+                  <% if type == 'match' and name == "Controls" and (case_value_counts[count_index] * @controls_per_case != count or (case_value_counts[count_index] != 0 and count == 0)) %><span rel="tooltip" title="&lt; <%= case_value_counts[count_index] * @controls_per_case %>" data-placement="right"><i class="icon-exclamation-sign"></i></span><% end %>
+                </td>
               <% end %>
               <td><%= values.count %></td>
             </tr>
