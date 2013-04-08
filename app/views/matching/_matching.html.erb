@@ -73,7 +73,10 @@
                   <% if type == 'match' and name == "Controls" and (case_value_counts[count_index] * @controls_per_case != count or (case_value_counts[count_index] != 0 and count == 0)) %><span rel="tooltip" title="&lt; <%= case_value_counts[count_index] * @controls_per_case %>" data-placement="right"><i class="icon-exclamation-sign"></i></span><% end %>
                 </td>
               <% end %>
-              <td><%= values.count %></td>
+              <td class="<%= (type == 'match' and name == "Controls" and case_values.count != 0 and values.count == 0) ? 'error' : (type == 'match' and name == "Controls" and case_values.count * @controls_per_case != values.count ? 'warning' : '') %>">
+                <%= values.count %>
+                <% if type == 'match' and name == "Controls" and (case_values.count * @controls_per_case != values.count or (case_values.count != 0 and values.count == 0)) %><span rel="tooltip" title="&lt; <%= case_values.count * @controls_per_case %>" data-placement="right"><i class="icon-exclamation-sign"></i></span><% end %>
+              </td>
             </tr>
             <% end %>
           </tbody>
