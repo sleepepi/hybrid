@@ -27,19 +27,36 @@
 
   <% sliceColors = ['#3366cc', '#dc3912', '#ff9900', '#109618', '#66aa00', '#dd4477', '#0099c6', '#990099'] %>
 
+
+  <% concepts_with_values = [] %>
+
+  <% @matching_concepts.each_with_index do |concept, index| %>
+    <% case_values = @matches.collect{|m| m[:criteria][index]} %>
+    <% control_values = []  %>
+    <% control_values = @matches.collect{|m| [m[:criteria][index]] * m[:matching_ids].count}.flatten %>
+    <% concepts_with_values << [concept, case_values, control_values] %>
+  <% end %>
+
   <% @extra_concepts.each_with_index do |concept, index| %>
+    <% case_values = @matches.collect{|m| m[:case_extra][index]} %>
+    <% control_values = @matches.collect{|m| m[:extra].collect{|arr| arr[index]}}.flatten %>
+    <% concepts_with_values << [concept, case_values, control_values] %>
+  <% end %>
+
+
+  <% concepts_with_values.each do |concept, case_values, control_values| %>
     <div>
-      <% case_values = @matches.collect{|m| m[:case_extra][index]} %>
-      <% control_values = @matches.collect{|m| m[:extra].collect{|arr| arr[index]}}.flatten %>
       <% if concept.categorical? or concept.boolean? %>
         <% all_unique_values = (case_values.uniq | control_values.uniq).sort %>
-        <table class="table table-striped table-hover" style="width:100%">
+        <table class="table table-striped table-hover" style="width:100%"><col width="72px"/>
           <thead>
             <tr>
               <th></th>
               <th style="text-align:left"><%= concept.human_name %></th>
               <% all_unique_values.each do |val| %>
-                <th style="text-align:left" class="<%= 'muted' unless val %>"><%= val ? val : '-' %></th>
+                <th style="text-align:left">
+                  <span class="count-rot315 <%= 'muted' if val == 'unknown' %>" rel="tooltip" title="<%= val == 'unknown' ? 'Unknown' : val %>"><%= val == 'unknown' ? 'Unknown' : val.truncate(10) %></span>
+                </th>
               <% end %>
               <th style="text-align:left">Total</th>
             </tr>
@@ -50,8 +67,8 @@
               <% counts = all_unique_values.collect{|val| values.select{|v| v == val}.count} %>
               <td><span data-object="sparkline" data-type="pie" data-values="<%= counts.to_json %>" style="display:none"></span></td>
               <td><%= name %></td>
-              <% counts.each_with_index do |count, index| %>
-                <td><span style="background-color: <%= sliceColors[index % sliceColors.size] %>">&nbsp;</span> <%= count %></td>
+              <% counts.each_with_index do |count, count_index| %>
+                <td><span style="background-color: <%= sliceColors[count_index % sliceColors.size] %>">&nbsp;</span> <%= count %></td>
               <% end %>
               <td><%= values.count %></td>
             </tr>
@@ -60,18 +77,18 @@
         </table>
 
       <% elsif concept.continuous? %>
-        <table class="table table-striped table-hover" style="width:100%">
+        <table class="table table-striped table-hover" style="width:100%"><col width="72px"/>
           <thead>
             <tr>
               <th></th>
               <th style="text-align:left"><%= concept.human_name %></th>
-              <th style="text-align:left">N</th>
-              <th style="text-align:left">Mean</th>
-              <th style="text-align:left">StdDev</th>
-              <th style="text-align:left">Median</th>
-              <th style="text-align:left">Min</th>
-              <th style="text-align:left">Max</th>
-              <th style="text-align:left;" class="muted">Unknown</th>
+              <th style="text-align:left"><span class="count-rot315">N</span></th>
+              <th style="text-align:left"><span class="count-rot315">Mean</span></th>
+              <th style="text-align:left"><span class="count-rot315">StdDev</span></th>
+              <th style="text-align:left"><span class="count-rot315">Median</span></th>
+              <th style="text-align:left"><span class="count-rot315">Min</span></th>
+              <th style="text-align:left"><span class="count-rot315">Max</span></th>
+              <th style="text-align:left;" class="muted"><span class="count-rot315">Unknown</span></th>
               <th style="text-align:left">Total</th>
             </tr>
           </thead>

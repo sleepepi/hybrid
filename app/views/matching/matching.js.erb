@@ -1,2 +1,4 @@
 $("#matching").html("<%= escape_javascript(render("matching/matching")) %>");
 loadPeity();
+$(".tooltip").remove();
+$("[rel~=tooltip]").tooltip({ trigger: 'hover' });

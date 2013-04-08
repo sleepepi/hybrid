@@ -327,3 +327,14 @@ tr.overall td {
      -moz-box-shadow: 5px 5px 3px -3px rgba(0, 0, 0, 0.075);
           box-shadow: 5px 5px 3px -3px rgba(0, 0, 0, 0.075);
 }
+
+.count-rot315 {
+  -moz-transform:rotate(315deg);
+  -o-transform:rotate(315deg);
+  -webkit-transform:rotate(315deg);
+  -ms-transform:rotate(315deg);
+  transform:rotate(315deg);
+  font-size:0.9em;
+  display:inline-block;
+  margin:10px 0;
+}
