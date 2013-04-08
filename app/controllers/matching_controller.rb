@@ -82,7 +82,7 @@ class MatchingController < ApplicationController
 
           case_extra = case_info[extra_start_index..-1]
 
-          matching_ids = controls_matrix[:result][1..-1].select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
+          matching_ids = (controls_matrix[:result][1..-1] ? controls_matrix[:result][1..-1].select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] : [])
 
           extra = []
 
