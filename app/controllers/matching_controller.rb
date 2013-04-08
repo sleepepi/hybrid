@@ -9,7 +9,7 @@ class MatchingController < ApplicationController
         send_data csv_string, type: 'text/csv; charset=iso-8859-1; header=present', disposition: "attachment; filename=\"Matching #{Time.now.strftime("%Y.%m.%d %Ih%M %p")}.csv\""
       end
       format.js do
-        create_matches(false)
+        create_matches(true) # (false)
       end
       format.html do
         load_criteria_concepts
@@ -62,27 +62,27 @@ class MatchingController < ApplicationController
         all_criteria = (params[:criteria_ids] || []).compact.uniq
         concept_ids = (params[:variable_ids] || []).compact.uniq
 
-        common_criteria = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
-        extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
+        @matching_concepts = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
+        @extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
 
-        cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [@common_identifier] + common_criteria + extra_concepts )
+        cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [@common_identifier] + @matching_concepts + @extra_concepts )
 
-        controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [@common_identifier] + common_criteria + extra_concepts )
+        controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [@common_identifier] + @matching_concepts + @extra_concepts )
 
-        extra_start_index = common_criteria.size + 1
+        extra_start_index = @matching_concepts.size + 1
 
-        @overall_criteria = (cases_matrix[:result][0] ? cases_matrix[:result][0][1..common_criteria.size] : [])
+        @overall_criteria = (cases_matrix[:result][0] ? cases_matrix[:result][0][1..@matching_concepts.size] : [])
         @overall_extra = (cases_matrix[:result][0] ? cases_matrix[:result][0][extra_start_index..-1] : [])
 
 
         cases_matrix[:result][1..-1].each do |case_info|
           id = case_info[0]
           # Select matching IDs
-          criteria = case_info[1..common_criteria.size]
+          criteria = case_info[1..@matching_concepts.size]
 
           case_extra = case_info[extra_start_index..-1]
 
-          matching_ids = controls_matrix[:result][1..-1].select{|control| control[1..common_criteria.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
+          matching_ids = controls_matrix[:result][1..-1].select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
 
           extra = []
 
