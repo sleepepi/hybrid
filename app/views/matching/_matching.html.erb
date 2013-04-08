@@ -32,7 +32,6 @@
 
   <% @matching_concepts.each_with_index do |concept, index| %>
     <% case_values = @matches.collect{|m| m[:criteria][index]} %>
-    <% control_values = []  %>
     <% control_values = @matches.collect{|m| [m[:criteria][index]] * m[:matching_ids].count}.flatten %>
     <% concepts_with_values << [concept, case_values, control_values] %>
   <% end %>
