@@ -1,4 +1,4 @@
-## 0.14.0
+## 0.14.0 (April 10, 2013)
 
 ### Enhancements
 - Added a tool to perform frequency-based matching
