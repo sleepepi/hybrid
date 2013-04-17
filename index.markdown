@@ -19,6 +19,9 @@ layout: default
       <img src="/hybrid/screenshots/epworth.png">
     </div>
   </div>
+
+  <img src="/hybrid/screenshots/search.png">
+
 </div>
 
 <hr class="blank" />
@@ -39,6 +42,8 @@ layout: default
   </div>
 
 </div>
+
+<img src="/hybrid/screenshots/specify.png">
 
 <hr class="blank" />
 
