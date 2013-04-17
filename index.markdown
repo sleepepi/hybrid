@@ -53,15 +53,18 @@ layout: default
 
 <hr class="blank" />
 
-<h1 class="about-title" style="text-align:center;">Dynamic Reports</h1>
-<img src="/hybrid/screenshots/reports.png" style="margin: 20px">
-
+<div class="well white">
+  <h1 class="about-title" style="text-align:center;">Dynamic Reports</h1>
+  <img src="/hybrid/screenshots/reports.png" style="margin: 20px">
+</div>
 
 
 <hr class="blank" />
 
-<h1 class="about-title" style="text-align:center;">Case Control Matching</h1>
-<img src="/hybrid/screenshots/matching.png" style="margin: 20px">
+<div class="well white">
+  <h1 class="about-title" style="text-align:center;">Case Control Matching</h1>
+  <img src="/hybrid/screenshots/matching.png" style="margin: 20px">
+</div>
 
 <hr class="blank" />
 
