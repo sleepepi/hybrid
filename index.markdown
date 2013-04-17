@@ -42,13 +42,13 @@ layout: default
 
 <hr class="blank" />
 
-<h1 class="about-title">Dynamic Reports</h1>
+<h1 class="about-title" style="text-align:center;">Dynamic Reports</h1>
 <img src="/hybrid/screenshots/reports.png" style="margin: 20px">
 
 
 
 <hr class="blank" />
 
-<h1 class="about-title">Case Control Matching</h1>
+<h1 class="about-title" style="text-align:center;">Case Control Matching</h1>
 <img src="/hybrid/screenshots/matching.png" style="margin: 20px">
 
