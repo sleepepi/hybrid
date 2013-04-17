@@ -20,6 +20,8 @@ layout: default
     </div>
   </div>
 
+  <hr class="blank" />
+
   <img src="/hybrid/screenshots/search.png">
 
 </div>
@@ -43,7 +45,9 @@ layout: default
 
 </div>
 
-<img src="/hybrid/screenshots/specify.png" class="img-rounded" style="border: 1px solid #666">
+<div class="well white">
+  <img src="/hybrid/screenshots/specify.png">
+</div>
 
 <hr class="blank" />
 
