@@ -20,8 +20,9 @@ hr.soften {
 }
 
 hr.blank {
-  height: 0px;
+  height: 1px;
   margin: 54px 0;
+  border: 0;
 }
 
 h1.about-title {
