@@ -55,7 +55,7 @@ layout: default
 
 <div class="well white">
   <h1 class="about-title" style="text-align:center;">Dynamic Reports</h1>
-  <img src="/hybrid/screenshots/reports.png" style="margin: 20px">
+  <img src="/hybrid/screenshots/reports.png" style="margin: 20px;max-width: 97%;">
 </div>
 
 
@@ -63,7 +63,7 @@ layout: default
 
 <div class="well white">
   <h1 class="about-title" style="text-align:center;">Case Control Matching</h1>
-  <img src="/hybrid/screenshots/matching.png" style="margin: 20px">
+  <img src="/hybrid/screenshots/matching.png" style="margin: 20px;max-width: 97%;">
 </div>
 
 <hr class="blank" />
