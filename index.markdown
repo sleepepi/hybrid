@@ -45,6 +45,8 @@ layout: default
 
 </div>
 
+<hr class="blank" />
+
 <div class="well white">
   <img src="/hybrid/screenshots/specify.png">
 </div>
