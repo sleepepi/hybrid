@@ -43,7 +43,7 @@ layout: default
 
 </div>
 
-<img src="/hybrid/screenshots/specify.png">
+<img src="/hybrid/screenshots/specify.png" class="img-rounded" style="border: 1px solid #666">
 
 <hr class="blank" />
 
