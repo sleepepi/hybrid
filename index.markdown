@@ -68,9 +68,11 @@ layout: default
 
     <div class="span6">
       <img src="/hybrid/screenshots/opensource.png">
-[![Build Status](https://travis-ci.org/sleepepi/hybrid.png?branch=master)](https://travis-ci.org/sleepepi/hybrid)
-[![Dependency Status](https://gemnasium.com/sleepepi/hybrid.png)](https://gemnasium.com/sleepepi/hybrid)
-[![Code Climate](https://codeclimate.com/github/sleepepi/hybrid.png)](https://codeclimate.com/github/sleepepi/hybrid)
+      <p>
+        <a href="https://travis-ci.org/sleepepi/hybrid"><img src="https://travis-ci.org/sleepepi/hybrid.png?branch=master" alt="Build Status" style="max-width:100%;"></a>
+        <a href="https://gemnasium.com/sleepepi/hybrid"><img src="https://gemnasium.com/sleepepi/hybrid.png" alt="Dependency Status" style="max-width:100%;"></a>
+        <a href="https://codeclimate.com/github/sleepepi/hybrid"><img src="https://codeclimate.com/github/sleepepi/hybrid.png" alt="Code Climate" style="max-width:100%;"></a>
+      </p>
     </div>
   </div>
 </div>
