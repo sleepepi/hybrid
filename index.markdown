@@ -52,3 +52,27 @@ layout: default
 <h1 class="about-title" style="text-align:center;">Case Control Matching</h1>
 <img src="/hybrid/screenshots/matching.png" style="margin: 20px">
 
+<hr class="blank" />
+
+<div class="well white">
+
+  <div class="row-fluid">
+    <div class="span6">
+      <h1 class="about-title">Open Source</h1>
+
+      <p style="color: #666">
+        The Sleep Portal is a <a data-title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License" href="https://github.com/sleepepi/hybrid/blob/master/LICENSE" rel="tooltip" data-original-title="" title="">free to use*</a> and <a data-title="Source code freely available on GitHub" href="https://github.com/sleepepi/hybrid" rel="tooltip" data-original-title="" title="">open source</a> web application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data.
+      </p>
+
+    </div>
+
+    <div class="span6">
+      <img src="/hybrid/screenshots/opensource.png">
+    </div>
+  </div>
+</div>
+
+
+[![Build Status](https://travis-ci.org/sleepepi/hybrid.png?branch=master)](https://travis-ci.org/sleepepi/hybrid)
+[![Dependency Status](https://gemnasium.com/sleepepi/hybrid.png)](https://gemnasium.com/sleepepi/hybrid)
+[![Code Climate](https://codeclimate.com/github/sleepepi/hybrid.png)](https://codeclimate.com/github/sleepepi/hybrid)
