@@ -30,11 +30,11 @@ layout: default
       <img class="pull-left" src="/hybrid/screenshots/shhs.png" style="margin: 20px 30px 20px 20px;">
       <h1 class="about-title">Access the Sleep Heart Health Study</h1>
 
-      <p>The Sleep Heart Health Study is a multi-center cohort study implemented by the National Heart Lung &amp; Blood Institute to determine the cardiovascular and other consequences of sleep-disordered breathing.  It tests whether sleep-related breathing is associated with an increased risk of coronary heart disease, stroke, all cause mortality, and hypertension.</p>
+      <p style="color: #666">The Sleep Heart Health Study is a multi-center cohort study implemented by the National Heart Lung &amp; Blood Institute to determine the cardiovascular and other consequences of sleep-disordered breathing.  It tests whether sleep-related breathing is associated with an increased risk of coronary heart disease, stroke, all cause mortality, and hypertension.</p>
 
-      <p>The SHHS2 Limited Access dataset represents a <b>subset of data</b> from the second follow-up visit, collected on 1000 individuals between 2001 and 2003.</p>
+      <p style="color: #666">The SHHS2 Limited Access dataset represents a <b>subset of data</b> from the second follow-up visit, collected on 1000 individuals between 2001 and 2003.</p>
 
-      <p>More information is available at the <a href="http://www.jhucct.com/shhs/" target="_blank">SHHS Website</a>.</p>
+      <p style="color: #666">More information is available at the <a href="http://www.jhucct.com/shhs/" target="_blank">SHHS Website</a>.</p>
     </div>
   </div>
 
