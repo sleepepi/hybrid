@@ -5,21 +5,35 @@ layout: default
 
 <div class="well white">
 
-  <div class="row">
+  <div class="row-fluid">
     <div class="span6">
       <h2 class="about-title">Explore Rich Datasets</h2>
 
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      <p>The Sleep Portal is a <a data-title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License" href="https://github.com/sleepepi/hybrid/blob/master/LICENSE" rel="tooltip" data-original-title="" title="">free to use*</a> and <a data-title="Source code freely available on GitHub" href="https://github.com/sleepepi/hybrid" rel="tooltip" data-original-title="" title="">open source</a> web application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. The Sleep Portal also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. The Sleep Portal uses a data dictionary approach to define data and database relationships.</p>
 
     </div>
 
     <div class="span6">
-      <img class="pull-right" src="/hybrid/screenshots/epworth.png">
+      <img src="/hybrid/screenshots/epworth.png">
     </div>
   </div>
+</div>
+
+<hr class="blank" />
+
+<div class="well white">
+
+  <div class="row-fluid">
+    <div class="span12">
+      <img class="pull-right" src="/hybrid/screenshots/shhs.png">
+      <h2 class="about-title">Access the Sleep Heart Health Study</h2>
+
+      <p>The Sleep Heart Health Study is a multi-center cohort study implemented by the National Heart Lung &amp; Blood Institute to determine the cardiovascular and other consequences of sleep-disordered breathing.  It tests whether sleep-related breathing is associated with an increased risk of coronary heart disease, stroke, all cause mortality, and hypertension.</p>
+
+      <p>The SHHS2 Limited Access dataset represents a <b>subset of data</b> from the second follow-up visit, collected on 1000 individuals between 2001 and 2003.</p>
+
+      <p>More information is available at the <a href="http://www.jhucct.com/shhs/" target="_blank">SHHS Website</a>.</p>
+    </div>
+  </div>
+
 </div>
