@@ -10,7 +10,7 @@ layout: default
       <h1 class="about-title">Introducing the Sleep Portal</h1>
 
       <p style="color: #666">
-        The <a href="https://sleepepepi.partners.org/hybrid" target="_blank">Sleep Portal</a> will be the largest and most comprehensive free, open-source web application designed to easily connect investigators to research databases containing a broad range of de-identified clinical and physiological data related to sleep and its disorders. This unique Portal. will provide researchers with query and download tools to expedite novel analyses, thereby advancing scientific knowledge related to the links among cardiopulmonary, neurologic, sleep and metabolic disorders. The existing Portal provides access to:
+        The <a href="https://sleepepi.partners.org/hybrid" target="_blank">Sleep Portal</a> will be the largest and most comprehensive free, open-source web application designed to easily connect investigators to research databases containing a broad range of de-identified clinical and physiological data related to sleep and its disorders. This unique Portal. will provide researchers with query and download tools to expedite novel analyses, thereby advancing scientific knowledge related to the links among cardiopulmonary, neurologic, sleep and metabolic disorders. The existing Portal provides access to:
       </p>
 
       <ul style="color: #666">
