@@ -108,8 +108,10 @@ layout: default
 <div class="well white">
   <h1 class="about-title">Video Tutorials</h1>
   <div class="row-fluid">
-    <div class="span4 thumbnail"><a href="http://youtu.be/NPGK4tBnMZg" target="_blank"><img src="/hybrid/screenshots/episode6.png"></a><div class="caption"><h3>Episode 6</h3> Grouping and Duplicating Search Concepts</div></div>
-    <div class="span4 thumbnail"><a href="http://youtu.be/TTCWL39kvlw" target="_blank"><img src="/hybrid/screenshots/episode7.png"></a><div class="caption"><h3>Episode 7</h3> Generating Datasets and Downloading Covariates</div></div>
-    <div class="span4 thumbnail"><a href="http://youtu.be/iIu8NYt6oD8" target="_blank"><img src="/hybrid/screenshots/episode8.png"></a><div class="caption"><h3>Episode 8</h3> Generating and Downloading Summary Reports</div></div>
+    <ul class="thumbnails">
+      <li class="span4"><div class="thumbnail"><a href="http://youtu.be/NPGK4tBnMZg" target="_blank"><img src="/hybrid/screenshots/episode6.png"></a><div class="caption"><h3>Episode 6</h3> Grouping and Duplicating Search Concepts</div></div></li>
+      <li class="span4"><div class="thumbnail"><a href="http://youtu.be/TTCWL39kvlw" target="_blank"><img src="/hybrid/screenshots/episode7.png"></a><div class="caption"><h3>Episode 7</h3> Generating Datasets and Downloading Covariates</div></div></li>
+      <li class="span4"><div class="thumbnail"><a href="http://youtu.be/iIu8NYt6oD8" target="_blank"><img src="/hybrid/screenshots/episode8.png"></a><div class="caption"><h3>Episode 8</h3> Generating and Downloading Summary Reports</div></div></li>
+    </ul>
   </div>
 </div>
