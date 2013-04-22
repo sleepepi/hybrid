@@ -35,10 +35,6 @@ layout: default
     </div>
   </div>
 
-  <hr class="blank" />
-
-  <img src="/hybrid/screenshots/search.png">
-
 </div>
 
 <hr class="blank" />
