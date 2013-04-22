@@ -108,8 +108,8 @@ layout: default
 <div class="well white">
   <h1 class="about-title">Video Tutorials</h1>
   <div class="row-fluid">
-    <a href="http://youtu.be/NPGK4tBnMZg" target="_blank" class="span4"><img src="/hybrid/screenshots/episode6.png" class="img-polaroid"></a>
-    <a href="http://youtu.be/TTCWL39kvlw" target="_blank" class="span4"><img src="/hybrid/screenshots/episode7.png" class="img-polaroid"></a>
-    <a href="http://youtu.be/iIu8NYt6oD8" target="_blank" class="span4"><img src="/hybrid/screenshots/episode8.png" class="img-polaroid"></a>
+    <a href="http://youtu.be/NPGK4tBnMZg" target="_blank" class="span4 thumbnail"><img src="/hybrid/screenshots/episode6.png" class="img-polaroid"></a>
+    <a href="http://youtu.be/TTCWL39kvlw" target="_blank" class="span4 thumbnail"><img src="/hybrid/screenshots/episode7.png" class="img-polaroid"></a>
+    <a href="http://youtu.be/iIu8NYt6oD8" target="_blank" class="span4 thumbnail"><img src="/hybrid/screenshots/episode8.png" class="img-polaroid"></a>
   </div>
 </div>
