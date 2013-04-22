@@ -10,19 +10,21 @@ layout: default
       <h1 class="about-title">Explore Rich Datasets</h1>
 
       <p style="color: #666">
-
         The Sleep Portal will be the largest and most comprehensive free, open-source web application designed to easily connect investigators to research databases containing a broad range of de-identified clinical and physiological data related to sleep and its disorders.  This unique Portal. will provide researchers with query and download tools to expedite novel analyses, thereby advancing scientific knowledge related to the links among cardiopulmonary, neurologic, sleep and metabolic disorders. The existing Portal provides access to:
-        <ul>
-          <li>A library of over 4,000 polysomnographs (physiological signals saved in European Data Format,  summary measures of spectral analysis of EEG signals, scored polysomnography annotations, and over 1,500 clinical and anthropometric variables collected as part of the <a href="https://sleepepi.partners.org/reading-center/shhs/" target="_blank">Sleep Heart Health Study</a>.</li>
-          <li>A powerful search interface that provides the ability to:
-            <ul>
-              <li>Explore data and retrieve counts and visualize graphs of the underlying data.</li>
-              <li>Generate dynamic datasets and reports from the underlying data, including facilitation of analyses of longitudinal data and creation of matched case-control samples.</li>
-              <li>Aggregate and download associated files using a single click file downloader.</li>
-            </ul>
-          </li>
-        </ul>
+      </p>
 
+      <ul style="color: #666">
+        <li>A library of over 4,000 polysomnographs (physiological signals saved in European Data Format,  summary measures of spectral analysis of EEG signals, scored polysomnography annotations, and over 1,500 clinical and anthropometric variables collected as part of the <a href="https://sleepepi.partners.org/reading-center/shhs/" target="_blank">Sleep Heart Health Study</a>.</li>
+        <li>A powerful search interface that provides the ability to:
+          <ul>
+            <li>Explore data and retrieve counts and visualize graphs of the underlying data.</li>
+            <li>Generate dynamic datasets and reports from the underlying data, including facilitation of analyses of longitudinal data and creation of matched case-control samples.</li>
+            <li>Aggregate and download associated files using a single click file downloader.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p style="color: #666">
         The Sleep Portal will be expanded over time to include data from other major NIH-supported studies, with the aim of enhancing the value of NIH’s investments in cohort studies and clinical trials by providing access to a central and expandable library of over 50,000 polysomnograms, including raw signal data and processed results of state-of-the art signal analyses and linked  clinical, physiological, anthropometric, biochemical and genetic data. Plans are in place to include: a) a database of quantitative metrics of heart rate, breathing, oxygenation, and brain neurophysiological signals derived from each study; b) key clinical covariate data; c) a tool set to allow the user to search  and access de-identified research data using a secure, cloud platform; e) reference values for computed time- and frequency- domain measures; e) an open source suite of tools for off line signal processing analyses; f)  European Data Format editing, harmonization and statistic generation; and g) user support for resource usage.
       </p>
 
