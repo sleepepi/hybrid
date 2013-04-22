@@ -110,14 +110,9 @@ layout: default
   <div class="row-fluid">
     <div class="span12">
       <h1 class="about-title">Video Tutorials</h1>
-
-      <object width="560" height="315">
-        <param name="movie" value="https://www.youtube.com/embed/NPGK4tBnMZg" />
-        <param name="allowFullScreen" value="true"/>
-        <param name="allowscriptaccess" value="always" />
-        <embed type="application/x-shockwave-flash" width="560" height="315" src="https://www.youtube.com/embed/NPGK4tBnMZg" allowfullscreen="true" allowscriptaccess="always"></embed>
-      </object>
-
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/NPGK4tBnMZg" frameborder="0" allowfullscreen></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/TTCWL39kvlw" frameborder="0" allowfullscreen></iframe>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/iIu8NYt6oD8" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 </div>
