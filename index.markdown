@@ -110,11 +110,11 @@ layout: default
   <div class="row-fluid">
     <div class="span12">
       <h1 class="about-title">Video Tutorials</h1>
-{% youtube NPGK4tBnMZg %}
+      <a href="http://youtu.be/NPGK4tBnMZg"><img src="/hybrid/screenshots/episode6.png" class="img-polaroid"></a>
 
-{% youtube TTCWL39kvlw %}
+      <a href="http://youtu.be/TTCWL39kvlw"><img src="/hybrid/screenshots/episode7.png" class="img-polaroid"></a>
 
-{% youtube iIu8NYt6oD8 %}
+      <a href="http://youtu.be/iIu8NYt6oD8"><img src="/hybrid/screenshots/episode8.png" class="img-polaroid"></a>
     </div>
   </div>
 </div>
