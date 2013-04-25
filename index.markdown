@@ -86,7 +86,7 @@ layout: default
       <h1 class="about-title">Open Source</h1>
 
       <p style="color: #666">
-        The Sleep Portal is a <a data-title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License" href="https://github.com/sleepepi/hybrid/blob/master/LICENSE" rel="tooltip" data-original-title="" title="">free to use*</a> and <a data-title="Source code freely available on GitHub" href="https://github.com/sleepepi/hybrid" rel="tooltip" data-original-title="" title="">open source</a> web application designed to easily connect across multiple heterogenous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data.
+        The Sleep Portal is a <a data-title="Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License" href="https://github.com/sleepepi/hybrid/blob/master/LICENSE" rel="tooltip" data-original-title="" title="">free to use*</a> and <a data-title="Source code freely available on GitHub" href="https://github.com/sleepepi/hybrid" rel="tooltip" data-original-title="" title="">open source</a> web application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data.
       </p>
 
     </div>
