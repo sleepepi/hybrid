@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   has_many :queries, -> { where deleted: false } #, order: 'updated_at DESC'
   has_many :query_users
-  has_many :shared_queries, -> { where deleted: false }, through: :query_users, source: :query, order: 'name'
+  has_many :shared_queries, -> { where( deleted: false ).order( 'name' )}, through: :query_users, source: :query
 
   has_many :reports
 

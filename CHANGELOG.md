@@ -1,5 +1,10 @@
 ## 0.14.1
 
+### Enhancements
+- **Gem Changes**
+  - Updated to rails 4.0.0.rc1
+  - Updated to contour 2.0.0.beta.8
+
 ## 0.14.0 (April 10, 2013)
 
 ### Enhancements
