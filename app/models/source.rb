@@ -82,8 +82,8 @@ class Source < ActiveRecord::Base
     error = result_hash[:error]
 
     if filter_unmapped
-      mapped_columns = self.mappings.where(status: 'mapped', table: table).collect{|m| m.column}
-      unmapped_columns = self.mappings.where(status: 'unmapped', table: table).collect{|m| m.column}
+      mapped_columns = self.mappings.where(status: 'mapped', table: table).pluck(:column)
+      unmapped_columns = self.mappings.where(status: 'unmapped', table: table).pluck(:column)
       filtered_columns = []
       columns.each do |column_hash|
         if unmapped_columns.include?(column_hash[:column]) or not mapped_columns.include?(column_hash[:column])
@@ -219,13 +219,8 @@ class Source < ActiveRecord::Base
   def table_columns_mapped(current_user, table)
     result_hash = self.table_columns(current_user, table)
     columns = result_hash[:result].collect{|c| c[:column]}
-    total_size = columns.size
-    number_mapped = 0
-    columns.each do |column|
-      mapping = self.mappings.find_by_table_and_column_and_status(table, column, 'mapped')
-      number_mapped += 1 if mapping
-    end
-    "#{number_mapped} of #{total_size}"
+    number_mapped = self.mappings.where( table: table, status: 'mapped', column: columns ).uniq.select(:column).count
+    "#{number_mapped} of #{columns.size}"
   end
 
   # This function calculates the derived mappings for a database.

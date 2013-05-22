@@ -4,6 +4,7 @@
 - Removed uri, namespace, and name from concepts for simpler imports and exports
 - Data Dictionary import simplified, imports CSV data by column header name
 - Concept folders and subfolders are now separated by `/` instead of `:`
+- Sources with large amounts of tables and columns now load more quickly
 
 ### Bug Fix
 - Fixed a data dictionary import failure caused by concept status column
