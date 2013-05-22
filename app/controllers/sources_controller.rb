@@ -45,7 +45,7 @@ class SourcesController < ApplicationController
         concepts = Concept.with_dictionary(params[:dictionary_id]).searchable.exactly(column_hash[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, column_hash[:column].to_s.gsub(/[^\w]/, ' ').downcase)
         c = concepts.first
         if concepts.size == 1 and c
-          mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], nil) unless mapping
+          mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: nil ).first_or_create unless mapping
           mapping.automap(current_user, c, column_hash)
         end
       end
