@@ -15,7 +15,6 @@ class Concept < ActiveRecord::Base
   scope :with_exact_folder_or_subfolder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + ':%', args.first]) }
 
   scope :with_dictionary, lambda { |*args| where(["concepts.dictionary_id IN (?) or 'all' IN (?)", args.first, args.first]) }
-  scope :with_namespace, lambda { |*args| where(["concepts.namespace IN (?) or '' IN (?)", args.first, args.first]) }
 
   scope :with_report, lambda { |*args| where(["? = '' or concepts.id in (select concept_id from report_concepts where report_concepts.report_id = ?)", args.first, args.first]) }
 
@@ -24,16 +23,8 @@ class Concept < ActiveRecord::Base
   scope :exactly, lambda { |*args| where([ 'LOWER(short_name) = ? or LOWER(short_name) = ? or LOWER(search_name) = ? or LOWER(search_name) = ? or concepts.id in (select concept_id from terms where LOWER(terms.search_name) = ? or LOWER(terms.search_name) = ?)', args.first, args[1], args.first, args[1], args.first, args[1] ]) }
 
   # Model Validation
-  validates_presence_of :name
-  validates_uniqueness_of :name
-
-  validates_format_of :uri,
-                      with: /\A[a-zA-Z]+:\/\/[\w\-.\/]*[\w]\Z/,
-                      message: "must be a valid URI without a trailing backslash."
-
-  validates_format_of :namespace,
-                      with: /\A[\w\-.]+\Z/,
-                      message: "must contain only digits, letters, underscores, periods, and dashes."
+  validates_presence_of :short_name
+  validates_uniqueness_of :short_name, scope: :dictionary_id
 
   validates_format_of :short_name,
                       with: /\A[\w\-]+\Z/,
@@ -70,8 +61,8 @@ class Concept < ActiveRecord::Base
     @human_name ||= begin
       if not self.display_name.blank?
         self.display_name
-      elsif not name.blank?
-        self.name.split("#").last.gsub('ANDOR', 'And / Or').titleize
+      elsif not short_name.blank?
+        self.short_name.gsub('ANDOR', 'And / Or').titleize
       else
         ''
       end
@@ -262,38 +253,10 @@ class Concept < ActiveRecord::Base
     self.update_column :search_name, self.human_name.downcase unless self.new_record?
   end
 
-  def self.name_to_uri_and_namespace_and_short_name(name, uri_missing = nil, namespace_missing = nil)
-    uri_namespacename = name.split('/')
-    namespace_name = uri_namespacename.last.to_s.split('#')
-    uri = uri_namespacename[0..-2].join('/')
-    namespace = namespace_name[0..-2].join
-    short_name = namespace_name.last.to_s
-
-    if short_name =~ /[^\w\-]/
-      old_short_name = short_name
-      short_name = short_name.titleize.gsub(/[^\w\-]/, '')
-      logger.debug "short_name: '#{old_short_name}' invalid, replacing with '#{short_name}'"
-    end
-
-    # If the name is in the form '#ShortName' without a uri or namespace prefix,
-    # then add in the one's provided as additional input params
-    uri = uri_missing if uri.blank? and not uri_missing.blank?
-    namespace = namespace_missing if namespace.blank? and not namespace_missing.blank?
-
-    full_name = uri + '/' + namespace + '#' + short_name
-
-    [full_name, uri, namespace, short_name]
-  end
-
-  # This function returns a column name for the concept, which basically takes the qname and replaces the colon with an underscore
-  # cname is short for column name
+  # This function returns a column name for the concept
+  # constructed from the dictionary name and the short_name
   def cname
-    self.qname.gsub(/[-:\s]/, '_')
-  end
-
-  # This turns http://purl.org/biotop/1.0/biotop.owl#Action into biotop:Action
-  def qname
-    self.name.blank? ? '' : self.name.split('#').first.to_s.split('/').last.to_s.split('.').first.to_s + ':' + self.name.split('#').last.to_s
+    self.dictionary.name.downcase.gsub(/[^a-z0-9]/, '_') + '_' + self.short_name.downcase.gsub(/[^a-z0-9]/, '_')
   end
 
   def equivalent_concepts

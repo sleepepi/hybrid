@@ -240,11 +240,11 @@ class Mapping < ActiveRecord::Base
   end
 
   def human_units
-    concept = Concept.find_by_name(self.units)
+    concept = Concept.find_by_short_name(self.units)
     if concept
       concept.human_units
     else
-      self.units.to_s.split('#').last || ''
+      self.units.to_s
     end
   end
 

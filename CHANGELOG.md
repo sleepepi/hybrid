@@ -1,5 +1,8 @@
 ## 0.14.2
 
+### Refactoring
+- Removed uri, namespace, and name from concepts for simpler imports and exports
+
 ### Bug Fix
 - Fixed a data dictionary import failure caused by concept status column
 

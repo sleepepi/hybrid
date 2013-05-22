@@ -23,16 +23,9 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :display_name, nil, class: 'control-label' %>
+    <%= f.label :folder, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :display_name %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :search_name, nil, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :search_name %>
+      <%= f.text_field :folder %>
     </div>
   </div>
 
@@ -44,23 +37,16 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :namespace, nil, class: 'control-label' %>
+    <%= f.label :display_name, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :namespace %>
+      <%= f.text_field :display_name %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :uri, nil, class: 'control-label' %>
+    <%= f.label :search_name, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :uri %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :name, nil, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name %>
+      <%= f.text_field :search_name %>
     </div>
   </div>
 
@@ -138,13 +124,6 @@
     <%= f.label :commonly_used, nil, class: 'control-label' %>
     <div class="controls">
       <%= f.check_box :commonly_used %>
-    </div>
-  </div>
-
-  <div class="control-group">
-    <%= f.label :folder, nil, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :folder %>
     </div>
   </div>
 

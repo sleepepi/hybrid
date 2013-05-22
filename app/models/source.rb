@@ -20,7 +20,7 @@ class Source < ActiveRecord::Base
   # Model Relationships
   belongs_to :user
   has_many :mappings, -> { where deleted: false }
-  has_many :concepts, -> { order :name }, through: :mappings
+  has_many :concepts, -> { order :short_name }, through: :mappings
 
   has_many :source_joins, dependent: :destroy
   has_many :reverse_source_joins, class_name: 'SourceJoin', foreign_key: 'source_to_id', dependent: :destroy

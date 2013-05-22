@@ -26,7 +26,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should auto map" do
-    post :auto_map, id: @source, table: '', dictionary_id: dictionaries(:one).to_param, namespace: '', format: 'js'
+    post :auto_map, id: @source, table: '', dictionary_id: dictionaries(:one).to_param, format: 'js'
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:columns)
     assert_not_nil assigns(:max_pages)
@@ -35,7 +35,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should auto map single table" do
-    post :auto_map, id: @source, table: 'table', dictionary_id: dictionaries(:one).to_param, namespace: '', format: 'js'
+    post :auto_map, id: @source, table: 'table', dictionary_id: dictionaries(:one).to_param, format: 'js'
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:columns)
     assert_not_nil assigns(:max_pages)
@@ -44,7 +44,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should not auto map with invalid source" do
-    post :auto_map, id: -1, table: '', dictionary_id: dictionaries(:one).to_param, namespace: '', format: 'js'
+    post :auto_map, id: -1, table: '', dictionary_id: dictionaries(:one).to_param, format: 'js'
     assert_nil assigns(:source)
     assert_response :success
   end

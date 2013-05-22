@@ -1,4 +1,4 @@
-<% @title = "Concept: #{@concept.name}" %>
+<% @title = "Concept: #{@concept.short_name}" %>
 <div class="page-header">
   <h1>
     <%= @title %>
@@ -20,15 +20,6 @@
 
   <dt>Short Name</dt>
   <dd><%= @concept.short_name %></dd>
-
-  <dt>Namespace</dt>
-  <dd><%= @concept.namespace %></dd>
-
-  <dt>Uri</dt>
-  <dd><%= @concept.uri %></dd>
-
-  <dt>Name</dt>
-  <dd><%= @concept.name %></dd>
 
   <dt>Version</dt>
   <dd><%= @concept.version %></dd>

@@ -42,7 +42,7 @@ class SourcesController < ApplicationController
 
       @columns.each do |column_hash|
         mapping = @source.mappings.find_by_table_and_column_and_column_value(table, column_hash[:column], nil)
-        concepts = Concept.with_dictionary(params[:dictionary_id]).with_namespace(params[:namespace] || '').searchable.exactly(column_hash[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, column_hash[:column].to_s.gsub(/[^\w]/, ' ').downcase)
+        concepts = Concept.with_dictionary(params[:dictionary_id]).searchable.exactly(column_hash[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, column_hash[:column].to_s.gsub(/[^\w]/, ' ').downcase)
         c = concepts.first
         if concepts.size == 1 and c
           mapping = @source.mappings.find_or_create_by_table_and_column_and_column_value(table, column_hash[:column], nil) unless mapping

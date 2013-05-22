@@ -79,7 +79,7 @@ class ConceptsController < ApplicationController
   end
 
   def info_external
-    @concept = Concept.new(name: params[:name], totalnum: params[:totalnum], key: params[:key], source_id: params[:source_id])
+    @concept = Concept.new(short_name: params[:short_name], totalnum: params[:totalnum], key: params[:key], source_id: params[:source_id])
     @query_concept = QueryConcept.new(external_key: params[:key], source_id: params[:source_id])
     @query = current_user.all_queries.find_by_id(params[:query_id])
 

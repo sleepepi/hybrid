@@ -5,12 +5,12 @@
       <% report_concept = @report.report_concepts.find_by_concept_id(@concept.id) %>
       <%= link_to "Remove from #{report_type}", report_concept, method: :delete, remote: true, title: @concept.human_name, class: 'btn btn-danger', data: { confirm: "Are you sure you want to remove #{@concept.human_name} from Dataset: #{@report.name}?" } %>
     <% else %>
-      <%= link_to "Add to #{report_type}", report_concepts_path(query_id: @query.id, concept_id: @concept.id, report_id: params[:add_report_id], source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary' %>
+      <%= link_to "Add to #{report_type}", report_concepts_path(query_id: @query.id, concept_id: @concept.id, report_id: params[:add_report_id], source_id: @concept.source_id, external_key: @concept.key, short_name: @concept.short_name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary' %>
     <% end %>
   <% else %>
     <span class="large"><strong><%= @concept.human_name %></strong></span>
     <br />
-    <%= link_to "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, name: @concept.name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary', onclick: 'hideContourModal();' %>
+    <%= link_to "Add to Search", query_concepts_path(query_id: @query.id, selected_concept_id: @concept.id, source_id: @concept.source_id, external_key: @concept.key, short_name: @concept.short_name), method: :post, remote: true, title: @concept.human_name, class: 'btn btn-primary', onclick: 'hideContourModal();' %>
   <% end %>
 <% else %>
   <span class="large"><strong><%= @concept.human_name %></strong></span>

@@ -139,7 +139,7 @@ class Report < ActiveRecord::Base
         else
           header_row[index] = 'Total'
         end
-        if report_concept = ReportConcept.find_by_id(report_concept_id) and c = Concept.find_by_name(statistic)
+        if report_concept = ReportConcept.find_by_id(report_concept_id) and c = Concept.find_by_short_name(statistic)
           header_row[index] = header_row[index].to_s + " - " + c.human_name
         else
           header_row[index] = [header_row[index], ((statistic.blank? or statistic == 'strata') ? nil :  statistic.to_s.titleize)].compact.join(" - ")
@@ -164,7 +164,7 @@ class Report < ActiveRecord::Base
           elsif rows.size > 1 and row_index == rows.size - 1 and statistic == 'strata'
             body_row[index] = "---"
           elsif strata[index]
-            if c = Concept.find_by_name(strata[index])
+            if c = Concept.find_by_short_name(strata[index])
               body_row[index] = c.human_name
             else
               body_row[index] = strata[index]

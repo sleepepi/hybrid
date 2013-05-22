@@ -8,10 +8,8 @@
       <%= link_to 'Auto Map All Tables', '#', data: { object: 'all-tables-automap' } %>
       to Dictionary
       <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
-      <br />
-      Name Space
-      <%= select_tag :all_namespace, options_for_select([["---", nil]] + Concept.current.select(:namespace).collect{|c| c.namespace}.compact.uniq.sort{|a,b| a.downcase <=> b.downcase}.collect{|item| [item, item]}, params[:namespace]), name: 'namespace' %>
-    <% end %><br />
+    <% end %>
+    <br />
     <%= link_to "Delete All Mappings", remove_all_mappings_source_path(@source), method: :post, data: { confirm: "Are you sure you want to DELETE all associated data source mappings for Data Source #{@source.name}?" }, class: 'btn btn-danger' %>
   <% end %>
   <ul>
