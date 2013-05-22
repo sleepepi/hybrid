@@ -258,42 +258,8 @@ class Concept < ActiveRecord::Base
     [self] + self.descendants
   end
 
-  # TODO: Units
-  def update_unit_type!
-    # UNIT_ARRAYS.each do |unit_type, unit_array|
-    # self.update_attributes unit_type: unit_type.to_s if unit_array.collect{|display_name, stored_name| stored_name}.include?(self.units)
-    # end
-  end
-
-  def update_status!
-    self.reload
-    result = nil
-    if self.continuous?
-      result = 'complete'
-      [:unit_type, :units].each do |continuous_property|
-        result = 'partial' if self.read_attribute(continuous_property).blank?
-      end
-    elsif self.categorical?
-      result = (self.children.size > 0 ? 'complete' : 'partial')
-    elsif self.boolean?
-      result = 'complete'
-    elsif self.date?
-      result = 'complete'
-    elsif self.identifier?
-      result = 'complete'
-    elsif self.file_locator?
-      result = 'complete'
-    elsif self.free_text?
-      result = 'complete'
-    end
-
-    self.update_search_name!
-
-    self.update_attributes(status: result)
-  end
-
   def update_search_name!
-    self.update_column :search_name, self.human_name.downcase
+    self.update_column :search_name, self.human_name.downcase unless self.new_record?
   end
 
   def self.name_to_uri_and_namespace_and_short_name(name, uri_missing = nil, namespace_missing = nil)

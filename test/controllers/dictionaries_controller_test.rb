@@ -50,7 +50,7 @@ class DictionariesControllerTest < ActionController::TestCase
     assert_template 'new'
   end
 
-  test "should create an dictionary from a CSV file" do
+  test "should create a dictionary from a CSV file" do
     assert_difference('Dictionary.count') do
       post :create, dictionary: { name: 'Dictionary Three', description: "Dictionary Test", status: 'active', visible: true },
                     dictionary_file: fixture_file_upload('../../test/support/dictionaries/tiny_dictionary.csv')
@@ -61,7 +61,7 @@ class DictionariesControllerTest < ActionController::TestCase
     assert_redirected_to dictionary_path(assigns(:dictionary))
   end
 
-  test "should create an dictionary from a CSV file using test_01.csv" do
+  test "should create a dictionary from a CSV file using test_01.csv" do
     assert_difference('Dictionary.count') do
       post :create, dictionary: { name: 'Dictionary Test 01 CSV', description: "Dictionary Test", status: 'active', visible: true },
                     dictionary_file: fixture_file_upload('../../test/support/dictionaries/test_01.csv')

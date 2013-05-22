@@ -23,7 +23,6 @@ boolean:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -44,7 +43,6 @@ categorical:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -65,7 +63,6 @@ continuous:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -130,7 +127,6 @@ continuous_parent:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -151,7 +147,6 @@ continuous_units:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  # status: complete
   uri: http://localhost
   version: MyString
 
@@ -172,7 +167,6 @@ boolean_child:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -193,7 +187,6 @@ continuous_with_label:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -218,7 +211,6 @@ boolean_child_two:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -239,7 +231,6 @@ formula:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -259,7 +250,6 @@ formula_parent:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -279,7 +269,6 @@ equivalent_age_at_visit:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -299,7 +288,6 @@ similar_age_at_visit:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -319,7 +307,6 @@ age_meta:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   uri: http://localhost
   version: MyString
 
@@ -339,6 +326,5 @@ no_uri:
   source_file: MyString
   source_description: MyString
   source_name: MyString
-  status: complete
   # uri: http://localhost
   version: MyString

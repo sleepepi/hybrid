@@ -74,7 +74,7 @@ class Dictionary < ActiveRecord::Base
   def import_csv(file_name)
     dictionary_version = Time.now.to_i.to_s
 
-    CSV.foreach(file_name) do |line|
+    CSV.parse( File.open(file_name, 'r:iso-8859-1:utf-8'){|f| f.read} ) do |line| # , headers: true
       if not line[0].blank? and line[0].first != '#'
         concept_name = line[0] + '/' + line[1] + '#' + line[2]
         c = Concept.where( name: concept_name, uri: line[0], namespace: line[1], short_name: line[2]).first_or_create
@@ -110,22 +110,23 @@ class Dictionary < ActiveRecord::Base
           concept_parent = Concept.where(name: parent_name, uri: parent_uri, namespace: parent_namespace, short_name: parent_short_name).first_or_create
           concept_parent.update_column :version, dictionary_version
           concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
-          concept_parent.update_status!
           cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id ).first_or_create
         end
 
         line[9].to_s.split(';').each do |child_name|
           (child_name, child_uri, child_namespace, child_short_name) = Concept.name_to_uri_and_namespace_and_short_name(child_name.strip, c.uri, c.namespace)
           concept_child = Concept.where(name: child_name.strip, uri: child_uri, namespace: child_namespace, short_name: child_short_name).first_or_create
-          concept_child.update_column :version, dictionary_version
-          concept_child.update_column :dictionary_id, self.id if concept_child.dictionary_id.blank?
-          if c.categorical?
-            concept_child.update_column :concept_type, 'boolean'
-          elsif not c.concept_type.blank?
-            concept_child.update_column :concept_type, c.concept_type
+
+          unless concept_child.new_record?
+            concept_child.update_column :version, dictionary_version
+            concept_child.update_column :dictionary_id, self.id if concept_child.dictionary_id.blank?
+            if c.categorical?
+              concept_child.update_column :concept_type, 'boolean'
+            elsif not c.concept_type.blank?
+              concept_child.update_column :concept_type, c.concept_type
+            end
+            cpc = ConceptPropertyConcept.where( concept_one_id: concept_child.id, concept_two_id: c.id ).first_or_create
           end
-          concept_child.update_status!
-          cpc = ConceptPropertyConcept.where( concept_one_id: concept_child.id, concept_two_id: c.id ).first_or_create
         end
 
         # Field values for categoricals may be referencing children in line[11]
@@ -139,8 +140,7 @@ class Dictionary < ActiveRecord::Base
           end
         end
 
-        c.update_unit_type!
-        c.update_status!
+        c.update_search_name!
       end
     end
 

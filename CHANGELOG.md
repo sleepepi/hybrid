@@ -1,5 +1,8 @@
 ## 0.14.2
 
+### Bug Fix
+- Fixed a data dictionary import failure caused by concept status column
+
 ## 0.14.1 (May 14, 2013)
 
 ### Enhancements
