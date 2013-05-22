@@ -2,6 +2,8 @@
 
 ### Refactoring
 - Removed uri, namespace, and name from concepts for simpler imports and exports
+- Data Dictionary import simplified, imports CSV data by column header name
+- Concept folders and subfolders are now separated by `/` instead of `:`
 
 ### Bug Fix
 - Fixed a data dictionary import failure caused by concept status column

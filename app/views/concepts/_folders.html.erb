@@ -1,4 +1,4 @@
-<% r = Regexp.new("^#{@folder.to_s.gsub(/\\/, ':')}:") %>
+<% r = Regexp.new("^#{@folder.to_s.gsub(/\\/, '/')}/") %>
 
 <% @terms = params['concept_search'].to_s.titleize.downcase.split(' ') %>
 
@@ -55,8 +55,8 @@
 
 
 <%# Draws the folders for the folder with prefix @folder %>
-<%# concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? 'Uncategorized' : c.folder.to_s.gsub(r, '').split(":").first}.sort.uniq.each do |folder| %>
-<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + ':' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split(":").first, c.folder.to_s.gsub(r, '').split(":").first.titleize, {}]} | external_folders.select{|ec| ec[:is_folder]}.collect{|ec| [ec[:key], ec[:key].to_s.gsub(/(\\)*$/, '').gsub(/\\/, ':').gsub(r, '').split(":").last, ec]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
+<%# concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? 'Uncategorized' : c.folder.to_s.gsub(r, '').split("/").first}.sort.uniq.each do |folder| %>
+<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + '/' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split("/").first, c.folder.to_s.gsub(r, '').split("/").first.titleize, {}]} | external_folders.select{|ec| ec[:is_folder]}.collect{|ec| [ec[:key], ec[:key].to_s.gsub(/(\\)*$/, '').gsub(/\\/, '/').gsub(r, '').split("/").last, ec]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
 
   <%# full_folder = "#{@folder.blank? ? '' : "#{@folder}:" }#{folder}" %>
   <% full_folder = full_folder_path %>

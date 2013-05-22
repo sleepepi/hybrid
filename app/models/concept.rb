@@ -10,9 +10,9 @@ class Concept < ActiveRecord::Base
   scope :with_concept_type, lambda { |*args|  where(["concepts.concept_type IN (?) or 'all' IN (?)", args.first, args.first]) }
 
   scope :with_source, lambda { |*args|  where(["concepts.id in (select concept_id from mappings where mappings.source_id IN (?) and mappings.status IN (?) and mappings.deleted = ?)", args.first, ['mapped', 'unmapped', 'derived'], false] ) } # TODO: Status of mapping no longer matters
-  scope :with_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ? IS NULL", args.first.to_s + ':%', args.first]) }
+  scope :with_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ? IS NULL", args.first.to_s + '/%', args.first]) }
   scope :with_exact_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first]) }
-  scope :with_exact_folder_or_subfolder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + ':%', args.first]) }
+  scope :with_exact_folder_or_subfolder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + '/%', args.first]) }
 
   scope :with_dictionary, lambda { |*args| where(["concepts.dictionary_id IN (?) or 'all' IN (?)", args.first, args.first]) }
 

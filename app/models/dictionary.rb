@@ -68,44 +68,49 @@ class Dictionary < ActiveRecord::Base
   def import_csv(file_name)
     dictionary_version = Time.now.to_i.to_s
 
-    CSV.parse( File.open(file_name, 'r:iso-8859-1:utf-8'){|f| f.read} ) do |line| # , headers: true
-      if not line[0].blank? and line[0].first != '#'
-        c = self.concepts.where( short_name: line[0] ).first_or_create
+    CSV.parse( File.open(file_name, 'r:iso-8859-1:utf-8'){|f| f.read}, headers: true ) do |line|
+      row = line.to_hash
+
+      unless row['Short Name'].blank?
+        c = self.concepts.where( short_name: row['Short Name'] ).first_or_create
         c.dictionary_id = self.id
         c.version = dictionary_version
-        c.description = line[1]
-        c.concept_type = line[3]
-        c.units = line[3]
+        c.description = row['Description']
+        c.concept_type = row['Concept Type']
+        c.units = row['Units']
 
         c.sensitivity = Concept::SENSITIVITY.collect{|s| s[1]}.include?(line[9]) ? line[9] : '0'
-        c.display_name = line[10]
-        c.commonly_used = (line[11] == '1')
-        c.folder = line[12]
-        c.formula = line[13]
-        c.source_name = line[14]
-        c.source_file = line[15]
-        c.source_description = line[16]
+        c.display_name = row['Display Name']
+        c.commonly_used = (row['Commonly Used'] == '1')
+        c.folder = row['Folder']
+        c.formula = row['Calculation']
+        c.source_name = row['Source Name']
+        c.source_file = row['Source File']
+        c.source_description = row['Source Description']
         c.save
 
         c.terms.destroy_all
-        line[4].to_s.split(';').each do |label|
+        row['Terms'].to_s.split(';').each do |label|
           term = c.terms.where( name: label.strip, internal: false ).first_or_create
           term.update_search_name!
         end
 
-        line[5].to_s.split(';').each do |internal_label|
+        row['Internal Terms'].to_s.split(';').each do |internal_label|
           internal_term = c.terms.where( name: internal_label.strip, internal: true ).first_or_create
           internal_term.update_search_name!
         end
 
-        line[6].to_s.split(';').each do |parent_name|
+        row['Parents'].to_s.split(';').each do |parent_name|
           concept_parent = self.concepts.where( short_name: parent_name.strip ).first_or_create
-          concept_parent.update_column :version, dictionary_version
-          concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
-          cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id ).first_or_create
+
+          unless concept_parent.new_record?
+            concept_parent.update_column :version, dictionary_version
+            concept_parent.update_column :dictionary_id, self.id if concept_parent.dictionary_id.blank?
+            cpc = ConceptPropertyConcept.where( concept_one_id: c.id, concept_two_id: concept_parent.id ).first_or_create
+          end
         end
 
-        line[7].to_s.split(';').each do |child_name|
+        row['Children'].to_s.split(';').each do |child_name|
           concept_child = self.concepts.where( short_name: child_name.strip ).first_or_create
 
           unless concept_child.new_record?
@@ -121,12 +126,14 @@ class Dictionary < ActiveRecord::Base
         end
 
         # Field values for categoricals may be referencing children in line[11]
-        line[8].to_s.split(';').each_with_index do |field_value, i|
-          if c.categorical? and not line[7].to_s.split(';')[i].blank?
-            child_name = line[7].to_s.split(';')[i]
+        row['Field Values'].to_s.split(';').each_with_index do |field_value, i|
+          if c.categorical? and not row['Children'].to_s.split(';')[i].blank?
+            child_name = row['Children'].to_s.split(';')[i]
             concept_child = self.concepts.where( short_name: child_name.strip ).first
-            internal_term = concept_child.terms.where( name: field_value.strip, internal: true ).first_or_create
-            internal_term.update_search_name!
+            if concept_child
+              internal_term = concept_child.terms.where( name: field_value.strip, internal: true ).first_or_create
+              internal_term.update_search_name!
+            end
           end
         end
 
