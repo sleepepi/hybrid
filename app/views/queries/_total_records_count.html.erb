@@ -1,3 +1,13 @@
-<code><%= @sql_conditions if current_user.system_admin? %></code>
+<div style="margin-top:10px">
+  <% if current_user.system_admin? %>
+    <% @sql_conditions.each do |condition| %>
+      <pre><%= condition %></pre>
+    <% end %>
 
-<code><%= @overall_errors if current_user.system_admin? %></code>
+    <% @overall_errors.each do |position, error| %>
+      <% unless error.blank? %>
+        <div class="alert alert-error"><b><%= position || 'Total' %></b> <%= error %></div>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

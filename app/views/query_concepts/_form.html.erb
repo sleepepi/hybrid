@@ -79,10 +79,22 @@
       <%= f.text_field :value %>
     <% end %>
 
+
+    <% if @query_concept.concept.sources.uniq.size > 1 %>
+      <div class="control-group">
+        <%= f.label :source_id, "At", class: 'control-label' %>
+        <div class="controls sheet-container">
+          <% @query_concept.concept.sources.uniq.each do |source| %>
+            <label class="radio"><%= f.radio_button :source_id, source.id %> <%= source.name %></label>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+
     <div class="control-group">
-      <%= f.label :negated, nil, class: 'control-label' %>
-      <div class="controls">
-        <%= f.check_box :negated %>
+      <div class="controls sheet-container">
+        <label class="checkbox negation <%= 'selected' if @query_concept.negated? %> inline"><%= f.check_box :negated %> Negated</label>
       </div>
     </div>
 

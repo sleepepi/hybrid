@@ -166,7 +166,7 @@ class QueryConceptsController < ApplicationController
 
     def query_concept_params
       params.require(:query_concept).permit(
-        :value, :right_operator, :negated
+        :value, :right_operator, :negated, :source_id
       )
     end
 end

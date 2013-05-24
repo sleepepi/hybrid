@@ -11,7 +11,7 @@ $(".errors_found").html("");
 <% end %>
 <% @overall_errors.each do |grouping,error| %>
   <% if grouping == nil %>
-    $('#total_errors_found').html("<span class='label label-warning' style='white-space:normal'><%= escape_javascript(error.html_safe) %></span>");
+    $('#total_errors_found').html("<div class='alert alert-warning'><%= escape_javascript(error.html_safe) %></div>");
   <% else %>
     $('#<%= grouping %>_errors').html("<span class='label label-warning' style='white-space:normal'><%= escape_javascript(error.html_safe) %></span>");
   <% end %>

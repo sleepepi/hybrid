@@ -1,1 +1,8 @@
-<b><%= @query.display_name %></b> <%= link_to 'edit', edit_name_query_path(@query), method: :post, remote: true, class: 'btn btn-mini' %>
+<% if @query.name.blank? %>
+  <span class="muted">Query <%= @query.created_at.strftime("%Y.%m.%d") %></span>
+<% else %>
+  <%= @query.name %>
+<% end %>
+
+
+<%= link_to 'edit', edit_name_query_path(@query), method: :post, remote: true, class: 'btn btn-mini' %>

@@ -13,21 +13,21 @@ class QueriesController < ApplicationController
       @overall_errors = {}
 
       if sources.size == 0
-        @sql_conditions = ''
-        @overall_totals[nil] = '&lsaquo;&Oslash;&rsaquo;'.html_safe
-        @overall_errors[nil] = 'No Data Sources Selected';
+        @sql_conditions = []
+        @overall_totals[nil] = 0
+        @overall_errors[nil] = 'No Data Sources Selected'
       else
         sub_totals = []
 
         sources.each do |source|
           if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
-            sub_totals << query.record_count_only_with_sub_totals(current_user, source, query_concepts)
+            sub_totals << query.record_count_only_with_sub_totals_using_resolvers(current_user, source, query_concepts)
           else
             sub_totals << {result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
           end
         end
 
-        @sql_conditions = sub_totals.collect{|st| st[:sql_conditions]}
+        @sql_conditions = sub_totals.collect{|st| st[:sql_conditions]}.flatten
 
         sub_totals.each do |sub_total_hash|
           sub_total = sub_total_hash[:result]

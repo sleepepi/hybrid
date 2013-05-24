@@ -221,3 +221,9 @@ jQuery ->
       hideContourModal()
       false
     )
+    .on('change', '.checkbox input:checkbox', () ->
+      if $(this).is(':checked')
+        $(this).parent().addClass('selected')
+      else
+        $(this).parent().removeClass('selected')
+    )

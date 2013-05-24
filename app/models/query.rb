@@ -30,8 +30,8 @@ class Query < ActiveRecord::Base
 
   # Query Methods
 
-  def display_name
-    self.name.blank? ? '<span style="color:#777;">--No Name--</span>'.html_safe : self.name
+  def generate_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
+    temp_query_concepts.collect{|qc| Resolver.new(qc, source, current_user)}
   end
 
   def file_type_count(current_user, file_type)
@@ -76,6 +76,7 @@ class Query < ActiveRecord::Base
 
     all_files
   end
+
 
   # Builds the conditions and subconditions given a query with query_concepts, or temporary_concepts from the Query Builder
   def build_conditions(current_user, source, temp_query_concepts = self.query_concepts)
@@ -180,11 +181,39 @@ class Query < ActiveRecord::Base
     sub_conditions << {position: nil, conditions: conditions, tables: overall_tables, join_conditions: overall_join_conditions}
     errors << [nil, "Not All Concepts Are Mapped in #{source.name}: #{overall_errors.join(', ')}"] if overall_error_found
 
-    return {result: sub_conditions, errors: errors}
+    return { result: sub_conditions, errors: errors }
+  end
+
+  def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
+    return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
+
+    resolvers = generate_resolvers(current_user, source, temp_query_concepts)
+
+    master_total = 0
+    master_tables = resolvers.collect(&:tables).flatten.compact.uniq
+    join_hash = source.join_conditions(master_tables, current_user)
+    resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
+    master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
+
+    if master_tables.size > 0 and source.use_sql?(current_user)
+      wrapper = Aqueduct::Builder.wrapper(source, current_user)
+      sql_statement = "SELECT COUNT(*) FROM #{master_tables.join(', ')} WHERE #{master_conditions}"
+      wrapper.connect
+      (results, number_of_rows) = wrapper.query(sql_statement)
+      wrapper.disconnect
+      master_total = results.to_a.first[0]
+    end
+
+
+    sub_totals = resolvers.collect{|r| ["record_ids_#{r.position}", r.count]} + [[nil, master_total]]
+    sql_conditions = resolvers.collect{|r| r.tables.join(',') + ' WHERE ' + r.conditions} + [master_tables.join(',') + ' WHERE ' + master_conditions]
+    errors = resolvers.collect{|r| ["record_ids_#{r.position}", r.errors.join(',')]}
+
+    return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
   def record_count_only_with_sub_totals(current_user, source, temp_query_concepts = self.query_concepts)
-    return {result: [[nil, 0]], errors: []} if temp_query_concepts.blank?
+    return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
 
     build_conditions_hash = self.build_conditions(current_user, source, temp_query_concepts)
 
@@ -195,19 +224,15 @@ class Query < ActiveRecord::Base
     sql_conditions = ''
 
     # Iterate through sub_conditions and retrieve count.  The sub_condition with a [nil, conditions] is the overall query.
-    # Iterate through sub_conditions and retrieve count.  The sub_condition with a {position: nil, conditions: conditions, tables: tables, join_conditions: join_conditions} is the overall query.
     sub_conditions.each do |sub_condition|
       result_hash = source.count(current_user, temp_query_concepts, sub_condition[:conditions], sub_condition[:tables], sub_condition[:join_conditions], self.identifier_concept)
       sql_conditions = result_hash[:sql_conditions] if sub_condition[:position] == nil
-      if result_hash[:error].blank?
-        sub_totals << [sub_condition[:position], result_hash[:result]]
-      else
-        sub_totals << [sub_condition[:position], result_hash[:result]]
-        errors << [sub_condition[:position], result_hash[:error]]
-      end
+
+      sub_totals << [sub_condition[:position], result_hash[:result]]
+      errors << [sub_condition[:position], result_hash[:error]] unless result_hash[:error].blank?
     end
 
-    return {result: sub_totals, errors: errors, sql_conditions: sql_conditions}
+    return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
   def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
