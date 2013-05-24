@@ -171,6 +171,14 @@
       )
   )
 
+@color_radio_group = (group_name) ->
+  $(":radio[name='" + group_name + "']").each( (index, element) ->
+    if $(element).prop('checked')
+      $(element).parent().addClass('selected')
+    else
+      $(element).parent().removeClass('selected')
+  )
+
 jQuery ->
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
@@ -226,4 +234,8 @@ jQuery ->
         $(this).parent().addClass('selected')
       else
         $(this).parent().removeClass('selected')
+    )
+    .on('change', '.radio input:radio', () ->
+      group_name = $(this).attr('name')
+      color_radio_group(group_name)
     )
