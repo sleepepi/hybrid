@@ -184,6 +184,17 @@ class Query < ActiveRecord::Base
     return { result: sub_conditions, errors: errors }
   end
 
+  def master_resolver(current_user, source, temp_query_concepts)
+    resolvers = generate_resolvers(current_user, source, temp_query_concepts)
+
+    master_tables = resolvers.collect(&:tables).flatten.compact.uniq
+    join_hash = source.join_conditions(master_tables, current_user)
+    resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
+    master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
+
+    return { master_tables: master_tables, master_conditions: master_conditions, errors: resolvers.collect{|r| r.errors}.flatten.uniq }
+  end
+
   def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
     return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
 
@@ -212,6 +223,49 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
+  def view_concept_values_with_resolvers(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
+    result = [[]]
+    error = ''
+
+    available_sources = []
+    selected_sources.each do |source|
+      if source.user_has_one_or_more_actions?(current_user, actions_required)
+        available_sources << source
+      end
+    end
+
+    error = "You do not have #{actions_required.collect{|a| '<span class="source_rule_text">'+a+'</span>'}.join(' or ')} in any of you selected data sources: <ul>#{selected_sources.collect{|s| "<li><b><i>#{s.name}</i></b></li>"}.join}</ul>" if available_sources.size == 0
+
+    result[0] = view_concept_ids.collect{|c_id| (c = Concept.find_by_id(c_id)) ? c.cname : nil}
+
+    available_sources.each do |source|
+      master_hash = master_resolver(current_user, source, temp_query_concepts)
+      if master_hash[:errors].blank?
+        result_hash = source.get_values_for_concepts(current_user, master_hash[:master_conditions], master_hash[:master_tables], nil, view_concept_ids, table_columns, actions_required)
+        if result_hash[:error].blank?
+          # Combine new hash with previous results from other sources
+          # TODO: This line may no longer be needed as the initial view_concept_ids should cover all concepts that are retrieved.
+          result[0] = (result.first + result_hash[:result].first).uniq
+
+          result_hash[:result][1..-1].each do |row|
+            result_row = []
+            result_hash[:result].first.each_with_index do |cname, column_index|
+              result_row[result.first.index(cname)] = row[column_index]
+            end
+            result << result_row
+          end
+        else
+          error = result_hash[:error]
+        end
+      else
+        error = master_hash[:errors].join(', ')
+      end
+
+    end
+
+    return { result: result, error: error }
+  end
+
   def record_count_only_with_sub_totals(current_user, source, temp_query_concepts = self.query_concepts)
     return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
 
@@ -236,6 +290,10 @@ class Query < ActiveRecord::Base
   end
 
   def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
+    self.view_concept_values_with_resolvers(current_user, selected_sources, view_concept_ids, temp_query_concepts, table_columns, actions_required)
+  end
+
+  def view_concept_values_old(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
     result = [[]]
     error = ''
     return { result: result, error: error } if temp_query_concepts.blank?
