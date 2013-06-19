@@ -157,10 +157,6 @@ class Concept < ActiveRecord::Base
     { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: all_stats.join('<br />') }
   end
 
-  def unit_range
-    []
-  end
-
   def continuous?
     self.concept_type == 'continuous'
   end
@@ -198,25 +194,6 @@ class Concept < ActiveRecord::Base
     result
   end
 
-  # This function returns all the mappings that should evaluate to true for the given concept.
-  # Example a Query for Gender should return results if Male has been marked as boolean, similar query for Age should return results for Age at Time of Test or Study
-  # Concept: Age, would find itself (Age, and descendants Age at Time of Test or Study, etc) basically finds all database_concepts that can be used to evaluate the parent concept.
-  def mapped_descendants(source = nil)
-    result = []
-    if source
-      all_derived_concepts = source.derived_concepts
-      if all_derived_concepts.include?(self)
-        # puts "#{self.human_name} included in [#{source.derived_concepts.collect{|concept| concept.human_name}.join(', ')}]"
-        # If the concept is in the derived concepts, then try to find the original concepts that reference it.
-        all_descendant_ids = self.descendants_and_self.collect{|c| c.id}
-        result = source.mappings.where(['concept_id in (?)', all_descendant_ids]) || []
-      end
-      # puts "#{self.human_name} does not have any mapped names in #{source.name}" if result.blank?
-      # puts "#{self.human_name} mapped names in #{source.name} are #{result.collect{|m| "#{m.table}.#{m.column}"}.join(', ')}" unless result.blank?
-    end
-    result
-  end
-
   def mapped_name(current_user, source = nil)
     result = nil
     if source
@@ -232,23 +209,6 @@ class Concept < ActiveRecord::Base
     result
   end
 
-  def descendants
-    result = []
-    # TODO: Include descendants
-    # self.children.each do |child|
-    #   unless result.include?(child)
-    #     result << ([child] + child.descendants)
-    #     result.flatten!
-    #     result.uniq!
-    #   end
-    # end
-    result
-  end
-
-  def descendants_and_self
-    [self] + self.descendants
-  end
-
   def update_search_name!
     self.update_column :search_name, self.human_name.downcase unless self.new_record?
   end
@@ -257,14 +217,6 @@ class Concept < ActiveRecord::Base
   # constructed from the dictionary name and the short_name
   def cname
     self.dictionary.name.downcase.gsub(/[^a-z0-9]/, '_') + '_' + self.short_name.downcase.gsub(/[^a-z0-9]/, '_')
-  end
-
-  def equivalent_concepts
-    (equivalent_concepts_a + equivalent_concepts_b).uniq
-  end
-
-  def similar_concepts
-    (similar_concepts_a + similar_concepts_b).uniq
   end
 
   def ancestors(concept_type_array = ['all'])

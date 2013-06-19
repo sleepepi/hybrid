@@ -27,7 +27,7 @@
         <%= select_tag "mappings[#{@mapping.id}][mapping_column_values][value_#{column_value}][value]", options_for_select([['----',nil], ["Unknown #{@mapping.concept.human_name}", 'unknown']] + @mapping.concept.recommended_concepts.collect{|item| [item.human_name, item.id]}, dccv_default), style: 'width:180px' %><br />
       <% end %>
     <% when 'continuous' %>
-      Units: <%= select_tag "mappings[#{@mapping.id}][units]", options_for_select([["----", nil]] + @mapping.concept.unit_range, @mapping.units) %>
+      Units: <%= select_tag "mappings[#{@mapping.id}][units]", options_for_select([["----", nil]], @mapping.units) %>
     <% when 'boolean' %>
       Boolean: Please Map True and False<br />
       <% @mapping.column_values(current_user).each do |column_value| %>

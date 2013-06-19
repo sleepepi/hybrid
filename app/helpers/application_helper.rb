@@ -46,8 +46,4 @@ module ApplicationHelper
     checked ? '<i class="icon-ok"></i>'.html_safe : ''
   end
 
-  def information(message = ' Press Enter to Search')
-    "<i class='icon-question-sign'></i> <span class='quiet small'>#{message}</span>".html_safe
-  end
-
 end

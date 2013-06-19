@@ -77,113 +77,6 @@ class Query < ActiveRecord::Base
     all_files
   end
 
-
-  # Builds the conditions and subconditions given a query with query_concepts, or temporary_concepts from the Query Builder
-  def build_conditions(current_user, source, temp_query_concepts = self.query_concepts)
-    t_start = Time.now
-    return {result: [[nil, '']], errors: []} if temp_query_concepts.blank?
-
-    sub_conditions = []
-    errors = []
-    overall_errors = []
-    overall_error_found = false
-
-    # Invididual Row Conditions
-    temp_query_concepts.each do |query_concept|
-      tables = []
-      join_conditions = ''
-      concept = query_concept.concept
-
-      # Determine what tables need to be used and join_conditions
-      if source.use_sql?(current_user)
-        tables << source.concept_tables(query_concept.concept)
-        tables.flatten!
-        tables.uniq!
-        join_conditions_hash = source.join_conditions(tables, current_user)
-        errors += join_conditions_hash[:errors] unless join_conditions_hash[:errors].blank?
-        join_conditions = join_conditions_hash[:result]
-      else
-        result_table_hash = source.concept_tables_external_wrap(current_user, query_concept)
-        errors += result_table_hash[:error] unless result_table_hash[:error].blank?
-        tables << result_table_hash[:result]
-      end
-
-      # TODO: Figure out what this does...(compared to the tables that are created above)
-      if source.use_sql?(current_user)
-        result_hash = query_concept.construct_sql(current_user, source)
-        tables += result_hash[:tables]
-
-        if concept and (source.derived_concepts.include?(concept) or source.linked_concepts.where(["concepts.id = ?", concept.id]).size > 0)
-
-          unless result_hash[:error].blank?
-            # overall_error_found = true
-            errors << ["record_ids_#{query_concept.id}", result_hash[:error]]
-            # overall_errors << result_hash[:error]
-          end
-
-          sub_conditions << {position: "record_ids_#{query_concept.id}", conditions: result_hash[:conditions], tables: tables, join_conditions: join_conditions}
-
-
-        elsif concept
-          overall_error_found = true
-          errors << ["record_ids_#{query_concept.id}", "Concept #{query_concept.concept.human_name} Not Mapped in #{source.name}"]
-          overall_errors << "Concept #{query_concept.concept.human_name} Not Mapped in #{source.name}"
-          sub_conditions << {position: "record_ids_#{query_concept.id}", conditions: result_hash, tables: tables, join_conditions: join_conditions}
-        end
-      else
-        # Subconditions generation for SQLless wrappers
-        result_hash = source.conditions_external_wrap(current_user, [query_concept])
-        errors << ["record_ids_#{query_concept.id}", result_hash[:error]] unless result_hash[:error].blank?
-        sub_conditions << {position: "record_ids_#{query_concept.id}", conditions: result_hash[:conditions], tables: tables, join_conditions: join_conditions}
-      end
-    end
-
-    select_tables = [] # TODO: Remove select_tables as it doesn't seem needed
-    all_conditions = []
-
-    temp_query_concepts.each do |qc|
-      result_hash = qc.construct_sql_wrap(current_user, source, temp_query_concepts)
-      select_tables += result_hash[:tables]
-      all_conditions << result_hash[:conditions]
-    end
-
-    conditions = all_conditions.join(' ')
-    conditions = "#{'NOT ' if self.negated?}(" + conditions + ')' if source.use_sql?(current_user)
-
-    overall_tables = []
-    overall_join_conditions = []
-
-    # Determine what tables need to be used and join_conditions
-    if source.use_sql?(current_user)
-      overall_tables = Array.new(select_tables) # TODO: Remove select_tables as it doesn't seem needed
-      temp_query_concepts.each do |query_concept|
-        overall_tables << source.concept_tables(query_concept.concept)
-        overall_tables.flatten!
-      end
-      overall_tables.uniq!
-      overall_join_conditions_hash = source.join_conditions(overall_tables, current_user)
-      overall_errors += overall_join_conditions_hash[:errors] unless overall_join_conditions_hash[:errors].blank?
-      overall_errors.uniq!
-      overall_join_conditions = overall_join_conditions_hash[:result]
-    else
-      overall_tables = Array.new(select_tables) # TODO: Remove select_tables as it doesn't seem needed
-      temp_query_concepts.each do |query_concept|
-        result_table_hash = source.concept_tables_external_wrap(current_user, query_concept)
-        overall_tables << result_table_hash[:result]
-        overall_tables.flatten!
-      end
-      overall_tables.uniq!
-      result_hash = source.conditions_external_wrap(current_user, temp_query_concepts)
-      conditions = result_hash[:conditions]
-      errors << result_hash[:error] unless result_hash[:error].blank?
-    end
-
-    sub_conditions << {position: nil, conditions: conditions, tables: overall_tables, join_conditions: overall_join_conditions}
-    errors << [nil, "Not All Concepts Are Mapped in #{source.name}: #{overall_errors.join(', ')}"] if overall_error_found
-
-    return { result: sub_conditions, errors: errors }
-  end
-
   def master_resolver(current_user, source, temp_query_concepts)
     resolvers = generate_resolvers(current_user, source, temp_query_concepts)
 
@@ -223,7 +116,7 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values_with_resolvers(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
+  def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
     result = [[]]
     error = ''
 
@@ -263,76 +156,6 @@ class Query < ActiveRecord::Base
 
     end
 
-    return { result: result, error: error }
-  end
-
-  def record_count_only_with_sub_totals(current_user, source, temp_query_concepts = self.query_concepts)
-    return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
-
-    build_conditions_hash = self.build_conditions(current_user, source, temp_query_concepts)
-
-    sub_totals = []
-    sub_conditions = build_conditions_hash[:result]
-    errors = build_conditions_hash[:errors]
-
-    sql_conditions = ''
-
-    # Iterate through sub_conditions and retrieve count.  The sub_condition with a [nil, conditions] is the overall query.
-    sub_conditions.each do |sub_condition|
-      result_hash = source.count(current_user, temp_query_concepts, sub_condition[:conditions], sub_condition[:tables], sub_condition[:join_conditions], self.identifier_concept)
-      sql_conditions = result_hash[:sql_conditions] if sub_condition[:position] == nil
-
-      sub_totals << [sub_condition[:position], result_hash[:result]]
-      errors << [sub_condition[:position], result_hash[:error]] unless result_hash[:error].blank?
-    end
-
-    return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
-  end
-
-  def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
-    self.view_concept_values_with_resolvers(current_user, selected_sources, view_concept_ids, temp_query_concepts, table_columns, actions_required)
-  end
-
-  def view_concept_values_old(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
-    result = [[]]
-    error = ''
-    return { result: result, error: error } if temp_query_concepts.blank?
-
-    available_sources = []
-    selected_sources.each do |source|
-      if source.user_has_one_or_more_actions?(current_user, actions_required)
-        available_sources << source
-      end
-    end
-
-    result[0] = view_concept_ids.collect{|c_id| (c = Concept.find_by_id(c_id)) ? c.cname : nil}
-
-    available_sources.each do |source|
-      conditions_hash = self.build_conditions(current_user, source, temp_query_concepts)
-      if conditions_hash[:error].blank?
-        overall_build_conditions = conditions_hash[:result].select{|bc| bc[:position] == nil}.first
-        result_hash = source.get_values_for_concepts(current_user, overall_build_conditions[:conditions], overall_build_conditions[:tables], conditions_hash[:select_identifier_concept], view_concept_ids, table_columns, actions_required)
-        if result_hash[:error].blank?
-          # Combine new hash with previous results from other sources
-          # TODO: This line may no longer be needed as the initial view_concept_ids should cover all concepts that are retrieved.
-          result[0] = (result.first + result_hash[:result].first).uniq
-
-          result_hash[:result][1..-1].each do |row|
-            result_row = []
-            result_hash[:result].first.each_with_index do |cname, column_index|
-              result_row[result.first.index(cname)] = row[column_index]
-            end
-            result << result_row
-          end
-        else
-          error = result_hash[:error]
-        end
-      else
-        error = condition_hash[:error]
-      end
-    end
-
-    error = "You do not have #{actions_required.collect{|a| '<span class="source_rule_text">'+a+'</span>'}.join(' or ')} in any of you selected data sources: <ul>#{selected_sources.collect{|s| "<li><b><i>#{s.name}</i></b></li>"}.join}</ul>" if available_sources.size == 0
     return { result: result, error: error }
   end
 
