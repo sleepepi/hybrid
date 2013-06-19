@@ -1,7 +1,6 @@
 ## 0.14.2
 
 ### Enhancements
-- Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 - Use of Ruby 2.0.0-p195 is now recommended
 - **Gem Changes**
   - Updated to rails 4.0.0.rc2
