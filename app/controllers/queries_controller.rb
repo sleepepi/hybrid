@@ -21,7 +21,7 @@ class QueriesController < ApplicationController
 
         sources.each do |source|
           if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
-            sub_totals << query.record_count_only_with_sub_totals(current_user, source, query_concepts)
+            sub_totals << query.record_count_only_with_sub_totals_using_resolvers(current_user, source, query_concepts)
           else
             sub_totals << {result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
           end
