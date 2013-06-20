@@ -238,7 +238,7 @@ class Source < ActiveRecord::Base
     Aqueduct::Builder.wrapper(self, current_user).external_concept_information(external_key)
   end
 
-  def get_values_for_concepts(current_user, conditions, tables, select_identifier_concept, view_concept_ids, table_columns = [], actions_required = ['view data distribution', 'view limited data distribution'])
+  def get_values_for_concepts(current_user, conditions, tables, view_concept_ids, actions_required = ['view data distribution', 'view limited data distribution'])
     result = []
     result2 = {}
     error = ''
@@ -247,137 +247,105 @@ class Source < ActiveRecord::Base
 
     if wrapper.use_sql?
       begin
-        if wrapper.connect
+        mappings_for_select_clause = []
+        self.mappings.where(concept_id: view_concept_ids).each do |mapping|
+          mappings_for_select_clause << mapping if mapping.user_can_view?(current_user, actions_required)
+        end
 
-          concepts_for_select_clause = [] #self.database_concepts.status('mapped').where(['database_concepts.concept_id IN (?)', view_concept_ids])
+        tables_covered_by_concepts = (mappings_for_select_clause.collect{|m| m.table} | tables).uniq
+        join_conditions_hash = self.join_conditions(tables_covered_by_concepts, current_user)
+        error = join_conditions_hash[:errors].join(', ')
 
-          logger.debug "VIEW CONCEPT IDS: #{view_concept_ids.inspect} #{view_concept_ids.size}"
+        if mappings_for_select_clause.size > 0 and tables_covered_by_concepts.size > 0
 
-          logger.debug view_concept_ids.class.name
+          result_hash = wrapper.sql_codes
+          sql_open = result_hash[:open]
+          sql_close = result_hash[:close]
 
-          view_concept_ids.each_with_index do |view_concept_id, index|
-            logger.debug "INDEX: #{index}"
+          sql_statement = "SELECT #{mappings_for_select_clause.collect{|m| m.table + '.' + sql_open + m.column + sql_close}.join(',')} FROM #{tables_covered_by_concepts.join(', ')} WHERE #{join_conditions_hash[:result].join(' and ')}#{' and ' unless join_conditions_hash[:result].blank?}#{conditions}"
 
-            # TODO: If multiple items are mapped to the same concept, return more than just the first mapped concept?
-            # Need to check how mappings are returned "uniquely" first
-            # self.mappings.where(['mappings.concept_id = ? and mappings.status = ?', view_concept_id, 'mapped']).each do |mapping|
-            #   concepts_for_select_clause << mapping if mapping.user_can_view?(current_user, actions_required)
-            # end
+          logger.debug "\n\nSQL for #{self.name}:\n\n   #{sql_statement}\n\n"
+
+          t = Time.now
+
+          concept_cnames = mappings_for_select_clause.each_with_index.collect{|m,i| m.concept ? m.concept.cname : "tmp_#{i}"}
+
+          wrapper.connect
+          (results, number_of_rows) = wrapper.query(sql_statement)
+          wrapper.disconnect
 
 
-            # TODO: This will be replaced by above code
-            mapping = self.mappings.where(['mappings.concept_id = ? and mappings.status IN (?)', view_concept_id, ['mapped', 'unmapped', 'derived']]).first
-            logger.debug "view_concept_id #{view_concept_id}"
-            logger.debug "Mapping #{mapping.inspect}"
-            if mapping and mapping.user_can_view?(current_user, actions_required)
-              logger.debug "adding mapping"
-              concepts_for_select_clause << mapping
-            end
+          result = Array.new(number_of_rows + 1) {Array.new(concept_cnames.size)}
+
+          # result << concept_cnames # mappings_for_select_clause.collect{|dc| dc.concept ? dc.concept.cname : 'blank_concept'}
+          result[0] = concept_cnames
+
+          # mappings_for_select_clause.each {|dc| datatypes[dc.concept.cname] = dc.concept.data_type if dc.concept}
+
+          t3 = Time.now
+
+          index_of_cname = {}
+          mappings_for_select_clause.each_with_index do |mapping, m_index|
+            index_of_cname[mapping.concept ? mapping.concept.cname : "tmp_#{m_index}"] = m_index
           end
 
-          logger.debug concepts_for_select_clause.inspect
+          massive_result_array = []
+          results.each{|row| massive_result_array << row }
+          results = nil
 
-          table_columns.each do |tc|
-            # mapping = self.mappings.find_by_table_and_column_and_column_value_and_status(tc[:table], tc[:column], nil, 'mapped').first
+          concept_cnames.each_with_index do |cname, column_index|
+            mapping = mappings_for_select_clause.select{|m| (m.concept ? m.concept.cname : "tmp_#{column_index}") == cname}.first
+            dccv_conversions = {}
+            if mapping
+              # TODO: Replace this with or something similar... see Mapping::human_normalized_value(val) and Mapping::uniq_normalized_value(val)
+              #   dccv_conversions['val_'+val_mapping.column_value.to_s] = mapping.human_normalized_value(val)
 
-            mapping = Mapping.new(table: tc[:table], column: tc[:column])
-            concepts_for_select_clause << mapping
-          end
-
-          tables_covered_by_concepts = (concepts_for_select_clause.collect{|m| m.table} | tables).uniq
-          join_conditions_hash = self.join_conditions(tables_covered_by_concepts, current_user)
-          error = join_conditions_hash[:errors].join(', ')
-
-          if concepts_for_select_clause.size > 0 and tables_covered_by_concepts.size > 0
-
-            result_hash = wrapper.sql_codes
-            sql_open = result_hash[:open]
-            sql_close = result_hash[:close]
-
-            sql_statement = "SELECT #{concepts_for_select_clause.collect{|m| m.table + '.' + sql_open + m.column + sql_close}.join(',')} FROM #{tables_covered_by_concepts.join(', ')} WHERE #{join_conditions_hash[:result].join(' and ')}#{' and ' unless join_conditions_hash[:result].blank?}#{conditions}"
-
-            logger.debug "\n\nSQL for #{self.name}:\n\n   #{sql_statement}\n\n"
-
-            t = Time.now
-
-            concept_cnames = concepts_for_select_clause.each_with_index.collect{|m,i| m.concept ? m.concept.cname : "tmp_#{i}"}
-
-            (results, number_of_rows) = wrapper.query(sql_statement)
-
-            logger.debug "Took #{Time.now - t} seconds to retrieve sql query."
-
-            result = Array.new(number_of_rows + 1) {Array.new(concept_cnames.size)}
-
-            # result << concept_cnames # concepts_for_select_clause.collect{|dc| dc.concept ? dc.concept.cname : 'blank_concept'}
-            result[0] = concept_cnames
-
-            # concepts_for_select_clause.each {|dc| datatypes[dc.concept.cname] = dc.concept.data_type if dc.concept}
-
-            t3 = Time.now
-
-            index_of_cname = {}
-            concepts_for_select_clause.each_with_index do |mapping, m_index|
-              index_of_cname[mapping.concept ? mapping.concept.cname : "tmp_#{m_index}"] = m_index
-            end
-
-            massive_result_array = []
-            results.each{|row| massive_result_array << row }
-            results = nil
-
-            concept_cnames.each_with_index do |cname, column_index|
-              mapping = concepts_for_select_clause.select{|m| (m.concept ? m.concept.cname : "tmp_#{column_index}") == cname}.first
-              dccv_conversions = {}
-              if mapping
-                # TODO: Replace this with or something similar... see Mapping::human_normalized_value(val) and Mapping::uniq_normalized_value(val)
-                #   dccv_conversions['val_'+val_mapping.column_value.to_s] = mapping.human_normalized_value(val)
-
-                val_mappings = self.mappings.where(["mappings.table = ? and mappings.column = ? and mappings.column_value IS NOT NULL and mappings.status IN (?)", mapping.table, mapping.column, ['mapped']])
-                val_mappings.each do |val_mapping|
-                  if mapping.concept.boolean? and val_mapping.value.blank?
-                    dccv_conversions['val_'+val_mapping.column_value.to_s] = (val_mapping.concept == mapping.concept) ? 'true' : 'false'
-                  elsif mapping.concept.boolean? or not val_mapping.value.blank?
-                    dccv_conversions['val_'+val_mapping.column_value.to_s] = val_mapping.value
-                  else
-                    dccv_conversions['val_'+val_mapping.column_value.to_s] = val_mapping.concept.human_name
-                  end
+              val_mappings = self.mappings.where(["mappings.table = ? and mappings.column = ? and mappings.column_value IS NOT NULL and mappings.status IN (?)", mapping.table, mapping.column, ['mapped']])
+              val_mappings.each do |val_mapping|
+                if mapping.concept.boolean? and val_mapping.value.blank?
+                  dccv_conversions['val_'+val_mapping.column_value.to_s] = (val_mapping.concept == mapping.concept) ? 'true' : 'false'
+                elsif mapping.concept.boolean? or not val_mapping.value.blank?
+                  dccv_conversions['val_'+val_mapping.column_value.to_s] = val_mapping.value
+                else
+                  dccv_conversions['val_'+val_mapping.column_value.to_s] = val_mapping.concept.human_name
                 end
               end
+            end
 
-              cname_index = index_of_cname[cname]
-              if not cname_index.blank? or cname == 'source_id'
-                (1..massive_result_array.size).each do |row_index|
-                  if cname == 'source_id'
-                    result[row_index][column_index] = self.id
+            cname_index = index_of_cname[cname]
+            if not cname_index.blank? or cname == 'source_id'
+              (1..massive_result_array.size).each do |row_index|
+                if cname == 'source_id'
+                  result[row_index][column_index] = self.id
+                  result2[cname] = [] if result2[cname].blank?
+                  result2[cname] << self.id
+                else
+                  if massive_result_array[row_index-1][cname_index].class != String and massive_result_array[row_index-1][cname_index].respond_to?('round') and massive_result_array[row_index-1][cname_index].round == massive_result_array[row_index-1][cname_index]
+                    massive_result_array[row_index-1][cname_index] = massive_result_array[row_index-1][cname_index].round
+                  end
+
+                  mra = 'val_' + ( (massive_result_array[row_index-1][cname_index] == nil) ? 'NULL' : massive_result_array[row_index-1][cname_index].to_s )
+
+                  if dccv_conversions[mra].blank?
+                    result[row_index][column_index] = massive_result_array[row_index-1][cname_index]
                     result2[cname] = [] if result2[cname].blank?
-                    result2[cname] << self.id
+                    result2[cname] << massive_result_array[row_index-1][cname_index]
                   else
-                    if massive_result_array[row_index-1][cname_index].class != String and massive_result_array[row_index-1][cname_index].respond_to?('round') and massive_result_array[row_index-1][cname_index].round == massive_result_array[row_index-1][cname_index]
-                      massive_result_array[row_index-1][cname_index] = massive_result_array[row_index-1][cname_index].round
-                    end
-
-                    mra = 'val_' + ( (massive_result_array[row_index-1][cname_index] == nil) ? 'NULL' : massive_result_array[row_index-1][cname_index].to_s )
-
-                    if dccv_conversions[mra].blank?
-                      result[row_index][column_index] = massive_result_array[row_index-1][cname_index]
-                      result2[cname] = [] if result2[cname].blank?
-                      result2[cname] << massive_result_array[row_index-1][cname_index]
-                    else
-                      result[row_index][column_index] = dccv_conversions[mra]
-                      result2[cname] = [] if result2[cname].blank?
-                      result2[cname] << dccv_conversions[mra]
-                    end
+                    result[row_index][column_index] = dccv_conversions[mra]
+                    result2[cname] = [] if result2[cname].blank?
+                    result2[cname] << dccv_conversions[mra]
                   end
                 end
-              else
-                logger.debug "Skipping #{cname}"
               end
+            else
+              logger.debug "Skipping #{cname}"
             end
-            logger.debug "Took #{Time.now - t3} seconds to retrieve t3."
-          elsif concepts_for_select_clause.size == 0
-            error = "Source #{self.name}: The selected concept is not mapped."
-          elsif tables_covered_by_concepts.size == 0
-            error = "Source #{self.name}: No tables specified in FROM clause."
           end
+          logger.debug "Took #{Time.now - t3} seconds to retrieve t3."
+        elsif mappings_for_select_clause.size == 0
+          error = "Source #{self.name}: The selected concept is not mapped."
+        elsif tables_covered_by_concepts.size == 0
+          error = "Source #{self.name}: No tables specified in FROM clause."
         end
       rescue => e
         error = "Source [#{self.name}] Error: #{e.inspect}"
@@ -387,12 +355,8 @@ class Source < ActiveRecord::Base
       end
     elsif not wrapper.use_sql?
       begin
-        if wrapper.connect
-          (results, number_of_rows) = wrapper.query(conditions)
-          # result = Array.new(number_of_rows + 1) {Array.new(concept_cnames.size)}
-          # result[0] = concept_cnames
-          result = results
-        end
+        wrapper.connect
+        (result, number_of_rows) = wrapper.query(conditions)
       rescue => e
         error = "Source [#{self.name}] Error: #{e.inspect}"
         logger.debug error

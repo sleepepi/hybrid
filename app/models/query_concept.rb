@@ -10,7 +10,7 @@ class QueryConcept < ActiveRecord::Base
   include Deletable
 
   # Model Relationships
-  belongs_to :query #, touch: true # Possibly not needed due to undo/redo actions
+  belongs_to :query
   belongs_to :concept
 
   # Only for external keys

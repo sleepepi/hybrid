@@ -15,7 +15,7 @@ class Query < ActiveRecord::Base
   belongs_to :identifier_concept, class_name: "Concept"
 
   has_many :query_concepts, -> { where(deleted: false).order('position') }
-  has_many :concepts, -> { order :position }, through: :query_concepts
+  has_many :concepts, -> { order "query_concepts.position" }, through: :query_concepts
 
   has_many :query_sources, dependent: :destroy
   has_many :sources, -> { order :name }, through: :query_sources
@@ -39,7 +39,7 @@ class Query < ActiveRecord::Base
     concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
     self.sources.with_file_type(file_type.id).each do |source|
       source_files[source.id] = {}
-      result_hash = self.view_concept_values(current_user, self.sources, concepts.collect{|c| c.id}, self.query_concepts, [], ["download files"])
+      result_hash = self.view_concept_values(current_user, self.sources, concepts.collect{|c| c.id}, self.query_concepts, ["download files"])
       all_files = {}
       if result_hash[:error].blank?
         values = result_hash[:result][1..-1]
@@ -116,7 +116,7 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, table_columns = [], actions_required = ["view data distribution", "view limited data distribution"])
+  def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, actions_required = ["view data distribution", "view limited data distribution"])
     result = [[]]
     error = ''
 
@@ -134,7 +134,7 @@ class Query < ActiveRecord::Base
     available_sources.each do |source|
       master_hash = master_resolver(current_user, source, temp_query_concepts)
       if master_hash[:errors].blank?
-        result_hash = source.get_values_for_concepts(current_user, master_hash[:master_conditions], master_hash[:master_tables], nil, view_concept_ids, table_columns, actions_required)
+        result_hash = source.get_values_for_concepts(current_user, master_hash[:master_conditions], master_hash[:master_tables], view_concept_ids, actions_required)
         if result_hash[:error].blank?
           # Combine new hash with previous results from other sources
           # TODO: This line may no longer be needed as the initial view_concept_ids should cover all concepts that are retrieved.
@@ -153,7 +153,6 @@ class Query < ActiveRecord::Base
       else
         error = master_hash[:errors].join(', ')
       end
-
     end
 
     return { result: result, error: error }

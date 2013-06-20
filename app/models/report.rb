@@ -25,7 +25,7 @@ class Report < ActiveRecord::Base
 
   def generate_report_table(current_user)
     filtered_report_concepts = self.report_concepts.select{|rc| not rc.position.blank?}
-    result_hash = self.query.view_concept_values(current_user, self.query.sources, filtered_report_concepts.collect{|rc| rc.concept_id}, self.query.query_concepts, [], ["download dataset", "download limited dataset"])
+    result_hash = self.query.view_concept_values(current_user, self.query.sources, filtered_report_concepts.collect{|rc| rc.concept_id}, self.query.query_concepts, ["download dataset", "download limited dataset"])
 
     unless result_hash[:error].blank?
       return {error: result_hash[:error], rows: [], columns: [], values: []}

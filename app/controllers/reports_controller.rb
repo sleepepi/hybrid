@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
     @report = @query.reports.find_by_id(params[:id]) if @query
     if @query and @report
       view_concept_ids = Concept.current.with_concept_type(['file locator']).with_source(@query.sources.collect{|s| s.id}).collect{|c| c.id} | @report.concepts.collect{|c| c.id}
-      view_concept_values = @query.view_concept_values(current_user, @query.sources, view_concept_ids, @query.query_concepts, [], ["download dataset", "download limited dataset"])
+      view_concept_values = @query.view_concept_values(current_user, @query.sources, view_concept_ids, @query.query_concepts, ["download dataset", "download limited dataset"])
       @graph_values = view_concept_values[:result]
       @error = view_concept_values[:error]
 
