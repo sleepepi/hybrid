@@ -11,7 +11,6 @@ class ReportsControllerTest < ActionController::TestCase
     post :get_csv, id: @report.to_param, query_id: queries(:one).to_param
     assert_not_nil assigns(:report)
     assert_not_nil assigns(:query)
-    assert_not_nil assigns(:graph_values)
     assert_response :success
   end
 

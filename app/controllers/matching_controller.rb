@@ -57,7 +57,7 @@ class MatchingController < ApplicationController
       controls_matrix = []
 
       if @cases and @controls
-        @common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier').pluck(:id)}.flatten.uniq).first
+        @common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier')}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier')}.flatten.uniq).first
 
         all_criteria = (params[:criteria_ids] || []).compact.uniq
         concept_ids = (params[:variable_ids] || []).compact.uniq - all_criteria
@@ -66,32 +66,31 @@ class MatchingController < ApplicationController
         @extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
 
         cases_matrix = @cases.view_concept_values(current_user, @cases.sources, [@common_identifier] + @matching_concepts + @extra_concepts )
-
         controls_matrix = @controls.view_concept_values(current_user, @controls.sources, [@common_identifier] + @matching_concepts + @extra_concepts )
 
         extra_start_index = @matching_concepts.size + 1
 
-        @overall_criteria = (cases_matrix[:result][0] ? cases_matrix[:result][0][1..@matching_concepts.size] : [])
-        @overall_extra = (cases_matrix[:result][0] ? cases_matrix[:result][0][extra_start_index..-1] : [])
+        @overall_criteria = @matching_concepts.collect(&:human_name)
+        @overall_extra = @extra_concepts.collect(&:human_name)
 
 
-        cases_matrix[:result][1..-1].each do |case_info|
+        cases_matrix.each do |case_info|
           id = case_info[0]
           # Select matching IDs
           criteria = case_info[1..@matching_concepts.size]
 
           case_extra = case_info[extra_start_index..-1]
 
-          matching_ids = (controls_matrix[:result][1..-1] ? controls_matrix[:result][1..-1].select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)] : [])
+          matching_ids = controls_matrix.select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
 
           extra = []
 
           matching_ids.each do |matching_id|
-            extra << controls_matrix[:result].select{|control| control[0] == matching_id }.first[extra_start_index..-1]
+            extra << controls_matrix.select{|control| control[0] == matching_id }.first[extra_start_index..-1]
           end
 
           # Remove matching IDs from controls_matrix so they aren't reused
-          controls_matrix[:result].delete_if{|control| matching_ids.include?(control[0])}
+          controls_matrix.delete_if{|control| matching_ids.include?(control[0])}
 
           @matches << { id: id, case_extra: case_extra, matching_ids: matching_ids, criteria: criteria, extra: extra }
         end

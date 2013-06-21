@@ -2,9 +2,9 @@
 
 <div class="row-fluid">
   <div class="span6">
-    <h3>Column</h3>
-    <ul id="sortable1" class="connectedSortable" style="margin-left:0px">
-      <% @report.report_concepts.where(strata: false).each do |report_concept| %>
+    <h3>Row (Group By)</h3>
+    <ul id="sortable2" class="connectedSortable" style="margin-left:0px">
+      <% @report.report_concepts.where(strata: true).each do |report_concept| %>
         <% @report_concept = report_concept %>
         <%= render partial: 'report_concepts/statistics' %>
       <% end %>
@@ -12,9 +12,9 @@
   </div>
 
   <div class="span6">
-    <h3>Row (Group By)</h3>
-    <ul id="sortable2" class="connectedSortable" style="margin-left:0px">
-      <% @report.report_concepts.where(strata: true).each do |report_concept| %>
+    <h3>Column</h3>
+    <ul id="sortable1" class="connectedSortable" style="margin-left:0px">
+      <% @report.report_concepts.where(strata: false).each do |report_concept| %>
         <% @report_concept = report_concept %>
         <%= render partial: 'report_concepts/statistics' %>
       <% end %>

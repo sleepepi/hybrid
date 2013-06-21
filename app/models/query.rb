@@ -36,18 +36,16 @@ class Query < ActiveRecord::Base
 
   def file_type_count(current_user, file_type)
     source_files = {}
-    concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
+    selected_concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
     self.sources.with_file_type(file_type.id).each do |source|
       source_files[source.id] = {}
-      result_hash = self.view_concept_values(current_user, self.sources, concepts.collect{|c| c.id}, self.query_concepts, ["download files"])
+      values = self.view_concept_values(current_user, self.sources, selected_concepts, ["download files"])
+
       all_files = {}
-      if result_hash[:error].blank?
-        values = result_hash[:result][1..-1]
-        concepts.each_with_index do |concept, concept_index|
-          values.each do |value|
-            all_files[concept.id] = [] if all_files[concept.id].blank?
-            all_files[concept.id] << value[concept_index]
-          end
+      selected_concepts.each_with_index do |concept, concept_index|
+        values.each do |value|
+          all_files[concept.id] = [] if all_files[concept.id].blank?
+          all_files[concept.id] << value[concept_index]
         end
       end
 
@@ -60,17 +58,14 @@ class Query < ActiveRecord::Base
   end
 
   def available_files(current_user)
-    concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
+    selected_concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
 
-    result_hash = self.view_concept_values(current_user, self.sources, concepts.collect{|c| c.id})
+    values = self.view_concept_values(current_user, self.sources, selected_concepts)
     all_files = {}
-    if result_hash[:error].blank?
-      values = result_hash[:result][1..-1]
-      concepts.each_with_index do |concept, concept_index|
-        values.each do |value|
-          all_files[concept.id] = [] if all_files[concept.id].blank?
-          all_files[concept.id] << value[concept_index]
-        end
+    selected_concepts.each_with_index do |concept, concept_index|
+      values.each do |value|
+        all_files[concept.id] = [] if all_files[concept.id].blank?
+        all_files[concept.id] << value[concept_index]
       end
     end
 
@@ -116,46 +111,14 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values(current_user, selected_sources, view_concept_ids, temp_query_concepts = self.query_concepts, actions_required = ["view data distribution", "view limited data distribution"])
-    result = [[]]
-    error = ''
+  def view_concept_values(current_user, selected_sources, selected_concepts, actions_required = ["view data distribution", "view limited data distribution"])
+    result = []
 
-    available_sources = []
-    selected_sources.each do |source|
-      if source.user_has_one_or_more_actions?(current_user, actions_required)
-        available_sources << source
-      end
+    selected_sources.select!{|source| source.user_has_one_or_more_actions?(current_user, actions_required)}.each do |source|
+      result += MasterResolver.new(selected_concepts, self, current_user, source, actions_required).values
     end
 
-    error = "You do not have #{actions_required.collect{|a| '<span class="source_rule_text">'+a+'</span>'}.join(' or ')} in any of you selected data sources: <ul>#{selected_sources.collect{|s| "<li><b><i>#{s.name}</i></b></li>"}.join}</ul>" if available_sources.size == 0
-
-    result[0] = view_concept_ids.collect{|c_id| (c = Concept.find_by_id(c_id)) ? c.cname : nil}
-
-    available_sources.each do |source|
-      master_hash = master_resolver(current_user, source, temp_query_concepts)
-      if master_hash[:errors].blank?
-        result_hash = source.get_values_for_concepts(current_user, master_hash[:master_conditions], master_hash[:master_tables], view_concept_ids, actions_required)
-        if result_hash[:error].blank?
-          # Combine new hash with previous results from other sources
-          # TODO: This line may no longer be needed as the initial view_concept_ids should cover all concepts that are retrieved.
-          result[0] = (result.first + result_hash[:result].first).uniq
-
-          result_hash[:result][1..-1].each do |row|
-            result_row = []
-            result_hash[:result].first.each_with_index do |cname, column_index|
-              result_row[result.first.index(cname)] = row[column_index]
-            end
-            result << result_row
-          end
-        else
-          error = result_hash[:error]
-        end
-      else
-        error = master_hash[:errors].join(', ')
-      end
-    end
-
-    return { result: result, error: error }
+    return result
   end
 
   def reorder(query_concept_ids)

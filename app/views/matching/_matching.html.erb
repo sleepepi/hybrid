@@ -46,7 +46,7 @@
   <% concepts_with_values.each do |concept, case_values, control_values, type| %>
     <div>
       <% if concept.categorical? or concept.boolean? %>
-        <% all_unique_values = (case_values.uniq | control_values.uniq).sort %>
+        <% all_unique_values = (case_values.map(&:to_s).uniq | control_values.map(&:to_s).uniq).sort %>
         <table class="table table-striped table-hover" style="width:100%"><col width="72px"/>
           <thead>
             <tr>
@@ -63,8 +63,8 @@
           <tbody>
             <% [["Cases", case_values], ["Controls", control_values]].each do |name, values| %>
             <tr>
-              <% case_value_counts = all_unique_values.collect{|val| case_values.select{|v| v == val}.count} %>
-              <% counts = all_unique_values.collect{|val| values.select{|v| v == val}.count} %>
+              <% case_value_counts = all_unique_values.collect{|val| case_values.select{|v| v.to_s == val}.count} %>
+              <% counts = all_unique_values.collect{|val| values.select{|v| v.to_s == val}.count} %>
               <td><span data-object="sparkline" data-type="pie" data-values="<%= counts.to_json %>" style="display:none"></span></td>
               <td><%= name %></td>
               <% counts.each_with_index do |count, count_index| %>

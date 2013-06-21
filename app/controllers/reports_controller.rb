@@ -6,13 +6,11 @@ class ReportsController < ApplicationController
     @query = current_user.all_queries.find_by_id(params[:query_id])
     @report = @query.reports.find_by_id(params[:id]) if @query
     if @query and @report
-      view_concept_ids = Concept.current.with_concept_type(['file locator']).with_source(@query.sources.collect{|s| s.id}).collect{|c| c.id} | @report.concepts.collect{|c| c.id}
-      view_concept_values = @query.view_concept_values(current_user, @query.sources, view_concept_ids, @query.query_concepts, ["download dataset", "download limited dataset"])
-      @graph_values = view_concept_values[:result]
-      @error = view_concept_values[:error]
+      selected_concepts = Concept.current.with_concept_type(['file locator']).with_source(@query.sources.collect{|s| s.id}) | @report.concepts
 
       csv_string = CSV.generate do |csv|
-        @graph_values.each do |row|
+        csv << selected_concepts.collect(&:human_name)
+        @query.view_concept_values(current_user, @query.sources, selected_concepts, ["download dataset", "download limited dataset"]).each do |row|
           csv << row
         end
       end
