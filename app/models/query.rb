@@ -72,17 +72,6 @@ class Query < ActiveRecord::Base
     all_files
   end
 
-  def master_resolver(current_user, source, temp_query_concepts)
-    resolvers = generate_resolvers(current_user, source, temp_query_concepts)
-
-    master_tables = resolvers.collect(&:tables).flatten.compact.uniq
-    join_hash = source.join_conditions(master_tables, current_user)
-    resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
-    master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
-
-    return { master_tables: master_tables, master_conditions: master_conditions, errors: resolvers.collect{|r| r.errors}.flatten.uniq }
-  end
-
   def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
     return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
 
@@ -94,7 +83,7 @@ class Query < ActiveRecord::Base
     resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
     master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
 
-    if master_tables.size > 0 and source.use_sql?(current_user)
+    if master_tables.size > 0
       wrapper = Aqueduct::Builder.wrapper(source, current_user)
       sql_statement = "SELECT COUNT(*) FROM #{master_tables.join(', ')} WHERE #{master_conditions}"
       wrapper.connect

@@ -12,7 +12,7 @@
 <% if @source.user_has_action?(current_user, "view data source general information") or @source.user_has_action?(current_user, "get count") %>
   <h4>Summary Counts</h4>
   <ul>
-    <% @source.derived_concepts.where(concept_type: 'identifier').order('display_name').uniq.each do |concept| %>
+    <% @source.concepts.where(concept_type: 'identifier').order('display_name').uniq.each do |concept| %>
       <% tables = @source.concept_tables(concept) %>
       <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
       <% join_conditions = join_conditions_hash[:result] %>

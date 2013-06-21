@@ -79,11 +79,11 @@
       <%= f.text_field :value %>
     <% end %>
 
-    <div class="control-group">
+    <div class="control-group" style="<%= 'display:none' if @query_concept.concept.sources.uniq.size < 2 %>">
       <%= f.label :source_id, "At", class: 'control-label' %>
       <div class="controls sheet-container">
         <% @query_concept.concept.sources.uniq.each do |source| %>
-          <label class="radio"><%= f.radio_button :source_id, source.id %> <%= source.name %></label>
+          <label class="radio <%= 'selected' if @query_concept.source == source %>"><%= f.radio_button :source_id, source.id, default: @query_concept.source == source %> <%= source.name %></label>
         <% end %>
       </div>
     </div>

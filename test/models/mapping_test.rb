@@ -103,10 +103,9 @@ class MappingTest < ActiveSupport::TestCase
   end
 
   test "generate_derived! for a continuous mapping increases the amount of derived concepts" do
-    source = mappings(:continuous_with_units).source
-    orig_mappings = source.derived_concepts.size
-    mappings(:continuous_with_units).generate_derived!
-    assert_equal orig_mappings + 2, source.derived_concepts.size
+    assert_difference('Mapping.count') do
+      mappings(:continuous_with_units).generate_derived!
+    end
   end
 
   test "abstract_value for query concepts" do

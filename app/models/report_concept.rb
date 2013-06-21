@@ -8,7 +8,6 @@ class ReportConcept < ActiveRecord::Base
   # Only for external keys
   belongs_to :source
 
-
   def copyable_attributes
     self.attributes.reject{|key, val| ['id', 'report_id', 'created_at', 'updated_at'].include?(key.to_s)}
   end

@@ -119,7 +119,7 @@ class Mapping < ActiveRecord::Base
           # Create if the concept isn't already mapped in the database to that particular table and column
           # Ex: Mappings for Weight at Baseline and Weight at Followup may exist as two separate columns,
           #     however generic "Weight" would still need to exist as a derived concept for EACH of the two mappings
-          existing_mappings = self.source.mappings.where( concept_id: ancestor.id, table: self.table, column: self.column ).status(['mapped', 'unmapped', 'derived']) # TODO: Any status really except outdated...which should just be deleted
+          existing_mappings = self.source.mappings.where( concept_id: ancestor.id, table: self.table, column: self.column )
 
           self.source.mappings.create( concept_id: ancestor.id, status: 'derived', value: self.value, table: self.table, column: self.column, column_value: self.column_value, units: self.units ) if existing_mappings.blank?
         end

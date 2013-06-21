@@ -43,10 +43,6 @@ class Source < ActiveRecord::Base
     Dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
   end
 
-  def all_source_joins
-    self.source_joins | self.reverse_source_joins
-  end
-
   def all_linked_sources(concept_id = nil)
     (self.sources.with_concept(concept_id || '') | self.rev_sources(concept_id || '')) - [self]
   end
@@ -61,10 +57,6 @@ class Source < ActiveRecord::Base
 
   def file_server_available?(current_user)
     Aqueduct::Builder.repository(self, current_user).file_server_available?
-  end
-
-  def use_sql?(current_user)
-    Aqueduct::Builder.wrapper(self, current_user).use_sql?
   end
 
   def sql_codes(current_user)
@@ -168,15 +160,6 @@ class Source < ActiveRecord::Base
     result
   end
 
-  # This is for NON-SQL wrappers, make the wrapper itself generate the concept tables
-  def concept_tables_external_wrap(current_user, query_concept)
-    Aqueduct::Builder.wrapper(self, current_user).concept_tables(query_concept)
-  end
-
-  def conditions_external_wrap(current_user, query_concepts)
-    Aqueduct::Builder.wrapper(self, current_user).conditions(query_concepts)
-  end
-
   # Given a list of tables find all the join conditions
   def join_conditions(tables, current_user)
     result = []
@@ -200,12 +183,6 @@ class Source < ActiveRecord::Base
       end
     end
     { result: result, errors: errors }
-  end
-
-  def derived_concepts
-    @derived_concepts ||= begin
-      self.concepts.where(['mappings.status IN (?)', ['mapped', 'unmapped', 'derived']])
-    end
   end
 
   def linked_concepts
