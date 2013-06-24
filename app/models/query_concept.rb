@@ -18,7 +18,7 @@ class QueryConcept < ActiveRecord::Base
 
   def concept_name_with_source
     full_name = "#{self.concept.human_name}"
-    full_name += " at #{self.source.name}" if self.source and self.source != self.query.sources.first and self.query.sources.size != 1
+    full_name += " at #{self.source.name}" if self.source and (self.source != self.query.sources.first or self.query.sources.size != 1)
     full_name
   end
 
