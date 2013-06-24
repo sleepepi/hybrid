@@ -1,10 +1,7 @@
 <%= form_for @query_concept, remote: true, html: { class: 'form-horizontal' } do |f| %>
   <% form_name = @query_concept.new_record? ? 'new_query_concept' : "edit_query_concept_#{@query_concept.id}" %>
 
-
-    <% if not @query_concept.concept and not @query_concept.external_key.blank? %>
-
-    <% elsif @query_concept.concept.continuous? %>
+    <% if @query_concept.concept.continuous? %>
       <div class="control-group">
         <%= f.label :value, nil, class: 'control-label' %>
         <div class="controls">

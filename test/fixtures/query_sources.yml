@@ -16,10 +16,6 @@ four:
   query: query_with_sources
   source: two
 
-external:
-  query: query_with_sources
-  source: i2b2_valid
-
 five:
   query: query_across_linked_sources
   source: linked_source_a

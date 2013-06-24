@@ -4,32 +4,11 @@
 
 <% if @query %>
   <% concept_scope = Concept.current.with_source(@query.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.id}) %>
-
-  <% external_concepts = [] %>
-  <% @query.sources.each do |source| %>
-    <% external_concepts_hash = source.external_concepts(current_user, @folder, params['concept_search']) %>
-    <% if external_concepts_hash[:error].blank? %>
-      <% external_concepts = external_concepts | external_concepts_hash[:result] %>
-    <% elsif current_user.system_admin? %>
-      <span class="label label-warning"><%= external_concepts_hash[:error] %></span>
-    <% end %>
-  <% end %>
 <% else %>
   <% concept_scope = Concept.current %>
 <% end %>
 
-<% if false %>
-<%= external_concepts.inspect %><br /><br />
-
-<%= external_concepts.collect{|ec| ec[:key]}.inspect %>
-<% end %>
-
-<% external_folders = external_concepts.select{|ec| ec[:is_folder]} %>
-
-<% external_concepts = external_concepts.select{|ec| not ec[:is_folder]} %>
-
 <% concept_scope = concept_scope.with_concept_type(params[:concept_type] || 'all') %>
-
 <% concept_scope = concept_scope.with_report(params[:report_id].to_s) %>
 
 <% if not params[:report_id].blank? %>
@@ -50,7 +29,6 @@
 <% end %>
 
 <% @current_folder_id = "folder_#{@folder.to_s.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
-
 <% @current_folder_id += "_#{params[:report_id]}" unless params[:report_id].blank? %>
 
 
@@ -94,21 +72,6 @@
 
 <%# Draws the concepts contained in @folder %>
 <div>
-  <%#= concept_scope.with_exact_folder(@folder).size %>
-  <%# concept_scope = concept_scope #.with_exact_folder(@folder) %>
-
-  <%#= filtered_concept_scope.with_exact_folder(@folder).size %>
-
-  <% filtered_external_concepts = external_concepts %>
-
-  <% filtered_external_concepts.sort{|a,b| a[:name] <=> b[:name]}.each do |external_concept| %>
-    <% @concept = Concept.new(name: external_concept[:name], totalnum: external_concept[:totalnum], key: external_concept[:key], source_id: external_concept[:source_id]) %> <%# TODO Copy below %>
-    <%= render partial: 'concepts/folder_concept' %>
-    <% concept_difference = (external_concepts.size - filtered_external_concepts.size) %>
-    <%= link_to "Show More +#{concept_difference}", '#', class: 'btn', style: "padding-top:1px;padding-bottom:1px;padding-left:0px;padding-right:1px", data: { object: 'folder-show-more', target: "##{@current_folder_id}_more"} if concept_difference > 0 %>
-    <div style="clear:both"></div>
-  <% end %>
-
 
   <% if filtered_concept_scope.size > 0 %>
     <% filtered_concept_scope.sort{|a,b| a.human_name <=> b.human_name}.each do |concept| %>
@@ -119,12 +82,6 @@
     <div style="clear:both"></div>
   <% end %>
   <div id="<%= @current_folder_id %>_more" style="<%= 'display:none' if filtered_concept_scope.size > 0 %>">
-
-    <% (external_concepts - filtered_external_concepts).sort{|a,b| a[:name] <=> b[:name]}.each do |external_concept| %>
-      <% @concept = Concept.new(name: external_concept[:name], totalnum: external_concept[:totalnum], key: external_concept[:key], source_id: external_concept[:source_id]) %> <%# TODO COPY HERE %>
-      <%= render partial: 'concepts/folder_concept' %>
-    <% end %>
-
     <% (concept_scope.with_exact_folder(@folder) - filtered_concept_scope).sort{|a,b| a.human_name <=> b.human_name}.each do |concept| %>
       <%= @concept = concept; @simple = true; render partial: 'concepts/folder_concept' %>
     <% end %>

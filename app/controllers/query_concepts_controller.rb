@@ -108,11 +108,6 @@ class QueryConceptsController < ApplicationController
     @query = current_user.all_queries.find_by_id(params[:query_id])
     concept = Concept.current.find_by_id(params[:selected_concept_id])
 
-    unless concept or params[:selected_concept_id] =~ /^[0-9]+$/ or params[:selected_concept_id].blank? or not params[:external_key].blank?
-      params[:source_id] = params[:selected_concept_id].split(',').first
-      params[:external_key] = params[:selected_concept_id].split(',')[1..-1].join(',')
-    end
-
     if @query and concept
       @query.query_concepts << @query.query_concepts.create(concept_id: concept.id, position: @query.query_concepts.size)
       @query.reload

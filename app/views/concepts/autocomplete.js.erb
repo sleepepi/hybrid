@@ -1,13 +1,6 @@
-<% if @concepts.size + @external_concepts.size > 0 %>
+<% if @concepts.size > 0 %>
 [
 <%= @concepts.collect{|c| "{\"id\":\"#{c.id || c.key}\", \"label\":\"#{highlight(c.human_name, @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{c.human_name}\", \"category\":\"#{escape_javascript(image_tag 'icons/folder.png', size: '12x12', style: 'vertical-align:text-bottom')} #{c.folder.blank? ? 'Uncategorized' : c.folder}\"}" }.join(',').html_safe %>
-
-<%# TODO: Refactor and include with @concepts initially %>
-<% if @external_concepts.size > 0 %>
-<%= ',' if @concepts.size > 0 %>
-<%= @external_concepts.collect{|c| "{\"id\":\"#{c[:source_id]},#{escape_javascript(c[:key])}\", \"label\":\"#{highlight(c[:name], @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{c[:source_id]},#{c[:name]}\", \"category\":\"#{escape_javascript(image_tag 'icons/folder.png', size: '12x12', style: 'vertical-align:text-bottom')} #{c[:folder].blank? ? 'Uncategorized' : c[:folder]}\"}" }.join(',').html_safe %>
-<% end %>
-
 ]
 <% elsif @query and @query.sources.size == 0 %>
 [

@@ -9,12 +9,8 @@
 
   <% if @query_concept.value.blank? and @query_concept.concept %>
     <span class="quiet" style="text-decoration:none;color:#EB6C20">Click to Set Value</span>
-  <% elsif not @query_concept.external_key.blank? %>
-    true
   <% else %>
-
     <%= @query_concept.human_value %>
-
   <% end %>
   <%= image_tag('icons/gentleface/cursor_H_split_16.png', style: 'vertical-align:text-bottom;cursor:move') %>
 <% end %>

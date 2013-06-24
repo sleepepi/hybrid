@@ -26,9 +26,3 @@ report_with_data:
   user: admin
   query: query_with_test_data
   is_dataset: false
-
-report_for_external:
-  name: External Report
-  user: admin
-  query: one
-  is_dataset: false

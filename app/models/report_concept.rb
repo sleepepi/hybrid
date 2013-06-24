@@ -4,8 +4,6 @@ class ReportConcept < ActiveRecord::Base
   # Model Relationships
   belongs_to :report
   belongs_to :concept
-
-  # Only for external keys
   belongs_to :source
 
   def source

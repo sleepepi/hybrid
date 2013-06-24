@@ -6,11 +6,6 @@ class ReportConceptsController < ApplicationController
     @report = @query.reports.find_by_id(params[:report_id]) if @query
     concept = Concept.current.find_by_id(params[:concept_id])
 
-    unless concept or params[:concept_id] =~ /^[0-9]+$/ or params[:concept_id].blank? or not params[:external_key].blank?
-      params[:source_id] = params[:concept_id].split(',').first
-      params[:external_key] = params[:concept_id].split(',')[1..-1].join(',')
-    end
-
     if @query and concept and @report
       @report.report_concepts << @report.report_concepts.create(concept_id: concept.id, position: @report.report_concepts.size + 1) unless @report.concepts.include?(concept)
       @report.reload

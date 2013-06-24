@@ -71,9 +71,3 @@ test_data_for_date:
   position: 8
   strata: false
   # statistic: all
-
-external_concept:
-  report: report_for_external
-  # concept:
-  source: i2b2_valid
-  external_key: \\i2b2_DEMO\i2b2\Demographics\Gender\Female\

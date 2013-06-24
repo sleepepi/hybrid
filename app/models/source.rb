@@ -207,8 +207,4 @@ class Source < ActiveRecord::Base
     self.mappings.status(['mapped', 'unmapped']).each{|m| m.generate_derived!}
   end
 
-  def external_concepts(current_user, folder = '', search_term = '')
-    Aqueduct::Builder.wrapper(self, current_user).external_concepts(folder, search_term)
-  end
-
 end

@@ -44,16 +44,6 @@ class ConceptsController < ApplicationController
       concept_scope = concept_scope.order("(concepts.folder IS NULL or concepts.folder = '') ASC, concepts.folder ASC, " + @order)
       @concepts = concept_scope.page(params[:page]).per(10)
 
-      @external_concepts = []
-      if @query and not search_string.blank?
-        @query.sources.each do |source|
-          external_concepts_hash = source.external_concepts(current_user, '', search_string)
-          if external_concepts_hash[:error].blank?
-            @external_concepts = @external_concepts | external_concepts_hash[:result]
-          end
-        end
-      end
-
       render json: @concepts.group_by{|c| c.folder}.collect{|folder, concepts| { text: folder, commonly_used: true, children: concepts.collect{|c| { id: c.id, text: c.human_name, commonly_used: c.commonly_used }}}}
     else
       @order = scrub_order(Concept, params[:order], "concepts.search_name")
