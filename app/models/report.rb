@@ -25,7 +25,7 @@ class Report < ActiveRecord::Base
 
   def generate_report_table(current_user)
     filtered_report_concepts = self.report_concepts.select{|rc| not rc.position.blank?}
-    values = self.query.view_concept_values(current_user, self.query.sources, filtered_report_concepts.collect{|rc| rc.concept}, ["download dataset", "download limited dataset"])
+    values = self.query.view_concept_values(current_user, self.query.sources, filtered_report_concepts.collect{|rc| rc.concept}, ["download dataset", "download limited dataset"], self.report_concepts.collect(&:source))
 
     row_values = []
     filtered_report_concepts.each_with_index do |rc, index|

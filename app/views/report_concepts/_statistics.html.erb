@@ -10,7 +10,7 @@
 
   <div id="report_concept_<%= @report_concept.id %>_options" style="display:none">
     <% if @report_concept.concept and (@report_concept.concept.continuous? or @report_concept.concept.boolean? or @report_concept.concept.categorical? or @report_concept.concept.date?) %>
-      <%= form_tag report_concept_path(@report_concept, query_id: @query.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form", style: 'display:inline' do %>
+      <%= form_tag report_concept_path(@report_concept, query_id: @query.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form" do %>
         <div class="sheet-container">
           <% statistics = @report_concept.concept.continuous? ? ReportConcept::STATISTIC.collect{|a,b| a} : ['all', 'count', 'percent'] %>
           <% statistics = ['year', 'month', 'week', 'day'] if @report_concept.concept.date? %>
@@ -18,11 +18,18 @@
             <label class="radio"><%= radio_button :report_concept, :statistic, statistic, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= statistic %></label>
           <% end %>
         </div>
+
+        <div class="control-group" style="<%= 'display:none' if @report_concept.concept.sources.uniq.size < 2 %>">
+          <label class="control-label">At</label>
+          <div class="controls sheet-container">
+            <% @report_concept.concept.sources.uniq.each do |source| %>
+              <label class="radio <%= 'selected' if @report_concept.source == source %>"><%= radio_button_tag "report_concept[source_id]", source.id, @report_concept.source == source, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= source.name %></label>
+            <% end %>
+          </div>
+        </div>
       <% end %>
     <% elsif @report_concept.concept %>
       No Options for <%= @report_concept.concept.concept_type %>
-    <% else %>
-      No Options for <%= @report_concept.external_concept_information(current_user)[:name] %>
     <% end %>
   </div>
 </li>

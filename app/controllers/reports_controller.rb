@@ -10,7 +10,7 @@ class ReportsController < ApplicationController
 
       csv_string = CSV.generate do |csv|
         csv << selected_concepts.collect(&:human_name)
-        @query.view_concept_values(current_user, @query.sources, selected_concepts, ["download dataset", "download limited dataset"]).each do |row|
+        @query.view_concept_values(current_user, @query.sources, selected_concepts, ["download dataset", "download limited dataset"], @report.report_concepts.collect(&:source)).each do |row|
           csv << row
         end
       end

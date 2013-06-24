@@ -43,7 +43,7 @@ class ReportConceptsController < ApplicationController
     @report_concept = ReportConcept.find_by_id(params[:id])
     @report = current_user.reports.find_by_id(@report_concept.report_id) if @report_concept
     if @query and @report_concept and @report
-      @report_concept.update_attributes statistic: params[:report_concept][:statistic]
+      @report_concept.update( statistic: params[:report_concept][:statistic], source_id: params[:report_concept][:source_id] )
       render 'reports/report_table'
     else
       render nothing: true

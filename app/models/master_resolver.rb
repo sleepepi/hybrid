@@ -2,11 +2,12 @@ class MasterResolver
 
   attr_reader :errors, :value_hash, :super_grid, :values
 
-  def initialize(concepts, query, current_user, resolving_source, actions_required = ['view data distribution', 'view limited data distribution'])
+  def initialize(concepts, query, current_user, resolving_source, actions_required = ['view data distribution', 'view limited data distribution'], additional_sources = [])
     @concepts = concepts.compact.to_a
     @current_user = current_user
     @actions_required = actions_required
     @query = query
+    @additional_sources = additional_sources
     @errors = []
     @resolving_source = resolving_source
     @super_grid = {}
@@ -32,7 +33,7 @@ class MasterResolver
 
   def set_values
     @value_hash = {}
-    @query.sources.each do |source|
+    (@query.sources.to_a | @additional_sources).uniq.each do |source|
       wrapper = Aqueduct::Builder.wrapper(source, @current_user)
 
       mappings_for_select_clause = []

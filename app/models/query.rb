@@ -100,11 +100,11 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values(current_user, selected_sources, selected_concepts, actions_required = ["view data distribution", "view limited data distribution"])
+  def view_concept_values(current_user, selected_sources, selected_concepts, actions_required = ["view data distribution", "view limited data distribution"], additional_sources = [])
     result = []
 
     selected_sources.select!{|source| source.user_has_one_or_more_actions?(current_user, actions_required)}.each do |source|
-      result += MasterResolver.new(selected_concepts, self, current_user, source, actions_required).values
+      result += MasterResolver.new(selected_concepts, self, current_user, source, actions_required, additional_sources).values
     end
 
     return result
