@@ -25,12 +25,6 @@
   <br />
 <% end %>
 
-<% if @query_concept %>
-  <% @query_concept.external_concept_information(current_user).each do |key, value| %>
-    <strong><%= key.to_s.titleize %></strong> <%= value %><br /><br />
-  <% end %>
-<% end %>
-
 <% if @concept.sensitivity != '0' %>
 <span class="label label-important">Sensitive</span>
 <p class="quiet small">This concept can ONLY be viewed or downloaded if you only have <span class='source_rule_text'>view data distribution</span> or <span class='source_rule_text'>download dataset</span> respectively.</p>

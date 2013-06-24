@@ -1,10 +1,6 @@
 <div class="<%= 'common' if @concept.commonly_used? %>">
   <% link_name = @simple ? @concept.human_name : highlight(@concept.human_name, @terms, highlighter: '<span class="highlight">\1</span>') %>
 
-  <% if @concept.new_record? %>
-    <%= link_to link_name + "#{ ' - ' + @concept.totalnum unless @concept.totalnum.blank?}", info_external_concepts_path(short_name: @concept.short_name, key: @concept.key, totalnum: @concept.totalnum, source_id: @concept.source_id, query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: @concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %>
-  <% else %>
-    <%= link_to link_name, info_concept_path(@concept, query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: @concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %>
-  <% end %>
+  <%= link_to link_name, info_concept_path(@concept, query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: @concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %>
 </div>
 <div style="clear:both"></div>

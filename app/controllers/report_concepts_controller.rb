@@ -15,10 +15,6 @@ class ReportConceptsController < ApplicationController
       @report.report_concepts << @report.report_concepts.create(concept_id: concept.id, position: @report.report_concepts.size + 1) unless @report.concepts.include?(concept)
       @report.reload
       render 'report_concepts/report_concepts'
-    elsif @query and not params[:source_id].blank? and not params[:external_key].blank?
-      @report.report_concepts << @report.report_concepts.create(external_key: params[:external_key], source_id: params[:source_id], position: @report.report_concepts.size + 1) unless @report.report_concepts.where(external_key: params[:external_key]).size > 0
-      @report.reload
-      render 'report_concepts/report_concepts'
     else
       render nothing: true
     end

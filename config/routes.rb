@@ -4,7 +4,6 @@ Hybrid::Application.routes.draw do
     collection do
       post :open_folder
       post :search_folder
-      post :info_external
     end
     member do
       post :info

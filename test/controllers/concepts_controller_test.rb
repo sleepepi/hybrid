@@ -15,13 +15,6 @@ class ConceptsControllerTest < ActionController::TestCase
   test "should get autocomplete" do
     get :index, autocomplete: 'true', format: 'js'
     assert_not_nil assigns(:concepts)
-    # assert_template 'autocomplete'
-  end
-
-  test "should get autocomplete with external concepts" do
-    get :index, autocomplete: 'true', concept_search_term: 'search term', query_id: queries(:query_with_sources).to_param, format: 'js'
-    assert_not_nil assigns(:concepts)
-    # assert_template 'autocomplete'
   end
 
   test "should get info for categorical concept" do
@@ -94,14 +87,6 @@ class ConceptsControllerTest < ActionController::TestCase
     post :search_folder, id: concepts(:categorical).to_param, query_id: queries(:three).to_param, popup: 'true', format: 'js'
     assert_not_nil assigns(:query)
     assert_template 'popup'
-  end
-
-  test "should get external concept info" do
-    post :info_external, query_id: queries(:three).to_param, name: 'Concept Name', totalnum: 5, key: '//concept/key', source_id: sources(:one).to_param, format: 'js'
-    assert_not_nil assigns(:concept)
-    assert_not_nil assigns(:query)
-    assert_nil assigns(:mapping)
-    assert_template 'info'
   end
 
   # TODO: Test Concept Creation, Deletion, etc

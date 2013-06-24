@@ -56,9 +56,8 @@
 
 <%# Draws the folders for the folder with prefix @folder %>
 <%# concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? 'Uncategorized' : c.folder.to_s.gsub(r, '').split("/").first}.sort.uniq.each do |folder| %>
-<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + '/' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split("/").first, c.folder.to_s.gsub(r, '').split("/").first.titleize, {}]} | external_folders.select{|ec| ec[:is_folder]}.collect{|ec| [ec[:key], ec[:key].to_s.gsub(/(\\)*$/, '').gsub(/\\/, '/').gsub(r, '').split("/").last, ec]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
+<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + '/' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split("/").first, c.folder.to_s.gsub(r, '').split("/").first.titleize, {}]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
 
-  <%# full_folder = "#{@folder.blank? ? '' : "#{@folder}:" }#{folder}" %>
   <% full_folder = full_folder_path %>
 
 
@@ -67,9 +66,6 @@
 
   <% found_number = (@terms.size == 0) ? 0 : filtered_children_scope.with_exact_folder_or_subfolder(full_folder).size %>
   <% unless folder_id == "folder_Uncategorized" %>
-    <% if folder_hash[:is_queryable] == true %>
-      <div style="float:left"><%= link_to '<i class="icon-question-sign"></i>'.html_safe, info_external_concepts_path(name: folder_hash[:name], key: folder_hash[:key], totalnum: folder_hash[:totalnum], source_id: folder_hash[:source_id], query_id: @query.id, identifier: params[:identifier], report_id: params[:report_id], add_report_id: params[:add_report_id]), method: :post, remote: true, title: folder_hash[:name], onclick: "showWaiting('#popup_info', ' Loading Concept', true)" %></div>
-    <% end %>
     <div id="<%= folder_id %>_link">
       <% @folder_id = folder_id %>
       <%# @folder_title = folder.titleize %>

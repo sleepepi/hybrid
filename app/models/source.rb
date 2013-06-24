@@ -211,7 +211,4 @@ class Source < ActiveRecord::Base
     Aqueduct::Builder.wrapper(self, current_user).external_concepts(folder, search_term)
   end
 
-  def external_concept_information(current_user, external_key)
-    Aqueduct::Builder.wrapper(self, current_user).external_concept_information(external_key)
-  end
 end

@@ -1,7 +1,6 @@
 <li class="ui-state-default faded_delete_icon bubble" id="report_concept_<%= @report_concept.id %>" data-image-id="report_concept_<%= @report_concept.id %>_delete_icon">
   <%= image_tag('icons/gentleface/cursor_drag_arrow_16.png', style: 'vertical-align:text-bottom') %>
-  <%#= @report_concept.concept.human_name %>
-  <%= @report_concept.concept ? @report_concept.concept.human_name : @report_concept.external_concept_information(current_user)[:name] %>
+  <%= @report_concept.concept.human_name %>
 
   <% @report_concept.statistic = ((@report_concept.concept and @report_concept.concept.date?) ? 'month' : 'all') if @report_concept.statistic.blank? %>
 

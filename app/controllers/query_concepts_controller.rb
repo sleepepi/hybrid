@@ -113,13 +113,8 @@ class QueryConceptsController < ApplicationController
       params[:external_key] = params[:selected_concept_id].split(',')[1..-1].join(',')
     end
 
-    # external_concept = Concept.new(name: params[:name], totalnum: params[:totalnum], key: params[:key])
     if @query and concept
       @query.query_concepts << @query.query_concepts.create(concept_id: concept.id, position: @query.query_concepts.size)
-      @query.reload
-      render 'query_concepts/query_concepts'
-    elsif @query and not params[:source_id].blank? and not params[:external_key].blank?
-      @query.query_concepts << @query.query_concepts.create(external_key: params[:external_key], source_id: params[:source_id], position: @query.query_concepts.size)
       @query.reload
       render 'query_concepts/query_concepts'
     else

@@ -129,7 +129,7 @@ class Report < ActiveRecord::Base
       columns.each_with_index do |(report_concept_id, statistic), index|
         report_concept = ReportConcept.find_by_id(report_concept_id)
         if report_concept
-          header_row[index] = (report_concept.concept ? report_concept.concept.human_name : report_concept.external_concept_information(current_user)[:name])
+          header_row[index] = report_concept.concept.human_name
         else
           header_row[index] = 'Total'
         end

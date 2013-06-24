@@ -18,6 +18,12 @@ class QueryConcept < ActiveRecord::Base
 
   # Query Concept Methods
 
+  def concept_name_with_source
+    full_name = "#{self.concept.human_name}"
+    full_name += " at #{self.source.name}" if self.source and self.source != self.query.sources.first and self.query.sources.size != 1
+    full_name
+  end
+
   def source
     if self.source_id and selected_source = Source.find_by_id(self.source_id)
       selected_source
@@ -122,17 +128,6 @@ class QueryConcept < ActiveRecord::Base
     end
     range = val.to_s.split(':')
     { token: token, val: val, left_token: left_token, right_token: right_token, range: range }
-  end
-
-  def external_concept_information(current_user)
-    @external_concept_information ||= begin
-      information = {name: self.external_key}
-      if self.source
-        result_hash = self.source.external_concept_information(current_user, self.external_key)
-        information = result_hash[:result] if result_hash[:error].blank?
-      end
-      information
-    end
   end
 
   # Overwrites deletable since it relies on callbacks

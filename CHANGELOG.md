@@ -3,6 +3,9 @@
 ### Enhancements
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 
+### Refactoring
+- Removed references to external concepts and datasets
+
 ## 0.14.2 (June 19, 2013)
 
 ### Enhancements
