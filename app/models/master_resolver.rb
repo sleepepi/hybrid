@@ -72,7 +72,7 @@ class MasterResolver
     end
 
     @super_grid.each do |key, values|
-      @values << values
+      @values << values.collect{|val| val || 'unknown'}
     end
   end
 
