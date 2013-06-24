@@ -2,12 +2,11 @@ class MasterResolver
 
   attr_reader :errors, :value_hash, :super_grid, :values
 
-  def initialize(concepts, query, current_user, resolving_source, actions_required = ['view data distribution', 'view limited data distribution'], additional_sources = [])
-    @concepts = concepts.compact.to_a
+  def initialize(report_concepts, query, current_user, resolving_source, actions_required = ['view data distribution', 'view limited data distribution'])
+    @report_concepts = report_concepts.compact.to_a
     @current_user = current_user
     @actions_required = actions_required
     @query = query
-    @additional_sources = additional_sources
     @errors = []
     @resolving_source = resolving_source
     @super_grid = {}
@@ -33,13 +32,13 @@ class MasterResolver
 
   def set_values
     @value_hash = {}
-    (@query.sources.to_a | @additional_sources).uniq.each do |source|
+    (@query.sources.to_a | @report_concepts.collect(&:source)).uniq.each do |source|
       wrapper = Aqueduct::Builder.wrapper(source, @current_user)
 
       mappings_for_select_clause = []
-      @concepts.each_with_index do |concept, index|
-        m = source.mappings.where(concept_id: concept.id).first
-        mappings_for_select_clause << { table: m.table, column: m.column, concept: m.concept, concept_index: index, mapping: m } if m and m.user_can_view?(@current_user, @actions_required)
+      @report_concepts.each_with_index do |report_concept, index|
+        m = source.mappings.where(concept_id: report_concept.concept.id).first if report_concept.source == source
+        mappings_for_select_clause << { table: m.table, column: m.column, concept: m.concept, report_concept_index: index, mapping: m } if m and m.user_can_view?(@current_user, @actions_required)
       end
 
       mappings_for_select_clause.uniq!
@@ -67,7 +66,7 @@ class MasterResolver
         results.to_a.each do |row|
           @super_grid[row[0].to_s] ||= []
           mappings_for_select_clause.each_with_index do |mapping_hash, mapping_index|
-            @super_grid[row[0].to_s][mapping_hash[:concept_index]] = mapping_hash[:mapping].human_normalized_value(row[mapping_index]) if mapping_hash[:concept_index]
+            @super_grid[row[0].to_s][mapping_hash[:report_concept_index]] = mapping_hash[:mapping].human_normalized_value(row[mapping_index]) if mapping_hash[:report_concept_index]
           end
 
         end

@@ -65,9 +65,12 @@ class MatchingController < ApplicationController
         @matching_concepts = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
         @extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
 
-        concepts = [@common_identifier] + @matching_concepts + @extra_concepts
-        cases_matrix = @cases.view_concept_values(current_user, @cases.sources, concepts, ["view data distribution", "view limited data distribution"], [] )
-        controls_matrix = @controls.view_concept_values(current_user, @controls.sources, concepts, ["view data distribution", "view limited data distribution"], [] )
+        report_concepts = []
+        ([@common_identifier] + @matching_concepts + @extra_concepts).compact.each do |concept|
+          report_concepts << ReportConcept.new( concept_id: concept.id )
+        end
+        cases_matrix = @cases.view_concept_values( current_user, @cases.sources, report_concepts )
+        controls_matrix = @controls.view_concept_values( current_user, @controls.sources, report_concepts )
 
         extra_start_index = @matching_concepts.size + 1
 

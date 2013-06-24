@@ -36,16 +36,19 @@ class Query < ActiveRecord::Base
 
   def file_type_count(current_user, file_type)
     source_files = {}
-    selected_concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
+    selected_report_concepts = []
+    Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator').each do |concept|
+      selected_report_concepts << ReportConcept.new( concept_id: concept.id )
+    end
     self.sources.with_file_type(file_type.id).each do |source|
       source_files[source.id] = {}
-      values = self.view_concept_values(current_user, self.sources, selected_concepts, ["download files"])
+      values = self.view_concept_values(current_user, self.sources, selected_report_concepts, ["download files"])
 
       all_files = {}
-      selected_concepts.each_with_index do |concept, concept_index|
+      selected_report_concepts.each_with_index do |report_concept, concept_index|
         values.each do |value|
-          all_files[concept.id] = [] if all_files[concept.id].blank?
-          all_files[concept.id] << value[concept_index]
+          all_files[report_concept.concept.id] = [] if all_files[report_concept.concept.id].blank?
+          all_files[report_concept.concept.id] << value[concept_index]
         end
       end
 
@@ -58,14 +61,17 @@ class Query < ActiveRecord::Base
   end
 
   def available_files(current_user)
-    selected_concepts = Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator')
+    selected_report_concepts = []
+    Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator').each do |concept|
+      selected_report_concepts << ReportConcept.new( concept_id: concept.id )
+    end
 
-    values = self.view_concept_values(current_user, self.sources, selected_concepts)
+    values = self.view_concept_values(current_user, self.sources, selected_report_concepts)
     all_files = {}
-    selected_concepts.each_with_index do |concept, concept_index|
+    selected_report_concepts.each_with_index do |report_concept, concept_index|
       values.each do |value|
-        all_files[concept.id] = [] if all_files[concept.id].blank?
-        all_files[concept.id] << value[concept_index]
+        all_files[report_concept.concept.id] = [] if all_files[report_concept.concept.id].blank?
+        all_files[report_concept.concept.id] << value[concept_index]
       end
     end
 
@@ -100,11 +106,11 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values(current_user, selected_sources, selected_concepts, actions_required = ["view data distribution", "view limited data distribution"], additional_sources = [])
+  def view_concept_values(current_user, selected_sources, selected_report_concepts, actions_required = ["view data distribution", "view limited data distribution"])
     result = []
 
     selected_sources.select!{|source| source.user_has_one_or_more_actions?(current_user, actions_required)}.each do |source|
-      result += MasterResolver.new(selected_concepts, self, current_user, source, actions_required, additional_sources).values
+      result += MasterResolver.new(selected_report_concepts, self, current_user, source, actions_required).values
     end
 
     return result
