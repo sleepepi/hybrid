@@ -8,6 +8,7 @@ class Resolver
     @source = source
     @current_user = current_user
     @errors = []
+    @identifer_concept = set_identifier_concept
     set_conditions
   end
 
@@ -50,6 +51,18 @@ class Resolver
       @query_concept
     end
 
+    def all_sources
+      [query_concept.source, source].uniq
+    end
+
+    def set_identifier_concept
+      identifier_concepts = []
+      Concept.current.where( concept_type: 'identifier' ).with_source(all_sources.collect(&:id)).each do |concept|
+        identifier_concepts << concept if not all_sources.collect{|s| s.concepts.where( concept_type: 'identifier').pluck(:id).include?(concept.id) }.include?(false)
+      end
+      @identifier_concept = identifier_concepts.first
+    end
+
     def construct_conditions
       unless query_concept.concept
         @errors << "No Concept Selected with Query Concept"
@@ -61,25 +74,18 @@ class Resolver
         # GENERATE LINKED SQL
         # 1) Get the Source Join between query_concept.source and source
         #    This returns table column, table column "the joins" per se....
-        source_join = SourceJoin.where( source_id: source.id, source_to_id: query_concept.source.id ).first
-        rev_join = SourceJoin.where( source_id: query_concept.source.id, source_to_id: source.id ).first
-        if source_join
-          table = source_join.from_table
-          column = source_join.from_column
-          table2 = source_join.to_table
-          column2 = source_join.to_column
-        elsif rev_join
-          table = rev_join.to_table
-          column = rev_join.to_column
-          table2 = rev_join.from_table
-          column2 = rev_join.from_column
+        if @identifier_concept
+          source_identifer_mapping = source.mappings.where(concept_id: @identifier_concept.id).first
+          query_concept_source_identifer_mapping = query_concept.source.mappings.where(concept_id: @identifier_concept.id).first
+        end
+
+        if source_identifer_mapping and query_concept_source_identifer_mapping
+          (conditions, table) = generate_sql_through_link(source_identifer_mapping, query_concept_source_identifer_mapping)
         else
           @errors << "No join found between #{query_concept.source.name} and #{source.name}."
           return ['1 = 0', nil]
         end
 
-
-        (conditions, table) = generate_sql_through_link(table, column, table2, column2)
       else
         # Generate Sql as normal
         # This is the same source against the same source
@@ -91,14 +97,14 @@ class Resolver
 
     # 2) Generate AND EVALUATE sql against linked source and SELECT table2.column2 WHERE sql as normal for query_concept.source (generate_sql_as_normal(query_concept.source))
     # 3) Build the sql to look like WHERE resolving_source.id IN (linked_ids)
-    def generate_sql_through_link(table, column, table2, column2)
+    def generate_sql_through_link(source_identifer_mapping, query_concept_source_identifer_mapping)
       result_hash = query_concept.source.sql_codes(current_user)
       sql_open = result_hash[:open]
       sql_close = result_hash[:close]
 
       wrapper = Aqueduct::Builder.wrapper(query_concept.source, current_user)
 
-      tables_covered_by_concepts = [table2]
+      tables_covered_by_concepts = [query_concept_source_identifer_mapping.table]
 
       (more_conditions, another_table) = generate_sql_as_normal(query_concept.source)
 
@@ -110,13 +116,13 @@ class Resolver
       join_hash[:result]
       all_conditions = [join_hash[:result], more_conditions].select{|c| not c.blank?}
 
-      sql_statement = "SELECT #{table2}.#{sql_open}#{column2}#{sql_close} FROM #{tables_covered_by_concepts.join(', ')} WHERE #{all_conditions.join(' and ')}"
+      sql_statement = "SELECT #{query_concept_source_identifer_mapping.table}.#{sql_open}#{query_concept_source_identifer_mapping.column}#{sql_close} FROM #{tables_covered_by_concepts.join(', ')} WHERE #{all_conditions.join(' and ')}"
 
       wrapper.connect
       (results, number_of_rows) = wrapper.query(sql_statement)
       wrapper.disconnect
 
-      results.to_a.size > 0 ? ["#{table}.#{sql_open}#{column}#{sql_close} IN (#{results.to_a.collect{|r| r.first.kind_of?(String) ? "'" + r.first.gsub("'", "\\\\'") + "'" : r.first.to_s}.join(', ')})", table] : ["1 = 0", nil]
+      results.to_a.size > 0 ? ["#{source_identifer_mapping.table}.#{sql_open}#{source_identifer_mapping.column}#{sql_close} IN (#{results.to_a.collect{|r| r.first.kind_of?(String) ? "'" + r.first.gsub("'", "\\\\'") + "'" : r.first.to_s}.join(', ')})", source_identifer_mapping.table] : ["1 = 0", nil]
     end
 
     # Takes a source and a concept, and generates SQL.

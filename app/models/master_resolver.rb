@@ -1,38 +1,34 @@
 class MasterResolver
 
-  attr_reader :errors, :value_hash, :super_grid, :values
+  attr_reader :errors, :values
 
-  def initialize(report_concepts, query, current_user, resolving_source, actions_required = ['view data distribution', 'view limited data distribution'])
+  def initialize(report_concepts, query, current_user, actions_required = ['view data distribution', 'view limited data distribution'])
     @report_concepts = report_concepts.compact.to_a
     @current_user = current_user
     @actions_required = actions_required
     @query = query
     @errors = []
-    @resolving_source = resolving_source
     @super_grid = {}
     @values = []
+    set_identifier_concept
     set_values
   end
 
-  def find_links_to(source)
-    source_join = SourceJoin.where( source_id: @resolving_source.id, source_to_id: source.id ).first
-    rev_join = SourceJoin.where( source_id: source.id, source_to_id: @resolving_source.id ).first
-    if source_join
-      table = source_join.to_table
-      column = source_join.to_column
-    elsif rev_join
-      table = rev_join.from_table
-      column = rev_join.from_column
-    else
-      @errors << "No join found between #{source.name} and #{@resolving_source.name}."
-      return {}
+  def all_sources
+    (@query.sources.to_a | @report_concepts.collect(&:source)).uniq
+  end
+
+  # The identifier concept is used to link across multiple datasets
+  def set_identifier_concept
+    identifier_concepts = []
+    Concept.current.where( concept_type: 'identifier' ).with_source(all_sources.collect(&:id)).each do |concept|
+      identifier_concepts << concept if not all_sources.collect{|s| s.concepts.where( concept_type: 'identifier').pluck(:id).include?(concept.id) }.include?(false)
     end
-    { table: table, column: column }
+    @identifier_concept = identifier_concepts.first
   end
 
   def set_values
-    @value_hash = {}
-    (@query.sources.to_a | @report_concepts.collect(&:source)).uniq.each do |source|
+    all_sources.each do |source|
       wrapper = Aqueduct::Builder.wrapper(source, @current_user)
 
       mappings_for_select_clause = []
@@ -41,14 +37,16 @@ class MasterResolver
         mappings_for_select_clause << { table: m.table, column: m.column, concept: m.concept, report_concept_index: index, mapping: m } if m and m.user_can_view?(@current_user, @actions_required)
       end
 
+      if mappings_for_select_clause.size > 0 and @identifier_concept
+        m = source.mappings.where(concept_id: @identifier_concept.id).first
+        mappings_for_select_clause.prepend( { table: m.table, column: m.column } ) if m
+      end
+
       mappings_for_select_clause.uniq!
 
       tables_covered_by_concepts = (mappings_for_select_clause.collect{|m| m[:table]} | source_tables(source)).uniq
       join_conditions_hash = source.join_conditions(tables_covered_by_concepts, @current_user)
       @errors += join_conditions_hash[:errors]
-
-      links_hash = find_links_to(source)
-      mappings_for_select_clause.prepend( { table: links_hash[:table], column: links_hash[:column] } ) if mappings_for_select_clause.size > 0 and not links_hash.blank?
 
       result_hash = wrapper.sql_codes
       sql_open = result_hash[:open]
@@ -70,7 +68,6 @@ class MasterResolver
           end
 
         end
-        @value_hash[source.name] = results.to_a
       end
     end
 

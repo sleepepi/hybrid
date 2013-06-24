@@ -42,7 +42,7 @@ class Query < ActiveRecord::Base
     end
     self.sources.with_file_type(file_type.id).each do |source|
       source_files[source.id] = {}
-      values = self.view_concept_values(current_user, self.sources, selected_report_concepts, ["download files"])
+      values = self.view_concept_values(current_user, selected_report_concepts, ["download files"])
 
       all_files = {}
       selected_report_concepts.each_with_index do |report_concept, concept_index|
@@ -66,7 +66,7 @@ class Query < ActiveRecord::Base
       selected_report_concepts << ReportConcept.new( concept_id: concept.id )
     end
 
-    values = self.view_concept_values(current_user, self.sources, selected_report_concepts)
+    values = self.view_concept_values(current_user, selected_report_concepts)
     all_files = {}
     selected_report_concepts.each_with_index do |report_concept, concept_index|
       values.each do |value|
@@ -106,14 +106,15 @@ class Query < ActiveRecord::Base
     return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
-  def view_concept_values(current_user, selected_sources, selected_report_concepts, actions_required = ["view data distribution", "view limited data distribution"])
-    result = []
+  def view_concept_values(current_user, selected_report_concepts, actions_required = ["view data distribution", "view limited data distribution"])
+    MasterResolver.new(selected_report_concepts, self, current_user, actions_required).values
 
-    selected_sources.select!{|source| source.user_has_one_or_more_actions?(current_user, actions_required)}.each do |source|
-      result += MasterResolver.new(selected_report_concepts, self, current_user, source, actions_required).values
-    end
+    # result = []
+    # selected_sources.select!{|source| source.user_has_one_or_more_actions?(current_user, actions_required)}.each do |source|
+    #   result += MasterResolver.new(selected_report_concepts, self, current_user, source, actions_required).values
+    # end
 
-    return result
+    # return result
   end
 
   def reorder(query_concept_ids)

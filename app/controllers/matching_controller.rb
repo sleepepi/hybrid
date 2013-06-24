@@ -69,8 +69,8 @@ class MatchingController < ApplicationController
         ([@common_identifier] + @matching_concepts + @extra_concepts).compact.each do |concept|
           report_concepts << ReportConcept.new( concept_id: concept.id )
         end
-        cases_matrix = @cases.view_concept_values( current_user, @cases.sources, report_concepts )
-        controls_matrix = @controls.view_concept_values( current_user, @controls.sources, report_concepts )
+        cases_matrix = @cases.view_concept_values( current_user, report_concepts )
+        controls_matrix = @controls.view_concept_values( current_user, report_concepts )
 
         extra_start_index = @matching_concepts.size + 1
 
