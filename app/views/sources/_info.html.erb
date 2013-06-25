@@ -52,7 +52,7 @@
 <% end %>
 
 <h4>Data Source Rules</h4>
-<% SourceRule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
+<% Rule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
   <ul style="list-style-type: none;margin-left: 0px;">
     <li>
       <%= check_box_tag rule_group, '1', false, disabled: true, class: "rule_group_#{index}_parent" %>
@@ -64,7 +64,6 @@
       </ul>
     </li>
   </ul>
-  <%= javascript_tag "toggleCheckboxGroupParent(#{index});" %>
 <% end %>
 
 <% if @source.all_dictionaries.size > 0 %>

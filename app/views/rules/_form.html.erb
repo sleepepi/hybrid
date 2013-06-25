@@ -1,21 +1,19 @@
 <div class="page-header">
-  <h1><%= @title %></h1>
+  <h1><%= link_to @source.name, @source %> &middot; <%= link_to 'Rules', source_rules_path(@source) %> &middot; <%= @title %></h1>
 </div>
 
-<%= form_for @source_rule, html: { class: 'form-horizontal' } do |f| %>
-  <% if @source_rule.errors.any? %>
+<%= form_for [@rule.source, @rule], html: { class: 'form-horizontal' } do |f| %>
+  <% if @rule.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@source_rule.errors.count, "error") %> prohibited this source_rule from being saved:</h2>
+      <h2><%= pluralize(@rule.errors.count, "error") %> prohibited this rule from being saved:</h2>
 
       <ul>
-      <% @source_rule.errors.full_messages.each do |msg| %>
+      <% @rule.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
-
-  <%= hidden_field_tag :source_id, @source.id %>
 
   <div class="control-group">
     <%= f.label :name, nil, class: 'control-label' %>
@@ -36,14 +34,13 @@
     <div class="controls">
       <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
         <tr>
-          <% SourceRule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
+          <% Rule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
             <td style="vertical-align:top">
               <%= check_box_tag rule_group, '1', false, onclick: "toggleCheckboxGroup(#{index});", class: "rule_group_#{index}_parent" %> <b><%= rule_group %></b><br />
               <% rules.each do |rule| %>
-                &nbsp;&nbsp;<%= check_box_tag "rules[#{rule.gsub(' ', '_')}]", '1', @source_rule.has_action?(rule), onclick: "toggleCheckboxGroupParent(#{index});", class: "rule_group_#{index}" %> <%= rule %><br />
+                &nbsp;&nbsp;<%= check_box_tag "rules[#{rule.gsub(' ', '_')}]", '1', @rule.has_action?(rule), onclick: "toggleCheckboxGroupParent(#{index});", class: "rule_group_#{index}" %> <%= rule %><br />
               <% end %>
             </td>
-            <%= javascript_tag "toggleCheckboxGroupParent(#{index});" %>
           <% end %>
         </tr>
       </table>
@@ -53,7 +50,7 @@
   <div class="control-group">
     <%= f.label :users, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :user_tokens, data: { pre: (@source_rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| { name: u.name_and_email, id: u.id }}.to_json } %>
+      <%= f.text_field :user_tokens, data: { pre: (@rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| { name: u.name_and_email, id: u.id }}.to_json } %>
     </div>
   </div>
 

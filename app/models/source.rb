@@ -27,9 +27,8 @@ class Source < ActiveRecord::Base
   has_many :source_file_types, dependent: :destroy
   has_many :file_types, -> { order :name }, through: :source_file_types
 
-  has_many :source_rules, dependent: :destroy
+  has_many :rules, dependent: :destroy
 
-  # has_many :database_access_rules, dependent: :destroy
   has_many :query_sources, dependent: :destroy
   has_many :queries, -> { order :name }, through: :query_sources
 
@@ -116,7 +115,7 @@ class Source < ActiveRecord::Base
 
   # Check if the user has at least one action in the given action_group
   def user_has_action_group?(current_user, action_group)
-    SourceRule.action_group_items(action_group).each do |action|
+    Rule.action_group_items(action_group).each do |action|
       return true if self.user_has_action?(current_user, action)
     end
     return false
@@ -126,7 +125,7 @@ class Source < ActiveRecord::Base
     return true if current_user.all_sources.include?(self)
     result = false
     blocked = false
-    self.source_rules.each do |rule|
+    self.rules.each do |rule|
       if rule.user_has_action?(current_user, action)
         if rule.blocked?
           blocked = true

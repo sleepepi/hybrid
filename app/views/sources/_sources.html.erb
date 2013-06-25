@@ -31,7 +31,7 @@
         <td><%= source.port.blank? ? '<span class="muted">3306</span>'.html_safe : source.port %></td>
         <td><%= source.database %></td>
         <td><%= source.username %></td>
-        <td><%= link_to source.source_rules.size, source_rules_path(source_id: source.id) %></td>
+        <td><%= link_to source.rules.size, source_rules_path(source) %></td>
         <td><%= link_to source.source_file_types.size, source_file_types_path(source_id: source.id) %></td>
         <td>
           <%= link_to 'Edit', edit_source_path(source), class: 'btn btn-mini' %>

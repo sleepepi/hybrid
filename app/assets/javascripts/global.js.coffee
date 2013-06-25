@@ -21,20 +21,6 @@
   element.attr('selectedIndex', next_index)
   element.change()
 
-@toggleCheckboxGroup = (index) ->
-  mode = $('.rule_group_'+index+'_parent').is(':checked');
-  $('.rule_group_'+index).each( () ->
-    $(this).prop('checked', mode)
-  )
-
-@toggleCheckboxGroupParent = (index) ->
-  mode = true
-  $('.rule_group_'+index).each( () ->
-    unless $(this).is(':checked')
-      mode = false
-  )
-  $('.rule_group_'+index+'_parent').prop('checked',mode)
-
 @markQueryConcept = (element, index) ->
   element = $(element)
   $('#selected_query_concept_id').val(index)
@@ -187,13 +173,6 @@ jQuery ->
     $.post($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script")
     showWaiting('#table_content', ' Loading Table Mappings', true)
     false
-  )
-
-  $("#source_rule_user_tokens").tokenInput(root_url + "users.json"
-    crossDomain: false
-    prePopulate: $("#source_rule_user_tokens").data("pre")
-    theme: "facebook"
-    preventDuplicates: true
   )
 
   # Show and hide a delete icon on mouseover and mouseout for query_concepts

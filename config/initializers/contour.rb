@@ -48,7 +48,7 @@ Contour.setup do |config|
     {
       name: '@source.name', eval: true, display: 'signed_in', path: 'source_path(@source)', position: 'left',
       condition: '@source and not @source.new_record?',
-      links: [{ name: 'Rules', path: 'source_rules_path(source_id: @source.id)' },
+      links: [{ name: 'Rules', path: 'source_rules_path(@source)' },
               { name: 'File Types', path: 'source_file_types_path(source_id: @source.id)' },
               { name: 'Joins', path: 'source_joins_path(@source)' }]
     },

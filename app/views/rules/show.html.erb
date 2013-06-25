@@ -1,0 +1,41 @@
+<% @title = @rule.name %>
+<div class="page-header">
+  <h1>
+    <%= link_to @source.name, @source %> &middot; <%= link_to 'Rules', source_rules_path(@source) %> &middot; <%= @title %>
+    <%= link_to "Edit Rule", edit_source_rule_path(@rule.source, @rule), class: 'btn btn-mini' %>
+    <%= link_to "Delete Rule", [@rule.source, @rule], data: { confirm: "Are you sure you want to delete Rule #{@rule.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+  </h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Description</dt>
+  <dd><%= simple_format @rule.description %></dd>
+
+  <dt>Actions</dt>
+  <dd>
+    <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
+      <tr>
+        <% Rule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
+          <td style="vertical-align:top">
+            <%= check_box_tag rule_group, '1', false, disabled: true, class: "rule_group_#{index}_parent" %> <b><%= rule_group %></b><br />
+            <% rules.each do |rule| %>
+              &nbsp;&nbsp;<%= check_box_tag "rules[#{rule.gsub(' ', '_')}]", '1', @rule.has_action?(rule), disabled: true, class: "rule_group_#{index}" %> <%= rule %><br />
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    </table>
+  </dd>
+
+  <dt>Users</dt>
+  <dd>
+    <ul>
+      <% @rule.users.collect{|id| User.find_by_id(id)}.compact.each do |user| %>
+        <li><%= link_to user.name, user %> &lsaquo;<%= user.email %>&rsaquo;</li>
+      <% end %>
+    </ul>
+  </dd>
+
+  <dt>Blocked</dt>
+  <dd><%= @rule.blocked %></dd>
+</dl>

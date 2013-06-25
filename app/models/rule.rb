@@ -1,4 +1,4 @@
-class SourceRule < ActiveRecord::Base
+class Rule < ActiveRecord::Base
   belongs_to :source
   serialize :actions, Array
   serialize :users, Array
