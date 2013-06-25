@@ -6,7 +6,6 @@ one:
   from_column: MyString
   to_table: MyString
   to_column: MyString
-  # source_to:
 
 two:
   source: one
@@ -14,7 +13,6 @@ two:
   from_column: MyString
   to_table: MyString
   to_column: MyString
-  # source_to:
 
 three:
   source: linked_source_a
@@ -22,7 +20,7 @@ three:
   from_column: from_column_join
   to_table: table
   to_column: to_column_join
-  source_to: linked_source_b
+  # source_to: linked_source_b
 
 four:
   source: two
@@ -30,4 +28,3 @@ four:
   from_column: to_column_join
   to_table: table2
   to_column: from_column_join
-  # source_to: two

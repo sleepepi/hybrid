@@ -35,4 +35,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  private
+
+  def redirect_without_source(path = root_path)
+    empty_response_or_root_path(path) unless @source
+  end
+
 end

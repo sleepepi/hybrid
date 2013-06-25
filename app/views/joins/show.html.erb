@@ -1,0 +1,22 @@
+<% @title = @join.name %>
+<div class="page-header">
+  <h1>
+    <%= link_to @source.name, @source %> &middot; <%= link_to 'Joins', source_joins_path(@source) %> &middot; <%= @title %>
+    <%= link_to "Edit Join", edit_source_join_path(@join.source, @join), class: 'btn btn-mini' %>
+    <%= link_to "Delete Join", [@join.source, @join], data: { confirm: "Are you sure you want to delete Join #{@join.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+  </h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>From Table</dt>
+  <dd><%= @join.from_table %></dd>
+
+  <dt>From Column</dt>
+  <dd><%= @join.from_column %></dd>
+
+  <dt>To Table</dt>
+  <dd><%= @join.to_table %></dd>
+
+  <dt>To Column</dt>
+  <dd><%= @join.to_column %></dd>
+</dl>

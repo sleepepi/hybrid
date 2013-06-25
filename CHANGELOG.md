@@ -7,6 +7,8 @@
 
 ### Refactoring
 - Removed references to external concepts and datasets
+- Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
+  - To link across sources `identifier` concepts are now required to be mapped in each source
 
 ## 0.14.2 (June 19, 2013)
 

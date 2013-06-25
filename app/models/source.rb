@@ -10,7 +10,7 @@ class Source < ActiveRecord::Base
   scope :available, -> { where deleted: false, visible: true }
   scope :available_or_creator_id, lambda { |arg| where( [ "sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, arg ] ) }
   scope :local, -> { where identifier: nil }
-  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.status IN (?) and mappings.deleted = ?) or '' IN (?)", arg, ['mapped', 'unmapped', 'derived'], false, arg] ) }
+  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.deleted = ?) or '' IN (?)", arg, false, arg] ) }
   scope :with_file_type, lambda { |arg| where( ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", arg] ) }
 
   # Model Validation
@@ -22,11 +22,7 @@ class Source < ActiveRecord::Base
   has_many :mappings, -> { where deleted: false }
   has_many :concepts, -> { order :short_name }, through: :mappings
 
-  has_many :source_joins, dependent: :destroy
-  has_many :reverse_source_joins, class_name: 'SourceJoin', foreign_key: 'source_to_id', dependent: :destroy
-
-  has_many :sources, through: :source_joins, source: 'source_to'
-  has_many :rev_sources, through: :reverse_source_joins, source: 'source'
+  has_many :joins, dependent: :destroy
 
   has_many :source_file_types, dependent: :destroy
   has_many :file_types, -> { order :name }, through: :source_file_types
@@ -43,16 +39,17 @@ class Source < ActiveRecord::Base
     Dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
   end
 
-  def all_linked_sources(concept_id = nil)
-    (self.sources.with_concept(concept_id || '') | self.rev_sources(concept_id || '')) - [self]
+  def all_linked_sources
+    identifiers = self.concepts.where( concept_type: 'identifier' ).pluck(:id)
+    if identifiers.size > 0
+      Source.available.where( "id != ?", self.id ).with_concept(identifiers)
+    else
+      Source.none
+    end
   end
 
-  def all_linked_sources_and_self(concept_id = nil)
-    self.all_linked_sources(concept_id) + [self]
-  end
-
-  def local_source_joins
-    self.source_joins.where(["source_to_id = ? or source_to_id IS NULL", self.id])
+  def all_linked_sources_and_self
+    self.all_linked_sources + [self]
   end
 
   def file_server_available?(current_user)
@@ -168,8 +165,7 @@ class Source < ActiveRecord::Base
       for i in (table_index+1..tables.size-1)
         table_two = tables[i]
         # find Join Condition if it exists between table_one and table_two
-        join = self.local_source_joins.find_by_from_table_and_to_table(table_one, table_two)
-        join = self.local_source_joins.find_by_from_table_and_to_table(table_two, table_one) unless join
+        join = self.joins.find_by_from_table_and_to_table(table_one, table_two) || self.joins.find_by_from_table_and_to_table(table_two, table_one)
 
         result_hash = self.sql_codes(current_user)
         sql_open = result_hash[:open]
@@ -183,10 +179,6 @@ class Source < ActiveRecord::Base
       end
     end
     { result: result, errors: errors }
-  end
-
-  def linked_concepts
-    Concept.with_source(self.all_linked_sources)
   end
 
   def count(current_user, query_concepts, conditions, tables, join_conditions, select_identifier_concept)

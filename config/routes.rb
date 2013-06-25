@@ -77,9 +77,9 @@ Hybrid::Application.routes.draw do
       get :download_file
       post :remove_all_mappings
     end
-  end
 
-  resources :source_joins
+    resources :joins
+  end
 
   resources :source_file_types
 

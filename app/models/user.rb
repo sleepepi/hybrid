@@ -56,12 +56,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_source_joins
-    @all_source_joins ||= begin
-      self.system_admin? ? SourceJoin.current : []
-    end
-  end
-
   # Overriding Devise built-in active_for_authentication? method
   def active_for_authentication?
     super and self.status == 'active' and not self.deleted?

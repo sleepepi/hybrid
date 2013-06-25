@@ -1,0 +1,28 @@
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'joins', per_page: 20 } %>
+
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'joins.from_table', 'From Table', 'joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'joins.from_column', 'From Column', 'joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'joins.to_table', 'To Table', 'joins_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'joins.to_column', 'To Column', 'joins_search') %></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <% @joins.each do |join| %>
+    <tr>
+      <td><%= join.from_table %></td>
+      <td><%= join.from_column %></td>
+      <td><%= join.to_table %></td>
+      <td><%= join.to_column %></td>
+      <td>
+        <%= link_to 'Edit', edit_source_join_path(join.source, join), class: 'btn btn-mini' %>
+        <%= link_to 'Delete', [join.source, join], data: { confirm: "Are you sure you want to delete Join #{join.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<center><%= paginate @joins, theme: "contour" %></center>
