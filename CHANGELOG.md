@@ -2,6 +2,8 @@
 
 ### Enhancements
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
+- **Gem Changes**
+  - Updated to rails 4.0.0
 
 ### Refactoring
 - Removed references to external concepts and datasets
