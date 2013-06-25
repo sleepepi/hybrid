@@ -9,7 +9,7 @@
 - Removed references to external concepts and datasets
 - Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
   - To link across sources `identifier` concepts are now required to be mapped in each source
-- Source Rules interface updated to be more consistent
+- Source Rules and Source Files interfaces updated to be more consistent
 
 ## 0.14.2 (June 19, 2013)
 
