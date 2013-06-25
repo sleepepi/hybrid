@@ -20,7 +20,6 @@ three:
   from_column: from_column_join
   to_table: table
   to_column: to_column_join
-  # source_to: linked_source_b
 
 four:
   source: two
