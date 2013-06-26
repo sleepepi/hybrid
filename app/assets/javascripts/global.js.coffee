@@ -51,17 +51,6 @@
     $(this).prop('checked', false)
   )
 
-@buildMappingTypeahead = (column, source_id) ->
-  $('[data-object~="mapping-typeahead"]').typeaheadmap(
-    source: (query, process) ->
-      return $.get(root_url + 'mappings/typeahead', { source_id: source_id, search: query }, (data) -> return process(data); );
-    listener: (k,v) ->
-      $("#new_concept_id").val(k)
-      $("#new_column").val(column)
-      $("#new_mapping_form").submit()
-    #,"key": "id", "value": "value"
-  )
-
 @buildQuerySourceTypeahead = () ->
   $("#source").select2(
     placeholder: "Select a data source"

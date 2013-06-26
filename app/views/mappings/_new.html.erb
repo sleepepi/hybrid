@@ -1,24 +1,11 @@
 <tr>
   <td><span class="label">Not Mapped</span></td>
-  <td></td>
   <td>
-    <%= link_to @column, '#', data: { object: 'mapping-new', value: "#{@column.gsub(' ', '_')}"} %>
-      <span class='disabled' style="font-size: 8px">
-        <%#= 'unmapped' %><br />
-        <%= 'primary key<br />'.html_safe if @is_primary_key %>
-        <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
-        <%= 'has index' if @has_index %>
-      </span>
+    <%= link_to 'automap', '#', data: { object: 'mapping-automap', table: params[:table], column: @column, source_id: @source.id }, class: 'btn btn-mini' %>
   </td>
   <td>
-    <table class="blank">
-      <tr>
-        <td>
-          <%= text_field_tag "database_concepts[#{@column}][search]", '', data: { object: 'mapping-typeahead', column: @column } %>
-          <%= hidden_field_tag "database_concepts[#{@column}][table]", params[:table] %>
-        </td>
-        <td id="database_concepts_<%= @column.gsub(' ', '_') %>_tree"></td>
-      </tr>
-    </table>
+    <%= @column %>
+  </td>
+  <td>
   </td>
 </tr>

@@ -16,13 +16,7 @@
       <% end %>
     </td>
     <td valign="top">
-      <%= @mapping.column %><br />
-      <span class='disabled' style="font-size: 8px">
-        <%= @mapping.status %><br />
-        <%= 'primary key<br />'.html_safe if @is_primary_key %>
-        <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
-        <%= 'has index' if @has_index %>
-      </span>
+      <%= @mapping.column %>
     </td>
     <td valign="top">
       <%= link_to @mapping.concept.human_name, info_mapping_path(@mapping), method: :post, remote: true, title: @mapping.concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" if @mapping.concept %>
@@ -38,13 +32,7 @@
   <tr class="search_no_border">
     <td><span class="label">Not Mapped</span></td>
     <td></td>
-    <td><%= @column %><br />
-      <span class='disabled' style="font-size: 8px">
-        <%#= 'unmapped' %><br />
-        <%= 'primary key<br />'.html_safe if @is_primary_key %>
-        <%= 'foreign key<br />'.html_safe if @is_foreign_key %>
-        <%= 'has index' if @has_index %>
-      </span>
+    <td><%= @column %>
     </td>
     <td></td>
   </tr>

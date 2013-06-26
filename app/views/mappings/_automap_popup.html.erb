@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h1>
+    Automap Column
+    <small><%= params[:column] %></small>
+  </h1>
+</div>
+
+<% mapping = @source.mappings.find_by_table_and_column_and_column_value(params[:table], params[:column], nil) %>
+<% concepts = Concept.searchable.exactly(params[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, params[:column].to_s.gsub(/[^\w]/, ' ').downcase).order(:dictionary_id, :short_name) %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th></th>
+      <th style="text-align:left">Name</th>
+      <th style="text-align:left">Display Name and Labels</th>
+      <th style="text-align:left">Type</th>
+      <th style="text-align:left">Dictionary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% concepts.each do |concept| %>
+      <tr>
+        <td><%= link_to 'Select and Map', mappings_path(source_id: @source.id, concept_id: concept.id, table: params[:table], column: params[:column]), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
+        <td><%= concept.short_name %></td>
+        <td>
+          <%= concept.human_name %>
+          <% concept.terms.each do |term| %>
+            <span class="label"><%= term.name %></span>
+          <% end %>
+        </td>
+        <td><%= concept.concept_type %></td>
+        <td><%= concept.dictionary.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr class="soften" style="margin-top:20px;" />
+
+<div class="button-group pull-right">
+  <%= button_tag 'Cancel', data: { object: 'hide-contour-modal' }, class: 'btn' %>
+</div>
+
+

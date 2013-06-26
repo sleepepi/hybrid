@@ -166,33 +166,23 @@ class SourcesController < ApplicationController
   private
 
     def set_source
-      set_source_with_actions
+      set_source_with_actions(:id)
     end
 
     def set_source_with_edit_data_source_connection_information
-      set_source_with_actions(["edit data source connection information"])
+      set_source_with_actions(:id, ["edit data source connection information"])
     end
 
     def set_source_with_edit_data_source_mappings
-      set_source_with_actions(["edit data source mappings"])
+      super(:id)
     end
 
     def set_source_with_view_or_edit_data_source_mappings
-      set_source_with_actions(["edit data source mappings"])
+      set_source_with_actions(:id, ["edit data source mappings"])
       unless @source
         render 'mapping_privilege'
         return
       end
-    end
-
-    def set_source_with_actions(actions = [])
-      @source = current_user.all_sources.find_by_id(params[:id])
-      source = Source.find_by_id(params[:id])
-      @source = source if (not @source) and source and source.user_has_one_or_more_actions?(current_user, actions)
-    end
-
-    def redirect_without_source
-      empty_response_or_root_path(sources_path) unless @source
     end
 
     def source_params

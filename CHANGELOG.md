@@ -2,6 +2,7 @@
 
 ### Enhancements
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
+- Individual Data Source columns now display available concepts if the automap picks up more than one mapping candidate
 - **Gem Changes**
   - Updated to rails 4.0.0
 

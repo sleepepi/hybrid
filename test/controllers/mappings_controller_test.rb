@@ -44,22 +44,6 @@ class MappingsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should get typeahead of available concepts" do
-    post :typeahead, source_id: sources(:two).to_param, search: 'gender', format: 'js'
-    assert_not_nil assigns(:source)
-    assert_not_nil assigns(:search_terms)
-    assert_not_nil assigns(:concepts)
-    # assert_template 'search_available'
-  end
-
-  test "empty get typeahead of available concepts and return no concepts" do
-    post :typeahead, source_id: sources(:two).to_param, search: '', format: 'js'
-    assert_not_nil assigns(:source)
-    assert_equal [], assigns(:search_terms)
-    assert_equal [], assigns(:concepts)
-    # assert_template 'search_available'
-  end
-
   test "should get expanded for categorical concept" do
     post :expanded, id: mappings(:categorical_with_values).to_param, format: 'js'
 
@@ -109,25 +93,25 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should create mapping and show additional options to complete mapping" do
     assert_difference('Mapping.count') do
-      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:boolean).to_param, table: 'table1', new_column: 'column3', format: 'js'
+      post :create, source_id: sources(:two).to_param, concept_id: concepts(:boolean).to_param, table: 'table1', column: 'column3', format: 'js'
     end
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:mapping)
-    assert_template "edit"
+    assert_template "create"
   end
 
   test "should create mapping and show completed mapping" do
     assert_difference('Mapping.count') do
-      post :create, source_id: sources(:two).to_param, new_concept_id: concepts(:datetime).to_param, table: 'table1', new_column: 'column10', format: 'js'
+      post :create, source_id: sources(:two).to_param, concept_id: concepts(:datetime).to_param, table: 'table1', column: 'column10', format: 'js'
     end
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:mapping)
-    assert_template "show"
+    assert_template "create"
   end
 
   test "should not create mapping for invalid source" do
     assert_difference('Mapping.count', 0) do
-      post :create, source_id: -1, new_concept_id: concepts(:datetime).to_param, table: 'table1', new_column: 'column10', format: 'js'
+      post :create, source_id: -1, concept_id: concepts(:datetime).to_param, table: 'table1', column: 'column10', format: 'js'
     end
     assert_nil assigns(:source)
     assert_nil assigns(:mapping)

@@ -1,39 +1,26 @@
-<%= form_tag mappings_path(source_id: @source.id, table: params[:table]), remote: true, method: :post, id: "new_mapping_form" do %>
-  <%= hidden_field_tag 'new_column', '' %>
-  <%= hidden_field_tag 'new_concept_id', '' %>
-<% end %>
-
-
 <%= form_tag update_multiple_mappings_path(source_id: @source.id, table: params[:table]), remote: true, method: :post, id: "mappings_form" do %>
   <%= hidden_field_tag 'selected_mapping_id' %>
-  <div class="frame">
-    <table style="width:100%"><col width="1px"/><col width="1px"/><col width="200px"/>
-      <tr>
-        <th></th>
-        <th></th>
-        <th>Column Name</th>
-        <th>Concept</th>
-      </tr>
-      <% @columns.each do |column_data| %>
-        <% @column = column_data[:column] %>
-
-        <% @is_primary_key = column_data[:primary_key] == 'true' %>
-        <% @is_foreign_key = column_data[:foreign_key] == 'true' %>
-        <% @has_index = column_data[:index] == 'true' %>
-
-        <% @mapping = @source.mappings.find_by_column_and_table(@column, params[:table]) %>
-        <tbody id="mapping_form_<%= @column.gsub(' ', '_') %>">
-          <% if @source.user_has_action?(current_user, "edit data source mappings") %>
-            <% if @mapping and ((@mapping.mapped? and params[:filter_unmapped] != '1') or @mapping.status == 'outdated') %>
-              <%= render partial: 'mappings/show' %>
-            <% elsif @mapping and not @mapping.deleted? %>
-              <%= render partial: 'mappings/edit' %>
-            <% else %>
-              <%= render partial: 'mappings/new' %>
-            <% end %>
+  <table class="table" style="width:100%"><col width="1px"/><col width="1px"/><col width="200px"/>
+    <tr>
+      <th></th>
+      <th></th>
+      <th style="text-align:left">Column Name</th>
+      <th style="text-align:left">Concept</th>
+    </tr>
+    <% @columns.each do |column_data| %>
+      <% @column = column_data[:column] %>
+      <% @mapping = @source.mappings.find_by_column_and_table(@column, params[:table]) %>
+      <tbody id="mapping_form_<%= @column.gsub(' ', '_') %>">
+        <% if @source.user_has_action?(current_user, "edit data source mappings") %>
+          <% if @mapping and ((@mapping.mapped? and params[:filter_unmapped] != '1') or @mapping.status == 'outdated') %>
+            <%= render partial: 'mappings/show' %>
+          <% elsif @mapping and not @mapping.deleted? %>
+            <%= render partial: 'mappings/edit' %>
+          <% else %>
+            <%= render partial: 'mappings/new' %>
           <% end %>
-        </tbody>
-      <% end %>
-    </table>
-  </div>
+        <% end %>
+      </tbody>
+    <% end %>
+  </table>
 <% end %>

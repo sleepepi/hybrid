@@ -16,7 +16,7 @@ class JoinsControllerTest < ActionController::TestCase
   test "should not get index with invalid source" do
     get :index, source_id: -1
     assert_nil assigns(:joins)
-    assert_redirected_to root_path
+    assert_redirected_to sources_path
   end
 
   test "should get new" do

@@ -17,7 +17,7 @@ class RulesControllerTest < ActionController::TestCase
     get :index, source_id: -1
     assert_nil assigns(:rules)
     assert_nil assigns(:source)
-    assert_redirected_to root_path
+    assert_redirected_to sources_path
   end
 
   test "should get new" do
@@ -62,7 +62,7 @@ class RulesControllerTest < ActionController::TestCase
     end
     assert_nil assigns(:source)
     assert_nil assigns(:rule)
-    assert_redirected_to root_path
+    assert_redirected_to sources_path
   end
 
   test "should show source rule" do

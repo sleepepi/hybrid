@@ -1,7 +1,12 @@
 class MappingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_source_with_edit_data_source_mappings, only: [ :automap_popup, :create ]
+  before_action :redirect_without_source, only: [ :automap_popup, :create ]
   before_action :set_mapping, only: [ :expanded, :show, :edit, :destroy ]
   before_action :redirect_without_mapping, only: [ :expanded, :show, :edit, :destroy ]
+
+  def automap_popup
+  end
 
   def info
     @mapping = Mapping.find_by_id(params[:id])
@@ -29,22 +34,6 @@ class MappingsController < ApplicationController
     end
 
     render nothing: true unless @concept
-  end
-
-  def typeahead
-    @source = Source.find_by_id(params[:source_id])
-    @search_terms = (params[:search] || params[:term]).to_s.strip.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-
-    if @search_terms.blank?
-      @concepts = []
-    else
-      concept_scope = Concept.searchable.order('search_name')
-      @search_terms.each{|search_term| concept_scope = concept_scope.search(search_term) }
-      @concepts = concept_scope.order('dictionary_id')
-    end
-
-    # render json: [{ id: '1', value: 'aaa'}, {id: '2', value: 'cat'}]
-    render json: @concepts.collect{|c| { id: c.id.to_s, value: c.human_name }}
   end
 
   def expanded
@@ -75,26 +64,12 @@ class MappingsController < ApplicationController
 
   # POST /mappings
   def create
-    @source = current_user.all_sources.find_by_id(params[:source_id])
-    source = Source.find_by_id(params[:source_id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source mappings")
-
-    @concept = Concept.find_by_id(params[:new_concept_id])
-    if @source and @concept
-      @mapping = @source.mappings.where( table: params[:table], column: params[:new_column] ).first_or_create
-      flash[:notice] = 'Mapping Created'
-
-      @mapping.update_attributes(units: @concept.units, concept_id: @concept.id, deleted: false)
+    @concept = Concept.find_by_id(params[:concept_id])
+    if @concept
+      @mapping = @source.mappings.where( table: params[:table], column: params[:column] ).first_or_create
+      @mapping.update(units: @concept.units, concept_id: @concept.id, deleted: false)
       @mapping.reload
       @mapping.set_status!(current_user)
-
-      if @mapping.mapped?
-        render 'show'
-      else
-        render 'edit'
-      end
-    else
-      render nothing: true
     end
   end
 

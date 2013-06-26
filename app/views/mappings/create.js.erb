@@ -1,0 +1,4 @@
+<% if @concept %>
+  $("#mapping_form_<%= @mapping.column.gsub(' ', '_') %>").html("<%= escape_javascript(render( @mapping.mapped? ? "show" : "edit" )) %>");
+  hideContourModal();
+<% end %>

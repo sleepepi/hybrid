@@ -37,8 +37,18 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def redirect_without_source(path = root_path)
-    empty_response_or_root_path(path) unless @source
-  end
+    def set_source_with_edit_data_source_mappings(id = :source_id)
+      set_source_with_actions(id, ["edit data source mappings"])
+    end
+
+    def redirect_without_source(path = sources_path)
+      empty_response_or_root_path(path) unless @source
+    end
+
+    def set_source_with_actions(id = :source_id, actions = [])
+      @source = current_user.all_sources.find_by_id(params[id])
+      source = Source.find_by_id(params[id])
+      @source = source if (not @source) and source and source.user_has_one_or_more_actions?(current_user, actions)
+    end
 
 end

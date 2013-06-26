@@ -10,9 +10,7 @@
 </div>
 
 <% if @error.blank? %>
-  <%#= check_box_tag "filter_unmapped", '1', params['filter_unmapped'], onchange: remote_function(url: get_columns_database_path(table: params[:table], page: params[:page].to_i), method: :post, with: "'&'+$('filter_unmapped').serialize()") + ";showWaiting('table_content'); return false;" %>
   <%= render partial: 'mappings/mappings' %>
-  <%#= render partial: 'database_concepts/search' %>
 <% else %>
   <%= @error %>
 <% end %>
