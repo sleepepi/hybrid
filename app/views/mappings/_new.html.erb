@@ -1,11 +1,10 @@
 <tr>
   <td><span class="label">Not Mapped</span></td>
   <td>
-    <%= link_to 'automap', '#', data: { object: 'mapping-automap', table: params[:table], column: @column, source_id: @source.id }, class: 'btn btn-mini' %>
-  </td>
-  <td>
     <%= @column %>
   </td>
   <td>
+    <%= link_to 'automap', '#', data: { object: 'mapping-automap', table: params[:table], column: @column, source_id: @source.id }, class: 'btn btn-mini' %>
   </td>
+  <td></td>
 </tr>

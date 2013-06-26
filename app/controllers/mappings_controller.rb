@@ -19,9 +19,9 @@ class MappingsController < ApplicationController
     if @mapping
       chart_params = {}
       if @mapping.concept.continuous? or @mapping.concept.date?
-        chart_params = {title: @mapping.concept.human_name, width: 381, height: 300, units: @mapping.human_units, legend: 'none'}
+        chart_params = { title: @mapping.concept.human_name, width: 381, height: 300, units: @mapping.human_units, legend: 'none' }
       elsif @mapping.concept.categorical? or @mapping.concept.boolean?
-        chart_params = {title: @mapping.concept.human_name, width: 381, height: 250}
+        chart_params = { title: @mapping.concept.human_name, width: 381, height: 250 }
       end
 
       result_hash = @mapping.graph_values(current_user, chart_params)
@@ -138,8 +138,6 @@ class MappingsController < ApplicationController
 
   # DELETE /mappings/1.js
   def destroy
-    flash[:notice] = 'Database Concept was deleted.'
-
     @column = @mapping.column
     @source = @mapping.source
     @table = @mapping.table

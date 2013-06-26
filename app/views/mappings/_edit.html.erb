@@ -3,9 +3,9 @@
     <%= hidden_field_tag "mapping_ids[]", @mapping.id %>
     <span class="label label-warning">Partially Mapped</span>
   </td>
+  <%= render partial: 'mappings/form' %>
   <td style="white-space:nowrap">
     <%= link_to 'save', '#', data: { object: 'mapping-select', value: "#{@mapping.id}"}, class: 'btn btn-mini btn-primary' %>
     <%= link_to 'cancel', mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, class: 'btn btn-mini' %>
   </td>
-  <%= render partial: 'mappings/form' %>
 </tr>

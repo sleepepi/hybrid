@@ -1,39 +1,29 @@
-<% if @mapping %>
-  <tr class="search_no_border">
-    <td valign="top" style="white-space:nowrap">
-        <% if @mapping.mapped? %>
-          <span class="label label-success">Mapped</span>
-        <% else %>
-          <span class="label label-warning">Partially Mapped</span>
-        <% end %>
-
-        <%= link_to 'info', expanded_mapping_path(@mapping, source_id: @mapping.source.id), method: :post, remote: true, with: "'show=' + $('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible')", before: "$('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').toggle(); this.src = ($('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible') ? '#{request.script_name}/assets/contour/down.png' : '#{request.script_name}/assets/contour/right.png')", class: 'btn btn-mini' %>
-    </td>
-    <td valign="top" style="white-space:nowrap">
-      <% if @mapping.source.user_has_action?(current_user, "edit data source mappings") %>
-        <%= link_to 'edit', edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, title: "Edit Mapping", class: 'btn btn-mini' %>
-        <%= link_to 'remove', mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, title: "Remove Mapping", class: 'btn btn-mini btn-danger' %>
+<tr class="search_no_border">
+  <td valign="top" style="white-space:nowrap">
+      <% if @mapping.mapped? %>
+        <span class="label label-success">Mapped</span>
+      <% else %>
+        <span class="label label-warning">Partially Mapped</span>
       <% end %>
-    </td>
-    <td valign="top">
-      <%= @mapping.column %>
-    </td>
-    <td valign="top">
-      <%= link_to @mapping.concept.human_name, info_mapping_path(@mapping), method: :post, remote: true, title: @mapping.concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" if @mapping.concept %>
-      <br />
-      <% unit_concept = Concept.find_by_short_name(@mapping.units) %>
-      <% if unit_concept %><span style="font-size: 8px">Units: <%= link_to unit_concept.human_name, unit_concept %></span><% end %>
-      <div id="mapping_<%= @mapping.column.gsub(' ', '_') %>_stats" style="display:none">
-        <%= image_tag 'contour/ajax-loader.gif' %>
-      </div>
-    </td>
-  </tr>
-<% else %>
-  <tr class="search_no_border">
-    <td><span class="label">Not Mapped</span></td>
-    <td></td>
-    <td><%= @column %>
-    </td>
-    <td></td>
-  </tr>
-<% end %>
+
+      <%= link_to 'info', expanded_mapping_path(@mapping, source_id: @mapping.source.id), method: :post, remote: true, with: "'show=' + $('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible')", before: "$('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').toggle(); this.src = ($('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible') ? '#{request.script_name}/assets/contour/down.png' : '#{request.script_name}/assets/contour/right.png')", class: 'btn btn-mini' %>
+  </td>
+  <td valign="top">
+    <%= @mapping.column %>
+  </td>
+  <td valign="top">
+    <%= link_to @mapping.concept.human_name, info_mapping_path(@mapping), method: :post, remote: true, title: @mapping.concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" if @mapping.concept %>
+    <br />
+    <% unit_concept = Concept.find_by_short_name(@mapping.units) %>
+    <% if unit_concept %><span style="font-size: 8px">Units: <%= link_to unit_concept.human_name, unit_concept %></span><% end %>
+    <div id="mapping_<%= @mapping.column.gsub(' ', '_') %>_stats" style="display:none">
+      <%= image_tag 'contour/ajax-loader.gif' %>
+    </div>
+  </td>
+  <td valign="top" style="white-space:nowrap">
+    <% if @mapping.source.user_has_action?(current_user, "edit data source mappings") %>
+      <%= link_to 'edit', edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, class: 'btn btn-mini' %>
+      <%= link_to 'remove', mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+    <% end %>
+  </td>
+</tr>

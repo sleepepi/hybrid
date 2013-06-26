@@ -1,9 +1,9 @@
 class RulesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source,                only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
-  before_action :redirect_without_source,   only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
-  before_action :set_rule,                  only: [ :show, :edit, :update, :destroy ]
-  before_action :redirect_without_rule,     only: [ :show, :edit, :update, :destroy ]
+  before_action :set_source_with_edit_data_source_rules,  only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+  before_action :redirect_without_source,                 only: [ :index, :show, :new, :edit, :create, :update, :destroy ]
+  before_action :set_rule,                                only: [ :show, :edit, :update, :destroy ]
+  before_action :redirect_without_rule,                   only: [ :show, :edit, :update, :destroy ]
 
   # GET /rules
   # GET /rules.json
@@ -50,12 +50,6 @@ class RulesController < ApplicationController
   end
 
   private
-
-    def set_source
-      @source = current_user.all_sources.find_by_id(params[:source_id])
-      source = Source.find_by_id(params[:source_id])
-      @source = source if (not @source) and source and source.user_has_action?(current_user, "edit data source rules")
-    end
 
     def set_rule
       @rule = @source.rules.find_by_id(params[:id])

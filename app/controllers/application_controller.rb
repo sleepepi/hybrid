@@ -37,6 +37,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+    def set_source_with_edit_data_source_rules(id = :source_id)
+      set_source_with_actions(id, ["edit data source rules"])
+    end
+
     def set_source_with_edit_data_source_mappings(id = :source_id)
       set_source_with_actions(id, ["edit data source mappings"])
     end

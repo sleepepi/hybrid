@@ -1,11 +1,11 @@
 <%= form_tag update_multiple_mappings_path(source_id: @source.id, table: params[:table]), remote: true, method: :post, id: "mappings_form" do %>
   <%= hidden_field_tag 'selected_mapping_id' %>
-  <table class="table" style="width:100%"><col width="1px"/><col width="1px"/><col width="200px"/>
+  <table class="table" style="width:100%"><col width="1px"/><col width="200px"/>
     <tr>
-      <th></th>
       <th></th>
       <th style="text-align:left">Column Name</th>
       <th style="text-align:left">Concept</th>
+      <th>Actions</th>
     </tr>
     <% @columns.each do |column_data| %>
       <% @column = column_data[:column] %>
