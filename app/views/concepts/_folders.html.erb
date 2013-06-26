@@ -34,7 +34,7 @@
 
 <%# Draws the folders for the folder with prefix @folder %>
 <%# concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? 'Uncategorized' : c.folder.to_s.gsub(r, '').split("/").first}.sort.uniq.each do |folder| %>
-<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized', {}] : ["#{@folder + '/' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split("/").first, c.folder.to_s.gsub(r, '').split("/").first.titleize, {}]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name, folder_hash| %>
+<% (concept_scope.with_folder(@folder).select('distinct(folder)').collect{|c| c.folder.blank? ? ['Uncategorized', 'Uncategorized'] : ["#{@folder + '/' unless @folder.blank?}" + c.folder.to_s.gsub(r, '').split("/").first, c.folder.to_s.gsub(r, '').split("/").first]}).sort{|a,b| a[1] <=> b[1]}.uniq.each do |full_folder_path, display_folder_name| %>
 
   <% full_folder = full_folder_path %>
 
@@ -46,8 +46,7 @@
   <% unless folder_id == "folder_Uncategorized" %>
     <div id="<%= folder_id %>_link">
       <% @folder_id = folder_id %>
-      <%# @folder_title = folder.titleize %>
-      <% @folder_title = display_folder_name + "#{ ' - ' + folder_hash[:totalnum] unless folder_hash[:totalnum].blank?}" %>
+      <% @folder_title = display_folder_name %>
       <% if found_number > 0 %>
         <%= render partial: 'concepts/folders_toggle_link' %>
       <% else %>
