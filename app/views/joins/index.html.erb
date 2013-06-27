@@ -1,7 +1,7 @@
 <% @title = 'Joins' %>
 <div class="page-header">
   <h1>
-    <%= link_to @source.name, @source %> &middot; <%= @title %>
+    <%= link_to 'Sources', sources_path %> &middot; <%= link_to @source.name, @source %> &middot; <%= @title %>
     <%= link_to "Create Join", new_source_join_path(@source), class: 'btn btn-mini btn-primary' %>
   </h1>
 </div>

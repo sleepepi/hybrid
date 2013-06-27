@@ -5,8 +5,14 @@
   </h1>
 </div>
 
+<% most_used_dictionary = @source.primary_dictionary %>
 <% mapping = @source.mappings.find_by_table_and_column_and_column_value(params[:table], params[:column], nil) %>
-<% concepts = Concept.searchable.exactly(params[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, params[:column].to_s.gsub(/[^\w]/, ' ').downcase).order(:dictionary_id, :short_name) %>
+<% concept_scope = Concept.searchable.exactly(params[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, params[:column].to_s.gsub(/[^\w]/, ' ').downcase) %>
+<% if most_used_dictionary %>
+  <% concepts = concept_scope.order("(dictionary_id = #{most_used_dictionary.id}) = 1 DESC", :short_name) %>
+<% else %>
+  <% concepts = concept_scope.order(:dictionary_id, :short_name) %>
+<% end %>
 
 <table class="table">
   <thead>
@@ -20,8 +26,8 @@
   </thead>
   <tbody>
     <% concepts.each do |concept| %>
-      <tr>
-        <td><%= link_to 'Select and Map', mappings_path(source_id: @source.id, concept_id: concept.id, table: params[:table], column: params[:column]), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
+      <tr class="<%= 'info' if concept.dictionary == most_used_dictionary %>">
+        <td><%= link_to 'Automap', mappings_path(source_id: @source.id, concept_id: concept.id, table: params[:table], column: params[:column]), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
         <td><%= concept.short_name %></td>
         <td>
           <%= concept.human_name %>

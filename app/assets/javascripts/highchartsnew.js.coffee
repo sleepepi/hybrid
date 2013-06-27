@@ -142,19 +142,16 @@
                 el_id = "#value_ids_" + this.id
                 if $(el_id).is(':checked')
                   $(el_id).prop('checked',false)
-                  $(el_id).parent().effect("highlight", {color:'#ff9999'}, 1000)
                 else
                   $(el_id).prop('checked',true)
-                  $(el_id).parent().effect("highlight", {color:'#99ff99'}, 1000)
+                $(el_id).change()
                 false
-    # legend: {
-    #   layout: 'vertical',
-    #   style: {
-    #     left: 'auto',
-    #     bottom: 'auto',
-    #     right: '50px',
+    # legend:
+    #   layout: 'vertical'
+    #   style:
+    #     left: 'auto'
+    #     bottom: 'auto'
+    #     right: '50px'
     #     top: '100px'
-    #   }
-    # },
     series: my_series
   )

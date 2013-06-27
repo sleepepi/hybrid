@@ -10,7 +10,7 @@ class Source < ActiveRecord::Base
   scope :available, -> { where deleted: false, visible: true }
   scope :available_or_creator_id, lambda { |arg| where( [ "sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, arg ] ) }
   scope :local, -> { where identifier: nil }
-  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?) and mappings.deleted = ?) or '' IN (?)", arg, false, arg] ) }
+  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?)) or '' IN (?)", arg, arg] ) }
   scope :with_file_type, lambda { |arg| where( ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", arg] ) }
 
   # Model Validation
@@ -19,7 +19,7 @@ class Source < ActiveRecord::Base
 
   # Model Relationships
   belongs_to :user
-  has_many :mappings, -> { where deleted: false }
+  has_many :mappings
   has_many :concepts, -> { order :short_name }, through: :mappings
 
   has_many :joins, dependent: :destroy
@@ -33,6 +33,13 @@ class Source < ActiveRecord::Base
   has_many :queries, -> { order :name }, through: :query_sources
 
   # Source Methods
+
+  # Returns the dictionary associated with the most mappings
+  def primary_dictionary
+    dictionary_ids = Concept.where(id: self.mappings.pluck(:concept_id).uniq).pluck(:dictionary_id)
+    frequency = dictionary_ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
+    Dictionary.available.find_by_id(dictionary_ids.sort_by { |v| frequency[v] }.last)
+  end
 
   def all_dictionaries
     Dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
@@ -70,15 +77,8 @@ class Source < ActiveRecord::Base
     error = result_hash[:error]
 
     if filter_unmapped
-      mapped_columns = self.mappings.where(status: 'mapped', table: table).pluck(:column)
-      unmapped_columns = self.mappings.where(status: 'unmapped', table: table).pluck(:column)
-      filtered_columns = []
-      columns.each do |column_hash|
-        if unmapped_columns.include?(column_hash[:column]) or not mapped_columns.include?(column_hash[:column])
-          filtered_columns << column_hash
-        end
-      end
-      columns = filtered_columns
+      mapped_columns = self.mappings.where( table: table ).select{|m| m.mapped?(current_user) }.collect{|m| m.column}.uniq
+      columns.reject!{|hash| mapped_columns.include?(hash[:column])}
     end
 
     if per_page > 0
@@ -148,12 +148,7 @@ class Source < ActiveRecord::Base
 
   # Returns tables for a selected concepts
   def concept_tables(concept)
-    result = []
-    if concept
-      mappings = self.mappings.where(concept_id: concept.id).where(['mappings.status IN (?)', ['mapped', 'unmapped', 'derived']])
-      result = mappings.collect{|m| m.table}.uniq
-    end
-    result
+    self.mappings.where(concept_id: concept.id).pluck(:table).uniq
   end
 
   # Given a list of tables find all the join conditions
@@ -187,15 +182,8 @@ class Source < ActiveRecord::Base
   def table_columns_mapped(current_user, table)
     result_hash = self.table_columns(current_user, table)
     columns = result_hash[:result].collect{|c| c[:column]}
-    number_mapped = self.mappings.where( table: table, status: 'mapped', column: columns ).uniq.select(:column).count
+    number_mapped = self.mappings.where( table: table, column: columns ).uniq.select(:column).count
     "#{number_mapped} of #{columns.size}"
-  end
-
-  # This function calculates the derived mappings for a database.
-  # Expensive Operation
-  def generate_derived_mappings!
-    self.mappings.status('derived').destroy_all()
-    self.mappings.status(['mapped', 'unmapped']).each{|m| m.generate_derived!}
   end
 
 end

@@ -21,7 +21,6 @@ Hybrid::Application.routes.draw do
 
   resources :mappings do
     collection do
-      post :update_multiple
       get :automap_popup
     end
     member do

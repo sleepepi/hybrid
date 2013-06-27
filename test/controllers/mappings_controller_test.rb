@@ -3,7 +3,13 @@ require 'test_helper'
 class MappingsControllerTest < ActionController::TestCase
   setup do
     login(users(:admin))
+    @source = sources(:two)
     @mapping = mappings(:one)
+  end
+
+  test "should get automap popup" do
+    get :automap_popup, source_id: @source, table: 'table', column: 'column1', format: 'js'
+    assert_template 'automap_popup'
   end
 
   test "should get info for categorical concept" do
@@ -119,13 +125,13 @@ class MappingsControllerTest < ActionController::TestCase
   end
 
   test "should show mapping" do
-    get :show, id: @mapping, format: 'js'
+    get :show, source_id: @source, id: @mapping, format: 'js'
     assert_not_nil assigns(:mapping)
     assert_response :success
   end
 
   test "should not show invalid mapping" do
-    get :show, id: -1, format: 'js'
+    get :show, source_id: @source, id: -1, format: 'js'
     assert_nil assigns(:mapping)
     assert_response :success
   end
@@ -136,22 +142,27 @@ class MappingsControllerTest < ActionController::TestCase
   end
 
   # TODO: Replace with update_multiple or rewrite update_multiple to just update
-  test "should update multiple mappings" do
-    post :update_multiple, source_id: sources(:two).to_param, selected_mapping_id: mappings(:categorical_with_values).to_param, mappings: {mappings(:categorical_with_values).to_param => {mapping_column_values: [['value_m', {value: concepts(:boolean_child).to_param, is_null: 'false'}],['value_', {value: '', is_null: 'true'}],['value_&lt;&#33;&#91;CDATA&#91;&#93;&#93;&gt;', {value: "", is_null: 'false'}]]}}, table: 'table', column: 'gender', format: 'js'
+  test "should update mapping" do
+    patch :update, source_id: sources(:two), id: mappings(:categorical_with_values), mapping: { column_values: [  { column_value: 'm', value: concepts(:boolean_child).to_param, is_null: 'false' },
+                                                                                                                  { column_value: '',  value: '',                                is_null: 'true'  },
+                                                                                                                  { column_value: '',  value: '',                                is_null: 'false' } ] }, format: 'js'
     assert_not_nil assigns(:source)
-    assert_not_nil assigns(:mappings)
-    assert_template 'update_multiple'
+    assert_not_nil assigns(:mapping)
+    assert_template 'show'
   end
 
-  test "update multiple mappings should render nothing if source not specified" do
-    post :update_multiple, source_id: -1, selected_mapping_id: mappings(:categorical_with_values).to_param, mappings: {mappings(:categorical_with_values).to_param => {mapping_column_values: [['value_m', {value: concepts(:boolean_child).to_param, is_null: 'false'}],['value_', {value: '', is_null: 'true'}]]}}, table: 'table', column: 'gender', format: 'js'
+  test "should not update mapping with invalid source" do
+    patch :update, source_id: -1, id: mappings(:categorical_with_values), mapping: { column_values: [ { column_value: 'm', value: concepts(:boolean_child).to_param, is_null: 'false' },
+                                                                                                      { column_value: '',  value: '',                                is_null: 'true'  },
+                                                                                                      { column_value: '',  value: '',                                is_null: 'false' } ] }, format: 'js'
     assert_nil assigns(:source)
+    assert_nil assigns(:mapping)
     assert_response :success
   end
 
   test "should destroy mapping" do
     assert_difference('Mapping.current.count', -1) do
-      delete :destroy, id: @mapping, format: 'js'
+      delete :destroy, source_id: @source, id: @mapping, format: 'js'
     end
 
     assert_template 'new'
@@ -159,7 +170,7 @@ class MappingsControllerTest < ActionController::TestCase
 
   test "should not destroy mapping without id" do
     assert_difference('Mapping.current.count', 0) do
-      delete :destroy, id: -1, format: 'js'
+      delete :destroy, source_id: @source, id: -1, format: 'js'
     end
     assert_nil assigns(:mapping)
     assert_response :success

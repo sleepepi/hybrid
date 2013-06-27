@@ -1,4 +1,15 @@
-# JavaScript Specific to Queries
+@checkAllCategoricalValues = () ->
+  elements = $('.categorical_values').each( () ->
+    $(this).prop('checked', true)
+    $(this).change()
+  )
+
+@uncheckAllCategoricalValues = () ->
+  elements = $('.categorical_values').each( () ->
+    $(this).prop('checked', false)
+    $(this).change()
+  )
+
 jQuery ->
   $( "#query_form" ).submit()
 

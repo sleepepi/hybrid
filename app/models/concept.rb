@@ -9,7 +9,7 @@ class Concept < ActiveRecord::Base
   scope :searchable, lambda { |*args|  where("concepts.concept_type IS NOT NULL") }
   scope :with_concept_type, lambda { |*args|  where(["concepts.concept_type IN (?) or 'all' IN (?)", args.first, args.first]) }
 
-  scope :with_source, lambda { |*args|  where(["concepts.id in (select concept_id from mappings where mappings.concept_id = concepts.id and mappings.source_id IN (?) and mappings.deleted = ?)", args.first, false] ) }
+  scope :with_source, lambda { |*args|  where(["concepts.id in (select concept_id from mappings where mappings.concept_id = concepts.id and mappings.source_id IN (?))", args.first] ) }
   scope :with_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ? IS NULL", args.first.to_s + '/%', args.first]) }
   scope :with_exact_folder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first]) }
   scope :with_exact_folder_or_subfolder, lambda { |*args| where(["LOWER(concepts.folder) LIKE ? or LOWER(concepts.folder) LIKE ? or ('Uncategorized' = ? and (concepts.folder IS NULL or concepts.folder = ''))", args.first, args.first.to_s + '/%', args.first]) }
@@ -34,7 +34,7 @@ class Concept < ActiveRecord::Base
 
   has_many :mappings, dependent: :destroy
   belongs_to :dictionary
-  has_many :sources, -> { where(deleted: false).order('sources.name') }, through: :mappings
+  has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
   has_many :terms, -> { order :name }, dependent: :destroy
   has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy

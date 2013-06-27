@@ -2,66 +2,51 @@ require 'test_helper'
 
 class MappingTest < ActiveSupport::TestCase
   test "mapped? returns true if the mapping is mapped" do
-    assert_equal true, mappings(:mapped).mapped?
+    assert_equal true, mappings(:mapped).mapped?(users(:valid))
   end
 
   test "mapped? returns false if the mapping is not mapped" do
-    assert_equal false, mappings(:three).mapped?
+    assert_equal false, mappings(:three).mapped?(users(:valid))
   end
 
-  test "set_status! sets status to unmapped for boolean mapping with no values" do
-    mappings(:one).set_status!(users(:admin))
-    assert_equal 'unmapped', mappings(:one).status
+  test "mapped? a boolean with no underlying column_values is mapped" do
+    assert_equal true, mappings(:one).mapped?(users(:admin))
   end
 
-  test "set_status! a continuous concept is unmapped if it does not have units" do
-    mappings(:continuous_without_units).set_status!(users(:admin))
-    assert_equal 'unmapped', mappings(:continuous_without_units).status
+  test "mapped? a continuous concept is mapped" do
+    assert_equal true, mappings(:continuous_with_units).mapped?(users(:admin))
   end
 
-  test "set_status! a continuous concept is mapped if it has units" do
-    mappings(:continuous_with_units).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:continuous_with_units).status
+  test "mapped? a categorical with at least one of its values mapped is considered mapped" do
+    assert_equal true, mappings(:categorical_with_values).mapped?(users(:admin))
   end
 
-  test "set_status! a categorical with at least one of its values mapped is considered mapped" do
-    mappings(:categorical_with_values).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:categorical_with_values).status
+  test "mapped? a date mapping is considered mapped" do
+    assert_equal true, mappings(:datetime).mapped?(users(:admin))
   end
 
-  test "set_status! a date mapping is considered mapped" do
-    mappings(:datetime).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:datetime).status
+  test "mapped? an identifier mapping is considered mapped" do
+    assert_equal true, mappings(:identifier).mapped?(users(:admin))
   end
 
-  test "set_status! an identifier mapping is considered mapped" do
-    mappings(:identifier).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:identifier).status
+  test "mapped? a filelocator mapping is considered mapped" do
+    assert_equal true, mappings(:filelocator).mapped?(users(:admin))
   end
 
-  test "set_status! a filelocator mapping is considered mapped" do
-    mappings(:filelocator).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:filelocator).status
+  test "mapped? a freetext mapping is considered mapped" do
+    assert_equal true, mappings(:freetext).mapped?(users(:admin))
   end
 
-  test "set_status! a freetext mapping is considered mapped" do
-    mappings(:freetext).set_status!(users(:admin))
-    assert_equal 'mapped', mappings(:freetext).status
+  test "mapped? an invalid mapped concept is considered unmapped" do
+    assert_equal false, mappings(:invalid).mapped?(users(:admin))
   end
 
-  test "set_status! an invalid mapped concept is considered unmapped" do
-    mappings(:invalid).set_status!(users(:admin))
-    assert_equal 'unmapped', mappings(:invalid).status
+  test "mapped? an mapping referencing a deleted concept is considered outdated" do
+    assert_equal false, mappings(:nonexistent_concept).mapped?(users(:admin))
   end
 
-  test "set_status! an mapping referencing a deleted concept is considered outdated" do
-    mappings(:nonexistent_concept).set_status!(users(:admin))
-    assert_equal 'outdated', mappings(:nonexistent_concept).status
-  end
-
-  test "set_status! an mapping without a concept is considered unmapped" do
-    mappings(:no_concept).set_status!(users(:admin))
-    assert_equal 'unmapped', mappings(:no_concept).status
+  test "mapped? an mapping without a concept is considered unmapped" do
+    assert_equal false, mappings(:no_concept).mapped?(users(:admin))
   end
 
   test "all_concepts returns an array of values" do
@@ -134,17 +119,7 @@ class MappingTest < ActiveSupport::TestCase
     assert_equal 'Strange Value', mappings(:boolean_female).uniq_normalized_value('f')
   end
 
-  test "should return human readable units" do
-    assert_equal 'year', mappings(:mapped_with_human_units).human_units
-  end
-
   test "user_can_view? should show if the user can view the mapping" do
     assert_equal false, mappings(:mapped_boolean).user_can_view?(users(:valid), ['view limited data distribution'])
-  end
-
-  test "should permanently delete mapping" do
-    assert_difference('Mapping.count', -1) do
-      mappings(:mapped_boolean).destroy(true)
-    end
   end
 end

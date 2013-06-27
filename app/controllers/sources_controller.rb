@@ -41,18 +41,16 @@ class SourcesController < ApplicationController
       current_time = Time.now
 
       @columns.each do |column_hash|
-        mapping = @source.mappings.find_by_table_and_column_and_column_value(table, column_hash[:column], nil)
+        mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: nil ).first
         concepts = Concept.with_dictionary(params[:dictionary_id]).searchable.exactly(column_hash[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, column_hash[:column].to_s.gsub(/[^\w]/, ' ').downcase)
-        c = concepts.first
-        if concepts.size == 1 and c
-          mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: nil ).first_or_create unless mapping
-          mapping.automap(current_user, c, column_hash)
+        if concepts.size == 1 and c = concepts.first
+          mapping = @source.mappings.where( concept_id: c.id, table: table, column: column_hash[:column], column_value: nil ).first_or_create
+          mapping.automap(current_user)
         end
       end
 
     end
 
-    table_div_name = tables.first.to_s.gsub(/[^\w\-]/, '_') # TODO: Remove or implement count update after automap for table
     all_columns = @columns.collect{|a| a[:column]}
 
     params[:page] = 1 if params[:page].blank?

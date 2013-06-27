@@ -3,6 +3,7 @@
 ### Enhancements
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 - Individual Data Source columns now display available concepts if the automap picks up more than one mapping candidate
+- Modified interface for selecting boolean and categorical search criteria
 - **Gem Changes**
   - Updated to rails 4.0.0
 
@@ -11,6 +12,7 @@
 - Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
   - To link across sources `identifier` concepts are now required to be mapped in each source
 - Source Rules and Source Files interfaces updated to be more consistent
+- Mappings no longer have status, deleted, or units
 
 ## 0.14.2 (June 19, 2013)
 

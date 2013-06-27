@@ -35,11 +35,12 @@
       <div class="control-group">
         <%= f.label :value, nil, class: 'control-label' %>
         <div class="controls sheet-container">
-          <%= link_to image_tag('icons/gentleface/checkbox_checked_16.png', alt: 'Select All', title: 'Select All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-check-all' }, class: 'bubble-azure', style: 'padding-top:10px' %>
-          <%= link_to image_tag('icons/gentleface/checkbox_unchecked_16.png', alt: 'Deselect All', title: 'Deselect All Concepts', class: 'smudge', style: 'margin-left:4px;margin-right:4px;vertical-align:text-bottom'), '#', data: { object: 'categorical-uncheck-all' }, class: 'bubble-azure', style: 'padding-top:10px' %><br />
-          <br />
+          <div style="margin-bottom:5px">
+            <%= link_to simple_check(true) + ' Select All', '#', data: { object: 'categorical-check-all' }, class: 'btn btn-mini' %>
+            <%= link_to simple_check(false) + ' Deselect All', '#', data: { object: 'categorical-uncheck-all' }, class: 'btn btn-mini' %>
+          </div>
           <% @query_concept.concept.recommended_concepts.each do |concept| %>
-            <label class="checkbox"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></label>
+            <label class="checkbox <%= 'selected' if @query_concept.value.to_s.split(',').include?(concept.id.to_s) %>"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></label>
           <% end %>
         </div>
       </div>
@@ -48,7 +49,7 @@
         <%= f.label :value, nil, class: 'control-label' %>
         <div class="controls sheet-container">
           <% ['true','false'].each do |value| %>
-            <label class="checkbox"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></label>
+            <label class="checkbox <%= 'selected' if @query_concept.value.to_s.split(',').include?(value.to_s) %>"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></label>
           <% end %>
         </div>
       </div>

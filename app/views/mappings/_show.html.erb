@@ -1,6 +1,6 @@
 <tr class="search_no_border">
   <td valign="top" style="white-space:nowrap">
-      <% if @mapping.mapped? %>
+      <% if @mapping.mapped?(current_user) %>
         <span class="label label-success">Mapped</span>
       <% else %>
         <span class="label label-warning">Partially Mapped</span>
@@ -12,10 +12,9 @@
     <%= @mapping.column %>
   </td>
   <td valign="top">
-    <%= link_to @mapping.concept.human_name, info_mapping_path(@mapping), method: :post, remote: true, title: @mapping.concept.human_name, onclick: "showWaiting('#popup_info', ' Loading Concept', true)" if @mapping.concept %>
+    <%= link_to @mapping.concept.human_name, @mapping.concept, target: '_blank' %>
     <br />
-    <% unit_concept = Concept.find_by_short_name(@mapping.units) %>
-    <% if unit_concept %><span style="font-size: 8px">Units: <%= link_to unit_concept.human_name, unit_concept %></span><% end %>
+    <% unless @mapping.concept.units.blank? %><span style="font-size: 8px">Units: <%= link_to @mapping.concept.units, @mapping.concept %></span><% end %>
     <div id="mapping_<%= @mapping.column.gsub(' ', '_') %>_stats" style="display:none">
       <%= image_tag 'contour/ajax-loader.gif' %>
     </div>

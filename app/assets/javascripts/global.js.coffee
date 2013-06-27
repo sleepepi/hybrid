@@ -41,16 +41,6 @@
       $('#query_concept_' + index + '_rop_text').show()
   )
 
-@checkAllCategoricalValues = () ->
-  elements = $('.categorical_values').each( () ->
-    $(this).prop('checked', true)
-  )
-
-@uncheckAllCategoricalValues = () ->
-  elements = $('.categorical_values').each( () ->
-    $(this).prop('checked', false)
-  )
-
 @buildQuerySourceTypeahead = () ->
   $("#source").select2(
     placeholder: "Select a data source"

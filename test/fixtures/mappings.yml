@@ -7,8 +7,6 @@ one:
   table: table
   column: column1
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 two:
   source: two
@@ -17,8 +15,6 @@ two:
   table: table
   column: column2
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 three:
   source: two
@@ -27,8 +23,6 @@ three:
   table: table
   column: column3
   # column_value: MyString
-  # units: MyString
-  # status: unmapped
 
 continuous_with_units:
   source: two
@@ -37,8 +31,6 @@ continuous_with_units:
   table: table
   column: column4
   # column_value: MyString
-  units: MyString
-  # status: unmapped
 
 continuous_without_units:
   source: two
@@ -47,8 +39,6 @@ continuous_without_units:
   table: table
   column: column5
   # column_value: MyString
-  # units: MyString
-  # status: unmapped
 
 mapped:
   source: two
@@ -57,8 +47,6 @@ mapped:
   table: table
   column: column6
   # column_value: MyString
-  # units: MyString
-  status: mapped
 
 categorical_with_values:
   source: two
@@ -67,8 +55,6 @@ categorical_with_values:
   table: table
   column: gender
   # column_value: MyString
-  # units: MyString
-  status: mapped
 
 boolean_male:
   source: two
@@ -77,8 +63,6 @@ boolean_male:
   table: table
   column: gender
   column_value: m
-  # units: MyString
-  status: mapped
 
 boolean_female:
   source: two
@@ -87,8 +71,6 @@ boolean_female:
   table: table
   column: gender
   column_value: f
-  # units: MyString
-  status: mapped
 
 datetime:
   source: two
@@ -97,8 +79,6 @@ datetime:
   table: table
   column: column9
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 identifier:
   source: two
@@ -107,8 +87,6 @@ identifier:
   table: table
   column: column10
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 filelocator:
   source: two
@@ -117,8 +95,6 @@ filelocator:
   table: table
   column: column11
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 filelocatormapped:
   source: two
@@ -127,8 +103,6 @@ filelocatormapped:
   table: table
   column: column12
   # column_value: MyString
-  # units: MyString
-  status: mapped
 
 freetext:
   source: two
@@ -137,8 +111,6 @@ freetext:
   table: table
   column: column12
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 invalid:
   source: two
@@ -147,8 +119,6 @@ invalid:
   table: table
   column: column13
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 no_concept:
   source: two
@@ -156,8 +126,6 @@ no_concept:
   table: table
   column: column14
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 nonexistent_concept:
   source: two
@@ -165,8 +133,6 @@ nonexistent_concept:
   table: table
   column: column15
   # column_value: MyString
-  # units: MyString
-  # status: mapped
 
 continuous_with_formula:
   source: two
@@ -175,8 +141,6 @@ continuous_with_formula:
   table: table
   column: column16
   # column_value: MyString
-  units: MyString
-  status: mapped
 
 continuous_with_units_and_linked:
   source: linked_source_b
@@ -185,8 +149,6 @@ continuous_with_units_and_linked:
   table: table
   column: column4
   # column_value: MyString
-  units: MyString
-  status: mapped
 
 mapped_boolean:
   source: fully_mapped_test_data_source
@@ -195,8 +157,6 @@ mapped_boolean:
   table: table
   column: column6
   column_value: t
-  # units: MyString
-  status: mapped
 
 mapped_continuous:
   source: fully_mapped_test_data_source
@@ -205,8 +165,6 @@ mapped_continuous:
   table: table
   column: column16
   # column_value: MyString
-  units: MyString
-  status: mapped
 
 mapped_categorical:
   source: fully_mapped_test_data_source
@@ -215,8 +173,6 @@ mapped_categorical:
   table: table
   column: column6
   # column_value: MyString
-  # units: MyString
-  status: mapped
 
 mapped_date:
   source: fully_mapped_test_data_source
@@ -225,8 +181,6 @@ mapped_date:
   table: table
   column: column9
   # column_value: MyString
-  # units: MyString
-  status: mapped
 
 mapped_with_human_units:
   source: fully_mapped_test_data_source
@@ -235,5 +189,3 @@ mapped_with_human_units:
   table: table
   column: column11
   # column_value: MyString
-  units: year
-  status: mapped

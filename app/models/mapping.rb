@@ -1,10 +1,10 @@
 class Mapping < ActiveRecord::Base
 
   # Named Scopes
-  scope :current, -> { where deleted: false }
-  scope :status, lambda { |arg| where(status: arg) }
+  scope :current, -> { all }
 
   # Model Validation
+  validates_presence_of :source_id, :concept_id, :table, :column
 
   # Model Relationships
 
@@ -13,37 +13,19 @@ class Mapping < ActiveRecord::Base
 
   # Mapping Methods
 
-  def mapped?
-    return self.status == 'mapped'
-  end
-
-  def set_status!(current_user)
-    if self.concept
-      if self.concept.continuous?
-        if self.units.blank?
-          update_column :status, 'unmapped'
-        else
-          update_column :status, 'mapped'
-        end
-      elsif self.concept.categorical? or self.concept.boolean?
-        self.column_values(current_user).each do |column_value|
-          val_mapping = self.source.mappings.find_by_table_and_column_and_column_value(self.table, self.column, (column_value == nil) ? 'NULL' : column_value.to_s)
-          if val_mapping and val_mapping.status == 'mapped'
-            update_column :status, 'mapped'
-            return
-          end
-        end
-        update_column :status, 'unmapped'
-      elsif self.concept.date? or self.concept.identifier? or self.concept.file_locator? or self.concept.free_text?
-        update_column :status, 'mapped'
+  def mapped?(current_user)
+    result = if self.concept
+      if self.concept.categorical? or self.concept.boolean?
+        self.source.mappings.where('column_value IS NOT NULL').where(concept_id: self.concept.id, table: self.table, column: self.column, value: nil).size == 0
+      elsif self.concept.continuous? or self.concept.date? or self.concept.identifier? or self.concept.file_locator? or self.concept.free_text?
+        true
       else
-        update_column :status, 'unmapped'
+        false
       end
-    elsif self.concept_id != nil
-      update_column :status, 'outdated' # If the concept no longer exists than the mapping has become outdated
     else
-      update_column :status, 'unmapped'
+      false
     end
+    result
   end
 
   # This function retrieves all of the concepts associated with the table.column mapping
@@ -121,7 +103,7 @@ class Mapping < ActiveRecord::Base
           #     however generic "Weight" would still need to exist as a derived concept for EACH of the two mappings
           existing_mappings = self.source.mappings.where( concept_id: ancestor.id, table: self.table, column: self.column )
 
-          self.source.mappings.create( concept_id: ancestor.id, status: 'derived', value: self.value, table: self.table, column: self.column, column_value: self.column_value, units: self.units ) if existing_mappings.blank?
+          self.source.mappings.create( concept_id: ancestor.id, value: self.value, table: self.table, column: self.column, column_value: self.column_value ) if existing_mappings.blank?
         end
       end
     end
@@ -151,13 +133,10 @@ class Mapping < ActiveRecord::Base
       query_concept_value.split(',').each do |concept_id|
         mappings = []
         if concept_id == 'true'
-          # TODO: It's True!
-          mappings = self.source.mappings.where(concept_id: self.concept.id, value: 'true') # Not quite right?
+          mappings = self.source.mappings.where(concept_id: self.concept.id, value: 'true')
         elsif concept_id == 'false'
-          # TODO: Negation!
-          mappings = self.source.mappings.where(concept_id: self.concept.id, value: 'false') # Not quite right?
+          mappings = self.source.mappings.where(concept_id: self.concept.id, value: 'false')
         elsif concept_id == 'unknown'
-          logger.debug "IS UNKNOWN!"
           mappings = self.source.mappings.where(concept_id: self.concept.id, value: 'unknown')
         else
           mappings = self.source.mappings.where(concept_id: concept_id)
@@ -236,15 +215,6 @@ class Mapping < ActiveRecord::Base
       end
     else
       val
-    end
-  end
-
-  def human_units
-    concept = Concept.find_by_short_name(self.units)
-    if concept
-      concept.human_units
-    else
-      self.units.to_s
     end
   end
 
@@ -360,14 +330,6 @@ class Mapping < ActiveRecord::Base
     { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: stats }
   end
 
-  def destroy(real_destroy = false)
-    if real_destroy
-      super()
-    else
-      update_attributes(deleted: true, status: 'unmapped', concept_id: nil, value: nil, units: nil)
-    end
-  end
-
   # Returns whether the user can see the mapping given a set of valid source rules
   def user_can_view?(current_user, actions_required)
     sensitive_concept = (self.concept and self.concept.sensitivity != '0')
@@ -382,40 +344,31 @@ class Mapping < ActiveRecord::Base
   end
 
   # automap mapping to c
-  def automap(current_user, c, column_hash)
-
-    @source = self.source
-
-    self.update_attributes(units: c.units, concept_id: c.id, deleted: false)
-
-    if c.categorical?
+  def automap(current_user)
+    if self.concept.categorical?
       column_values = self.column_values(current_user)
       column_values.each do |column_value|
         if column_value == nil
-          val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: 'NULL' ).first_or_create
-          val_mapping.update_attributes(concept_id: c.id, value: 'unknown', status: 'mapped', deleted: false)
+          val_mapping = self.source.mappings.where( table: table, column: self.column, column_value: 'NULL' ).first_or_create( concept_id: self.concept.id, value: 'unknown' )
         else
           internal_term_found = false
-          c.recommended_concepts.each do |recommended_concept|
+          self.concept.recommended_concepts.each do |recommended_concept|
             recommended_concept.internal_terms.each do |internal_term|
               if internal_term.name.downcase == column_value.to_s.downcase and not internal_term_found
-                val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: column_value.to_s ).first_or_create
-                val_mapping.update_attributes(concept_id: recommended_concept.id, value: nil, status: 'mapped', deleted: false)
+                val_mapping = self.source.mappings.where( table: table, column: self.column, column_value: column_value.to_s ).first_or_create( concept_id: recommended_concept.id, value: nil )
                 internal_term_found = true
               end
             end
           end
 
           unless internal_term_found
-            val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: column_value.to_s ).first_or_create
-            val_mapping.update_attributes(concept_id: c.id, value: nil, status: 'unmapped', deleted: false)
+            val_mapping = self.source.mappings.where( table: table, column: self.column, column_value: column_value.to_s ).first_or_create( concept_id: self.concept.id, value: nil )
           end
         end
       end
-    elsif c.boolean?
+    elsif self.concept.boolean?
       column_values = self.column_values(current_user)
       column_values.each do |column_value|
-        status = 'mapped'
         value = nil # Important, nil value is different than "unknown"
 
         if column_value == nil or ['-1'].include?(column_value.to_s.downcase)
@@ -430,18 +383,11 @@ class Mapping < ActiveRecord::Base
         else
           cv = column_value.to_s
           # value = nil # This is essentially set here.
-          status = 'unmapped'
         end
 
-        val_mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: cv ).first_or_create
-        val_mapping.update_attributes(concept_id: c.id, value: value, status: status, deleted: false)
+        val_mapping = self.source.mappings.where( table: table, column: self.column, column_value: cv ).first_or_create( concept_id: self.concept.id, value: value )
       end
     end
-
-    self.reload
-    # TODO: Remove Mappings that no longer exist in the underlying data source
-    # mapping.database_concept_column_values.where(["time_stamp != ?", current_time]).each {|dccv| dccv.destroy}
-    self.set_status!(current_user)
 
     # Currently only derives mappings for continuous concepts
     self.generate_derived!
