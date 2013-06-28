@@ -1,5 +1,5 @@
 <div class="page-header">
-  <h1><%= @title %></h1>
+  <h1><%= link_to 'Dictionaries', dictionaries_path %> &middot; <%= @title %></h1>
 </div>
 
 <%= form_for @dictionary, html: { class: 'form-horizontal', enctype: "multipart/form-data" } do |f| %>

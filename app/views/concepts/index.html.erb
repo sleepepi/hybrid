@@ -1,12 +1,12 @@
-<% @title = ["Concepts", @dictionary ? @dictionary.name : nil].compact.join(' - ') %>
+<% @title = "Concepts" %>
 <div class="page-header">
   <h1>
+    <% if @dictionary %>
+      <%= link_to 'Dictionaries', dictionaries_path %> &middot; <%= link_to @dictionary.name, @dictionary %> &middot;
+    <% end %>
     <%= @title %>
     <% if current_user.system_admin? and false %>
       <%= link_to "Create Concept", new_concept_path, class: 'btn btn-mini btn-primary' %>
-    <% end %>
-    <% if @dictionary %>
-      <%= link_to "Dictionary: #{@dictionary.name} CSV File", export_to_csv_dictionary_path(@dictionary), class: 'btn btn-mini' %>
     <% end %>
   </h1>
 </div>

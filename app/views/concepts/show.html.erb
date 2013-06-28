@@ -1,11 +1,11 @@
-<% @title = "Concept: #{@concept.short_name}" %>
+<% @title = @concept.short_name %>
 <div class="page-header">
   <h1>
-    <%= @title %>
+    <%= link_to 'Concepts', concepts_path %> &middot; <%= @title %>
     <%#= link_to "Edit Concept", edit_concept_path(@concept), class: 'btn btn-mini' %>
     <%#= link_to "Delete Concept", @concept, method: :delete, class: 'btn btn-mini btn-danger', data: { confirm: "Are you sure you want to delete Concept #{@concept.name}?" } %>
-    <%= link_to "View Concepts", concepts_path, class: 'btn btn-mini' %>
   </h1>
+  <small><%= simple_format @concept.description %></small>
 </div>
 
 <dl class="dl-horizontal">
@@ -14,9 +14,6 @@
 
   <dt>Display Name</dt>
   <dd><%= @concept.display_name %></dd>
-
-  <dt>Search Name</dt>
-  <dd><%= @concept.search_name %></dd>
 
   <dt>Short Name</dt>
   <dd><%= @concept.short_name %></dd>
@@ -27,12 +24,6 @@
       <span class="label"><%= term.name %></span>
     <% end %>
   </dd>
-
-  <dt>Version</dt>
-  <dd><%= @concept.version %></dd>
-
-  <dt>Description</dt>
-  <dd><%= simple_format @concept.description %></dd>
 
   <dt>Concept Type</dt>
   <dd><%= @concept.concept_type %></dd>
@@ -47,7 +38,14 @@
   <dd><%= @concept.source_file %></dd>
 
   <dt>Sensitivity</dt>
-  <dd><%= @concept.sensitivity %></dd>
+  <dd>
+    <% if @concept.sensitivity != '0' %>
+    <span class="label label-important">Sensitive</span>
+    <p class="quiet small">This concept can ONLY be viewed or downloaded if you only have <span class='source_rule_text'>view data distribution</span> or <span class='source_rule_text'>download dataset</span> respectively.</p>
+    <% else %>
+    <span class="label">Non Sensitive</span>
+    <% end %>
+  </dd>
 
   <dt>Commonly Used</dt>
   <dd><%= @concept.commonly_used %></dd>
@@ -96,5 +94,8 @@
 
 </dl>
 
-<%= render partial: 'concepts/info' %>
+<%= form_tag info_concept_path(@concept), method: :post, remote: true, data: { object: 'form-load' } do %>
+<% end %>
+
+<%#= render partial: 'concepts/info' %>
 <div id="distribution"></div>

@@ -1,3 +1,4 @@
+<% if @query %>
 showContourModal();
 
 if ($("#concept_info").length == 0) {
@@ -5,12 +6,13 @@ if ($("#concept_info").length == 0) {
   $("#concept_folder_search").html("<%= escape_javascript(render("concepts/folder_search")) %>");
   $("#concept_folders").html("<%= escape_javascript(render("concepts/folders")) %>");
 }
-
+<% end %>
 
 $("#concept_info").html("<%= escape_javascript(render("info")) %>");
 
+<% if @query %>
 $('html, body').animate({ scrollTop: $(".contour-modal-wrapper").offset().top - 40 }, 'fast');
-
+<% end %>
 
 <% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
   <% width = @defaults[:width].to_s.gsub("'", '') %>
