@@ -21,6 +21,13 @@
   <dt>Short Name</dt>
   <dd><%= @concept.short_name %></dd>
 
+  <dt>Labels</dt>
+  <dd>
+    <% @concept.terms.each do |term| %>
+      <span class="label"><%= term.name %></span>
+    <% end %>
+  </dd>
+
   <dt>Version</dt>
   <dd><%= @concept.version %></dd>
 

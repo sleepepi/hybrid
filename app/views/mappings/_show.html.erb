@@ -22,7 +22,7 @@
   <td valign="top" style="white-space:nowrap">
     <% if @mapping.source.user_has_action?(current_user, "edit data source mappings") %>
       <%= link_to 'edit', edit_mapping_path(@mapping, source_id: @mapping.source.id), method: :get, remote: true, class: 'btn btn-mini' %>
-      <%= link_to 'remove', mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+      <%= link_to 'remove', mapping_path(@mapping, source_id: @mapping.source.id, table: @mapping.table), method: :delete, remote: true, class: 'btn btn-mini btn-danger', data: { confirm: "Are you sure you want to remove #{@mapping.table}.#{@mapping.column} mapping to #{@mapping.concept.human_name}?" } %>
     <% end %>
   </td>
 </tr>
