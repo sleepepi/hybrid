@@ -1,0 +1,36 @@
+<% @title = @domain.name %>
+<div class="page-header">
+  <h1>
+    <%= link_to @dictionary.name, @dictionary %> &middot; <%= link_to 'Domains', dictionary_domains_path(@dictionary) %> &middot; <%= @title %>
+  </h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Folder</dt>
+  <dd><%= simple_format @domain.folder %></dd>
+
+  <dt>Options</dt>
+  <dd><%= render partial: 'options', locals: { domain: @domain } %></dd>
+
+  <dt>Variables</dt>
+  <dd>
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="text-align:left">Variable</th>
+          <th style="text-align:left">Display Name</th>
+        </tr>
+      </thead>
+      <% @domain.variables.each do |variable| %>
+        <tr>
+          <td><%= link_to variable.name, [variable.dictionary, variable] %></td>
+          <td><%= variable.display_name %></td>
+        </tr>
+      <% end %>
+    </table>
+  </dd>
+
+  <dt>Version</dt>
+  <dd><%= @domain.version %></dd>
+
+</dl>

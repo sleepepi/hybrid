@@ -4,10 +4,10 @@
   <thead>
     <tr>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.name', 'Name', 'dictionaries_search') %></th>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.status', 'Status', 'dictionaries_search') %></th>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.user_id', 'Creator', 'dictionaries_search') %></th>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'dictionaries.visible', 'Visible', 'dictionaries_search') %></th>
-      <th>Concepts</th>
+      <th>Variables</th>
+      <th>Domains</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -15,12 +15,11 @@
   <% @dictionaries.each do |dictionary| %>
     <tr>
       <td><%= link_to dictionary.name, dictionary %></td>
-      <td><%= dictionary.status %></td>
       <td><%= link_to dictionary.user.name, dictionary.user if dictionary.user %></td>
       <td><%= dictionary.visible %></td>
-      <td><%= link_to dictionary.concepts.size, concepts_path(dictionary_id: dictionary.id) %></td>
+      <td><%= link_to dictionary.variables.size, dictionary_variables_path(dictionary) %></td>
+      <td><%= link_to dictionary.domains.size, dictionary_domains_path(dictionary) %></td>
       <td>
-        <%= link_to 'Export', export_to_csv_dictionary_path(dictionary), class: 'btn btn-mini' %>
         <%= link_to 'Edit', edit_dictionary_path(dictionary), class: 'btn btn-mini' %>
         <%= link_to 'Delete', dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
       </td>

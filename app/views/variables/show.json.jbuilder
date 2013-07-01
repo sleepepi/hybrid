@@ -1,0 +1,1 @@
+json.extract! @variable, :folder, :name, :display_name, :description, :variable_type, :dictionary_id, :domain_id, :units, :version, :calculation, :design_file, :design_name, :sensitivity, :commonly_used, :created_at, :updated_at

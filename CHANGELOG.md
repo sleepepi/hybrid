@@ -13,6 +13,7 @@
   - To link across sources `identifier` concepts are now required to be mapped in each source
 - Source Rules and Source Files interfaces updated to be more consistent
 - Mappings no longer have status, deleted, or units
+- Generic concepts have been changed into variables and domains for better integration using the [Spout JSON Data Dictionary Gem](https://github.com/sleepepi/spout)
 
 ## 0.14.2 (June 19, 2013)
 

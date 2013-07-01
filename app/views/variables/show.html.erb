@@ -1,0 +1,57 @@
+<% @title = @variable.name %>
+<div class="page-header">
+  <h1>
+    <%= link_to @dictionary.name, @dictionary %> &middot; <%= link_to 'Variables', dictionary_variables_path(@dictionary) %> &middot; <%= @title %>
+  </h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt>Folder</dt>
+  <dd><%= simple_format @variable.folder %></dd>
+
+  <dt>Display Name</dt>
+  <dd><%= @variable.display_name %></dd>
+
+  <dt>Tags</dt>
+  <dd>
+    <% @variable.tags.each do |tag| %>
+      <span class="label"><%= tag.name %></span>
+    <% end %>
+  </dd>
+
+  <dt>Description</dt>
+  <dd><%= simple_format @variable.description %></dd>
+
+  <dt>Variable Type</dt>
+  <dd><%= @variable.variable_type %></dd>
+
+  <dt>Domain</dt>
+  <dd>
+    <% if @variable.domain %>
+      <%= link_to @variable.domain.name, [@variable.domain.dictionary, @variable.domain] %>
+      <%= render partial: 'domains/options', locals: { domain: @variable.domain } %>
+    <% end %>
+  </dd>
+
+  <dt>Units</dt>
+  <dd><%= @variable.units %></dd>
+
+  <dt>Calculation</dt>
+  <dd><%= @variable.calculation %></dd>
+
+  <dt>Design File</dt>
+  <dd><%= @variable.design_file %></dd>
+
+  <dt>Design Name</dt>
+  <dd><%= @variable.design_name %></dd>
+
+  <dt>Sensitivity</dt>
+  <dd><%= @variable.sensitivity %></dd>
+
+  <dt>Commonly Used</dt>
+  <dd><%= simple_check @variable.commonly_used %></dd>
+
+  <dt>Version</dt>
+  <dd><%= @variable.version %></dd>
+
+</dl>

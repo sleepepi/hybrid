@@ -12,9 +12,11 @@ Hybrid::Application.routes.draw do
 
   resources :dictionaries do
     member do
-      get :export_to_csv
-      post :remove_concepts_and_relations
+      post :clean
     end
+
+    resources :domains
+    resources :variables
   end
 
   resources :file_types

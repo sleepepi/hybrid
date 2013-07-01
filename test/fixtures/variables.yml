@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  folder: MyText
+  name: variable_one
+  display_name: Variable One
+  description: MyText
+  variable_type: MyString
+  dictionary: one
+  domain: one
+  units: MyString
+  version: MyString
+  calculation: MyString
+  design_file: MyString
+  design_name: MyString
+  sensitivity: MyString
+  commonly_used: false
+
+two:
+  folder: MyText
+  name: variable_two
+  display_name: Variable Two
+  description: MyText
+  variable_type: MyString
+  dictionary: one
+  domain: two
+  units: MyString
+  version: MyString
+  calculation: MyString
+  design_file: MyString
+  design_name: MyString
+  sensitivity: MyString
+  commonly_used: false

@@ -1,18 +1,13 @@
 class DictionariesController < ApplicationController
   before_action :authenticate_user!
   before_action :check_system_admin
-  before_action :set_dictionary, only: [ :show, :edit, :update, :destroy, :remove_concepts_and_relations, :export_to_csv ]
-  before_action :redirect_without_dictionary, only: [ :show, :edit, :update, :destroy, :remove_concepts_and_relations, :export_to_csv ]
+  before_action :set_editable_dictionary,     only: [ :show, :edit, :update, :destroy, :clean ]
+  before_action :redirect_without_dictionary, only: [ :show, :edit, :update, :destroy, :clean ]
 
-  def remove_concepts_and_relations
-    @dictionary.cleanup('')
+  # POST /dictionaries/1/clean
+  def clean
+    @dictionary.clean
     redirect_to @dictionary
-  end
-
-  def export_to_csv
-    send_data @dictionary.export_csv,
-      type: 'text/csv; charset=iso-8859-1; header=present',
-      disposition: "attachment; filename=\"#{@dictionary.name.gsub(/[^\w]/, '')} #{Time.now.strftime("%Y.%m.%d %Ih%M %p")}.csv\""
   end
 
   # GET /dictionaries
@@ -42,13 +37,22 @@ class DictionariesController < ApplicationController
     @dictionary = current_user.dictionaries.new(dictionary_params)
 
     if @dictionary.save
-      unless params[:dictionary_file].blank?
-        if params[:dictionary_file].original_filename =~ /.*\.csv/i
-          @dictionary.import_csv(params[:dictionary_file].tempfile.path)
+      unless params[:domains_file].blank?
+        if params[:domains_file].original_filename =~ /.*\.csv/i
+          @dictionary.import_domains(params[:domains_file].tempfile.path)
         else
-          flash[:alert] = "Unsupported dictionary file format!"
+          flash[:alert] = "Unsupported domains file format!"
         end
       end
+
+      unless params[:variables_file].blank?
+        if params[:variables_file].original_filename =~ /.*\.csv/i
+          @dictionary.import_variables(params[:variables_file].tempfile.path)
+        else
+          flash[:alert] = "Unsupported variables file format!"
+        end
+      end
+
       redirect_to @dictionary, notice: 'Dictionary was successfully created.'
     else
       render action: 'new'
@@ -59,11 +63,19 @@ class DictionariesController < ApplicationController
   # PUT /dictionaries/1.json
   def update
     if @dictionary.update(dictionary_params)
-      unless params[:dictionary_file].blank?
-        if params[:dictionary_file].original_filename =~ /.*\.csv/i
-          @dictionary.import_csv(params[:dictionary_file].tempfile.path)
+      unless params[:domains_file].blank?
+        if params[:domains_file].original_filename =~ /.*\.csv/i
+          @dictionary.import_domains(params[:domains_file].tempfile.path)
         else
-          flash[:alert] = "Unsupported dictionary file format!"
+          flash[:alert] = "Unsupported domains file format!"
+        end
+      end
+
+      unless params[:variables_file].blank?
+        if params[:variables_file].original_filename =~ /.*\.csv/i
+          @dictionary.import_variables(params[:variables_file].tempfile.path)
+        else
+          flash[:alert] = "Unsupported variables file format!"
         end
       end
 
@@ -86,17 +98,13 @@ class DictionariesController < ApplicationController
 
   private
 
-    def set_dictionary
-      @dictionary = current_user.all_dictionaries.find_by_id(params[:id])
-    end
-
-    def redirect_without_dictionary
-      empty_response_or_root_path(dictionaries_path) unless @dictionary
+    def set_editable_dictionary
+      super(:id)
     end
 
     def dictionary_params
       params.require(:dictionary).permit(
-        :name, :description, :visible, :status
+        :name, :description, :visible
       )
     end
 end

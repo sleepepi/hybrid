@@ -1,0 +1,29 @@
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'variables', per_page: 20, object_count: @variables.total_count } %>
+
+<table class="table table-striped table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'variables.folder', 'Folder', 'variables_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'variables.name', 'Name', 'variables_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'variables.display_name', 'Display Name', 'variables_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'variables.variable_type', 'Variable Type', 'variables_search') %></th>
+    </tr>
+  </thead>
+
+  <% @variables.each do |variable| %>
+    <tr>
+      <td><%= variable.folder %></td>
+      <td><%= link_to variable.name, [variable.dictionary, variable] %></td>
+      <td><%= variable.display_name %></td>
+      <td>
+        <%= variable.variable_type %>
+        <% if variable.domain %>
+          <%= link_to variable.domain.name, [variable.domain.dictionary, variable.domain] %>
+          <%= render partial: 'domains/options', locals: { domain: variable.domain } %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="center"><%= paginate @variables, theme: 'contour' %></div>

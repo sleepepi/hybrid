@@ -1,0 +1,14 @@
+<% @title = 'Variables' %>
+<div class="page-header">
+  <h1>
+    <%= link_to 'Dictionaries', dictionaries_path %> &middot; <%= link_to @dictionary.name, @dictionary %> &middot; <%= @title %>
+  </h1>
+</div>
+
+<%= form_tag dictionary_variables_path(@dictionary), method: :get, remote: true, id: "variables_search", class: 'form-search', data: { object: 'form-load', no_turbolink: true } do %>
+  <%= hidden_field_tag :order %>
+  <%= text_field_tag 'search', params[:search], class: 'search-query' %>
+  <%= submit_tag 'Search', class: 'btn btn-primary' %>
+<% end %>
+
+<div id="variables"><div class="center"><%= image_tag "contour/ajax-loader.gif" %></div></div>

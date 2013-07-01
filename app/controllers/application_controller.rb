@@ -55,4 +55,16 @@ class ApplicationController < ActionController::Base
       @source = source if (not @source) and source and source.user_has_one_or_more_actions?(current_user, actions)
     end
 
+    def set_viewable_dictionary(id = :dictionary_id)
+      @dictionary = current_user.all_viewable_dictionaries.find_by_id(params[id])
+    end
+
+    def set_editable_dictionary(id = :dictionary_id)
+      @dictionary = current_user.all_dictionaries.find_by_id(params[id])
+    end
+
+    def redirect_without_dictionary
+      empty_response_or_root_path(dictionaries_path) unless @dictionary
+    end
+
 end

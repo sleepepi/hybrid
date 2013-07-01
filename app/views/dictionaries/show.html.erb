@@ -2,8 +2,9 @@
 <div class="page-header">
   <h1>
     <%= link_to 'Dictionaries', dictionaries_path %> &middot; <%= @title %>
-    <%= link_to "Edit Dictionary", edit_dictionary_path(@dictionary), class: 'btn btn-mini' %>
-    <%= link_to "Delete Dictionary", @dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+    <%= link_to 'Edit Dictionary', edit_dictionary_path(@dictionary), class: 'btn btn-mini' %>
+    <%= link_to 'Delete Dictionary', @dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+    <%= link_to 'Clean Dictionary', clean_dictionary_path(@dictionary), method: :post, data: { confirm: "Are you sure you want to DELETE all associated variables and domains for #{@dictionary.name} dictionary?" }, class: 'btn btn-mini btn-danger' %>
   </h1>
 </div>
 
@@ -15,19 +16,16 @@
   <dd><%= link_to @dictionary.user.name, @dictionary.user if @dictionary.user %></dd>
 
   <dt>Visible</dt>
-  <dd><%= @dictionary.visible %></dd>
+  <dd><%= simple_check @dictionary.visible %></dd>
 
-  <dt>Status</dt>
-  <dd><%= @dictionary.status %></dd>
-
-  <dt>Export</dt>
-  <dd><%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary), class: 'btn btn-mini' %></dd>
-
-  <dt>Concepts</dt>
+  <dt><%= link_to 'Variables', dictionary_variables_path(@dictionary) %></dt>
   <dd>
-    <%= link_to @dictionary.concepts.size, concepts_path(dictionary_id: @dictionary.id) %>
-    <% if current_user.all_dictionaries.include?(@dictionary) %>
-      <%= link_to 'Delete all associated Concepts and Relationships', remove_concepts_and_relations_dictionary_path(@dictionary), method: :post, data: { confirm: "Are you sure you want to DELETE all associated concepts and relationships for #{@dictionary.name} dictionary?\n\nIt is recommended to BACKUP the dictionary first by downloading an EXPORT first." }, class: 'btn btn-mini btn-danger' %>
-    <% end %>
+    <%= @dictionary.variables.size %>
   </dd>
+
+  <dt><%= link_to 'Domains', dictionary_domains_path(@dictionary) %></dt>
+  <dd>
+    <%= @dictionary.domains.size %>
+  </dd>
+
 </dl>

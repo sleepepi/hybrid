@@ -1,0 +1,25 @@
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'domains', per_page: 20, object_count: @domains.total_count } %>
+
+<table class="table table-bordered" style="width:100%">
+  <thead>
+    <tr>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'domains.folder', 'Folder', 'domains_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'domains.name', 'Name', 'domains_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'domains.options', 'Options', 'domains_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'domains.version', 'Version', 'domains_search') %></th>
+    </tr>
+  </thead>
+
+  <% @domains.each do |domain| %>
+    <tr>
+      <td><%= domain.folder %></td>
+      <td><%= link_to domain.name, [domain.dictionary, domain] %></td>
+      <td>
+        <%= render partial: 'options', locals: { domain: domain } %>
+      </td>
+      <td><%= domain.version %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="center"><%= paginate @domains, theme: 'contour' %></div>

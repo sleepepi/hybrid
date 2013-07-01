@@ -37,16 +37,16 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :status, nil, class: 'control-label' %>
+    <%= label :variables_file, "Variables File", class: 'control-label' %>
     <div class="controls">
-      <%= f.select :status, Dictionary::STATUS %>
+      <%= file_field_tag :variables_file %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= label :dictionary_file, 'CSV File', class: 'control-label' %>
+    <%= label :domains_file, "Domains File", class: 'control-label' %>
     <div class="controls">
-      <%= file_field_tag :dictionary_file %>
+      <%= file_field_tag :domains_file %>
     </div>
   </div>
 

@@ -25,9 +25,9 @@ class User < ActiveRecord::Base
   has_many :file_types
   has_many :dictionaries, -> { where deleted: false }
 
-  has_many :queries, -> { where deleted: false } #, order: 'updated_at DESC'
+  has_many :queries, -> { where deleted: false }
   has_many :query_users
-  has_many :shared_queries, -> { where( deleted: false ).order( 'name' )}, through: :query_users, source: :query
+  has_many :shared_queries, -> { where( deleted: false ).order( 'name' ) }, through: :query_users, source: :query
 
   has_many :reports
 
@@ -41,6 +41,12 @@ class User < ActiveRecord::Base
   def all_dictionaries
     @all_dictionaries ||= begin
       self.dictionaries
+    end
+  end
+
+  def all_viewable_dictionaries
+    @all_viewable_dictionaries ||= begin
+      Dictionary.current.where("user_id = ? or visible = ?", self.id, true)
     end
   end
 
