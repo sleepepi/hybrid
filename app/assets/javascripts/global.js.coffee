@@ -122,7 +122,7 @@ jQuery ->
   $("a[rel~=tooltip]").tooltip()
 
   $("#table_columns_search select, #table_columns_search input").change( () ->
-    $.post($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script")
+    $.get($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script")
     showWaiting('#table_content', ' Loading Table Mappings', true)
     false
   )

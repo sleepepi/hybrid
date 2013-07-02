@@ -14,7 +14,7 @@ class Mapping < ActiveRecord::Base
   # Mapping Methods
 
   def mapped?(current_user)
-    false
+    true
   end
 
   # Returns unique column values in alphabetical order

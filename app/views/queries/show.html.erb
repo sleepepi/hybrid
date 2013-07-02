@@ -2,7 +2,7 @@
 
 <div class="page-header">
   <div class="pull-right">
-    <%= link_to "History", queries_path, rel: 'tooltip', title: pluralize(current_user.all_queries.size, 'Existing Search'), data: { placement: 'left' }, class: 'btn btn-mini' %>
+    <%= link_to "History", queries_path, class: 'btn btn-mini' %>
     <%= link_to "New Search", new_query_path, id: 'new_search_link', class: 'btn btn-mini' %>
     <%= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>
     <%= link_to "Matching", matching_path(cases_id: @query.id, controls_id: @query.id), class: 'btn btn-mini' %>
@@ -129,7 +129,7 @@
   </div>
 </div>
 
-<div id="information" style="display:none2"></div>
+<div id="information" style="display:none"></div>
 
 <hr class="soften" style="margin: 20px 0px">
 
