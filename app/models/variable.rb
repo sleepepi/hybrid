@@ -21,6 +21,8 @@ class Variable < ActiveRecord::Base
   belongs_to :domain
   has_many :tags, dependent: :destroy
   has_many :mappings, dependent: :destroy
+  has_many :query_concepts, dependent: :destroy
+  has_many :report_concepts, dependent: :destroy
   has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
 end

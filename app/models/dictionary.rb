@@ -13,9 +13,6 @@ class Dictionary < ActiveRecord::Base
   # Model Relationships
   belongs_to :user
 
-  has_many :concepts
-  has_many :concept_property_concepts, through: :concepts
-
   has_many :domains
   has_many :variables
 

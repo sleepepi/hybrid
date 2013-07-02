@@ -40,11 +40,11 @@ class Concept < ActiveRecord::Base
   has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy
   has_many :internal_terms, -> { where(internal: true).order('terms.name') }, class_name: "Term", dependent: :destroy
 
-  has_many :concept_property_concepts, foreign_key: 'concept_one_id', dependent: :destroy
-  has_many :parents, through: :concept_property_concepts, source: 'concept_two'
+  # has_many :concept_property_concepts, foreign_key: 'concept_one_id', dependent: :destroy
+  # has_many :parents, through: :concept_property_concepts, source: 'concept_two'
 
-  has_many :reverse_concept_property_concepts, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
-  has_many :children, through: :reverse_concept_property_concepts, source: 'concept_one'
+  # has_many :reverse_concept_property_concepts, class_name: 'ConceptPropertyConcept', foreign_key: 'concept_two_id', dependent: :destroy
+  # has_many :children, through: :reverse_concept_property_concepts, source: 'concept_one'
 
   has_many :query_concepts, dependent: :destroy
   has_many :queries, through: :query_concepts

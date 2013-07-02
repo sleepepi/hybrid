@@ -87,7 +87,7 @@ class DictionariesControllerTest < ActionController::TestCase
   test "should update dictionary" do
     put :update, id: @dictionary, dictionary: @dictionary.attributes
     assert_not_nil assigns(:dictionary)
-    assert_equal assigns(:dictionary).concepts, @dictionary.concepts
+    assert_equal assigns(:dictionary).variables, @dictionary.variables
     assert_redirected_to dictionary_path(assigns(:dictionary))
   end
 
