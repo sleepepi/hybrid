@@ -36,9 +36,9 @@ class Concept < ActiveRecord::Base
   belongs_to :dictionary
   has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
-  has_many :terms, -> { order :name }, dependent: :destroy
-  has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy
-  has_many :internal_terms, -> { where(internal: true).order('terms.name') }, class_name: "Term", dependent: :destroy
+  # has_many :terms, -> { order :name }, dependent: :destroy
+  # has_many :external_terms, -> { where(internal: false).order('terms.name') }, class_name: "Term", dependent: :destroy
+  # has_many :internal_terms, -> { where(internal: true).order('terms.name') }, class_name: "Term", dependent: :destroy
 
   # has_many :concept_property_concepts, foreign_key: 'concept_one_id', dependent: :destroy
   # has_many :parents, through: :concept_property_concepts, source: 'concept_two'
