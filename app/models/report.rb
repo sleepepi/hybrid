@@ -3,7 +3,7 @@ class Report < ActiveRecord::Base
   belongs_to :query
 
   has_many :report_concepts, -> { order :position }, dependent: :destroy
-  has_many :concepts, through: :report_concepts
+  has_many :variables, through: :report_concepts
 
   def name
     self.read_attribute('name').blank? ? "ID ##{self.id}" : self.read_attribute('name')
@@ -31,7 +31,7 @@ class Report < ActiveRecord::Base
     filtered_report_concepts.each_with_index do |rc, index|
       if rc.statistic == 'year' and rc.strata?
         values.each{|v| v[index] = v[index].year if v[index].kind_of?(Date) or v[index].kind_of?(Time)}
-      elsif (rc.statistic == 'month' or rc.statistic.blank?) and rc.concept and rc.concept.date? and rc.strata?
+      elsif (rc.statistic == 'month' or rc.statistic.blank?) and rc.variable.variable_type == 'date' and rc.strata?
         values.each{|v| v[index] = "#{v[index].year} Month #{'%02d' % v[index].month}" if v[index].kind_of?(Date) or v[index].kind_of?(Time)}
       elsif rc.statistic == 'week' and rc.strata?
         values.each{|v| v[index] = "#{v[index].year} Week #{'%02d' % v[index].to_date.cweek}" if v[index].kind_of?(Date) or v[index].kind_of?(Time)}
@@ -49,7 +49,7 @@ class Report < ActiveRecord::Base
     filtered_report_concepts.each_with_index do |rc, index|
       if rc.strata?
         columns << [rc.id, 'strata']
-      elsif rc.concept and rc.concept.continuous?
+      elsif ['integer', 'numeric'].include?(rc.variable.variable_type)
         if rc.statistic == 'all' or rc.statistic.blank?
           columns << [rc.id, 'min']
           columns << [rc.id, 'avg']
@@ -57,7 +57,7 @@ class Report < ActiveRecord::Base
         else
           columns << [rc.id, rc.statistic]
         end
-      elsif rc.concept and (rc.concept.boolean? or rc.concept.categorical?)
+      elsif rc.variable.variable_type == 'choices'
         values.collect{|v| v[index]}.uniq.partition{|x| x.is_a? String}.map{|i| i.sort{|a,b| a.to_s <=> b.to_s}}.flatten.each do |val|
           if rc.statistic == 'all' or rc.statistic.blank?
             columns << [rc.id, "#{val} (count)"]
@@ -71,7 +71,7 @@ class Report < ActiveRecord::Base
           end
           # columns << [rc.id, val]
         end
-      elsif rc.concept and rc.concept.date?
+      elsif rc.variable.variable_type == 'date'
         if rc.statistic == 'day'
           values.collect{|v| v[index]}.compact.collect{|d| d.strftime("%Y-%m-%d")}.uniq.sort.each{ |val| columns << [rc.id, "#{val} (count)"] }
         elsif rc.statistic == 'week'
@@ -129,7 +129,7 @@ class Report < ActiveRecord::Base
       columns.each_with_index do |(report_concept_id, statistic), index|
         report_concept = ReportConcept.find_by_id(report_concept_id)
         if report_concept
-          header_row[index] = report_concept.concept.human_name
+          header_row[index] = report_concept.variable.display_name
         else
           header_row[index] = 'Total'
         end
@@ -170,9 +170,9 @@ class Report < ActiveRecord::Base
             end
 
             if report_concept = ReportConcept.find_by_id(report_concept_id)
-              if report_concept.concept and (report_concept.concept.categorical? or report_concept.concept.boolean?)
+              if report_concept.variable.variable_type == 'choices'
                 filtered_results.select!{|item| item.to_s == statistic.to_s.split(' ')[0..-2].join(' ')}
-              elsif report_concept.concept and report_concept.concept.date?
+              elsif report_concept.variable.variable_type == 'date'
                 if report_concept.statistic == 'day'
                   filtered_results.select!{|d| (d.kind_of?(Date) or d.kind_of?(Time)) and d.strftime("%Y-%m-%d") == statistic.to_s.split(' ')[0..-2].join(' ')}
                 elsif report_concept.statistic == 'week'
@@ -201,7 +201,7 @@ class Report < ActiveRecord::Base
               else
                 body_row[index] = "---"
               end
-            elsif report_concept = ReportConcept.find_by_id(report_concept_id) and report_concept.concept and (report_concept.concept.categorical? or report_concept.concept.boolean? or report_concept.concept.date?)
+            elsif report_concept = ReportConcept.find_by_id(report_concept_id) and ['choices', 'date'].include?(report_concept.variable.variable_type)
               if statistic.to_s.split(' ').last == '(count)'
                 body_row[index] = filtered_results.size
               elsif statistic.to_s.split(' ').last == '(%)'

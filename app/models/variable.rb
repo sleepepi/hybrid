@@ -7,6 +7,8 @@ class Variable < ActiveRecord::Base
 
   # Named Scopes
   scope :current, -> { all }
+  scope :with_source, lambda { |arg| where( [ "variables.id in (select variable_id from mappings where mappings.variable_id = variables.id and mappings.source_id IN (?))", arg ] ) }
+
 
   # Model Validation
   validates_presence_of :name, :display_name, :variable_type, :dictionary_id
@@ -18,5 +20,7 @@ class Variable < ActiveRecord::Base
   belongs_to :dictionary
   belongs_to :domain
   has_many :tags, dependent: :destroy
+  has_many :mappings, dependent: :destroy
+  has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
 end

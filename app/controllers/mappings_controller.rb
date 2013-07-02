@@ -1,47 +1,25 @@
 class MappingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source_with_edit_data_source_mappings, only: [ :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :redirect_without_source, only: [ :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :set_mapping, only: [ :expanded, :show, :edit, :update, :destroy ]
-  before_action :redirect_without_mapping, only: [ :expanded, :show, :edit, :update, :destroy ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :expanded, :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
+  before_action :redirect_without_source,                   only: [ :expanded, :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
+  before_action :set_mapping,                               only: [ :expanded, :info, :show, :edit, :update, :destroy ]
+  before_action :redirect_without_mapping,                  only: [ :expanded, :info, :show, :edit, :update, :destroy ]
 
   def automap_popup
   end
 
   def info
-    @mapping = Mapping.find_by_id(params[:id])
-    @concept = @mapping.concept if @mapping
-
     @query = current_user.queries.new()
 
-    params['concept_search'] = @concept.search_name if @concept
-
-    if @mapping
-      chart_params = {}
-      if @mapping.concept.continuous? or @mapping.concept.date?
-        chart_params = { title: @mapping.concept.human_name, width: 381, height: 300, units: @mapping.concept.human_units, legend: 'none' }
-      elsif @mapping.concept.categorical? or @mapping.concept.boolean?
-        chart_params = { title: @mapping.concept.human_name, width: 381, height: 250 }
-      end
-
-      result_hash = @mapping.graph_values(current_user, chart_params)
-      @values = result_hash[:values]
-      @categories = result_hash[:categories]
-      @chart_type = result_hash[:chart_type]
-      @chart_element_id = result_hash[:chart_element_id]
-      @stats = result_hash[:stats]
-      @defaults = result_hash[:defaults]
-    end
-
-    render nothing: true unless @concept
-  end
-
-  def expanded
-    chart_params = {}
-    if @mapping.concept.continuous? or @mapping.concept.date?
-      chart_params = { title: @mapping.concept.human_name, width: 680, height: 300, units: @mapping.concept.human_units, legend: 'none' }
-    elsif @mapping.concept.categorical? or @mapping.concept.boolean?
-      chart_params = { title: @mapping.concept.human_name, width: 450, height: 250 }
+    chart_params = { title: @mapping.variable.display_name }
+    case @mapping.variable.variable_type when 'numeric', 'integer', 'date'
+    chart_params[:width] = 381
+    chart_params[:height] = 300
+    chart_params[:units] = @mapping.variable.units
+    chart_params[:legend] = 'none'
+    when 'choices'
+      chart_params[:width] = 381
+      chart_params[:height] = 250
     end
 
     result_hash = @mapping.graph_values(current_user, chart_params)
@@ -49,7 +27,26 @@ class MappingsController < ApplicationController
     @categories = result_hash[:categories]
     @chart_type = result_hash[:chart_type]
     @chart_element_id = result_hash[:chart_element_id]
-    @stats = result_hash[:stats]
+    @defaults = result_hash[:defaults]
+  end
+
+  def expanded
+    chart_params = { title: @mapping.variable.display_name }
+    case @mapping.variable.variable_type when 'numeric', 'integer', 'date'
+      chart_params[:width] = 680
+      chart_params[:height] = 300
+      chart_params[:units] = @mapping.variable.units
+      chart_params[:legend] = 'none'
+    when 'choices'
+      chart_params[:width] = 450
+      chart_params[:height] = 250
+    end
+
+    result_hash = @mapping.graph_values(current_user, chart_params)
+    @values = result_hash[:values]
+    @categories = result_hash[:categories]
+    @chart_type = result_hash[:chart_type]
+    @chart_element_id = result_hash[:chart_element_id]
     @defaults = result_hash[:defaults]
   end
 
@@ -63,11 +60,8 @@ class MappingsController < ApplicationController
 
   # POST /mappings
   def create
-    @concept = Concept.find_by_id(params[:concept_id])
-    if @concept
-      @mapping = @source.mappings.create( table: params[:table], column: params[:column], concept_id: @concept.id )
-      @mapping.automap(current_user)
-    end
+    @mapping = @source.mappings.create(mapping_params)
+    render 'show'
   end
 
   # PATCH /mappings/1
@@ -109,9 +103,8 @@ class MappingsController < ApplicationController
     end
 
     def mapping_params
-      params[:mapping] ||= { blank: true }
       params.require(:mapping).permit(
-        { :column_values => [ :value, :column_value, :is_null ] }
+        :table, :column, :variable_id
       )
     end
 end

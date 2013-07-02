@@ -1,5 +1,20 @@
 class QueriesController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_query,               only: [ :autocomplete, :destroy ]
+  before_action :redirect_without_query,  only: [ :autocomplete, :destroy ]
+
+  def autocomplete
+    @query = current_user.queries.find_by_id(params[:id])
+
+    variable_scope = Variable.current.search(params[:search]).where( dictionary_id: @query.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.variables.pluck(:dictionary_id).uniq}.flatten.uniq )
+
+    @variables = variable_scope.page(params[:page]).per(10)
+      # @order = scrub_order(Concept, params[:order], "concepts.search_name")
+      # concept_scope = concept_scope.order("(concepts.folder IS NULL or concepts.folder = '') ASC, concepts.folder ASC, " + @order)
+      # @concepts = concept_scope.page(params[:page]).per(10)
+
+    render json: @variables.group_by{|v| v.folder}.collect{|folder, variables| { text: folder, commonly_used: true, children: variables.collect{|v| { id: v.id, text: v.display_name, commonly_used: v.commonly_used }}}}
+  end
 
   # Get Count
   def total_records_count
@@ -23,7 +38,7 @@ class QueriesController < ApplicationController
           if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
             sub_totals << query.record_count_only_with_sub_totals_using_resolvers(current_user, source, query_concepts)
           else
-            sub_totals << {result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
+            sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
           end
         end
 
@@ -181,8 +196,14 @@ class QueriesController < ApplicationController
   # end
 
   def destroy
-    @query = current_user.all_queries.find_by_id(params[:id])
-    @query.destroy if @query
+    @query.destroy
     redirect_to queries_path
   end
+
+  private
+
+    def set_query
+      super(:id)
+    end
+
 end

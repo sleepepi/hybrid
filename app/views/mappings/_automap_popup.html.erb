@@ -6,12 +6,11 @@
 </div>
 
 <% most_used_dictionary = @source.primary_dictionary %>
-<% mapping = @source.mappings.find_by_table_and_column_and_column_value(params[:table], params[:column], nil) %>
-<% concept_scope = Concept.searchable.exactly(params[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, params[:column].to_s.gsub(/[^\w]/, ' ').downcase) %>
+<% variable_scope = Variable.current.where( name: params[:column] ) %>
 <% if most_used_dictionary %>
-  <% concepts = concept_scope.order("(dictionary_id = #{most_used_dictionary.id}) = 1 DESC", :short_name) %>
+  <% variables = variable_scope.order("(dictionary_id = #{most_used_dictionary.id}) = 1 DESC", :name) %>
 <% else %>
-  <% concepts = concept_scope.order(:dictionary_id, :short_name) %>
+  <% variables = variable_scope.order(:dictionary_id, :name) %>
 <% end %>
 
 <table class="table">
@@ -19,24 +18,24 @@
     <tr>
       <th></th>
       <th style="text-align:left">Name</th>
-      <th style="text-align:left">Display Name and Labels</th>
+      <th style="text-align:left">Display Name and Tags</th>
       <th style="text-align:left">Type</th>
       <th style="text-align:left">Dictionary</th>
     </tr>
   </thead>
   <tbody>
-    <% concepts.each do |concept| %>
-      <tr class="<%= 'info' if concept.dictionary == most_used_dictionary %>">
-        <td><%= link_to 'Automap', mappings_path(source_id: @source.id, concept_id: concept.id, table: params[:table], column: params[:column]), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
-        <td><%= concept.short_name %></td>
+    <% variables.each do |variable| %>
+      <tr class="<%= 'info' if variable.dictionary == most_used_dictionary %>">
+        <td><%= link_to 'Automap', mappings_path(source_id: @source.id, mapping: { variable_id: variable.id, table: params[:table], column: params[:column] } ), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
+        <td><%= variable.name %></td>
         <td>
-          <%= concept.human_name %>
-          <% concept.terms.each do |term| %>
-            <span class="label"><%= term.name %></span>
+          <%= variable.display_name %>
+          <% variable.tags.each do |tag| %>
+            <span class="label"><%= tag.name %></span>
           <% end %>
         </td>
-        <td><%= concept.concept_type %></td>
-        <td><%= concept.dictionary.name %></td>
+        <td><%= variable.variable_type %></td>
+        <td><%= variable.dictionary.name %></td>
       </tr>
     <% end %>
   </tbody>

@@ -1,43 +1,49 @@
 class ReportConceptsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_query,                       only: [ :create, :update, :destroy ]
+  before_action :redirect_without_query,          only: [ :create, :update, :destroy ]
+  before_action :set_report,                      only: [ :create, :update, :destroy ]
+  before_action :redirect_without_report,         only: [ :create, :update, :destroy ]
+  before_action :set_report_concept,              only: [ :update, :destroy ]
+  before_action :redirect_without_report_concept, only: [ :update, :destroy ]
 
   def create
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report = @query.reports.find_by_id(params[:report_id]) if @query
-    concept = Concept.current.find_by_id(params[:concept_id])
+    variable = Variable.current.find_by_id(params[:variable_id])
 
-    if @query and concept and @report
-      @report.report_concepts << @report.report_concepts.create(concept_id: concept.id, position: @report.report_concepts.size + 1) unless @report.concepts.include?(concept)
+    if variable
+      @report.report_concepts << @report.report_concepts.create( variable_id: variable.id, position: @report.report_concepts.size + 1) unless @report.variables.include?(variable)
       @report.reload
-      render 'report_concepts/report_concepts'
-    else
-      render nothing: true
     end
-  end
-
-  def destroy
-    @report_concept = ReportConcept.find_by_id(params[:id])
-    @report = @report_concept.report if @report_concept
-    @query = @report.query if @report
-    if @report_concept and @report and @query and current_user.all_queries.include?(@query)
-      @report.report_concepts.select{|rc| rc.position > @report_concept.position}.each{|rc| rc.update_column :position, rc.position - 1}
-      @report_concept.destroy
-      @report.reload
-      render 'report_concepts/report_concepts'
-    else
-      render nothing: true
-    end
+    render 'report_concepts/report_concepts'
   end
 
   def update
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report_concept = ReportConcept.find_by_id(params[:id])
-    @report = current_user.reports.find_by_id(@report_concept.report_id) if @report_concept
-    if @query and @report_concept and @report
-      @report_concept.update( statistic: params[:report_concept][:statistic], source_id: params[:report_concept][:source_id] )
-      render 'reports/report_table'
-    else
-      render nothing: true
-    end
+    @report_concept.update( statistic: params[:report_concept][:statistic], source_id: params[:report_concept][:source_id] )
+    render 'reports/report_table'
   end
+
+  def destroy
+    @report.report_concepts.select{|rc| rc.position > @report_concept.position}.each{|rc| rc.update_column :position, rc.position - 1}
+    @report_concept.destroy
+    @report.reload
+    render 'report_concepts/report_concepts'
+  end
+
+  private
+
+    def set_report
+      @report = @query.reports.find_by_id(params[:report_id])
+    end
+
+    def redirect_without_report
+      empty_response_or_root_path unless @report
+    end
+
+    def set_report_concept
+      @report_concept = @report.report_concepts.find_by_id(params[:id])
+    end
+
+    def redirect_without_report_concept
+      empty_response_or_root_path unless @report_concept
+    end
 end

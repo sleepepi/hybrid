@@ -12,18 +12,18 @@ class MatchingController < ApplicationController
         create_matches(true) # (false)
       end
       format.html do
-        load_criteria_concepts
-        load_extra_concepts
+        load_criteria_variables
+        load_extra_variables
       end
     end
   end
 
   def add_variable
-    load_extra_concepts
+    load_extra_variables
   end
 
   def add_criteria
-    load_criteria_concepts
+    load_criteria_variables
   end
 
   private
@@ -35,20 +35,20 @@ class MatchingController < ApplicationController
       @sources = (@cases ? @cases.sources.to_a : []) & (@controls ? @controls.sources.to_a : [])
     end
 
-    def load_criteria_concepts
-      concepts = []
+    def load_criteria_variables
+      variables = []
       @sources.each do |s|
-        concepts += (concepts + s.concepts.where(concept_type: 'categorical').collect{|c| [c.display_name, c.id]}).uniq
+        variables += (variables + s.variables.where( variable_type: 'choices' ).collect{|v| [v.display_name, v.id]}).uniq
       end
-      @concepts = concepts.sort{|a,b| a[0].to_s <=> b[0].to_s}
+      @variables = variables.sort{|a,b| a[0].to_s <=> b[0].to_s}
     end
 
-    def load_extra_concepts
-      all_concepts = []
+    def load_extra_variables
+      all_variables = []
       @sources.each do |s|
-        all_concepts += (all_concepts + s.concepts.where("folder != '' and folder IS NOT NULL").collect{|c| [c.display_name, c.id]}).uniq
+        all_variables += (all_variables + s.variables.collect{|v| [v.display_name, v.id]}).uniq
       end
-      @all_concepts = all_concepts.sort{|a,b| a[0].to_s <=> b[0].to_s}
+      @all_variables = all_variables.sort{|a,b| a[0].to_s <=> b[0].to_s}
     end
 
     def create_matches(include_extra)
@@ -57,35 +57,35 @@ class MatchingController < ApplicationController
       controls_matrix = []
 
       if @cases and @controls
-        @common_identifier = (@cases.sources.collect{|s| s.concepts.where(concept_type: 'identifier')}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(concept_type: 'identifier')}.flatten.uniq).first
+        @common_identifier = (@cases.sources.collect{|s| s.variables.where( variable_type: 'identifier' )}.flatten.uniq & @controls.sources.collect{|s| s.variables.where( variable_type: 'identifier' )}.flatten.uniq).first
 
         all_criteria = (params[:criteria_ids] || []).compact.uniq
-        concept_ids = (params[:variable_ids] || []).compact.uniq - all_criteria
+        variable_ids = (params[:variable_ids] || []).compact.uniq - all_criteria
 
-        @matching_concepts = (@cases.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: all_criteria)}.flatten.uniq)
-        @extra_concepts = (include_extra ? (@cases.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq & @controls.sources.collect{|s| s.concepts.where(id: concept_ids)}.flatten.uniq) : [])
+        @matching_variables = (@cases.sources.collect{|s| s.variables.where(id: all_criteria)}.flatten.uniq & @controls.sources.collect{|s| s.variables.where(id: all_criteria)}.flatten.uniq)
+        @extra_variables = (include_extra ? (@cases.sources.collect{|s| s.variables.where(id: variable_ids)}.flatten.uniq & @controls.sources.collect{|s| s.variables.where(id: variable_ids)}.flatten.uniq) : [])
 
-        report_concepts = []
-        ([@common_identifier] + @matching_concepts + @extra_concepts).compact.each do |concept|
-          report_concepts << ReportConcept.new( concept_id: concept.id )
+        report_variables = []
+        ([@common_identifier] + @matching_variables + @extra_variables).compact.each do |variable|
+          report_variables << ReportConcept.new( variable_id: variable.id )
         end
-        cases_matrix = @cases.view_concept_values( current_user, report_concepts )
-        controls_matrix = @controls.view_concept_values( current_user, report_concepts )
+        cases_matrix = @cases.view_concept_values( current_user, report_variables )
+        controls_matrix = @controls.view_concept_values( current_user, report_variables )
 
-        extra_start_index = @matching_concepts.size + 1
+        extra_start_index = @matching_variables.size + 1
 
-        @overall_criteria = @matching_concepts.collect(&:human_name)
-        @overall_extra = @extra_concepts.collect(&:human_name)
+        @overall_criteria = @matching_variables.collect(&:display_name)
+        @overall_extra = @extra_variables.collect(&:display_name)
 
 
         cases_matrix.each do |case_info|
           id = case_info[0]
           # Select matching IDs
-          criteria = case_info[1..@matching_concepts.size]
+          criteria = case_info[1..@matching_variables.size]
 
           case_extra = case_info[extra_start_index..-1]
 
-          matching_ids = controls_matrix.select{|control| control[1..@matching_concepts.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
+          matching_ids = controls_matrix.select{|control| control[1..@matching_variables.size] == criteria}.collect{|control| control[0]}[0..(@controls_per_case - 1)]
 
           extra = []
 

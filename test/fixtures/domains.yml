@@ -1,23 +1,40 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+--- !map:HashWithIndifferentAccess
 
 one:
   folder: Ratings
   name: difficulty_rating
-  options: [{ name: Easy,       value: '1' },
-            { name: Medium,     value: '2' },
-            { name: Hard,       value: '3' }]
+  options: [ { display_name: Easy,       value: '1' },
+             { display_name: Medium,     value: '2' },
+             { display_name: Hard,       value: '3' } ]
   dictionary: one
   version: MyString
 
 two:
   folder: Time Points
   name: weekday
-  options: [{ name: Sunday,     value: '0' },
-            { name: Monday,     value: '1' },
-            { name: Tuesday,    value: '2' },
-            { name: Wednesday,  value: '3' },
-            { name: Thursday,   value: '4' },
-            { name: Friday,     value: '5' },
-            { name: Saturday,   value: '6' }]
+  options: [ { display_name: Sunday,     value: '0' },
+             { display_name: Monday,     value: '1' },
+             { display_name: Tuesday,    value: '2' },
+             { display_name: Wednesday,  value: '3' },
+             { display_name: Thursday,   value: '4' },
+             { display_name: Friday,     value: '5' },
+             { display_name: Saturday,   value: '6' } ]
+  dictionary: one
+  version: MyString
+
+ecg:
+  # folder:
+  name: has_ecg
+  options: [ { display_name: Yes, value: '1' },
+             { display_name: No,  value: '0' } ]
+  dictionary: one
+  version: MyString
+
+gender:
+  # folder:
+  name: gender
+  options: [ { display_name: Male,   value: '1' },
+             { display_name: Female, value: '2' } ]
   dictionary: one
   version: MyString

@@ -13,7 +13,7 @@ one:
   calculation: MyString
   design_file: MyString
   design_name: MyString
-  sensitivity: MyString
+  sensitivity: 0
   commonly_used: false
 
 two:
@@ -29,5 +29,80 @@ two:
   calculation: MyString
   design_file: MyString
   design_name: MyString
-  sensitivity: MyString
+  sensitivity: 0
+  commonly_used: false
+
+choices:
+  folder: Administrative/SubFolder
+  name: ecg
+  display_name: Has ECG Study
+  description: "This is a boolean & ! < > value with strange symbols that need to be escaped."
+  variable_type: choices
+  dictionary: one
+  domain: ecg
+  version: MyString
+  # calculation:
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 0
+  commonly_used: false
+
+numeric:
+  folder: Demographics
+  name: age_at_visit
+  display_name: Age at Visit
+  description: MyString
+  variable_type: numeric
+  dictionary: one
+  # domain:
+  version: MyString
+  # calculation:
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 0
+  commonly_used: false
+
+gender:
+  folder: Demographics
+  name: gender
+  display_name: Gender
+  # description:
+  variable_type: choices
+  dictionary: one
+  domain: gender
+  version: MyString
+  # calculation:
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 0
+  commonly_used: false
+
+date:
+  folder: Calendar
+  name: date_of_visit
+  display_name: Date of Visit
+  # description:
+  variable_type: date
+  dictionary: one
+  # domain:
+  version: MyString
+  # calculation:
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 1
+  commonly_used: false
+
+calculation:
+  folder: Demographics
+  name: calculation
+  display_name: Calculation
+  # description:
+  variable_type: numeric
+  dictionary: one
+  # domain:
+  version: MyString
+  calculation: date_of_visit + age_at_visit
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 0
   commonly_used: false

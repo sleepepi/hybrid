@@ -12,17 +12,20 @@
 <% if @source.user_has_action?(current_user, "view data source general information") or @source.user_has_action?(current_user, "get count") %>
   <h4>Summary Counts</h4>
   <ul>
-    <% @source.concepts.where(concept_type: 'identifier').order('display_name').uniq.each do |concept| %>
-      <% tables = @source.concept_tables(concept) %>
-      <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
-      <% join_conditions = join_conditions_hash[:result] %>
-      <% if join_conditions_hash[:error].blank? %>
-        <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, concept) %>
-          <% if result_hash[:error].blank? %>
-            <li><%= result_hash[:result] %> <%= concept.human_name %><br /><br /></li>
-          <% else %>
+    <% @source.variables.where(variable_type: 'identifier').order('display_name').uniq.each do |variable| %>
+      <% if false %>
+        <% tables = @source.variable_tables(variable) %>
+        <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
+        <% join_conditions = join_conditions_hash[:result] %>
+        <% if join_conditions_hash[:error].blank? %>
+          <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, concept) %>
+            <% if result_hash[:error].blank? %>
+              <li><%= result_hash[:result] %> <%= concept.human_name %><br /><br /></li>
+            <% else %>
+          <% end %>
         <% end %>
       <% end %>
+      <li><%= '???' %> <%= variable.display_name %></li>
     <% end %>
     <li><%= pluralize @source.mappings.size, 'Mapped Concept' %></li>
   </ul>
@@ -70,7 +73,7 @@
   <h4>Associated Dictionaries</h4>
   <ul>
     <% @source.all_dictionaries.sort{|a,b| a.name <=> b.name}.each do |dictionary| %>
-      <li><%= link_to dictionary.name, concepts_path(dictionary_id: dictionary.id), target: '_blank' %> <% if false %> <%= link_to 'CSV File', export_to_csv_dictionary_path(@dictionary), class: 'btn btn-mini' %> <% end %><br /><br /></li>
+      <li><%= link_to dictionary.name, dictionary_variables_path(dictionary), target: '_blank' %></li>
     <% end %>
   </ul>
 <% end %>

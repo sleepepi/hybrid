@@ -1,4 +1,4 @@
-$("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").html('<div><div id="<%= @chart_element_id %>" style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px"></div></div><%= escape_javascript(@stats.to_s.html_safe) %>');
+$("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").html('<div><div id="<%= @chart_element_id %>" <% if @chart_type %>style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px" <% end %>></div></div><%= escape_javascript(render partial: "stats") %>');
 
 $("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").show();
 

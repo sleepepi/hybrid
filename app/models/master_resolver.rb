@@ -10,7 +10,7 @@ class MasterResolver
     @errors = []
     @super_grid = {}
     @values = []
-    set_identifier_concept
+    set_identifier_variable
     set_values
   end
 
@@ -18,13 +18,13 @@ class MasterResolver
     (@query.sources.to_a | @report_concepts.collect(&:source)).uniq
   end
 
-  # The identifier concept is used to link across multiple datasets
-  def set_identifier_concept
-    identifier_concepts = []
-    Concept.current.where( concept_type: 'identifier' ).with_source(all_sources.collect(&:id)).each do |concept|
-      identifier_concepts << concept if not all_sources.collect{|s| s.concepts.where( concept_type: 'identifier').pluck(:id).include?(concept.id) }.include?(false)
+  # The identifier variable is used to link across multiple datasets
+  def set_identifier_variable
+    identifier_variables = []
+    Variable.current.where( variable_type: 'identifier' ).with_source(all_sources.collect(&:id)).each do |variable|
+      identifier_variables << variable if not all_sources.collect{|s| s.variables.where( variable_type: 'identifier').pluck(:id).include?(variable.id) }.include?(false)
     end
-    @identifier_concept = identifier_concepts.first
+    @identifier_variable = identifier_variables.first
   end
 
   def set_values
@@ -33,12 +33,13 @@ class MasterResolver
 
       mappings_for_select_clause = []
       @report_concepts.each_with_index do |report_concept, index|
-        m = source.mappings.where(concept_id: report_concept.concept.id).first if report_concept.source == source
-        mappings_for_select_clause << { table: m.table, column: m.column, concept: m.concept, report_concept_index: index, mapping: m } if m and m.user_can_view?(@current_user, @actions_required)
+        m = source.mappings.where( variable_id: report_concept.variable.id ).first if report_concept.source == source
+         # TODO remove `variable: m.variable` from hash below, not needed.
+        mappings_for_select_clause << { table: m.table, column: m.column, variable: m.variable, report_concept_index: index, mapping: m } if m and m.user_can_view?(@current_user, @actions_required)
       end
 
-      if mappings_for_select_clause.size > 0 and @identifier_concept
-        m = source.mappings.where(concept_id: @identifier_concept.id).first
+      if mappings_for_select_clause.size > 0 and @identifier_variable
+        m = source.mappings.where( variable_id: @identifier_variable.id ).first
         mappings_for_select_clause.prepend( { table: m.table, column: m.column } ) if m
       end
 

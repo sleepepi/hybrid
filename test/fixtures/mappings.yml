@@ -2,7 +2,7 @@
 
 one:
   source: two
-  concept: boolean
+  variable: choices
   # value: MyString
   table: table
   column: column1
@@ -10,182 +10,133 @@ one:
 
 two:
   source: two
-  concept: boolean
+  variable: choices
   # value: MyString
   table: table
   column: column2
   # column_value: MyString
 
-three:
-  source: two
-  concept: one
-  # value: MyString
-  table: table
-  column: column3
-  # column_value: MyString
+# three:
+#   source: two
+#   concept: one
+#   # value: MyString
+#   table: table
+#   column: column3
+#   # column_value: MyString
 
-continuous_with_units:
+numeric_with_units:
   source: two
-  concept: continuous
-  # value: MyString
+  variable: numeric
   table: table
   column: column4
-  # column_value: MyString
 
-continuous_without_units:
-  source: two
-  concept: continuous
-  # value: MyString
-  table: table
-  column: column5
-  # column_value: MyString
+# continuous_without_units:
+#   source: two
+#   concept: continuous
+#   # value: MyString
+#   table: table
+#   column: column5
+#   # column_value: MyString
 
-mapped:
+choices_with_values:
   source: two
-  concept: boolean
-  # value: MyString
-  table: table
-  column: column6
-  # column_value: MyString
-
-categorical_with_values:
-  source: two
-  concept: categorical
-  # value: MyString
+  variable: gender
   table: table
   column: gender
-  # column_value: MyString
 
-boolean_male:
-  source: two
-  concept: boolean_child
-  # value: MyString
-  table: table
-  column: gender
-  column_value: m
+# datetime:
+#   source: two
+#   concept: datetime
+#   # value: MyString
+#   table: table
+#   column: column9
+#   # column_value: MyString
 
-boolean_female:
-  source: two
-  concept: boolean_child_two
-  value: Strange Value
-  table: table
-  column: gender
-  column_value: f
+# identifier:
+#   source: two
+#   concept: identifier
+#   # value: MyString
+#   table: table
+#   column: column10
+#   # column_value: MyString
 
-datetime:
-  source: two
-  concept: datetime
-  # value: MyString
-  table: table
-  column: column9
-  # column_value: MyString
+# filelocator:
+#   source: two
+#   concept: filelocator
+#   # value: MyString
+#   table: table
+#   column: column11
+#   # column_value: MyString
 
-identifier:
-  source: two
-  concept: identifier
-  # value: MyString
-  table: table
-  column: column10
-  # column_value: MyString
+# filelocatormapped:
+#   source: two
+#   concept: filelocator
+#   # value: MyString
+#   table: table
+#   column: column12
+#   # column_value: MyString
 
-filelocator:
-  source: two
-  concept: filelocator
-  # value: MyString
-  table: table
-  column: column11
-  # column_value: MyString
+# freetext:
+#   source: two
+#   concept: freetext
+#   # value: MyString
+#   table: table
+#   column: column12
+#   # column_value: MyString
 
-filelocatormapped:
-  source: two
-  concept: filelocator
-  # value: MyString
-  table: table
-  column: column12
-  # column_value: MyString
+# invalid:
+#   source: two
+#   concept: invalid
+#   # value: MyString
+#   table: table
+#   column: column13
+#   # column_value: MyString
 
-freetext:
-  source: two
-  concept: freetext
-  # value: MyString
-  table: table
-  column: column12
-  # column_value: MyString
+# no_concept:
+#   source: two
+#   # concept: MyString
+#   table: table
+#   column: column14
+#   # column_value: MyString
 
-invalid:
-  source: two
-  concept: invalid
-  # value: MyString
-  table: table
-  column: column13
-  # column_value: MyString
+# continuous_with_formula:
+#   source: two
+#   concept: formula
+#   # value: MyString
+#   table: table
+#   column: column16
+#   # column_value: MyString
 
-no_concept:
-  source: two
-  # concept: MyString
-  table: table
-  column: column14
-  # column_value: MyString
+# continuous_with_units_and_linked:
+#   source: linked_source_b
+#   concept: continuous
+#   # value: MyString
+#   table: table
+#   column: column4
+#   # column_value: MyString
 
-nonexistent_concept:
-  source: two
-  concept_id: -1
-  table: table
-  column: column15
-  # column_value: MyString
-
-continuous_with_formula:
-  source: two
-  concept: formula
-  # value: MyString
+calculation:
+  source: fully_mapped_test_data_source
+  variable: calculation
   table: table
   column: column16
-  # column_value: MyString
 
-continuous_with_units_and_linked:
-  source: linked_source_b
-  concept: continuous
-  # value: MyString
-  table: table
-  column: column4
-  # column_value: MyString
-
-mapped_boolean:
+mapped_choices:
   source: fully_mapped_test_data_source
-  concept: boolean
-  # value: MyString
+  variable: choices
   table: table
   column: column6
-  column_value: t
-
-mapped_continuous:
-  source: fully_mapped_test_data_source
-  concept: formula
-  # value: MyString
-  table: table
-  column: column16
-  # column_value: MyString
-
-mapped_categorical:
-  source: fully_mapped_test_data_source
-  concept: categorical
-  # value: MyString
-  table: table
-  column: column6
-  # column_value: MyString
 
 mapped_date:
   source: fully_mapped_test_data_source
-  concept: datetime
-  # value: MyString
+  variable: date
   table: table
   column: column9
-  # column_value: MyString
 
-mapped_with_human_units:
-  source: fully_mapped_test_data_source
-  concept: continuous_parent
-  # value: MyString
-  table: table
-  column: column11
-  # column_value: MyString
+# mapped_with_human_units:
+#   source: fully_mapped_test_data_source
+#   concept: continuous_parent
+#   # value: MyString
+#   table: table
+#   column: column11
+#   # column_value: MyString

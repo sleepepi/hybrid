@@ -7,7 +7,7 @@ class ReportsController < ApplicationController
     @report = @query.reports.find_by_id(params[:id]) if @query
     if @query and @report
       csv_string = CSV.generate do |csv|
-        csv << @report.report_concepts.collect{|rc| rc.concept.human_name}
+        csv << @report.report_concepts.collect{|rc| rc.variable.display_name}
         @query.view_concept_values(current_user, @report.report_concepts, ["download dataset", "download limited dataset"]).each do |row|
           csv << row
         end

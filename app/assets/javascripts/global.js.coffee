@@ -60,33 +60,6 @@
       $("#sources_form").submit()
   )
 
-@formatConceptResult = (concept) ->
-  markup = ""
-  markup = "<span class='muted'>" unless concept.commonly_used
-  markup += concept.text
-  markup += "</span>" unless concept.commonly_used
-  markup
-
-@buildQueryConceptTypeahead = () ->
-  $("#concept_search_term").select2(
-    placeholder: "Search for a concept, i.e. Age, Gender"
-    minimumInputLength: 1
-    width: 'resolve'
-    initSelection: (element, callback) ->
-      callback([])
-    ajax:
-      url: root_url + "concepts"
-      dataType: 'json'
-      data: (term, page) -> { search: term, autocomplete: 'true', query_id: $('#concept_search_term').data('query-id') }
-      results: (data, page) -> # parse the results into the format expected by Select2.
-          return results: data
-    formatResult: formatConceptResult
-  ).on("change", (e) ->
-    if $("#concept_search_term").val() != ""
-      $("#selected_concept_id").val(e.val)
-      $("#concept_search_term").select2("val", "")
-      $("#search_form").submit()
-  )
 
 @buildReportConceptTypeahead = () ->
   $("#report_concept_search_term").select2(

@@ -37,8 +37,8 @@ class Query < ActiveRecord::Base
   def file_type_count(current_user, file_type)
     source_files = {}
     selected_report_concepts = []
-    Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator').each do |concept|
-      selected_report_concepts << ReportConcept.new( concept_id: concept.id )
+    Variable.current.with_source(self.sources.collect{|s| s.id}).where( variable_type: 'file' ).each do |variable|
+      selected_report_concepts << ReportConcept.new( variable_id: variable.id )
     end
     self.sources.with_file_type(file_type.id).each do |source|
       source_files[source.id] = {}
@@ -47,13 +47,13 @@ class Query < ActiveRecord::Base
       all_files = {}
       selected_report_concepts.each_with_index do |report_concept, concept_index|
         values.each do |value|
-          all_files[report_concept.concept.id] = [] if all_files[report_concept.concept.id].blank?
-          all_files[report_concept.concept.id] << value[concept_index]
+          all_files[report_concept.variable.id] = [] if all_files[report_concept.variable.id].blank?
+          all_files[report_concept.variable.id] << value[concept_index]
         end
       end
 
-      all_files.each do |concept_id, file_locators|
-        source_files[source.id][concept_id] = Aqueduct::Builder.repository(source, current_user).count_files(file_locators, file_type.extension) if Concept.with_source(source.id).find_by_id(concept_id)
+      all_files.each do |variable_id, file_locators|
+        source_files[source.id][variable_id] = Aqueduct::Builder.repository(source, current_user).count_files(file_locators, file_type.extension) if Concept.with_source(source.id).find_by_id(variable_id)
       end
     end
 
@@ -62,16 +62,16 @@ class Query < ActiveRecord::Base
 
   def available_files(current_user)
     selected_report_concepts = []
-    Concept.current.searchable.with_source(self.sources.collect{|s| s.id}).with_concept_type('file locator').each do |concept|
-      selected_report_concepts << ReportConcept.new( concept_id: concept.id )
+    Variable.current.with_source(self.sources.collect{|s| s.id}).where( variable_type: 'file' ).each do |variable|
+      selected_report_concepts << ReportConcept.new( variable_id: variable.id )
     end
 
     values = self.view_concept_values(current_user, selected_report_concepts)
     all_files = {}
     selected_report_concepts.each_with_index do |report_concept, concept_index|
       values.each do |value|
-        all_files[report_concept.concept.id] = [] if all_files[report_concept.concept.id].blank?
-        all_files[report_concept.concept.id] << value[concept_index]
+        all_files[report_concept.variable.id] = [] if all_files[report_concept.variable.id].blank?
+        all_files[report_concept.variable.id] << value[concept_index]
       end
     end
 
@@ -92,6 +92,7 @@ class Query < ActiveRecord::Base
     if master_tables.size > 0
       wrapper = Aqueduct::Builder.wrapper(source, current_user)
       sql_statement = "SELECT COUNT(*) FROM #{master_tables.join(', ')} WHERE #{master_conditions}"
+      Rails.logger.debug sql_statement
       wrapper.connect
       (results, number_of_rows) = wrapper.query(sql_statement)
       wrapper.disconnect

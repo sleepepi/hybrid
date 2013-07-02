@@ -33,6 +33,7 @@ Hybrid::Application.routes.draw do
 
   resources :queries do
     member do
+      get :autocomplete
       post :total_records_count
       post :data_files
       post :load_file_type
@@ -74,7 +75,7 @@ Hybrid::Application.routes.draw do
   resources :sources do
     member do
       post :auto_map
-      post :table_columns
+      get :table_columns
       get :download_file
       post :remove_all_mappings
     end

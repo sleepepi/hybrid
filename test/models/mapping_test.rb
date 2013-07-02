@@ -1,57 +1,6 @@
 require 'test_helper'
 
 class MappingTest < ActiveSupport::TestCase
-  test "mapped? returns true if the mapping is mapped" do
-    assert_equal true, mappings(:mapped).mapped?(users(:valid))
-  end
-
-  test "mapped? returns false if the mapping is not mapped" do
-    assert_equal false, mappings(:three).mapped?(users(:valid))
-  end
-
-  test "mapped? a boolean with no underlying column_values is mapped" do
-    assert_equal true, mappings(:one).mapped?(users(:admin))
-  end
-
-  test "mapped? a continuous concept is mapped" do
-    assert_equal true, mappings(:continuous_with_units).mapped?(users(:admin))
-  end
-
-  test "mapped? a categorical with at least one of its values mapped is considered mapped" do
-    assert_equal true, mappings(:categorical_with_values).mapped?(users(:admin))
-  end
-
-  test "mapped? a date mapping is considered mapped" do
-    assert_equal true, mappings(:datetime).mapped?(users(:admin))
-  end
-
-  test "mapped? an identifier mapping is considered mapped" do
-    assert_equal true, mappings(:identifier).mapped?(users(:admin))
-  end
-
-  test "mapped? a filelocator mapping is considered mapped" do
-    assert_equal true, mappings(:filelocator).mapped?(users(:admin))
-  end
-
-  test "mapped? a freetext mapping is considered mapped" do
-    assert_equal true, mappings(:freetext).mapped?(users(:admin))
-  end
-
-  test "mapped? an invalid mapped concept is considered unmapped" do
-    assert_equal false, mappings(:invalid).mapped?(users(:admin))
-  end
-
-  test "mapped? an mapping referencing a deleted concept is considered outdated" do
-    assert_equal false, mappings(:nonexistent_concept).mapped?(users(:admin))
-  end
-
-  test "mapped? an mapping without a concept is considered unmapped" do
-    assert_equal false, mappings(:no_concept).mapped?(users(:admin))
-  end
-
-  test "all_concepts returns an array of values" do
-    assert mappings(:one).all_concepts.is_a?(Array)
-  end
 
   test "column_values returns an array of values" do
     assert mappings(:one).column_values(users(:admin)).is_a?(Array)
@@ -71,55 +20,26 @@ class MappingTest < ActiveSupport::TestCase
     assert !result[:error].blank?
   end
 
-  test "column_statistics_given_values returns a string if values are given" do
-    assert mappings(:one).column_statistics_given_values([1,2,3,4]).is_a?(String)
-  end
-
-  test "column_statistics_given_values returns a string even if the concept type is not supported" do
-    assert mappings(:invalid).column_statistics_given_values([1,2,3,4]).is_a?(String)
-  end
-
-  test "column_statistics_given_values returns a string if no values are given" do
-    assert mappings(:one).column_statistics_given_values([]).is_a?(String)
-  end
-
-  test "column_statistics_given_values returns a string if values are given for continuous concept" do
-    assert mappings(:continuous_with_units).column_statistics_given_values([1,2,3,4,nil]).is_a?(String)
-  end
-
-  test "generate_derived! for a continuous mapping increases the amount of derived concepts" do
-    assert_difference('Mapping.count') do
-      mappings(:continuous_with_units).generate_derived!
-    end
-  end
-
   test "abstract_value for query concepts" do
-    assert mappings(:mapped_boolean).abstract_value(query_concepts(:with_boolean_data)).kind_of?(Array)
-    assert mappings(:mapped_boolean).abstract_value(query_concepts(:with_boolean_data_negated)).kind_of?(Array)
-    assert mappings(:mapped_continuous).abstract_value(query_concepts(:with_data)).kind_of?(Array)
-    assert mappings(:mapped_continuous).abstract_value(query_concepts(:with_data_negated)).kind_of?(Array)
-    assert mappings(:mapped_categorical).abstract_value(query_concepts(:with_categorical_data)).kind_of?(Array)
-    assert mappings(:mapped_categorical).abstract_value(query_concepts(:with_categorical_data_negated)).kind_of?(Array)
-    assert mappings(:mapped_categorical).abstract_value(query_concepts(:with_categorical_data_true_false)).kind_of?(Array)
+    assert mappings(:calculation).abstract_value(query_concepts(:with_data)).kind_of?(Array)
+    assert mappings(:calculation).abstract_value(query_concepts(:with_data_negated)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data_negated)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data_true_false)).kind_of?(Array)
     assert mappings(:mapped_date).abstract_value(query_concepts(:with_date_data)).kind_of?(Array)
-    assert mappings(:nonexistent_concept).abstract_value(query_concepts(:with_boolean_data)).kind_of?(Array)
   end
 
   test "human_normalized_value converts mappings to human readable format" do
-    assert_equal mappings(:boolean_male).concept.human_name, mappings(:categorical_with_values).human_normalized_value('m')
-    assert_equal 'true', mappings(:boolean_male).human_normalized_value('m')
+    assert_equal 'Male', mappings(:choices_with_values).human_normalized_value('1')
     assert_equal '2011', mappings(:mapped_date).human_normalized_value('2011')
-    assert_equal 'Strange Value', mappings(:boolean_female).human_normalized_value('f')
   end
 
   test "uniq_normalized_value converts values to uniq strings" do
-    assert_equal mappings(:boolean_male).concept.id, mappings(:categorical_with_values).uniq_normalized_value('m')
-    # assert_equal 'true', mappings(:boolean_male).uniq_normalized_value('m')
+    assert_equal '1', mappings(:choices_with_values).uniq_normalized_value('1')
     assert_equal '2011', mappings(:mapped_date).uniq_normalized_value('2011')
-    assert_equal 'Strange Value', mappings(:boolean_female).uniq_normalized_value('f')
   end
 
   test "user_can_view? should show if the user can view the mapping" do
-    assert_equal false, mappings(:mapped_boolean).user_can_view?(users(:valid), ['view limited data distribution'])
+    assert_equal false, mappings(:mapped_date).user_can_view?(users(:valid), ['view limited data distribution'])
   end
 end

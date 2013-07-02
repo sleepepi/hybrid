@@ -40,12 +40,12 @@
 
 
     <%= form_tag query_concepts_path(query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#concept_folders', 'Loading Concepts', false);", id: 'search_form', class: 'form-horizontal' do %>
-      <%= hidden_field_tag 'selected_concept_id' %>
+      <%= hidden_field_tag 'variable_id' %>
 
       <div class="control-group">
         <label class="control-label">With</label>
         <div class="controls" style="white-space:nowrap">
-          <%= text_field_tag 'concept_search_term', '', tabindex: '2', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'query-concept-typeahead', query_id: @query.id }, style: 'width:80%' %>
+          <%= text_field_tag 'variable_search', '', tabindex: '2', data: { object: 'query-concept-typeahead', query_id: @query.id }, style: 'width:80%' %>
           <%= link_to 'more', search_folder_concepts_path(popup: true, query_id: @query.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' }, id: 'concept_search_term_more' %>
         </div>
       </div>
@@ -129,7 +129,7 @@
   </div>
 </div>
 
-<div id="information" style="display:none"></div>
+<div id="information" style="display:none2"></div>
 
 <hr class="soften" style="margin: 20px 0px">
 

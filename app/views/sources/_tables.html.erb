@@ -7,7 +7,7 @@
     <%= form_tag auto_map_source_path(@source), method: :post, remote: true, id: 'auto_map_form_all', style: 'display:inline' do %>
       <%= link_to 'Auto Map All Tables', '#', data: { object: 'all-tables-automap' } %>
       to Dictionary
-      <%= select_tag :all_dictionary_id, options_for_select([["-All-", 'all']] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
+      <%= select_tag :all_dictionary_id, options_for_select([["--Choose Dictionary--", nil]] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), name: 'dictionary_id' %>
     <% end %>
     <br />
     <%= link_to "Delete All Mappings", remove_all_mappings_source_path(@source), method: :post, data: { confirm: "Are you sure you want to DELETE all associated data source mappings for Data Source #{@source.name}?" }, class: 'btn btn-danger' %>

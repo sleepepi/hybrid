@@ -1,0 +1,77 @@
+<% values = @mapping.all_values_for_column(current_user)[:values] %>
+<% missing_values = values.size - values.compact.size %>
+<% if values.size > 0 %>
+  <% case @mapping.variable.variable_type when 'numeric', 'integer' %>
+    <% values = values.compact.collect{|num_string| num_string.to_f} %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th style="text-align:left">N</th>
+          <th style="text-align:left">Mean</th>
+          <th style="text-align:left">StdDev</th>
+          <th style="text-align:left">Median</th>
+          <th style="text-align:left">Minimum</th>
+          <th style="text-align:left">Maximum</th>
+          <th style="text-align:left" class="muted">Unknown</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><%= values.size %></td>
+        <td><%= "%0.2f" % (values.sum / values.size) %></td>
+        <td>
+          <% if values.size == 1 %>
+            -
+          <% else %>
+            &plusmn; <%= "%0.2f" % (@mapping.send('std_dev', values)) %>
+          <% end %>
+        </td>
+        <td><%= values.sort[(values.size / 2).to_i] %></td>
+        <td><%= "%0.2f" % (values.min) %></td>
+        <td><%= "%0.2f" % (values.max) %></td>
+        <td><%= missing_values == 0 ? '-' : missing_values %></td>
+      </tr>
+    </table>
+  <% when 'choices' %>
+    <table class="table table-striped" style="width:100%">
+      <thead>
+        <tr>
+          <th style="text-align:left">Value</th>
+          <th style="text-align:left">Mapping</th>
+          <th style="text-align:left">Count</th>
+          <th style="text-align:right">%</th>
+        </tr>
+      </thead>
+      <% values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array| %>
+        <tr>
+          <td><%= (key == nil ? "NULL" : key.to_s) %></td>
+          <td><%= @mapping.human_normalized_value(key) %></td>
+          <td><%= array.size %></td>
+          <td style='text-align:right'><%= "%0.2f%" % (array.size * 100.0 / values.size) %></td>
+        </tr>
+      <% end %>
+    </table>
+
+  <% else %>
+    <% values = values.compact.sort %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th style="text-align:left">N</th>
+          <th style="text-align:left">Median</th>
+          <th style="text-align:left">Minimum</th>
+          <th style="text-align:left">Maximum</th>
+          <th style="text-align:left" class="muted">Missing</th>
+        </tr>
+      </thead>
+      <tr>
+        <td><%= values.size %></td>
+        <td><%= values[(values.size / 2).to_i] %></td>
+        <td><%= values.first %></td>
+        <td><%= values.last %></td>
+        <td><%= missing_values == 0 ? '-' : missing_values %></td>
+      </tr>
+    </table>
+  <% end %>
+<% else %>
+  No Values In Database
+<% end %>

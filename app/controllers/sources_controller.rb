@@ -5,7 +5,9 @@ class SourcesController < ApplicationController
   before_action :set_source_with_edit_data_source_connection_information, only: [ :edit, :update ]
   before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings ]
   before_action :set_source_with_view_or_edit_data_source_mappings, only: [ :table_columns ]
-  before_action :redirect_without_source, only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings ]
+  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings ]
+  before_action :set_viewable_dictionary,     only: [ :auto_map ]
+  before_action :redirect_without_dictionary, only: [ :auto_map ]
 
   def download_file
     @source = current_user.all_sources.find_by_id(params[:id])
@@ -41,11 +43,9 @@ class SourcesController < ApplicationController
       current_time = Time.now
 
       @columns.each do |column_hash|
-        mapping = @source.mappings.where( table: table, column: column_hash[:column], column_value: nil ).first
-        concepts = Concept.with_dictionary(params[:dictionary_id]).searchable.exactly(column_hash[:column].to_s.gsub(/[^\w]/, ' ').titleize.downcase, column_hash[:column].to_s.gsub(/[^\w]/, ' ').downcase)
-        if concepts.size == 1 and c = concepts.first
-          mapping = @source.mappings.where( concept_id: c.id, table: table, column: column_hash[:column], column_value: nil ).first_or_create
-          mapping.automap(current_user)
+        variables = @dictionary.variables.where( name: column_hash[:column] )
+        if variables.size == 1 and v = variables.first
+          @source.mappings.where( variable_id: v.id, table: table, column: column_hash[:column] ).first_or_create
         end
       end
 

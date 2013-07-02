@@ -1,0 +1,12 @@
+<div class="control-group">
+  <%= label_tag :start_date, nil, class: 'control-label' %>
+  <div class="controls">
+    <%= text_field_tag :start_date, (@query_concept.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+  </div>
+</div>
+<div class="control-group">
+  <%= label_tag :end_date, nil, class: 'control-label' %>
+  <div class="controls">
+    <%= text_field_tag :end_date, (@query_concept.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+  </div>
+</div>

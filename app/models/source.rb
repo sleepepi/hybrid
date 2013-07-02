@@ -10,7 +10,8 @@ class Source < ActiveRecord::Base
   scope :available, -> { where deleted: false, visible: true }
   scope :available_or_creator_id, lambda { |arg| where( [ "sources.deleted = ? and (sources.visible = ? or sources.user_id IN (?))", false, true, arg ] ) }
   scope :local, -> { where identifier: nil }
-  scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?)) or '' IN (?)", arg, arg] ) }
+  # scope :with_concept, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.concept_id IN (?)) or '' IN (?)", arg, arg] ) }
+  scope :with_variable, lambda { |arg|  where( ["sources.id in (select source_id from mappings where mappings.variable_id IN (?))", arg] ) }
   scope :with_file_type, lambda { |arg| where( ["sources.id IN (select source_id from source_file_types where source_file_types.file_type_id IN (?))", arg] ) }
 
   # Model Validation
@@ -20,7 +21,8 @@ class Source < ActiveRecord::Base
   # Model Relationships
   belongs_to :user
   has_many :mappings
-  has_many :concepts, -> { order :short_name }, through: :mappings
+  # has_many :concepts, -> { order :short_name }, through: :mappings
+  has_many :variables, -> { order :display_name }, through: :mappings
 
   has_many :joins, dependent: :destroy
 
@@ -36,19 +38,19 @@ class Source < ActiveRecord::Base
 
   # Returns the dictionary associated with the most mappings
   def primary_dictionary
-    dictionary_ids = Concept.where(id: self.mappings.pluck(:concept_id).uniq).pluck(:dictionary_id)
+    dictionary_ids = Variable.where(id: self.mappings.pluck(:variable_id).uniq).pluck(:dictionary_id)
     frequency = dictionary_ids.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
     Dictionary.available.find_by_id(dictionary_ids.sort_by { |v| frequency[v] }.last)
   end
 
   def all_dictionaries
-    Dictionary.available.find(self.concepts.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
+    Dictionary.available.find(self.variables.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
   end
 
   def all_linked_sources
-    identifiers = self.concepts.where( concept_type: 'identifier' ).pluck(:id)
+    identifiers = self.variables.where( variable_type: 'identifier' ).pluck(:id)
     if identifiers.size > 0
-      Source.available.where( "id != ?", self.id ).with_concept(identifiers)
+      Source.available.where( "id != ?", self.id ).with_variable(identifiers)
     else
       Source.none
     end
@@ -146,10 +148,14 @@ class Source < ActiveRecord::Base
     return false
   end
 
-  # Returns tables for a selected concepts
-  def concept_tables(concept)
-    self.mappings.where(concept_id: concept.id).pluck(:table).uniq
+  def variable_tables(variable)
+    self.mappings.where( variable_id: variable.id ).pluck(:table).uniq
   end
+
+  # # Returns tables for a selected concepts
+  # def concept_tables(concept)
+  #   self.mappings.where(concept_id: concept.id).pluck(:table).uniq
+  # end
 
   # Given a list of tables find all the join conditions
   def join_conditions(tables, current_user)

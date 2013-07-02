@@ -1,114 +1,33 @@
-<%= form_for @query_concept, remote: true, html: { class: 'form-horizontal' } do |f| %>
-  <% form_name = @query_concept.new_record? ? 'new_query_concept' : "edit_query_concept_#{@query_concept.id}" %>
-
-    <% if @query_concept.concept.continuous? %>
-      <div class="control-group">
-        <%= f.label :value, nil, class: 'control-label' %>
-        <div class="controls">
-          <%= f.text_field :value, class: 'span12', placeholder: 'Drag and select a range on the graph!' %>
-        </div>
-      </div>
-
-      <%= javascript_tag do %>
-        $('#query_concept_value').popover({
-          html: true,
-          placement: 'bottom',
-          trigger: 'hover',
-          title: 'Value Formats',
-          content: '<table style="font-size:0.8em" class="table table-condensed table-striped"><thead><tr><th>Format</th><th>Values Returned</th></tr></thead>\
-                       <tbody>\
-                         <tr><td>&gt; x</td><td>greater than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
-                         <tr><td>[x:y]</td><td><em style="text-decoration:underline">Including Endpoints</em><br />greater than or equal to <strong>x</strong> and <br />less than or equal to <strong>y</strong></td></tr>\
-                         <tr><td>&gt;= x</td><td>greater than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
-                         <tr><td>(x:y)</td><td><em style="text-decoration:underline">Excluding Endpoints</em><br />greater than <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
-                         <tr><td>&lt; x</td><td>less than <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
-                         <tr><td>[x:y)</td><td>greater than or equal to <strong>x</strong> and <br />less than <strong>y</strong></td></tr>\
-                         <tr><td>&lt;= x</td><td>less than or equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
-                         <tr><td>(x:y]</td><td>greater than <strong>x</strong> and <br />less than and equal to <strong>y</strong></td></tr>\
-                         <tr><td>x</td><td>exactly equal to <strong>x</strong></td><td style="border-top:1px solid transparent;border-bottom:1px solid transparent"></td></tr>\
-                         <tr><td style="white-space:nowrap">(a:b), &gt; c</td><td><em style="text-decoration:underline">Combining Formats</em><br /> (greater than <strong>a</strong> and less than <strong>b</strong>) or <br />greater than <strong>c</strong></td></tr>\
-                       </tbody></table>'
-        });
-      <% end %>
-
-    <% elsif @query_concept.concept.categorical? %>
-      <div class="control-group">
-        <%= f.label :value, nil, class: 'control-label' %>
-        <div class="controls sheet-container">
-          <div style="margin-bottom:5px">
-            <%= link_to simple_check(true) + ' Select All', '#', data: { object: 'categorical-check-all' }, class: 'btn btn-mini' %>
-            <%= link_to simple_check(false) + ' Deselect All', '#', data: { object: 'categorical-uncheck-all' }, class: 'btn btn-mini' %>
-          </div>
-          <% @query_concept.concept.recommended_concepts.each do |concept| %>
-            <label class="checkbox <%= 'selected' if @query_concept.value.to_s.split(',').include?(concept.id.to_s) %>"><%= check_box_tag "value_ids[#{concept.id}]", "1", @query_concept.value.to_s.split(',').include?(concept.id.to_s), class: 'categorical_values' %> <%= concept.human_name %></label>
-          <% end %>
-        </div>
-      </div>
-    <% elsif @query_concept.concept.boolean? %>
-      <div class="control-group">
-        <%= f.label :value, nil, class: 'control-label' %>
-        <div class="controls sheet-container">
-          <% ['true','false'].each do |value| %>
-            <label class="checkbox <%= 'selected' if @query_concept.value.to_s.split(',').include?(value.to_s) %>"><%= check_box_tag "value_ids[#{value}]", "1", @query_concept.value.to_s.split(',').include?(value.to_s) %> <%= value %></label>
-          <% end %>
-        </div>
-      </div>
-    <% elsif @query_concept.concept.date? %>
-      <div class="control-group">
-        <%= label_tag :start_date, nil, class: 'control-label' %>
-        <div class="controls">
-          <%= text_field_tag :start_date, (@query_concept.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= label_tag :end_date, nil, class: 'control-label' %>
-        <div class="controls">
-          <%= text_field_tag :end_date, (@query_concept.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@query_concept.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
-        </div>
-      </div>
-    <% elsif @query_concept.concept.identifier? %>
-
-      <div class="control-group">
-        <label class="control-label">Identifier</label>
-        <div class="controls">
-          <%= f.text_field :value %>
-        </div>
-      </div>
-    <% elsif @query_concept.concept.file_locator? %>
-
-      <div class="control-group">
-        <label class="control-label">File Locator</label>
-        <div class="controls">
-          <%= f.text_field :value %>
-        </div>
-      </div>
-    <% elsif @query_concept.concept.free_text? %>
-      <div class="control-group">
-        <label class="control-label">Free Text</label>
-        <div class="controls">
-          <%= f.text_field :value %>
-        </div>
-      </div>
-    <% end %>
-
-    <div class="control-group" style="<%= 'display:none' if @query_concept.concept.sources.uniq.size < 2 %>">
-      <%= f.label :source_id, "At", class: 'control-label' %>
-      <div class="controls sheet-container">
-        <% @query_concept.concept.sources.uniq.each do |source| %>
-          <label class="radio <%= 'selected' if @query_concept.source == source %>"><%= radio_button_tag "query_concept[source_id]", source.id, @query_concept.source == source %> <%= source.name %></label>
-        <% end %>
-      </div>
-    </div>
-
+<%= form_for @query_concept, url: query_concept_path(@query_concept, query_id: @query), method: :patch, remote: true, html: { class: 'form-horizontal', id: "edit_query_concept_#{@query_concept.id}" } do |f| %>
+  <% begin %>
+    <%= render partial: "query_concepts/forms/#{@query_concept.variable.variable_type}", locals: { f: f } %>
+  <% rescue %>
     <div class="control-group">
-      <div class="controls sheet-container">
-        <label class="checkbox negation <%= 'selected' if @query_concept.negated? %> inline"><%= f.check_box :negated %> Negated</label>
+      <label class="control-label"><%= @query_concept.variable.variable_type.titleize %></label>
+      <div class="controls">
+        <%= f.text_field :value %>
       </div>
     </div>
+  <% end %>
+
+  <div class="control-group" style="<%= 'display:none' if @query_concept.variable.sources.uniq.size < 2 %>">
+    <%= f.label :source_id, "At", class: 'control-label' %>
+    <div class="controls sheet-container">
+      <% @query_concept.variable.sources.uniq.each do |source| %>
+        <label class="radio <%= 'selected' if @query_concept.source == source %>"><%= radio_button_tag "query_concept[source_id]", source.id, @query_concept.source == source %> <%= source.name %></label>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls sheet-container">
+      <label class="checkbox negation <%= 'selected' if @query_concept.negated? %> inline"><%= f.check_box :negated %> Negated</label>
+    </div>
+  </div>
 
   <div class="form-actions">
-    <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "##{form_name}" } %>
+    <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "#edit_query_concept_#{@query_concept.id}" } %>
     <%= link_to 'Cancel', '#', class: 'btn', data: { object: 'hide-contour-modal' } %>
-    <%= link_to 'Remove', @query_concept, method: 'delete', remote: true, class: 'btn btn-danger' %>
+    <%= link_to 'Remove', query_concept_path(@query_concept, query_id: @query), method: 'delete', remote: true, class: 'btn btn-danger' %>
   </div>
 <% end %>

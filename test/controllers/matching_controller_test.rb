@@ -15,7 +15,7 @@ class MatchingControllerTest < ActionController::TestCase
   end
 
   test "get matching with ajax" do
-    get :matching, controls_id: queries(:query_with_test_data).id, cases_id: queries(:query_with_test_data).id, controls_per_case: 2, criteria_ids: [concepts(:categorical).id], variable_ids: [], format: 'js'
+    get :matching, controls_id: queries(:query_with_test_data).id, cases_id: queries(:query_with_test_data).id, controls_per_case: 2, criteria_ids: [variables(:choices).id], variable_ids: [], format: 'js'
     assert_not_nil assigns(:controls)
     assert_not_nil assigns(:cases)
     assert_equal 2, assigns(:controls_per_case)
@@ -39,7 +39,7 @@ class MatchingControllerTest < ActionController::TestCase
     assert_not_nil assigns(:controls)
     assert_not_nil assigns(:cases)
     assert_not_nil assigns(:sources)
-    assert_not_nil assigns(:all_concepts)
+    assert_not_nil assigns(:all_variables)
     assert_template 'add_variable'
   end
 
@@ -48,7 +48,7 @@ class MatchingControllerTest < ActionController::TestCase
     assert_not_nil assigns(:controls)
     assert_not_nil assigns(:cases)
     assert_not_nil assigns(:sources)
-    assert_not_nil assigns(:concepts)
+    assert_not_nil assigns(:variables)
     assert_template 'add_criteria'
   end
 

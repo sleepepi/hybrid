@@ -3,7 +3,7 @@
 one:
   # id: 1
   report: report
-  concept: boolean
+  variable: choices
   position: 1
   strata: false
   statistic: all
@@ -11,63 +11,63 @@ one:
 two:
   # id: 2
   report: report
-  concept: categorical
+  variable: choices
   position: 2
   strata: false
   statistic: all
 
 test_data_for_boolean:
   report: report_with_data
-  concept: boolean
+  variable: choices
   position: 1
   strata: true
   # statistic: all
 
 test_data_for_categorical:
   report: report_with_data
-  concept: categorical
+  variable: choices
   position: 2
   strata: false
   statistic: all
 
 test_data_for_age:
   report: report_with_data
-  concept: formula
+  variable: calculation
   position: 3
   strata: false
   statistic: all
 
 test_data_for_percent:
   report: report_with_data
-  concept: categorical
+  variable: choices
   position: 4
   strata: false
   statistic: percent
 
 test_data_for_count:
   report: report_with_data
-  concept: categorical
+  variable: choices
   position: 5
   strata: false
   statistic: count
 
 test_data_for_age_min:
   report: report_with_data
-  concept: formula
+  variable: calculation
   position: 6
   strata: false
   statistic: min
 
 test_data_for_unknown_statistic:
   report: report_with_data
-  concept: categorical
+  variable: choices
   position: 7
   strata: false
   statistic: unknown
 
 test_data_for_date:
   report: report_with_data
-  concept: datetime
+  variable: date
   position: 8
   strata: false
   # statistic: all

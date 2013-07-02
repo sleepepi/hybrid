@@ -6,59 +6,6 @@ one:
 two:
   id: 2
 
-boolean:
-  dictionary: one
-  folder: Administrative:SubFolder
-  short_name: ecg
-  commonly_used: false
-  concept_type: boolean
-  description: "This is a boolean & ! < > value with strange symbols that need to be escaped."
-  display_name: Has ECG Study
-  search_name: has ecg study
-  formula: MyString
-  sensitivity: 0
-  source_file: MyString
-  source_description: MyString
-  source_name: MyString
-  version: MyString
-
-categorical:
-  dictionary: one
-  short_name: gender
-  folder: Demographics
-  commonly_used: false
-  concept_type: categorical
-  description: MyString
-  display_name: Gender
-  search_name: gender
-  sensitivity: 0
-  source_file: MyString
-  source_description: MyString
-  source_name: MyString
-  version: MyString
-
-continuous:
-  dictionary: one
-  folder: Demographics
-  short_name: age_at_visit
-  commonly_used: false
-  concept_type: continuous
-  description: MyString
-  display_name: Age at Visit
-  search_name: age at visit
-  sensitivity: 0
-  source_file: MyString
-  source_description: MyString
-  source_name: MyString
-  version: MyString
-
-datetime:
-  dictionary: one
-  short_name: date_of_visit
-  concept_type: datetime
-  search_name: date of visit
-  sensitivity: 1
-
 identifier:
   dictionary: one
   short_name: deidentified_id
@@ -158,21 +105,6 @@ boolean_child_two:
   source_name: MyString
   version: MyString
 
-formula:
-  dictionary: one
-  folder: Demographics
-  short_name: formula
-  commonly_used: false
-  concept_type: continuous
-  description: MyString
-  display_name: Formula
-  formula: date_of_visit + age_at_visit
-  search_name: formula
-  sensitivity: 0
-  source_file: MyString
-  source_description: MyString
-  source_name: MyString
-  version: MyString
 
 formula_parent:
   dictionary: one

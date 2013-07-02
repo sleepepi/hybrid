@@ -2,18 +2,16 @@
   <tr>
     <th></th>
     <th style="text-align:left">Column Name</th>
-    <th style="text-align:left">Concept</th>
+    <th style="text-align:left">Variable</th>
     <th>Actions</th>
   </tr>
   <% @columns.each do |column_data| %>
     <% @column = column_data[:column] %>
-    <% @mapping = @source.mappings.where(table: params[:table], column: @column, value: nil, column_value: nil).first %>
+    <% @mapping = @source.mappings.where(table: params[:table], column: @column).first %>
     <tbody id="mapping_form_<%= @column.gsub(' ', '_') %>">
       <% if @source.user_has_action?(current_user, "edit data source mappings") %>
-        <% if @mapping and (@mapping.mapped?(current_user) and params[:filter_unmapped] != '1') %>
+        <% if @mapping %>
           <%= render partial: 'mappings/show' %>
-        <% elsif @mapping %>
-          <%= render partial: 'mappings/edit' %>
         <% else %>
           <%= render partial: 'mappings/new' %>
         <% end %>

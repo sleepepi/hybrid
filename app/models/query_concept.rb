@@ -1,6 +1,6 @@
 class QueryConcept < ActiveRecord::Base
 
-  OPERATOR = ["and", "or"].collect{|i| [i,i]}
+  OPERATOR = ["and", "or"]
 
   # Callbacks
   after_create :create_qc_query_history
@@ -9,24 +9,33 @@ class QueryConcept < ActiveRecord::Base
   # Concerns
   include Deletable
 
+  # Model Validation
+  validates_presence_of :query_id, :variable_id, :position
+
   # Model Relationships
   belongs_to :query
-  belongs_to :concept
+  belongs_to :variable
   belongs_to :source
 
   # Query Concept Methods
 
-  def concept_name_with_source
-    full_name = "#{self.concept.human_name}"
+  def variable_name_with_source
+    full_name = "#{self.variable.display_name}"
     full_name += " at #{self.source.name}" if self.source and (self.source != self.query.sources.first or self.query.sources.size != 1)
     full_name
   end
+
+  # def concept_name_with_source
+  #   full_name = "#{self.concept.human_name}"
+  #   full_name += " at #{self.source.name}" if self.source and (self.source != self.query.sources.first or self.query.sources.size != 1)
+  #   full_name
+  # end
 
   def source
     if self.source_id and selected_source = Source.find_by_id(self.source_id)
       selected_source
     else
-      self.concept.sources.first
+      self.variable.sources.first
     end
   end
 
@@ -34,43 +43,26 @@ class QueryConcept < ActiveRecord::Base
     self.attributes.reject{|key, val| ['id', 'query_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
   end
 
-  # Returns the value of the string as a human readable value
   def human_value
-    result = ''
-    if self.concept and self.concept.continuous?
-      result = token_ranges
-    elsif self.concept and self.concept.categorical?
-      result = self.value.to_s.split(',').collect{|c_id| Concept.find_by_id(c_id)}.compact().collect{|c| "#{c.human_name}"}.join(' <span class="nolink">or</span> ').html_safe
-    elsif self.concept and self.concept.boolean?
-      result = self.value.to_s.split(',').collect{|c| "#{c}"}.join(' <span class="nolink">or</span> ').html_safe
-    elsif self.concept and self.concept.date?
+    case self.variable.variable_type when 'integer', 'numeric'
+      token_ranges
+    when 'choices'
+      self.variable.domain.options.select{|option| self.value.to_s.split(',').include?(option[:value].to_s)}.collect{|option| option[:display_name]}.join(' <span class="nolink">or</span> ').html_safe
+      # self.value.to_s.split(',').collect{|v| self.variable.domain.options.select{|opt| opt[:value].to_s == v.to_s}.collect{|opt| opt[:display_name]}} #.join(' <span class="nolink">or</span> ').html_safe
+    when 'date'
       start_date = self.value.to_s.split(':')[0]
       end_date = self.value.to_s.split(':')[1]
+      result = ''
       result << "<span class='nolink'>on or after</span> #{start_date}" unless start_date.blank?
       result << " <span class='nolink'>and</span> " unless start_date.blank? or end_date.blank?
       result << "<span class='nolink'>on or before</span> #{end_date}" unless end_date.blank?
-      result = result.html_safe
-    elsif self.concept and self.concept.identifier?
-      result = "Identifier [#{self.value}]"
-    elsif self.concept and self.concept.file_locator?
-      result = "File Locator [#{self.value}]"
-    elsif self.concept and self.concept.free_text?
-      result = "Free Text [#{self.value}]"
+      result.html_safe
+    else
+      "#{self.variable.variable_type} [#{self.value}]"
     end
-    result
   end
 
   def token_ranges
-    result = ''
-
-    u = self.concept.units.to_s.split('#').last.to_s.humanize.downcase
-    u_singular = ''
-    u_plural = ''
-    unless u.blank?
-      u_singular = u.split(' ')[0].singularize + ' ' + u.split(' ')[1..-1].join(' ')
-      u_plural = (u.split(' ')[0] == 'percent' ? 'percent' : u.split(' ')[0].pluralize) + ' ' + u.split(' ')[1..-1].join(' ')
-    end
-
     results = []
 
     self.value.to_s.split(',').each do |val|
@@ -85,14 +77,14 @@ class QueryConcept < ActiveRecord::Base
         if left_token.blank? and right_token.blank?
           results << "between <b>#{range[0]}</b> and <b>#{range[1]}</b> #{u_plural}"
         else
-          results << "#{left_token} <b>#{range[0]}</b> and #{right_token} <b>#{range[1]}</b> #{u_plural}"
+          results << "#{left_token} <b>#{range[0]}</b> and #{right_token} <b>#{range[1]}</b> #{self.variable.units}"
         end
       else
-        results << "#{token unless token == '='} <b>#{val}</b> #{val == "1" ? u_singular : u_plural}"
+        results << "#{token unless token == '='} <b>#{val}</b> #{self.variable.units}"
       end
     end
 
-    result = results.join(' or ').html_safe
+    results.join(' or ').html_safe
   end
 
 
@@ -130,13 +122,13 @@ class QueryConcept < ActiveRecord::Base
 
   # Overwrites deletable since it relies on callbacks
   def destroy
-    update_attributes deleted: true
-    self.query.update_positions if self.query
+    self.update deleted: true
+    self.query.update_positions
   end
 
   def undestroy
-    update_attributes deleted: false
-    self.query.update_positions if self.query
+    self.update deleted: false
+    self.query.update_positions
   end
 
   # After Create Action

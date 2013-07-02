@@ -1,34 +1,34 @@
 <li class="ui-state-default faded_delete_icon bubble" id="report_concept_<%= @report_concept.id %>" data-image-id="report_concept_<%= @report_concept.id %>_delete_icon">
   <%= image_tag('icons/gentleface/cursor_drag_arrow_16.png', style: 'vertical-align:text-bottom') %>
-  <%= @report_concept.concept.human_name %>
+  <%= @report_concept.variable.display_name %>
 
-  <% @report_concept.statistic = ((@report_concept.concept and @report_concept.concept.date?) ? 'month' : 'all') if @report_concept.statistic.blank? %>
+  <% @report_concept.statistic = (@report_concept.variable.variable_type == 'date' ? 'month' : 'all') if @report_concept.statistic.blank? %>
 
   <%= link_to 'edit', '#', data: { object: 'toggle', target: "#report_concept_#{@report_concept.id}_options" }, class: 'btn btn-mini' %>
   <%= link_to 'remove', @report_concept, method: :delete, remote: true, id: "report_concept_#{@report_concept.id}_delete_icon", data: { confirm: "Are you sure you want to remove this concept from Report #{@report.name}?" }, class: 'btn btn-mini btn-danger' %>
 
   <div id="report_concept_<%= @report_concept.id %>_options" style="display:none">
-    <% if @report_concept.concept and (@report_concept.concept.continuous? or @report_concept.concept.boolean? or @report_concept.concept.categorical? or @report_concept.concept.date?) %>
+    <% if ['integer', 'numeric', 'choices', 'date'].include?(@report_concept.variable.variable_type) %>
       <%= form_tag report_concept_path(@report_concept, query_id: @query.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form" do %>
         <div class="sheet-container">
-          <% statistics = @report_concept.concept.continuous? ? ReportConcept::STATISTIC.collect{|a,b| a} : ['all', 'count', 'percent'] %>
-          <% statistics = ['year', 'month', 'week', 'day'] if @report_concept.concept.date? %>
+          <% statistics = ['integer', 'numeric'].include?(@report_concept.variable.variable_type) ? ReportConcept::STATISTIC.collect{|a,b| a} : ['all', 'count', 'percent'] %>
+          <% statistics = ['year', 'month', 'week', 'day'] if @report_concept.variable.variable_type == 'date' %>
           <% statistics.each do |statistic, s2| %>
             <label class="radio"><%= radio_button :report_concept, :statistic, statistic, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= statistic %></label>
           <% end %>
         </div>
 
-        <div class="control-group" style="<%= 'display:none' if @report_concept.concept.sources.uniq.size < 2 %>">
+        <div class="control-group" style="<%= 'display:none' if @report_concept.variable.sources.uniq.size < 2 %>">
           <label class="control-label">At</label>
           <div class="controls sheet-container">
-            <% @report_concept.concept.sources.uniq.each do |source| %>
+            <% @report_concept.variable.sources.uniq.each do |source| %>
               <label class="radio <%= 'selected' if @report_concept.source == source %>"><%= radio_button_tag "report_concept[source_id]", source.id, @report_concept.source == source, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= source.name %></label>
             <% end %>
           </div>
         </div>
       <% end %>
-    <% elsif @report_concept.concept %>
-      No Options for <%= @report_concept.concept.concept_type %>
+    <% else %>
+      No Options for <%= @report_concept.variable.variable_type %>
     <% end %>
   </div>
 </li>

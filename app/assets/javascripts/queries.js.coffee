@@ -1,13 +1,44 @@
-@checkAllCategoricalValues = () ->
-  elements = $('.categorical_values').each( () ->
+@checkAllChoices = () ->
+  elements = $('.choices').each( () ->
     $(this).prop('checked', true)
     $(this).change()
   )
 
-@uncheckAllCategoricalValues = () ->
-  elements = $('.categorical_values').each( () ->
+@uncheckAllChoices = () ->
+  elements = $('.choices').each( () ->
     $(this).prop('checked', false)
     $(this).change()
+  )
+
+@formatConceptResult = (concept) ->
+  markup = ""
+  markup = "<span class='muted'>" unless concept.commonly_used
+  markup += concept.text
+  markup += "</span>" unless concept.commonly_used
+  markup
+
+@buildQueryConceptTypeahead = () ->
+  $("#variable_search").select2(
+    placeholder: "Select a variable"
+    minimumInputLength: 1
+    width: 'resolve'
+    initSelection: (element, callback) ->
+      callback([])
+    ajax:
+      url: root_url + "queries/#{$('#variable_search').data('query-id')}/autocomplete"
+      dataType: 'json'
+      data: (term, page) -> { search: term }
+      results: (data, page) -> # parse the results into the format expected by Select2.
+          return results: data
+    formatResult: formatConceptResult
+  ).on("change", (e) ->
+    if $("#variable_search").val() != ""
+      $("#variable_search").select2("val", "")
+      params = {}
+      params.query_id = $(this).data('query-id')
+      params.variable_id = e.val
+      showWaiting('#concept_folders', 'Loading', false)
+      $.post(root_url + "query_concepts", params, null, "script")
   )
 
 jQuery ->
@@ -37,11 +68,11 @@ jQuery ->
       false
     )
     .on('click', '[data-object~="categorical-check-all"]', () ->
-      checkAllCategoricalValues()
+      checkAllChoices()
       false
     )
     .on('click', '[data-object~="categorical-uncheck-all"]', () ->
-      uncheckAllCategoricalValues()
+      uncheckAllChoices()
       false
     )
     .on('click', '[data-object~="operand-edit"]', () ->
