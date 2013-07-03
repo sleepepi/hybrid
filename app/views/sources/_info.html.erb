@@ -2,9 +2,9 @@
 <br />
 <% if @query and @query.sources.include?(@source) %>
   <% query_source = @query.query_sources.find_by_source_id(@source.id) %>
-  <%= link_to "Remove from Search", query_source, method: :delete, remote: true, class: 'btn btn-danger', data: { confirm: "Are you sure you want to remove #{@source.name} from your query?" } %>
+  <%= link_to "Remove from Search", query_source_path(query_source, query_id: @query.id), method: :delete, remote: true, class: 'btn btn-danger' %>
 <% else %>
-  <%= link_to "Add to Search", query_sources_path(query_id: @query.id, selected_source_id: @source.id), method: :post, remote: true, title: @source.name, class: 'btn btn-primary' if @query %>
+  <%= link_to "Add to Search", query_sources_path(query_id: @query.id, query_source: { source_id: @source.id } ), method: :post, remote: true, title: @source.name, class: 'btn btn-primary' if @query %>
 <% end %>
 
 <p class="quiet small"><%= sanitize @source.description, attributes: %w(href target) %></p>
@@ -13,19 +13,15 @@
   <h4>Summary Counts</h4>
   <ul>
     <% @source.variables.where(variable_type: 'identifier').order('display_name').uniq.each do |variable| %>
-      <% if false %>
-        <% tables = @source.variable_tables(variable) %>
-        <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
-        <% join_conditions = join_conditions_hash[:result] %>
-        <% if join_conditions_hash[:error].blank? %>
-          <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, concept) %>
-            <% if result_hash[:error].blank? %>
-              <li><%= result_hash[:result] %> <%= concept.human_name %><br /><br /></li>
-            <% else %>
-          <% end %>
+      <% tables = @source.variable_tables(variable) %>
+      <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
+      <% join_conditions = join_conditions_hash[:result] %>
+      <% if join_conditions_hash[:error].blank? %>
+        <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, variable) %>
+        <% if result_hash[:error].blank? %>
+          <li><%= result_hash[:result] %> <%= variable.display_name %></li>
         <% end %>
       <% end %>
-      <li><%= '???' %> <%= variable.display_name %></li>
     <% end %>
     <li><%= pluralize @source.mappings.size, 'Mapped Concept' %></li>
   </ul>

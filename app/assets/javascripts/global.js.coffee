@@ -41,25 +41,6 @@
       $('#query_concept_' + index + '_rop_text').show()
   )
 
-@buildQuerySourceTypeahead = () ->
-  $("#source").select2(
-    placeholder: "Select a data source"
-    width: 'resolve'
-    initSelection: (element, callback) ->
-      callback([])
-    ajax:
-      url: root_url + "sources"
-      dataType: 'json'
-      data: (term, page) -> { search: term, autocomplete: 'true' }
-      results: (data, page) -> # parse the results into the format expected by Select2.
-          return results: data
-  ).on("change", (e) ->
-    if $("#source").val() != ""
-      $("#selected_source_id").val(e.val)
-      $("#source").select2("val", "")
-      $("#sources_form").submit()
-  )
-
 
 @buildReportConceptTypeahead = () ->
   $("#report_concept_search_term").select2(

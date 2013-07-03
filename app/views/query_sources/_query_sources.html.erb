@@ -2,9 +2,9 @@
   <div style="display:inline-block; line-height:25px"
     onmouseover="$('#query_source_<%= query_source.id %>_delete_link').show();"
     onmouseout="$('#query_source_<%= query_source.id %>_delete_link').hide();">
-    <%= link_to query_source.source.name, query_source, method: :get, remote: true %>
+    <%= link_to query_source.source.name, query_source_path(query_source, query_id: @query.id), method: :get, remote: true %>
     <div style="display:inline-block;width:55px">
-      <%= link_to 'remove', query_source, method: :delete, remote: true, class: 'btn btn-mini btn-danger', id: "query_source_#{query_source.id}_delete_link", style: 'display:none' %>
+      <%= link_to 'remove', query_source_path(query_source, query_id: @query.id), method: :delete, remote: true, class: 'btn btn-mini btn-danger', id: "query_source_#{query_source.id}_delete_link", style: 'display:none' %>
     </div>
   </div>
 <% end %>

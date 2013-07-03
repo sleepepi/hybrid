@@ -17,6 +17,29 @@
   markup += "</span>" unless concept.commonly_used
   markup
 
+@buildQuerySourceTypeahead = () ->
+  $("#source").select2(
+    placeholder: "Select a data source"
+    width: 'resolve'
+    initSelection: (element, callback) ->
+      callback([])
+    ajax:
+      url: root_url + "sources"
+      dataType: 'json'
+      data: (term, page) -> { search: term, autocomplete: 'true' }
+      results: (data, page) -> # parse the results into the format expected by Select2.
+          return results: data
+  ).on("change", (e) ->
+    if $("#source").val() != ""
+      $("#source").select2("val", "")
+      params = {}
+      params.query_id = $(this).data('query-id')
+      params.query_source = {}
+      params.query_source.source_id = e.val
+      showWaiting('#query_sources', 'Loading Sources', false)
+      $.post(root_url + "query_sources", params, null, "script")
+  )
+
 @buildQueryConceptTypeahead = () ->
   $("#variable_search").select2(
     placeholder: "Select a variable"

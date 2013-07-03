@@ -25,4 +25,19 @@ class Variable < ActiveRecord::Base
   has_many :report_concepts, dependent: :destroy
   has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
+  def mapped_name(current_user, source = nil)
+    result = nil
+    if source
+      mappings = source.mappings.where(variable_id: self.id)
+      mapping = mappings.first
+      if mapping
+        result_hash = source.sql_codes(current_user)
+        sql_open = result_hash[:open]
+        sql_close = result_hash[:close]
+        result = mapping.table + '.' + sql_open + mapping.column + sql_close
+      end
+    end
+    result
+  end
+
 end

@@ -11,9 +11,5 @@ img_redo.attr('data-img-state', '<%= @query.redo? ? "enabled" : "disabled" %>');
 img_undo.attr('src', root_url + 'assets/' + img_undo.attr('data-img-'+img_undo.attr('data-img-state')));
 img_redo.attr('src', root_url + 'assets/' + img_redo.attr('data-img-'+img_redo.attr('data-img-state')));
 
-
-
-$('#selected_concept_id').val('');
-$('#concept_search_term').val('');
-$( "#query_form" ).submit();
-$( "#report_table_form" ).submit();
+$("#query_form").submit();
+$("#report_table_form").submit();
