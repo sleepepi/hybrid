@@ -31,8 +31,8 @@ class User < ActiveRecord::Base
 
   has_many :reports
 
-  has_many :true_datasets, -> { where(is_dataset: true).order('(reports.name IS NULL or reports.name = ""), reports.name, reports.id') }, class_name: "Report"
-  has_many :true_reports, -> { where(is_dataset: false).order('(reports.name IS NULL or reports.name = ""), reports.name, reports.id') }, class_name: "Report"
+  has_many :true_datasets, -> { where(is_dataset: true).order( :name, :id ) }, class_name: 'Report'
+  has_many :true_reports, -> { where(is_dataset: false).order( :name, :id ) }, class_name: 'Report'
 
   has_many :sources, -> { where deleted: false }
 

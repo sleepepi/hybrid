@@ -22,8 +22,8 @@ class Query < ActiveRecord::Base
 
   has_many :reports
 
-  has_many :true_datasets, -> { where(is_dataset: true).order('(reports.name IS NULL or reports.name = ""), reports.name, reports.id') }, class_name: "Report"
-  has_many :true_reports, -> { where(is_dataset: false).order('(reports.name IS NULL or reports.name = ""), reports.name, reports.id') }, class_name: "Report"
+  has_many :true_datasets, -> { where(is_dataset: true).order( :name, :id ) }, class_name: 'Report'
+  has_many :true_reports, -> { where(is_dataset: false).order( :name, :id ) }, class_name: 'Report'
 
   # has_many :query_users, dependent: :destroy
   # has_many :users, through: :query_users, order: 'last_name, first_name', conditions: ['users.deleted = ?', false]

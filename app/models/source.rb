@@ -44,7 +44,7 @@ class Source < ActiveRecord::Base
   end
 
   def all_dictionaries
-    Dictionary.available.find(self.variables.select(:dictionary_id).group(:dictionary_id).collect(&:dictionary_id).uniq)
+    Dictionary.available.where( id: self.variables.select(:dictionary_id).group(:dictionary_id, :display_name).collect(&:dictionary_id).uniq )
   end
 
   def all_linked_sources

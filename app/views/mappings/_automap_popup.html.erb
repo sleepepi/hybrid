@@ -8,7 +8,7 @@
 <% most_used_dictionary = @source.primary_dictionary %>
 <% variable_scope = Variable.current.where( name: params[:column] ) %>
 <% if most_used_dictionary %>
-  <% variables = variable_scope.order("(dictionary_id = #{most_used_dictionary.id}) = 1 DESC", :name) %>
+  <% variables = variable_scope.order("(dictionary_id = #{most_used_dictionary.id}) = 't' DESC", :name) %>
 <% else %>
   <% variables = variable_scope.order(:dictionary_id, :name) %>
 <% end %>
