@@ -1,6 +1,7 @@
 ## 0.15.0
 
 ### Enhancements
+- PostgreSQL is now the database of choice for the Sleep Portal
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 - Individual Data Source columns now display available concepts if the automap picks up more than one mapping candidate
 - Modified interface for selecting boolean and categorical search criteria
