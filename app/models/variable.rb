@@ -40,4 +40,12 @@ class Variable < ActiveRecord::Base
     result
   end
 
+  def domain_values
+    if self.domain
+      self.domain.values
+    else
+      []
+    end
+  end
+
 end

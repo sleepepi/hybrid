@@ -17,4 +17,10 @@ class Domain < ActiveRecord::Base
   belongs_to :dictionary
   has_many :variables
 
+  # Domain Methods
+
+  def values
+    self.options.collect{ |option| option[:value] }
+  end
+
 end

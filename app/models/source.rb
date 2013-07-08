@@ -79,7 +79,7 @@ class Source < ActiveRecord::Base
     error = result_hash[:error]
 
     if filter_unmapped
-      mapped_columns = self.mappings.where( table: table ).select{|m| m.mapped?(current_user) }.collect{|m| m.column}.uniq
+      mapped_columns = self.mappings.includes(:source, :variable, { variable: :domain }).where( table: table ).select{|m| m.mapped?(current_user) }.collect{|m| m.column}.uniq
       columns.reject!{|hash| mapped_columns.include?(hash[:column])}
     end
 

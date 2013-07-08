@@ -14,7 +14,11 @@ class Mapping < ActiveRecord::Base
   # Mapping Methods
 
   def mapped?(current_user)
-    true
+    if self.variable.variable_type == 'choices'
+      (self.column_values(current_user).reject{|v| v == nil}.collect{|v| v.to_s} | self.variable.domain_values).size <= self.variable.domain_values.size
+    else
+      true
+    end
   end
 
   # Returns unique column values in alphabetical order

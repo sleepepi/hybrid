@@ -43,7 +43,7 @@ class SourcesController < ApplicationController
       current_time = Time.now
 
       @columns.each do |column_hash|
-        variables = @dictionary.variables.where( name: column_hash[:column] )
+        variables = @dictionary.variables.where( 'LOWER(name) = ?', column_hash[:column].to_s.downcase )
         if variables.size == 1 and v = variables.first
           @source.mappings.where( variable_id: v.id, table: table, column: column_hash[:column] ).first_or_create
         end

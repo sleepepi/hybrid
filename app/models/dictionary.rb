@@ -34,13 +34,13 @@ class Dictionary < ActiveRecord::Base
         variable_hash[key] = row[column_name].to_s.strip
       end
 
-      domain = self.domains.where( name: row['domain'].to_s.strip ).first
+      domain = self.domains.where( 'LOWER(name) = ?', row['domain'].to_s.strip.downcase ).first
 
       variable_hash[:domain_id] = domain.id if domain
       variable_hash[:variable_type] = row['type'].to_s.strip if Variable::TYPE.collect{|t| t[1]}.include?(row['type'].to_s.strip)
       variable_hash[:version] = version
 
-      if not variable_hash[:name].blank? and v = self.variables.where( name: variable_hash[:name] ).first
+      if not variable_hash[:name].blank? and v = self.variables.where( 'LOWER(name) = ?', variable_hash[:name].downcase ).first
         variable_hash.delete(:name)
         v.update( variable_hash )
       else
@@ -66,7 +66,7 @@ class Dictionary < ActiveRecord::Base
     CSV.parse( File.open(file_name, 'r:iso-8859-1:utf-8'){|f| f.read}, headers: true ) do |line|
       row = line.to_hash
 
-      d = self.domains.where( name: row['domain_id'].to_s.strip ).first_or_create( folder: row['folder'], version: version )
+      d = self.domains.where( 'LOWER(name) = ?', row['domain_id'].to_s.strip.downcase ).first_or_create( name: row['domain_id'].to_s.strip.downcase, folder: row['folder'], version: version )
 
       if d.valid?
         d.options << { value: row['value'].to_s.strip, display_name: row['display_name'].to_s.strip }
