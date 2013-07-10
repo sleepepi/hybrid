@@ -5,6 +5,7 @@
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 - Individual Data Source columns now display available concepts if the automap picks up more than one mapping candidate
 - Modified interface for selecting boolean and categorical search criteria
+- Creating and editing a source join now provides underlying table and column information
 - Use of Ruby 2.0.0-p247 is now recommended
 - **Gem Changes**
   - Updated to rails 4.0.0

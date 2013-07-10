@@ -76,6 +76,7 @@ Hybrid::Application.routes.draw do
     member do
       post :auto_map
       get :table_columns
+      get :table_columns_for_select
       get :download_file
       post :remove_all_mappings
     end

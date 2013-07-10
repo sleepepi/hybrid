@@ -1,0 +1,6 @@
+<div class="control-group">
+  <%= label_tag "join[#{attribute}]", attribute.to_s.humanize, class: 'control-label' %>
+  <div class="controls">
+    <%= select_tag "join[#{attribute}]", options_for_select([['---', nil]] + @source.table_columns(current_user, table)[:result].collect{|col_hash| col_hash[:column]}, selected_column) %>
+  </div>
+</div>

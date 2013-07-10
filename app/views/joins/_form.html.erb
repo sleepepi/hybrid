@@ -18,29 +18,23 @@
   <div class="control-group">
     <%= f.label :from_table, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :from_table %>
+      <%= f.select :from_table, [['---', nil]] + @source.tables(current_user)[:result], {}, data: { source_id: @source.id, attribute: 'from_column' } %>
     </div>
   </div>
 
-  <div class="control-group">
-    <%= f.label :from_column, nil, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :from_column %>
-    </div>
+  <div id="from_column-container">
+    <%= render partial: 'column_selection_container', locals: { attribute: :from_column, table: @join.from_table, selected_column: @join.from_column } %>
   </div>
 
   <div class="control-group">
     <%= f.label :to_table, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.text_field :to_table %>
+      <%= f.select :to_table, [['---', nil]] + @source.tables(current_user)[:result], {}, data: { source_id: @source.id, attribute: 'to_column' } %>
     </div>
   </div>
 
-  <div class="control-group">
-    <%= f.label :to_column, nil, class: 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :to_column %>
-    </div>
+  <div id="to_column-container">
+    <%= render partial: 'column_selection_container', locals: { attribute: :to_column, table: @join.to_table, selected_column: @join.to_column } %>
   </div>
 
   <div class="form-actions">
