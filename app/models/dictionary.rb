@@ -30,8 +30,12 @@ class Dictionary < ActiveRecord::Base
       row = line.to_hash
 
       variable_hash = {}
-      [[:folder, 'folder'], [:name, 'id'], [:display_name, 'display_name'], [:description, 'description'], [:units, 'units'], [:calculation, 'calculation']].each do |key, column_name|
+      [[:folder, 'folder'], [:name, 'id'], [:display_name, 'display_name'], [:description, 'description'], [:units, 'units'], [:calculation, 'calculation'], [:design_name, 'design_name'], [:design_file, 'design_file']].each do |key, column_name|
         variable_hash[key] = row[column_name].to_s.strip
+      end
+
+      [[:sensitivity, 'sensitivity'], [:commonly_used, 'commonly_used']].each do |key, column_name|
+        variable_hash[key] = row[column_name].to_s.strip unless row[column_name].to_s.strip.blank?
       end
 
       domain = self.domains.where( 'LOWER(name) = ?', row['domain'].to_s.strip.downcase ).first
