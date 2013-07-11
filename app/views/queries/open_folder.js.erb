@@ -1,0 +1,2 @@
+$("#<%= params[:folder_id] %>_link").html("<%= escape_javascript( render partial: 'variables/folder_link', locals: { folder_id: params[:folder_id], folder: params[:folder] } ) %>");
+$("#<%= params[:folder_id] %>_content").html("<%= escape_javascript( render partial: 'variables/folders', locals: { folder: params[:folder] } ) %>");

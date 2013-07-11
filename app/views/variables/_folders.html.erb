@@ -1,0 +1,29 @@
+<% variable_scope = Variable.current.with_source(@query.sources.collect{|s| s.all_linked_sources.pluck(:id) + [s.id]}.flatten.uniq) %>
+
+<% variable_scope.with_folder(folder).select('distinct(folder)').collect{|v| v.folder_path_and_folder(folder)}.sort{|a,b| a[1] <=> b[1]}.uniq.each do |folder_path, folder_display_name| %>
+
+  <% folder_id = "folder_#{folder_path.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
+
+  <div id="<%= folder_id %>_link">
+    <%= link_to open_folder_query_path(@query, folder: folder_path, folder_id: folder_id), method: :get, remote: true, style: "text-decoration:none" do %>
+      <i class="icon-folder-close"></i>
+      <span class="nolink"><%= folder_display_name %></span>
+    <% end %>
+  </div>
+
+  <% found_number = 0 %>
+  <div id="<%= folder_id %>_content" style="margin-left:20px">
+    <% if found_number > 0 %>
+      <%= render partial: 'variables/folders', locals: { folder: folder_path } %>
+    <% end %>
+  </div>
+
+<% end %>
+
+<div>
+  <% variable_scope.with_exact_folder(folder).each do |variable| %>
+    <div class="<%= 'common' if variable.commonly_used? %>">
+      <%= link_to variable.display_name, '#' %>
+    </div>
+  <% end %>
+</div>

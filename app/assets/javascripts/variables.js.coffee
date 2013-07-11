@@ -1,3 +1,10 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+jQuery ->
+  $(document)
+    .on('click', '[data-object~="toggle-folder"]', () ->
+      folder_id = $(this).data('folder-id')
+      $("##{folder_id}_content").toggle()
+      if $("##{folder_id}_content").is(':visible')
+        $("##{folder_id}_link_img").attr('class', 'icon-folder-open')
+      else
+        $("##{folder_id}_link_img").attr('class', 'icon-folder-close')
+    )

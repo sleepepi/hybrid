@@ -1,0 +1,25 @@
+<div>
+  <h3>Variables</h3>
+</div>
+
+<hr class="soften" style="margin-top:5px;margin-bottom:35px"/>
+
+<div class="row-fluid">
+  <div class="span6">
+    <%= form_tag search_folder_concepts_path(query_id: @query.id, add_report_id: params[:add_report_id]), remote: true, method: :post, onsubmit: "showWaiting('#concept_folders', ' Loading Concepts', true)", id: "concept_search_form" do %>
+      <%= text_field_tag 'concept_search', params[:concept_search], class: 'span12', placeholder: 'Enter variable name or navigate folders.' %>
+    <% end %>
+    <div id="variable_folders">
+      <%= render partial: 'variables/folders', locals: { folder: nil } %>
+    </div>
+  </div>
+
+  <div class="span6">
+    <div id="variable_info">
+    </div>
+  </div>
+</div>
+
+<div style="height:30px; margin-top:35px;">
+  <%= link_to 'Close', '#', class: 'btn btn-mini pull-right', data: { object: 'hide-contour-modal' } %>
+</div>

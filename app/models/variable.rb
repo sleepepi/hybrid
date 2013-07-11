@@ -7,7 +7,9 @@ class Variable < ActiveRecord::Base
 
   # Named Scopes
   scope :current, -> { all }
-  scope :with_source, lambda { |arg| where( [ "variables.id in (select variable_id from mappings where mappings.variable_id = variables.id and mappings.source_id IN (?))", arg ] ) }
+  scope :with_source, lambda { |arg| where( "variables.id in (select variable_id from mappings where mappings.variable_id = variables.id and mappings.source_id IN (?))", arg ) }
+  scope :with_folder, lambda { |arg| where( "LOWER(folder) LIKE ? or ? IS NULL", "#{arg.to_s.downcase}/%", arg ) }
+  scope :with_exact_folder, lambda { |arg| where( "LOWER(folder) LIKE ? or ('Uncategorized' = ? and (folder IS NULL or folder = ''))", arg.to_s.downcase, arg ) }
 
 
   # Model Validation
@@ -45,6 +47,16 @@ class Variable < ActiveRecord::Base
       self.domain.values
     else
       []
+    end
+  end
+
+  def folder_path_and_folder(current_folder)
+    r = Regexp.new("^#{current_folder}/")
+    if self.folder.blank?
+      ['Uncategorized', 'Uncategorized']
+    else
+      variable_folder = self.folder.to_s.gsub(r, '').split('/').first
+      [[current_folder, variable_folder].compact.join('/'), variable_folder]
     end
   end
 

@@ -1,7 +1,17 @@
 class QueriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_query,               only: [ :autocomplete, :destroy ]
-  before_action :redirect_without_query,  only: [ :autocomplete, :destroy ]
+  before_action :set_query,               only: [ :autocomplete, :destroy, :variables_popup, :open_folder ]
+  before_action :redirect_without_query,  only: [ :autocomplete, :destroy, :variables_popup, :open_folder ]
+
+  # GET /queries/1/variable_popup.js
+  def variables_popup
+
+  end
+
+  # GET /queries/1/open_folder.js
+  def open_folder
+
+  end
 
   def autocomplete
     @query = current_user.queries.find_by_id(params[:id])
