@@ -90,7 +90,6 @@ class QueryConcept < ActiveRecord::Base
 
   # Values can include:
   #        concept_ids:     1234,5678
-  #            boolean:     false,true
   #               null:     nil
   #             ranges:     x:y
   #                         [x:y]
