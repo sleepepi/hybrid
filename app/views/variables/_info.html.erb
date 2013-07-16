@@ -1,0 +1,6 @@
+<div id="variable_<%= variable.id %>_graph"></div>
+
+<% variable.mappings.each do |mapping| %>
+  <% @mapping = mapping %>
+  <%= render partial: "mappings/stats" %>
+<% end %>

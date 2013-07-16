@@ -61,26 +61,21 @@ class QueryConceptsController < ApplicationController
   def edit
     @query_concept = @query.query_concepts.find_by_id(params[:id])
 
-    # @concept = @query_concept.concept if @query_concept
-    # if @concept and @concept.mappings.size > 0
-    #   chart_params = {}
-    #   width = "100%"
-    #   if @concept.continuous? or @concept.date?
-    #     chart_params = { title: @concept.human_name, width: width, height: "300px", units: @concept.human_units, legend: 'none', make_selection: true }
-    #   elsif @concept.categorical? or @concept.boolean?
-    #     chart_params = { title: @concept.human_name, width: width, height: "250px", make_selection: true }
-    #   end
+    chart_params = { title: @query_concept.variable.display_name, width: '100%', make_selection: true }
+    case @query_concept.variable.variable_type when 'numeric', 'integer', 'date'
+      chart_params[:height] = '300px'
+      chart_params[:units] = @query_concept.variable.units
+      chart_params[:legend] = 'none'
+    when 'choices'
+      chart_params[:height] = '250px'
+    end
 
-    #   result_hash = @concept.graph_values(current_user, chart_params)
-    #   @values = result_hash[:values]
-    #   @categories = result_hash[:categories]
-    #   @chart_type = result_hash[:chart_type]
-    #   @chart_element_id = result_hash[:chart_element_id]
-    #   @stats = result_hash[:stats]
-    #   @defaults = result_hash[:defaults]
-
-    #   @mapping = 1
-    # end
+    result_hash = @query_concept.variable.graph_values(current_user, chart_params)
+    @values = result_hash[:values]
+    @categories = result_hash[:categories]
+    @chart_type = result_hash[:chart_type]
+    @chart_element_id = result_hash[:chart_element_id]
+    @defaults = result_hash[:defaults]
 
     render nothing: true unless @query_concept
   end

@@ -78,9 +78,9 @@ class Mapping < ActiveRecord::Base
     error = value_hash[:error].to_s
 
     if values.size > 0
-      if self.concept.continuous? # or self.concept.date?
+      if ['numeric', 'integer'].include?(self.variable.variable_type)
         values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
-      elsif self.concept.categorical? or self.concept.boolean?
+      elsif self.variable.variable_type == 'choices'
         value_hash = {}
         values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
           orig_key = key

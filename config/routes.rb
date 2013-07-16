@@ -26,7 +26,6 @@ Hybrid::Application.routes.draw do
       get :automap_popup
     end
     member do
-      post :expanded
       post :info
     end
   end

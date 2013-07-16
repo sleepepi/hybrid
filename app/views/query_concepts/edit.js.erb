@@ -1,21 +1,14 @@
 $("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("query_concepts/popup")) %>");
 showContourModal();
 
-<% if @concept %>
-  <% @query = nil %>
-  $("#query_concepts_right").html("<%= escape_javascript(render("concepts/info")) %><div id=\"distribution_qc_popup\"></div>");
-<% end %>
+<% width = @defaults[:width].to_s.gsub("'", '') %>
+<% height = @defaults[:height].to_s.gsub("'", '') %>
+$("#variable_<%= @query_concept.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" style="position:relative;width: <%= width %>;height: <%= height %>"></div>');
 
-<% if @mapping and (@concept.continuous? or @concept.date? or @concept.categorical? or @concept.boolean?) %>
-  <% width = @defaults[:width].to_s.gsub("'", '') %>
-  <% height = @defaults[:height].to_s.gsub("'", '') %>
-  $("#distribution_qc_popup").html('<div id="<%= @chart_element_id %>_qc_popup" style="position:relative;width: <%= width %>;height: <%= height %>"></div><%= escape_javascript(@stats.to_s.html_safe) %>');
-
-  <% case @chart_type when 'column' %>
-    drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
-  <% when 'pie' %>
-    drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
-  <% end %>
+<% case @chart_type when 'column' %>
+  drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
+<% when 'pie' %>
+  drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
 <% end %>
 
 
@@ -42,3 +35,11 @@ $('.datepicker').datepicker({ showOtherMonths: true, selectOtherMonths: true, ch
                  </tbody></table>'
   });
 <% end %>
+
+$("[data-object='sensitive-tooltip']").popover({
+  html: true,
+  placement: 'right',
+  trigger: 'hover',
+  title: '',
+  content: '<p class="quiet small">This variable can ONLY be viewed or downloaded if you only have <span class="source_rule_text">view data distribution</span> or <span class="source_rule_text">download dataset</span> respectively.</p>'
+});

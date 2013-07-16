@@ -12,7 +12,9 @@
   </div>
 
   <div class="span6">
-    <div id="query_concepts_right"></div>
+    <div>
+      <%= render partial: 'variables/info', locals: { variable: @query_concept.variable } %>
+    </div>
   </div>
 </div>
 

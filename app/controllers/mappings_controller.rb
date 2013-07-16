@@ -1,36 +1,14 @@
 class MappingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source_with_edit_data_source_mappings, only: [ :expanded, :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :redirect_without_source,                   only: [ :expanded, :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :set_mapping,                               only: [ :expanded, :info, :show, :edit, :update, :destroy ]
-  before_action :redirect_without_mapping,                  only: [ :expanded, :info, :show, :edit, :update, :destroy ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
+  before_action :redirect_without_source,                   only: [ :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
+  before_action :set_mapping,                               only: [ :info, :show, :edit, :update, :destroy ]
+  before_action :redirect_without_mapping,                  only: [ :info, :show, :edit, :update, :destroy ]
 
   def automap_popup
   end
 
   def info
-    @query = current_user.queries.new()
-
-    chart_params = { title: @mapping.variable.display_name }
-    case @mapping.variable.variable_type when 'numeric', 'integer', 'date'
-    chart_params[:width] = 381
-    chart_params[:height] = 300
-    chart_params[:units] = @mapping.variable.units
-    chart_params[:legend] = 'none'
-    when 'choices'
-      chart_params[:width] = 381
-      chart_params[:height] = 250
-    end
-
-    result_hash = @mapping.graph_values(current_user, chart_params)
-    @values = result_hash[:values]
-    @categories = result_hash[:categories]
-    @chart_type = result_hash[:chart_type]
-    @chart_element_id = result_hash[:chart_element_id]
-    @defaults = result_hash[:defaults]
-  end
-
-  def expanded
     chart_params = { title: @mapping.variable.display_name }
     case @mapping.variable.variable_type when 'numeric', 'integer', 'date'
       chart_params[:width] = 680

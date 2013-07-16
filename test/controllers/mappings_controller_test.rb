@@ -16,38 +16,19 @@ class MappingsControllerTest < ActionController::TestCase
     post :info, source_id: @source, id: mappings(:choices_with_values), format: 'js'
 
     assert_not_nil assigns(:mapping)
-    assert_not_nil assigns(:query)
-
     assert_template 'info'
   end
 
   test "should get info for continuous variable" do
-    post :info, source_id: @source, id: mappings(:numeric_with_units), format: 'js'
+    post :info, source_id: @source, id: mappings(:numeric_with_units).to_param, format: 'js'
 
     assert_not_nil assigns(:mapping)
-    assert_not_nil assigns(:query)
 
     assert_template 'info'
   end
 
-  test "should get expanded for choices variable" do
-    post :expanded, source_id: @source, id: mappings(:choices_with_values), format: 'js'
-
-    assert_not_nil assigns(:mapping)
-
-    assert_template 'expanded'
-  end
-
-  test "should get expanded for continuous variable" do
-    post :expanded, source_id: @source, id: mappings(:numeric_with_units).to_param, format: 'js'
-
-    assert_not_nil assigns(:mapping)
-
-    assert_template 'expanded'
-  end
-
-  test "should get expanded and render blank without variable" do
-    post :expanded, source_id: @source, id: -1, format: 'js'
+  test "should get info and render blank without variable" do
+    post :info, source_id: @source, id: -1, format: 'js'
     assert_nil assigns(:mapping)
     assert_response :success
   end

@@ -75,7 +75,7 @@ class QueryConcept < ActiveRecord::Base
 
       if range.size == 2
         if left_token.blank? and right_token.blank?
-          results << "between <b>#{range[0]}</b> and <b>#{range[1]}</b> #{u_plural}"
+          results << "between <b>#{range[0]}</b> and <b>#{range[1]}</b> #{self.variable.units}"
         else
           results << "#{left_token} <b>#{range[0]}</b> and #{right_token} <b>#{range[1]}</b> #{self.variable.units}"
         end

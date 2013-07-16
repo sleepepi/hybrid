@@ -60,4 +60,91 @@ class Variable < ActiveRecord::Base
     end
   end
 
+  def design_name_or_filename
+    self.design_name.blank? ? self.design_file : self.design_name
+  end
+
+  def graph_values(current_user, chart_params)
+    categories = []
+    result = ''
+    error = ''
+    all_stats = []
+    values = {}
+    mapping_values = []
+
+    self.mappings.each do |mapping|
+      value_hash = mapping.graph_values_short(current_user, chart_params)
+      if value_hash[:error].blank?
+        local_values = value_hash[:local_values]
+        value_array = value_hash[:value_array]
+        all_stats << value_hash[:stats]
+        if ['numeric', 'integer', 'date'].include?(self.variable_type)
+          mapping_values << local_values
+        elsif self.variable_type == 'choices'
+          mapping_values << value_array
+        end
+      else
+        mapping_values << []
+      end
+    end
+
+    if ['numeric', 'integer', 'date'].include?(self.variable_type)
+      all_mapping_values = mapping_values.flatten
+      all_integers = false
+      all_integers = (all_mapping_values.count{|i| i.denominator != 1} == 0)
+      minimum = all_mapping_values.min || 0
+      maximum = all_mapping_values.max || 100
+      default_max_buckets = 30
+      max_buckets = all_integers ? [maximum - minimum + 1, default_max_buckets].min : default_max_buckets
+      bucket_size = (maximum - minimum + 1).to_f / max_buckets
+
+      (0..(max_buckets-1)).each do |bucket|
+        val_min = (bucket_size * bucket) + minimum
+        val_max = bucket_size * (bucket + 1) + minimum
+        # Greater or equal to val_min, less than val_max
+        # categories << "'#{val_min} to #{val_max}'"
+        categories << "#{val_min.round}"
+      end
+
+      self.mappings.each_with_index do |mapping, index|
+        new_values = []
+        unless mapping_values[index].blank?
+          (0..max_buckets-1).each do |bucket|
+            val_min = (bucket_size * bucket) + minimum
+            val_max = bucket_size * (bucket + 1) + minimum
+            # Greater or equal to val_min, less than val_max
+            new_values << mapping_values[index].count{|i| i >= val_min and i < val_max}
+          end
+          mapping_values[index] = new_values
+        end
+      end
+    end
+
+
+    self.mappings.each_with_index do |mapping, index|
+      unless mapping_values[index].blank?
+        key_name = "#{mapping.source.name}.#{mapping.table}.#{mapping.column}"
+        if ['numeric', 'integer', 'date'].include?(self.variable_type)
+          values[key_name] = mapping_values[index] #local_values
+        elsif self.variable_type == 'choices'
+          values[key_name] = mapping_values[index] #"[" + value_array.join(',') + "]"
+        end
+      end
+    end
+
+    if ['numeric', 'integer', 'date'].include?(self.variable_type)
+      chart_type = "column"
+    elsif self.variable_type == 'choices'
+      chart_type = "pie"
+    end
+
+    chart_element_id = "variable_chart_#{self.id}"
+
+    defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
+
+    defaults.merge!(chart_params)
+
+    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: all_stats.join('<br />') }
+  end
+
 end
