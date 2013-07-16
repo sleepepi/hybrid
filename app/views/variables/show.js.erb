@@ -1,0 +1,31 @@
+<% chart_params = { title: @variable.display_name, width: '100%', make_selection: true } %>
+<% case @variable.variable_type when 'numeric', 'integer', 'date' %>
+  <% chart_params[:height] = '300px' %>
+  <% chart_params[:units] = @variable.units %>
+  <% chart_params[:legend] = 'none' %>
+<% when 'choices' %>
+  <% chart_params[:height] = '250px' %>
+<% end %>
+<% result_hash = @variable.graph_values(current_user, chart_params) %>
+<% @values = result_hash[:values] %>
+<% @categories = result_hash[:categories] %>
+<% @chart_type = result_hash[:chart_type] %>
+<% @chart_element_id = result_hash[:chart_element_id] %>
+<% @defaults = result_hash[:defaults] %>
+
+$("#variable_info").html("");
+$("#variable_info").append("<%= escape_javascript( render partial: 'variables/info', locals: { variable: @variable } ) %>");
+$("#variable_info").append("<%= escape_javascript( render partial: 'variables/about', locals: { variable: @variable } ) %>");
+$("#variable_info").append("<%= escape_javascript( render partial: 'variables/add', locals: { variable: @variable } ) %>");
+
+<% width = @defaults[:width].to_s.gsub("'", '') %>
+<% height = @defaults[:height].to_s.gsub("'", '') %>
+$("#variable_<%= @variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" style="position:relative;width: <%= width %>;height: <%= height %>"></div>');
+
+<% case @chart_type when 'column' %>
+  drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
+<% when 'pie' %>
+  drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
+<% end %>
+
+loadSensitiveVariablePopover();

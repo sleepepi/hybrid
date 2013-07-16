@@ -94,7 +94,7 @@ class Mapping < ActiveRecord::Base
           value_array << { name: "#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')} in #{self.source.name.gsub("'", '\\\\\'')}", y: array.size, id: uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'') }
         end
       else
-        error += ": No Chart for #{self.concept.concept_type} Concepts Provided"
+        error += ": No Chart for #{self.variable.variable_type} Provided"
       end
     else
       error += ": No Values In Database For this Column"

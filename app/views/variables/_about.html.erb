@@ -1,0 +1,34 @@
+<dl class="dl-horizontal">
+  <% unless variable.description.blank? %>
+    <dt>Description</dt>
+    <dd><%= simple_markdown variable.description %></dd>
+  <% end %>
+
+  <% if variable.sensitivity != '0' %>
+    <dt>Sensitivity</dt>
+    <dd><span class="label label-important" data-object="sensitive-tooltip">Sensitive</span></dd>
+  <% end %>
+
+  <% unless variable.calculation.blank? %>
+    <dt>Calculation</dt>
+    <dd><pre><%= variable.calculation %></pre></dd>
+  <% end %>
+
+  <% unless variable.design_file.blank? %>
+    <dt>Source File</dt>
+    <dd><%= link_to variable.design_name_or_filename, "#{request.script_name}/forms/" + variable.design_file, target: '_blank' %></dd>
+  <% end %>
+
+  <dt>Variable Type</dt>
+  <dd><%= variable.variable_type %></dd>
+
+  <% if variable.tags.size > 0 %>
+    <dt>Tags</dt>
+    <dd>
+      <% variable.tags.each do |tag| %>
+        <span class="label"><%= tag.name %></span>
+      <% end %>
+    </dd>
+  <% end %>
+
+</dl>

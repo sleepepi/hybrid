@@ -34,6 +34,7 @@ Hybrid::Application.routes.draw do
     member do
       get :variables_popup
       get :open_folder
+      get :search_folder
       get :autocomplete
       post :total_records_count
       post :data_files

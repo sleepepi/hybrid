@@ -33,24 +33,4 @@
 <% end %>
 
 
-<dl class="dl-horizontal">
-  <% unless @query_concept.variable.description.blank? %>
-    <dt>Description</dt>
-    <dd><%= simple_markdown @query_concept.variable.description %></dd>
-  <% end %>
-
-  <% if @query_concept.variable.sensitivity != '0' %>
-    <dt>Sensitivity</dt>
-    <dd><span class="label label-important" data-object="sensitive-tooltip">Sensitive</span></dd>
-  <% end %>
-
-  <% unless @query_concept.variable.calculation.blank? %>
-    <dt>Calculation</dt>
-    <dd><pre><%= @query_concept.variable.calculation %></pre></dd>
-  <% end %>
-
-  <% unless @query_concept.variable.design_file.blank? %>
-    <dt>Source File</dt>
-    <dd><%= link_to @query_concept.variable.design_name_or_filename, "#{request.script_name}/forms/" + @query_concept.variable.design_file, target: '_blank' %></dd>
-  <% end %>
-</dl>
+<%= render partial: 'variables/about', locals: { variable: @query_concept.variable } %>
