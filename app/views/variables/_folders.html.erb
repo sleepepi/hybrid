@@ -1,6 +1,7 @@
 <% variable_scope = Variable.current.with_source(@query.sources.collect{|s| s.all_linked_sources.pluck(:id) + [s.id]}.flatten.uniq) %>
 
 <% variable_scope_filter_by_search = ( params[:search].blank? ? Variable.none : variable_scope.search(params[:search]) ) %>
+<% discovered_variable_ids = variable_scope_filter_by_search.pluck(:id) %>
 
 <% variable_scope.with_folder(folder).select('distinct(folder)').collect{|v| v.folder_path_and_folder(folder)}.sort{|a,b| a[1] <=> b[1]}.uniq.each do |folder_path, folder_display_name| %>
 
@@ -29,7 +30,8 @@
 <div>
   <% variable_scope.with_exact_folder(folder).each do |variable| %>
     <div class="<%= 'common' if variable.commonly_used? %>">
-      <%= link_to highlight(variable.display_name, params[:search].to_s, highlighter: '<span class="highlight">\1</span>'), dictionary_variable_path(variable.dictionary, variable, query_id: @query.id), remote: true %>
+      <% link_name = discovered_variable_ids.include?(variable.id) ? "<span class='highlight'>#{variable.display_name}</span>".html_safe : variable.display_name %>
+      <%= link_to link_name, dictionary_variable_path(variable.dictionary, variable, query_id: @query.id), remote: true %>
     </div>
   <% end %>
 </div>

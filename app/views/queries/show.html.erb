@@ -5,10 +5,10 @@
     <%= link_to "History", queries_path, class: 'btn btn-mini' %>
     <%= link_to "New Search", new_query_path, id: 'new_search_link', class: 'btn btn-mini' %>
     <%= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>
-    <%= link_to "Matching", matching_path(cases_id: @query.id, controls_id: @query.id), class: 'btn btn-mini' %>
+    <%#= link_to "Matching", matching_path(cases_id: @query.id, controls_id: @query.id), class: 'btn btn-mini' %>
   </div>
   <h1>
-    <%= @title %>
+    <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
   </h1>
 </div>
 
@@ -18,39 +18,29 @@
   <div class="contour-modal" data-object="contour_modal_container"></div>
 </div>
 
-<div class="row-fluid">
-  <div class="span6">
-
-    <form class="form-horizontal">
-      <div class="control-group">
-        <label class="control-label">From</label>
-        <div class="controls" style="white-space:nowrap">
-          <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { query_id: @query.id }, style: 'width:80%' %>
-          <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' }, id: 'source_more' %>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls" id="query_sources">
-          <%= render partial: 'query_sources/query_sources' %>
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="control-label">With</label>
-        <div class="controls" style="white-space:nowrap">
-          <%= text_field_tag 'variable_search', '', tabindex: '2', data: { query_id: @query.id }, style: 'width:80%' %>
-          <%= link_to 'more', variables_popup_query_path(@query), method: :get, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
-        </div>
-      </div>
-    </form>
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">From</label>
+    <div class="controls" style="white-space:nowrap">
+      <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { query_id: @query.id } %>
+      <%= link_to 'more', sources_path(popup: true, query_id: @query.id), remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more data sources', data: { placement: 'right' }, id: 'source_more' %>
+    </div>
   </div>
 
-  <div class="span6" style="text-align:right">
-    <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
+  <div class="control-group">
+    <div class="controls" id="query_sources">
+      <%= render partial: 'query_sources/query_sources' %>
+    </div>
   </div>
-</div>
 
+  <div class="control-group">
+    <label class="control-label">With</label>
+    <div class="controls" style="white-space:nowrap">
+      <%= text_field_tag 'variable_search', '', tabindex: '2', data: { query_id: @query.id } %>
+      <%= link_to 'more', variables_popup_query_path(@query), method: :get, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
+    </div>
+  </div>
+</form>
 
 <%= form_tag mark_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, id: 'mark_query_concepts_form' do %>
   <%= hidden_field_tag :selected_query_concept_id, '', name: 'query_concept_id' %>
@@ -84,17 +74,33 @@
 
 <hr class="soften" style="margin: 20px 0px">
 
-<%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form' do %>
-  <div id="query_concepts" style="clear:both;margin-left:50px;margin-right:50px"><%= render partial: 'query_concepts/query_concepts' %></div>
-<% end %>
+<div class="row-fluid">
+  <div class="span9">
+    <%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form' do %>
+      <div id="query_concepts" style="clear:both;margin-left:50px;margin-right:50px"><%= render partial: 'query_concepts/query_concepts' %></div>
+    <% end %>
+  </div>
 
+  <div class="span3">
+    <div class="download-container">
+      <div class="download-container-after">Total</div>
+      <h1>
+        <div id="total_records_found_display" class="records_found center"></div>
+      </h1>
+    </div>
 
-<hr class="soften" style="margin: 20px 0px">
+    <span id="total_errors_found" class="errors_found"></span>
+  </div>
+</div>
 
 <%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', false)" do %>
 <% end %>
 
-<div class="row">
+<% if false %>
+
+<hr class="soften" style="margin: 20px 0px">
+
+<div class="row-fluid">
   <div class="span3">
     <h2 class="about-title" style="text-align:left">Result</h2>
     <div id="total_records_found_display" class="records_found" style="font-weight: 300;font-size:30px;line-height:1"></div>
@@ -122,6 +128,7 @@
     <div id="query_file_types"><%= render partial: 'queries/file_types' %></div>
   </div>
 </div>
+<% end %>
 
 <div id="information" style="display:none"></div>
 
