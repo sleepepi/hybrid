@@ -1,13 +1,16 @@
-<h3 style="margin-top:0px"><%= @source.name %></h3>
-<br />
-<% if @query and @query.sources.include?(@source) %>
-  <% query_source = @query.query_sources.find_by_source_id(@source.id) %>
-  <%= link_to "Remove from Search", query_source_path(query_source, query_id: @query.id), method: :delete, remote: true, class: 'btn btn-danger' %>
-<% else %>
-  <%= link_to "Add to Search", query_sources_path(query_id: @query.id, query_source: { source_id: @source.id } ), method: :post, remote: true, title: @source.name, class: 'btn btn-primary' if @query %>
-<% end %>
+<h3 style="margin-top:0px">
+  <%= @source.name %>
+  <% if @query and @query.sources.include?(@source) %>
+    <% query_source = @query.query_sources.find_by_source_id(@source.id) %>
+    <%= link_to "Remove from Search", query_source_path(query_source, query_id: @query.id), method: :delete, remote: true, class: 'btn btn-danger' %>
+  <% else %>
+    <%= link_to "Add to Search", query_sources_path(query_id: @query.id, query_source: { source_id: @source.id } ), method: :post, remote: true, title: @source.name, class: 'btn btn-primary' if @query %>
+  <% end %>
+</h3>
 
-<p class="quiet small"><%= sanitize @source.description, attributes: %w(href target) %></p>
+<%= simple_markdown @source.description %>
+
+<hr class="soften" style="margin: 20px 0px">
 
 <% if @source.user_has_action?(current_user, "view data source general information") or @source.user_has_action?(current_user, "get count") %>
   <h4>Summary Counts</h4>
