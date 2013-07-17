@@ -1,10 +1,10 @@
-# Hybrid, Sleep Portal
+# Sleep Portal
 
-[![Build Status](https://travis-ci.org/sleepepi/hybrid.png?branch=master)](https://travis-ci.org/sleepepi/hybrid)
-[![Dependency Status](https://gemnasium.com/sleepepi/hybrid.png)](https://gemnasium.com/sleepepi/hybrid)
-[![Code Climate](https://codeclimate.com/github/sleepepi/hybrid.png)](https://codeclimate.com/github/sleepepi/hybrid)
+[![Build Status](https://travis-ci.org/sleepepi/sleepportal.png?branch=master)](https://travis-ci.org/sleepepi/sleepportal)
+[![Dependency Status](https://gemnasium.com/sleepepi/sleepportal.png)](https://gemnasium.com/sleepepi/sleepportal)
+[![Code Climate](https://codeclimate.com/github/sleepepi/sleepportal.png)](https://codeclimate.com/github/sleepepi/sleepportal)
 
-Hybrid is a web-application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. Hybrid also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. Hybrid uses a data dictionary approach to define data and database relationships. Using Rails 4.0+ and Ruby 2.0.0+.
+The Sleep Portal is a web-application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. The Sleep Portal also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. A [data dictionary approach](https://github.com/sleepepi/spout) is used to define data and database relationships. Using Rails 4.0+ and Ruby 2.0.0+.
 
 ## Installation
 
@@ -16,12 +16,12 @@ Once you have the prerequisites in place, you can proceed to install bundler whi
 gem install bundler
 ```
 
-This README assumes the following installation directory: /var/www/hybrid
+This README assumes the following installation directory: /var/www/sleepportal
 
 ```
 cd /var/www
 
-git clone git://github.com/sleepepi/hybrid.git
+git clone https://github.com/sleepepi/sleepportal.git
 
 cd hybrid
 
@@ -48,7 +48,7 @@ Open a browser and go to: [http://localhost](http://localhost)
 
 All done!
 
-## Contributing to Hybrid
+## Contributing to the Sleep Portal
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -60,4 +60,4 @@ All done!
 
 ## Copyright [![Creative Commons 3.0](http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png)](http://creativecommons.org/licenses/by-nc-sa/3.0)
 
-Copyright (c) 2013 Division of Medicine Program of Sleep Medicine Epidemiology. See [LICENSE](https://github.com/sleepepi/hybrid/blob/master/LICENSE) for further details.
+Copyright (c) 2013 Division of Medicine Program of Sleep Medicine Epidemiology. See [LICENSE](https://github.com/sleepepi/sleepportal/blob/master/LICENSE) for further details.
