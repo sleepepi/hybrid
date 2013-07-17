@@ -139,12 +139,12 @@
           events:
             click: (event) ->
               if params['make_selection']
-                el_id = "#value_ids_" + this.id
-                if $(el_id).is(':checked')
-                  $(el_id).prop('checked',false)
+                checkbox = $("input[value='#{this.id}']")
+                if checkbox.is(':checked')
+                  checkbox.prop('checked',false)
                 else
-                  $(el_id).prop('checked',true)
-                $(el_id).change()
+                  checkbox.prop('checked',true)
+                checkbox.change()
                 false
     # legend:
     #   layout: 'vertical'

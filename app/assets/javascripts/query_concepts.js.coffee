@@ -10,3 +10,12 @@ jQuery ->
     .on('click', '[data-object~="mark_query_concept"]', () ->
       markQueryConcept(this)
     )
+    .on('click', '[data-object~="select-checkbox"]', () ->
+      checkbox = $("input[value='#{$(this).data('value')}']")
+      if checkbox.is(':checked')
+        checkbox.prop('checked',false)
+      else
+        checkbox.prop('checked',true)
+      checkbox.change()
+      false
+    )

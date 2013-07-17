@@ -32,7 +32,7 @@
       </tr>
     </table>
   <% when 'choices' %>
-    <table class="table table-striped" style="width:100%">
+    <table class="table table-striped table-hover" style="width:100%">
       <thead>
         <tr>
           <th style="text-align:left">Value</th>
@@ -42,7 +42,7 @@
         </tr>
       </thead>
       <% values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array| %>
-        <tr>
+        <tr data-object="select-checkbox" data-value="<%= key %>" style="cursor:pointer">
           <td><%= (key == nil ? "NULL" : key.to_s) %></td>
           <td><%= @mapping.human_normalized_value(key) %></td>
           <td><%= array.size %></td>
