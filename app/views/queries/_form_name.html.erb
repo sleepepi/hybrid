@@ -1,4 +1,3 @@
-<%= form_tag save_name_query_path(@query), method: :post, remote: true, class: 'form-inline', style: 'margin-bottom:0px' do %>
-  <%= text_field :query, :name, style: 'width:300px', class: "input-small", placeholder: "Enter a Name for your Search" %>
-  <%= submit_tag 'save', class: 'btn btn-mini btn-primary' %>
-<% end %>
+<%= text_field :query, :name, class: "input-large", placeholder: "Enter a Name for your Search", style: 'margin-bottom:0px', data: { query_id: @query.id } %>
+<%= link_to 'Save Name', '#', class: 'btn btn-primary btn-mini', data: { object: 'save_query_name' } %>
+<%= link_to 'Cancel', @query, method: :get, remote: true, class: 'btn btn-mini' %>

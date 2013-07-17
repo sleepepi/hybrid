@@ -40,8 +40,6 @@ Hybrid::Application.routes.draw do
       post :data_files
       post :load_file_type
       post :reorder
-      post :edit_name
-      post :save_name
       post :undo
       post :redo
       post :copy

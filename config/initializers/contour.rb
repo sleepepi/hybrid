@@ -34,9 +34,6 @@ Contour.setup do |config|
               { name: 'Logout', path: 'destroy_user_session_path' }]
     },
     {
-      name: 'Search', display: 'signed_in', path: 'root_path', position: 'left'
-    },
-    {
       name: 'History', display: 'signed_in', path: 'queries_path', position: 'left'
     },
     {

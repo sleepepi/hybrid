@@ -64,6 +64,12 @@
       $.post(root_url + "query_concepts", params, null, "script")
   )
 
+@submitQueryName = () ->
+  $.post(root_url + "queries/#{$("#query_name").data('query-id')}", "_method=patch" + "&" + $("#query_name").serialize(), null, "script")
+
+@cancelQueryNameEdit = () ->
+  $.get(root_url + "queries/#{$("#query_name").data('query-id')}", null, null, "script")
+
 jQuery ->
   $( "#query_form" ).submit()
 
@@ -107,5 +113,15 @@ jQuery ->
       $('#query_concept_' + $(this).data('value') + '_rop_text').show()
       $('#query_concept_' + $(this).data('value') + '_rop_select').hide()
       false
+    )
+    .on('click', '[data-object~="save_query_name"]', () ->
+      submitQueryName()
+      false
+    )
+    .on("keyup", "#query_name", (event) ->
+      if event.which == 13
+        submitQueryName()
+      else if event.which == 27
+        cancelQueryNameEdit()
     )
 

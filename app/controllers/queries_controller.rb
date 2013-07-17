@@ -1,7 +1,7 @@
 class QueriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_query,               only: [ :autocomplete, :destroy, :variables_popup, :open_folder ]
-  before_action :redirect_without_query,  only: [ :autocomplete, :destroy, :variables_popup, :open_folder ]
+  before_action :set_query,               only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo ]
+  before_action :redirect_without_query,  only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo ]
 
   # GET /queries/1/variable_popup.js
   def variables_popup
@@ -95,64 +95,41 @@ class QueriesController < ApplicationController
     render nothing: true unless @query
   end
 
-  def edit_name
-    @query = current_user.all_queries.find_by_id(params[:id])
-    render nothing: true unless @query
+  # GET /queries/1/edit.js
+  def edit
   end
 
-  def save_name
-    @query = current_user.all_queries.find_by_id(params[:id])
-    if @query
-      @query.update_attributes name: params[:query][:name]
-    else
-      render nothing: true
-    end
+  # POST /queries/1.js
+  def update
+    @query.reload unless @query.update query_params
+    render 'show'
   end
 
   def undo
-    @query = current_user.all_queries.find_by_id(params[:id])
-    if @query
-      @query.undo!
-      render 'query_concepts/query_concepts'
-    else
-      render nothing: true
-    end
+    @query.undo!
+    render 'query_concepts/query_concepts'
   end
 
   def redo
-    @query = current_user.all_queries.find_by_id(params[:id])
-    if @query
-      @query.redo!
-      render 'query_concepts/query_concepts'
-    else
-      render nothing: true
-    end
+    @query.redo!
+    render 'query_concepts/query_concepts'
   end
 
   def index
-    # current_user.update_column :queries_per_page, params[:queries_per_page].to_i if params[:queries_per_page].to_i >= 5 and params[:queries_per_page].to_i <= 20
-    query_scope = current_user.all_queries
-
-    @search_terms = params[:search].to_s.gsub(/[^0-9a-zA-Z]/, ' ').split(' ')
-    @search_terms.each{|search_term| query_scope = query_scope.search(search_term) }
-
     @order = scrub_order(Query, params[:order], 'queries.created_at DESC')
-    query_scope = query_scope.order(@order)
-
-    @queries = query_scope.page(params[:page]).per(20) # current_user.queries_per_page)
+    @queries = current_user.all_queries.search(params[:search]).order(@order).page(params[:page]).per(20)
   end
-
 
   def show
     @query = current_user.all_queries.find_by_id(params[:id])
     @query = current_user.all_queries.find_by_id(current_user.current_query_id) unless @query
-    @query = current_user.queries.create(name: "#{current_user.last_name} #{Time.now.strftime("%Y.%m.%d %l:%M %p")}") unless @query
+    @query = current_user.queries.create(name: "#{current_user.last_name} Search ##{current_user.queries.count+1}") unless @query
 
     current_user.update_column :current_query_id, @query.id
   end
 
   def new
-    @query = current_user.queries.create(name: "#{current_user.last_name} #{Time.now.strftime("%Y.%m.%d %l:%M %p")}")
+    @query = current_user.queries.create(name: "#{current_user.last_name}  Search ##{current_user.queries.count+1}")
     current_user.update_column :current_query_id, @query.id
     redirect_to root_path, notice: "Created search #{@query.name}"
   end
@@ -168,11 +145,6 @@ class QueriesController < ApplicationController
     end
   end
 
-  # # GET /queries/1/edit
-  # def edit
-  #   @query = Query.find(params[:id])
-  # end
-  #
   # # POST /queries
   # # POST /queries.xml
   # def create
@@ -215,5 +187,12 @@ class QueriesController < ApplicationController
     def set_query
       super(:id)
     end
+
+    def query_params
+      params.require(:query).permit(
+        :name
+      )
+    end
+
 
 end

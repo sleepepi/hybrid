@@ -21,12 +21,6 @@
   element.attr('selectedIndex', next_index)
   element.change()
 
-@markQueryConcept = (element, index) ->
-  element = $(element)
-  $('#selected_query_concept_id').val(index)
-  $('#query_concept_selected').val(element.is(':checked'))
-  $.post($("#mark_query_concepts_form").attr("action"), $("#mark_query_concepts_form").serialize(), null, "script")
-
 @changeRightOperator = (element, index) ->
   element = $(element)
   $('#selected_right_operator_query_concept_id').val(index)

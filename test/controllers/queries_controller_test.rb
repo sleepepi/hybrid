@@ -75,23 +75,23 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "should popup edit name box" do
-    post :edit_name, id: queries(:query_with_sources), format: 'js'
-    assert_template 'edit_name'
+    post :edit, id: queries(:query_with_sources), format: 'js'
+    assert_template 'edit'
   end
 
   test "edit name should return blank without valid query" do
-    post :edit_name, id: -1, format: 'js'
+    post :edit, id: -1, format: 'js'
     assert_response :success
   end
 
   test "should save name" do
-    post :save_name, id: queries(:query_with_sources), query: {name: 'My New Name'}, format: 'js'
+    post :update, id: queries(:query_with_sources), query: {name: 'My New Name'}, format: 'js'
     assert_equal 'My New Name', assigns(:query).name
-    assert_template 'save_name'
+    assert_template 'show'
   end
 
   test "save name should return blank without valid query" do
-    post :save_name, id: -1, query: {name: 'My New Name'}, format: 'js'
+    post :update, id: -1, query: { name: 'My New Name' }, format: 'js'
     assert_response :success
   end
 
