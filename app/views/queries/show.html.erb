@@ -86,7 +86,7 @@
   </div>
 </div>
 
-<%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', false)" do %>
+<%= form_tag total_records_count_query_path(@query), method: :post, remote: true, id: 'query_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', true)" do %>
 <% end %>
 
 <% if false %>
