@@ -1,4 +1,4 @@
-module Hybrid
+module SleepPortal
   module VERSION #:nodoc:
     MAJOR = 0
     MINOR = 15

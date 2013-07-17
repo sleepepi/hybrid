@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Hybrid::Application.load_tasks
+SleepPortal::Application.load_tasks

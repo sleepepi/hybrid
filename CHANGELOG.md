@@ -281,7 +281,7 @@
 
 ### Enhancements
 - Update to Rails 3.1.1
-- The login page now displays the latest news from the Hybrid RSS Feed, (gem Contour 0.5.6)
+- The login page now displays the latest news from the Sleep Portal RSS Feed, (gem Contour 0.5.6)
 - Reports now reload when opening the report and when adding or removing concepts to the report
 - Users can now delete a concept directly from a report
 - Percent and Count options can now be set for categorical and boolean concepts allowing the percentages to be downloaded in their own column

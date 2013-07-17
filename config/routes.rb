@@ -1,4 +1,4 @@
-Hybrid::Application.routes.draw do
+SleepPortal::Application.routes.draw do
 
   resources :concepts do
     collection do
