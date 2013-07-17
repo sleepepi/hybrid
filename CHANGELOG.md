@@ -9,7 +9,7 @@
 - Use of Ruby 2.0.0-p247 is now recommended
 - **Gem Changes**
   - Updated to rails 4.0.0
-  - Updated to contour 2.0.0.rc2
+  - Updated to contour 2.0.0.rc3
 
 ### Refactoring
 - Removed references to external concepts and datasets
