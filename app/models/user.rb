@@ -38,6 +38,11 @@ class User < ActiveRecord::Base
 
   # User Methods
 
+  def avatar_url(size = 80, default = 'mm')
+    gravatar_id = Digest::MD5.hexdigest(self.email.to_s.downcase)
+    "//gravatar.com/avatar/#{gravatar_id}.png?&s=#{size}&r=pg&d=#{default}"
+  end
+
   def all_dictionaries
     @all_dictionaries ||= begin
       self.dictionaries
