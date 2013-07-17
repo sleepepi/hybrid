@@ -14,7 +14,7 @@ gem 'ruby-ntlm-namespace',  '~> 0.0.1'
 gem 'redcarpet',            '~> 3.0.0'
 
 # Data File and Data Source connections
-gem 'aqueduct',             '~> 0.2.0.pre',       github: 'remomueller/aqueduct',             ref: '6ca6b08'
+gem 'aqueduct',             '~> 0.2.0'
 gem 'aqueduct-elastic',     '~> 0.2.0.pre',       github: 'remomueller/aqueduct-elastic',     ref: '2f99711'
 gem 'aqueduct-ftp',         '~> 0.2.0.pre',       github: 'remomueller/aqueduct-ftp',         ref: 'e2ec908'
 gem 'aqueduct-mounted',     '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mounted',     ref: '026b74c'
