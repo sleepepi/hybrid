@@ -17,7 +17,7 @@ gem 'redcarpet',            '~> 3.0.0'
 gem 'aqueduct',             '~> 0.2.0'
 gem 'aqueduct-elastic',     '~> 0.2.0'
 gem 'aqueduct-ftp',         '~> 0.2.0'
-gem 'aqueduct-mounted',     '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mounted',     ref: '026b74c'
+gem 'aqueduct-mounted',     '~> 0.2.0'
 gem 'aqueduct-postgresql',  '~> 0.2.0'
 gem 'aqueduct-mysql',       '~> 0.2.0'
 # Install instructions for Windows: http://blog.mmediasys.com/2011/07/07/installing-mysql-on-windows-7-x64-and-using-ruby-with-it/
