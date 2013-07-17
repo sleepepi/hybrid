@@ -108,10 +108,6 @@ jQuery ->
     .on('mouseout', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/blank.png'))
 
   $(document)
-    .on('mouseover', ".smudge", () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?.png/, '_g1.png')))
-    .on('mouseout', ".smudge",  () -> $(this).attr('src', $(this).attr('src').replace(/(-(.*?))?_g1.png/, '.png')))
-
-  $(document)
     .on('click', '[data-object~="submit"]', () ->
       $($(this).data('target')).submit()
       false
