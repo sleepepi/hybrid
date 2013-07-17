@@ -16,7 +16,7 @@ gem 'redcarpet',            '~> 3.0.0'
 # Data File and Data Source connections
 gem 'aqueduct',             '~> 0.2.0'
 gem 'aqueduct-elastic',     '~> 0.2.0'
-gem 'aqueduct-ftp',         '~> 0.2.0.pre',       github: 'remomueller/aqueduct-ftp',         ref: 'e2ec908'
+gem 'aqueduct-ftp',         '~> 0.2.0'
 gem 'aqueduct-mounted',     '~> 0.2.0.pre',       github: 'remomueller/aqueduct-mounted',     ref: '026b74c'
 gem 'aqueduct-postgresql',  '~> 0.2.0'
 gem 'aqueduct-mysql',       '~> 0.2.0'
