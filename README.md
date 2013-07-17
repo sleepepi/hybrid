@@ -23,7 +23,7 @@ cd /var/www
 
 git clone https://github.com/sleepepi/sleepportal.git
 
-cd hybrid
+cd sleepportal
 
 bundle install
 ```

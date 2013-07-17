@@ -5,7 +5,7 @@ development:
   encoding: unicode
   pool: 5
   timeout: 5000
-  database: hybrid_development
+  database: sleepportal_development
   username: <%= print "Enter Database Username: "; u = gets.chomp(); u %>
   <%= print "Enter Database Password: "; p = gets.chomp(); if p == '' then p = '# password:' else p = "password: #{p}" end; p %>
   <%= print "Enter Database Socket: "; s = gets.chomp(); if s == '' then s = '# socket:' else s = "socket: #{s}" end; s %>
@@ -19,7 +19,7 @@ test:
   encoding: unicode
   pool: 5
   timeout: 5000
-  database: hybrid_test
+  database: sleepportal_test
   pool: 5
   username: <%= u %>
   <%= p %>
@@ -31,7 +31,7 @@ production:
   encoding: unicode
   pool: 5
   timeout: 5000
-  database: hybrid_production
+  database: sleepportal_production
   pool: 5
   username: <%= u %>
   <%= p %>
