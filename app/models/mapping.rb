@@ -83,45 +83,33 @@ class Mapping < ActiveRecord::Base
 
   def graph_values(current_user, chart_params)
     categories = []
-    value_hash = self.all_values_for_column(current_user)
-    values = value_hash[:values]
+    values = self.all_values_for_column(current_user)[:values]
 
-    result = value_hash[:error].to_s
-    error = value_hash[:error].to_s
-
-    if values.size > 0
-      case self.variable.variable_type when 'numeric', 'integer'
-        values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
-        min = values.min || 0 # (values.min > 0) ? values.min : 0
-        max = values.max || 0
-        my_array = Array.new((max + 1)-min, 0)
-        tmp_categories = Array.new((max + 1)-min, 0)
-        num_zeros = 0
-        prior_zero_detected = true
-        (min..max).each do |inc|
-          # Print value if it's the first or last occurence in a sequence of zero record, or if there are records with that value
-          if values.count(inc) > 0 or not prior_zero_detected or values.count(inc+1) > 0
-            my_array[inc-min-num_zeros] = values.count(inc)
-            tmp_categories[inc-min-num_zeros] = inc.to_s
-            prior_zero_detected = (values.count(inc) == 0)
-          else
-            num_zeros += 1
-          end
+    case self.variable.variable_type when 'numeric', 'integer'
+      values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
+      min = values.min || 0 # (values.min > 0) ? values.min : 0
+      max = values.max || 0
+      my_array = Array.new((max + 1)-min, 0)
+      tmp_categories = Array.new((max + 1)-min, 0)
+      num_zeros = 0
+      prior_zero_detected = true
+      (min..max).each do |inc|
+        # Print value if it's the first or last occurence in a sequence of zero record, or if there are records with that value
+        if values.count(inc) > 0 or not prior_zero_detected or values.count(inc+1) > 0
+          my_array[inc-min-num_zeros] = values.count(inc)
+          tmp_categories[inc-min-num_zeros] = inc.to_s
+          prior_zero_detected = (values.count(inc) == 0)
+        else
+          num_zeros += 1
         end
-        top_value = ((max)-min-num_zeros)
-        values = my_array[0..top_value]
-        categories = tmp_categories[0..top_value]
-      when 'choices'
-        value_array = []
-        values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          value_array << { name: "#{self.human_normalized_value(key)}", y: array.size, id: key.to_s }
-        end
-        values = value_array
-      else
-        error += ": No Chart for #{self.variable.variable_type} Provided"
       end
-    else
-      error += ": No Values In Database For this Column"
+      top_value = ((max)-min-num_zeros)
+      values = my_array[0..top_value]
+      categories = tmp_categories[0..top_value]
+    when 'choices'
+      values = values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.collect do |key, array|
+        { name: "#{self.human_normalized_value(key)}", y: array.size, id: key.to_s }
+      end
     end
 
     values = { "#{self.source.name}.#{self.column}" => values }
@@ -137,7 +125,7 @@ class Mapping < ActiveRecord::Base
     defaults.merge!(chart_params)
 
 
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: "variable_chart_#{self.variable.id}", error: error }
+    { values: values, categories: categories, chart_type: chart_type, defaults: defaults }
   end
 
   # Returns whether the user can see the mapping given a set of valid source rules

@@ -20,11 +20,11 @@ class MappingsController < ApplicationController
       chart_params[:height] = 250
     end
 
+    @chart_element_id = "variable_chart_#{@mapping.variable.id}"
     result_hash = @mapping.graph_values(current_user, chart_params)
     @values = result_hash[:values]
     @categories = result_hash[:categories]
     @chart_type = result_hash[:chart_type]
-    @chart_element_id = result_hash[:chart_element_id]
     @defaults = result_hash[:defaults]
   end
 

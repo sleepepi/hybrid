@@ -122,13 +122,11 @@ class Variable < ActiveRecord::Base
       chart_type = "pie"
     end
 
-    chart_element_id = "variable_chart_#{self.id}"
-
     defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
 
     defaults.merge!(chart_params)
 
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id }
+    { values: values, categories: categories, chart_type: chart_type, defaults: defaults }
   end
 
 end

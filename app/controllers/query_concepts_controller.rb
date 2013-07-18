@@ -70,11 +70,11 @@ class QueryConceptsController < ApplicationController
       chart_params[:height] = '250px'
     end
 
+    @chart_element_id = "variable_chart_#{@query_concept.variable.id}"
     result_hash = @query_concept.variable.graph_values(current_user, chart_params)
     @values = result_hash[:values]
     @categories = result_hash[:categories]
     @chart_type = result_hash[:chart_type]
-    @chart_element_id = result_hash[:chart_element_id]
     @defaults = result_hash[:defaults]
 
     render nothing: true unless @query_concept
