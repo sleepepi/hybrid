@@ -55,19 +55,14 @@ class Mapping < ActiveRecord::Base
     result
   end
 
-  # Returns the name of the concept if the mapping is categorical
-  # True, False, or Unknown if the mapping is boolean
+  # Returns the display name of the corresponding variable domain choice if the variable type is choices
   # And the value itself if an appropriate match can not be found
   def human_normalized_value(val)
     if self.variable.variable_type == 'choices'
-      self.variable.domain.options.select{|option| option[:value].to_s == val.to_s}.collect{|option| option[:display_name]}.first
+      self.variable.domain.options.select{|option| option[:value].to_s == val.to_s}.collect{|option| option[:display_name]}.first || 'Unknown'
     else
       val
     end
-  end
-
-  def uniq_normalized_value(val)
-    val
   end
 
   def graph_values_short(current_user, chart_params)
@@ -81,17 +76,9 @@ class Mapping < ActiveRecord::Base
       if ['numeric', 'integer'].include?(self.variable.variable_type)
         values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
       elsif self.variable.variable_type == 'choices'
-        value_hash = {}
-        values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          orig_key = key
-          key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_hash[(key == nil ? "NULL" : key.to_s.gsub('&lt;![CDATA[', '"').gsub(']]&gt;', '"').gsub(' ', '_').gsub("'", '\\\\\'')) + ': ' + self.uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')] = array.size
-        end
         value_array = []
         values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          orig_key = key
-          key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_array << { name: "#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')} in #{self.source.name.gsub("'", '\\\\\'')}", y: array.size, id: uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'') }
+          value_array << { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
         end
       else
         error += ": No Chart for #{self.variable.variable_type} Provided"
@@ -134,19 +121,11 @@ class Mapping < ActiveRecord::Base
         values = my_array[0..top_value]
         categories = tmp_categories[0..top_value]
       when 'choices'
-        value_hash = {}
-        # logger.debug "values: #{values.inspect}"
-        values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          orig_key = key
-          key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_hash[(key == nil ? "NULL" : key.to_s.gsub('&lt;![CDATA[', '"').gsub(']]&gt;', '"').gsub(' ', '_').gsub("'", '\\\\\'')) + ': ' + self.uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')] = array.size
-        end
         value_array = []
         values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          orig_key = key
-          key = '&lt;![CDATA[]]&gt;' if key == ''
-          value_array << { name: "#{self.human_normalized_value(orig_key).to_s.gsub("'", '\\\\\'')}", y: array.size, id: uniq_normalized_value(orig_key).to_s.gsub("'", '\\\\\'') }
+          value_array << { name: "#{self.human_normalized_value(key)}", y: array.size, id: key.to_s }
         end
+        values = value_array
       else
         error += ": No Chart for #{self.variable.variable_type} Provided"
       end
@@ -154,19 +133,12 @@ class Mapping < ActiveRecord::Base
       error += ": No Values In Database For this Column"
     end
 
-    # return {value_hash: value_hash, values: values, categories: categories, error: error}
-
-    key_name = "#{self.source.name}.#{self.column}"
+    values = { "#{self.source.name}.#{self.column}" => values }
 
     case self.variable.variable_type when 'integer', 'numeric', 'date'
       chart_type = "column"
-      values = { key_name => values }
-      chart_element_id = "column_chart_#{self.variable.id}"
     when 'choices'
       chart_type = "pie"
-      # values = value_hash
-      values = { key_name => value_array }
-      chart_element_id = "pie_chart_#{self.variable.id}"
     end
 
     defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
@@ -174,7 +146,7 @@ class Mapping < ActiveRecord::Base
     defaults.merge!(chart_params)
 
 
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error }
+    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: "variable_chart_#{self.variable.id}", error: error }
   end
 
   # Returns whether the user can see the mapping given a set of valid source rules

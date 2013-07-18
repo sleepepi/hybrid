@@ -19,3 +19,5 @@ jQuery ->
       checkbox.change()
       false
     )
+    .on('mouseover', '[data-object="toggle-delete-link"]', () -> $($(this).data('target')).show())
+    .on('mouseout', '[data-object="toggle-delete-link"]', () -> $($(this).data('target')).hide())

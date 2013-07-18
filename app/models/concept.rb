@@ -90,7 +90,7 @@ class Concept < ActiveRecord::Base
         if self.continuous? or self.date?
           mapping_values << local_values
         elsif self.categorical? or self.boolean?
-          mapping_values << value_array # "[" + value_array.join(',') + "]"
+          mapping_values << value_array
         end
       else
         mapping_values << []

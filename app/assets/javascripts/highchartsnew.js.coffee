@@ -139,7 +139,7 @@
           events:
             click: (event) ->
               if params['make_selection']
-                checkbox = $("input[value='#{this.id}']")
+                checkbox = $("input[name='values[]'][value='#{this.id}']")
                 if checkbox.is(':checked')
                   checkbox.prop('checked',false)
                 else

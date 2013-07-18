@@ -65,6 +65,7 @@ class Variable < ActiveRecord::Base
     self.design_name.blank? ? self.design_file : self.design_name
   end
 
+  # TODO: Requires refactoring. It looks like some transformations are redundant and can be achieved in a single step.
   def graph_values(current_user, chart_params)
     categories = []
     result = ''
@@ -121,15 +122,9 @@ class Variable < ActiveRecord::Base
       end
     end
 
-
-    self.mappings.each_with_index do |mapping, index|
-      unless mapping_values[index].blank?
-        key_name = "#{mapping.source.name}.#{mapping.table}.#{mapping.column}"
-        if ['numeric', 'integer', 'date'].include?(self.variable_type)
-          values[key_name] = mapping_values[index] #local_values
-        elsif self.variable_type == 'choices'
-          values[key_name] = mapping_values[index] #"[" + value_array.join(',') + "]"
-        end
+    if ['numeric', 'integer', 'date', 'choices'].include?(self.variable_type)
+      self.mappings.each_with_index do |mapping, index|
+        values["#{mapping.source.name}.#{mapping.table}.#{mapping.column}"] = mapping_values[index] unless mapping_values[index].blank?
       end
     end
 

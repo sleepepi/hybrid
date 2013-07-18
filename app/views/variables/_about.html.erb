@@ -19,16 +19,12 @@
     <dd><%= link_to variable.design_name_or_filename, "#{request.script_name}/forms/" + variable.design_file, target: '_blank' %></dd>
   <% end %>
 
-  <dt>Variable Type</dt>
-  <dd><%= variable.variable_type %></dd>
-
-  <% if variable.tags.size > 0 %>
-    <dt>Tags</dt>
-    <dd>
-      <% variable.tags.each do |tag| %>
-        <span class="label"><%= tag.name %></span>
-      <% end %>
-    </dd>
-  <% end %>
+  <dt>Tags</dt>
+  <dd>
+    <span class="label label-inverse"><%= variable.name %></span>
+    <% variable.tags.pluck(:name).reject{|n| n.downcase == variable.name.downcase }.each do |tag_name| %>
+      <span class="label"><%= tag_name %></span>
+    <% end %>
+  </dd>
 
 </dl>

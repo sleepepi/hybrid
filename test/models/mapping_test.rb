@@ -34,11 +34,6 @@ class MappingTest < ActiveSupport::TestCase
     assert_equal '2011', mappings(:mapped_date).human_normalized_value('2011')
   end
 
-  test "uniq_normalized_value converts values to uniq strings" do
-    assert_equal '1', mappings(:choices_with_values).uniq_normalized_value('1')
-    assert_equal '2011', mappings(:mapped_date).uniq_normalized_value('2011')
-  end
-
   test "user_can_view? should show if the user can view the mapping" do
     assert_equal false, mappings(:mapped_date).user_can_view?(users(:valid), ['view limited data distribution'])
   end
