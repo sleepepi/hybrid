@@ -1,5 +1,0 @@
-$("#<%= params[:folder_id] %>_content").html("<%= escape_javascript(render("folders")) %>");
-<% @folder_id = params[:folder_id] %>
-<% @folder_title = params[:folder_name].to_s.gsub(@r, '').split(':').first.to_s.titleize %>
-<% @folder_title = params[:display_folder_name]%>
-$("#<%= params[:folder_id] %>_link").html("<%= escape_javascript(render("concepts/folders_toggle_link")) %>");

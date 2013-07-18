@@ -133,8 +133,8 @@ class Report < ActiveRecord::Base
         else
           header_row[index] = 'Total'
         end
-        if report_concept = ReportConcept.find_by_id(report_concept_id) and c = Concept.find_by_short_name(statistic)
-          header_row[index] = header_row[index].to_s + " - " + c.human_name
+        if report_concept = ReportConcept.find_by_id(report_concept_id) and report_concept.variable.domain and option = report_concept.variable.domain.options.select{|o| o[:value] == statistic}.first
+          header_row[index] = header_row[index].to_s + " - " + option[:display_name]
         else
           header_row[index] = [header_row[index], ((statistic.blank? or statistic == 'strata') ? nil :  statistic.to_s.titleize)].compact.join(" - ")
         end
@@ -158,8 +158,8 @@ class Report < ActiveRecord::Base
           elsif rows.size > 1 and row_index == rows.size - 1 and statistic == 'strata'
             body_row[index] = "---"
           elsif strata[index]
-            if c = Concept.find_by_short_name(strata[index])
-              body_row[index] = c.human_name
+            if v = Variable.find_by_name(strata[index])
+              body_row[index] = v.display_name
             else
               body_row[index] = strata[index]
             end
