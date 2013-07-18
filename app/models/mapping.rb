@@ -69,25 +69,19 @@ class Mapping < ActiveRecord::Base
     value_hash = self.all_values_for_column(current_user)
     values = value_hash[:values]
 
-    result = value_hash[:error].to_s
-    error = value_hash[:error].to_s
-
-    if values.size > 0
-      if ['numeric', 'integer'].include?(self.variable.variable_type)
-        values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
-      elsif self.variable.variable_type == 'choices'
-        value_array = []
-        values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-          value_array << { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
-        end
-      else
-        error += ": No Chart for #{self.variable.variable_type} Provided"
+    if ['numeric', 'integer'].include?(self.variable.variable_type)
+      values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
+    elsif self.variable.variable_type == 'choices'
+      value_array = []
+      values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
+        value_array << { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
       end
+      values = value_array
     else
-      error += ": No Values In Database For this Column"
+      error += ": No Chart for #{self.variable.variable_type} Provided"
     end
 
-    { local_values: values, value_array: value_array, error: error }
+    values
   end
 
   def graph_values(current_user, chart_params)

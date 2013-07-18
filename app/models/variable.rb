@@ -68,25 +68,11 @@ class Variable < ActiveRecord::Base
   # TODO: Requires refactoring. It looks like some transformations are redundant and can be achieved in a single step.
   def graph_values(current_user, chart_params)
     categories = []
-    result = ''
-    error = ''
-    all_stats = []
-    values = {}
     mapping_values = []
 
-    self.mappings.each do |mapping|
-      value_hash = mapping.graph_values_short(current_user, chart_params)
-      if value_hash[:error].blank?
-        local_values = value_hash[:local_values]
-        value_array = value_hash[:value_array]
-        all_stats << value_hash[:stats]
-        if ['numeric', 'integer', 'date'].include?(self.variable_type)
-          mapping_values << local_values
-        elsif self.variable_type == 'choices'
-          mapping_values << value_array
-        end
-      else
-        mapping_values << []
+    if ['numeric', 'integer', 'date', 'choices'].include?(self.variable_type)
+      self.mappings.each do |mapping|
+        mapping_values << mapping.graph_values_short(current_user, chart_params)
       end
     end
 
@@ -122,6 +108,8 @@ class Variable < ActiveRecord::Base
       end
     end
 
+    values = {}
+
     if ['numeric', 'integer', 'date', 'choices'].include?(self.variable_type)
       self.mappings.each_with_index do |mapping, index|
         values["#{mapping.source.name}.#{mapping.table}.#{mapping.column}"] = mapping_values[index] unless mapping_values[index].blank?
@@ -140,7 +128,7 @@ class Variable < ActiveRecord::Base
 
     defaults.merge!(chart_params)
 
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id, error: error, stats: all_stats.join('<br />') }
+    { values: values, categories: categories, chart_type: chart_type, defaults: defaults, chart_element_id: chart_element_id }
   end
 
 end
