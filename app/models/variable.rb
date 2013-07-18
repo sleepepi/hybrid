@@ -7,7 +7,7 @@ class Variable < ActiveRecord::Base
 
   # Named Scopes
   scope :current, -> { all }
-  scope :search, lambda { |arg| where("LOWER(name) LIKE ? or LOWER(description) LIKE ? or variables.id in ( select tags.variable_id from tags where LOWER(tags.name) LIKE ? )", arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%')) }
+  scope :search, lambda { |arg| where("LOWER(name) LIKE ? or LOWER(display_name) LIKE ? or LOWER(description) LIKE ? or variables.id in ( select tags.variable_id from tags where LOWER(tags.name) LIKE ? )", arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%'), arg.to_s.downcase.gsub(/^| |$/, '%')) }
   scope :with_source, lambda { |arg| where( "variables.id in (select variable_id from mappings where mappings.variable_id = variables.id and mappings.source_id IN (?))", arg ) }
   scope :with_folder, lambda { |arg| where( "LOWER(folder) LIKE ? or ? IS NULL", "#{arg.to_s.downcase}/%", arg ) }
   scope :with_exact_folder, lambda { |arg| where( "LOWER(folder) LIKE ? or ('Uncategorized' = ? and (folder IS NULL or folder = ''))", arg.to_s.downcase, arg ) }

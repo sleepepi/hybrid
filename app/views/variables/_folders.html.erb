@@ -27,11 +27,18 @@
 
 <% end %>
 
+<% folder_variable_scope = discovered_variable_ids.size > 0 ? variable_scope_filter_by_search : variable_scope %>
+
 <div>
-  <% variable_scope.with_exact_folder(folder).each do |variable| %>
+  <% folder_variable_scope.with_exact_folder(folder).each do |variable| %>
     <div class="<%= 'common' if variable.commonly_used? %>">
       <% link_name = discovered_variable_ids.include?(variable.id) ? "<span class='highlight'>#{variable.display_name}</span>".html_safe : variable.display_name %>
       <%= link_to link_name, dictionary_variable_path(variable.dictionary, variable, query_id: @query.id), remote: true %>
     </div>
+  <% end %>
+  <% hidden_count = variable_scope.with_exact_folder(folder).count - variable_scope_filter_by_search.with_exact_folder(folder).count %>
+  <% if folder and discovered_variable_ids.size > 0 and hidden_count > 0 %>
+    <% folder_id = "folder_#{folder.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
+    <%= link_to pluralize(hidden_count, 'Hidden Variable'), open_folder_query_path(@query, folder: folder, folder_id: folder_id), method: :get, remote: true, class: 'btn btn-mini' %>
   <% end %>
 </div>
