@@ -66,19 +66,16 @@ class Mapping < ActiveRecord::Base
   end
 
   def graph_values_short(current_user, chart_params)
-    value_hash = self.all_values_for_column(current_user)
-    values = value_hash[:values]
+    values = self.all_values_for_column(current_user)[:values]
 
-    if ['numeric', 'integer'].include?(self.variable.variable_type)
+    case self.variable.variable_type when 'integer'
       values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_i} # Ignore null and blank values!
-    elsif self.variable.variable_type == 'choices'
-      value_array = []
-      values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array|
-        value_array << { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
+    when 'numeric'
+      values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_f} # Ignore null and blank values!
+    when 'choices'
+      values = values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.collect do |key, array|
+        { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
       end
-      values = value_array
-    else
-      error += ": No Chart for #{self.variable.variable_type} Provided"
     end
 
     values
