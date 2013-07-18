@@ -114,13 +114,7 @@ class Mapping < ActiveRecord::Base
 
     values = { "#{self.source.name}.#{self.column}" => values }
 
-    case self.variable.variable_type when 'integer', 'numeric', 'date'
-      chart_type = "column"
-    when 'choices'
-      chart_type = "pie"
-    end
-
-    { values: values, categories: categories, chart_type: chart_type }
+    { values: values, categories: categories }
   end
 
   # Returns whether the user can see the mapping given a set of valid source rules

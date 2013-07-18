@@ -9,22 +9,21 @@ class MappingsController < ApplicationController
   end
 
   def info
-    @defaults = { title: @mapping.variable.display_name, width: 320, height: 240, units: '', legend: 'right' }
+    @defaults = { title: @mapping.variable.display_name, width: '320px', height: '240px', units: '', legend: 'right' }
     case @mapping.variable.variable_type when 'numeric', 'integer', 'date'
-      @defaults[:width] = 680
-      @defaults[:height] = 300
+      @defaults[:width] = '680px'
+      @defaults[:height] = '300px'
       @defaults[:units] = @mapping.variable.units
       @defaults[:legend] = 'none'
     when 'choices'
-      @defaults[:width] = 450
-      @defaults[:height] = 250
+      @defaults[:width] = '450px'
+      @defaults[:height] = '250px'
     end
 
     @chart_element_id = "variable_chart_#{@mapping.variable.id}"
     result_hash = @mapping.graph_values(current_user)
     @values = result_hash[:values]
     @categories = result_hash[:categories]
-    @chart_type = result_hash[:chart_type]
   end
 
   # GET /mappings/1

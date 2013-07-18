@@ -1,9 +1,9 @@
-$("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").html('<div><div id="<%= @chart_element_id %>" <% if @chart_type %>style="width: <%= @defaults[:width] %>px;height: <%= @defaults[:height] %>px" <% end %>></div></div><%= escape_javascript(render partial: "stats") %>');
+$("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").html('<div><div id="<%= @chart_element_id %>" <% if @mapping.variable.chart_type %>style="width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>" <% end %>></div></div><%= escape_javascript(render partial: "stats") %>');
 
 $("#mapping_<%= @mapping.column.gsub(' ', '_') %>_stats").show();
 
 
-<% case @chart_type when 'column' %>
+<% case @mapping.variable.chart_type when 'column' %>
   drawHighChartHistogramChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
 <% when 'pie' %>
   drawHighChartPieChart('<%= @chart_element_id %>', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);

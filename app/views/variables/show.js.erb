@@ -10,18 +10,15 @@
 <% result_hash = @variable.graph_values(current_user) %>
 <% @values = result_hash[:values] %>
 <% @categories = result_hash[:categories] %>
-<% @chart_type = result_hash[:chart_type] %>
 
 $("#variable_info").html("");
 $("#variable_info").append("<%= escape_javascript( render partial: 'variables/info', locals: { variable: @variable } ) %>");
 $("#variable_info").append("<%= escape_javascript( render partial: 'variables/about', locals: { variable: @variable } ) %>");
 $("#variable_info").append("<%= escape_javascript( render partial: 'variables/add', locals: { variable: @variable } ) %>");
 
-<% width = @defaults[:width].to_s.gsub("'", '') %>
-<% height = @defaults[:height].to_s.gsub("'", '') %>
-$("#variable_<%= @variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" style="position:relative;width: <%= width %>;height: <%= height %>"></div>');
+$("#variable_<%= @variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
 
-<% case @chart_type when 'column' %>
+<% case @variable.chart_type when 'column' %>
   drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
 <% when 'pie' %>
   drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);

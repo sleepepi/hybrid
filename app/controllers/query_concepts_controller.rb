@@ -74,7 +74,6 @@ class QueryConceptsController < ApplicationController
     result_hash = @query_concept.variable.graph_values(current_user)
     @values = result_hash[:values]
     @categories = result_hash[:categories]
-    @chart_type = result_hash[:chart_type]
 
     render nothing: true unless @query_concept
   end

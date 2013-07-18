@@ -28,6 +28,14 @@ class Variable < ActiveRecord::Base
   has_many :report_concepts, dependent: :destroy
   has_many :sources, -> { where(deleted: false).uniq.order('sources.name') }, through: :mappings
 
+  def chart_type
+    case self.variable_type when 'integer', 'numeric', 'date'
+      "column"
+    when 'choices'
+      "pie"
+    end
+  end
+
   def mapped_name(current_user, source = nil)
     result = nil
     if source
@@ -116,13 +124,7 @@ class Variable < ActiveRecord::Base
       end
     end
 
-    if ['numeric', 'integer', 'date'].include?(self.variable_type)
-      chart_type = "column"
-    elsif self.variable_type == 'choices'
-      chart_type = "pie"
-    end
-
-    { values: values, categories: categories, chart_type: chart_type }
+    { values: values, categories: categories }
   end
 
 end
