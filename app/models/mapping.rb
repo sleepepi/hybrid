@@ -65,7 +65,7 @@ class Mapping < ActiveRecord::Base
     end
   end
 
-  def graph_values_short(current_user, chart_params)
+  def graph_values_short(current_user)
     values = self.all_values_for_column(current_user)[:values]
 
     case self.variable.variable_type when 'integer'
@@ -81,7 +81,7 @@ class Mapping < ActiveRecord::Base
     values
   end
 
-  def graph_values(current_user, chart_params)
+  def graph_values(current_user)
     categories = []
     values = self.all_values_for_column(current_user)[:values]
 
@@ -120,12 +120,7 @@ class Mapping < ActiveRecord::Base
       chart_type = "pie"
     end
 
-    defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
-
-    defaults.merge!(chart_params)
-
-
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults }
+    { values: values, categories: categories, chart_type: chart_type }
   end
 
   # Returns whether the user can see the mapping given a set of valid source rules

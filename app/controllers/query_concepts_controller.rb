@@ -61,21 +61,20 @@ class QueryConceptsController < ApplicationController
   def edit
     @query_concept = @query.query_concepts.find_by_id(params[:id])
 
-    chart_params = { title: @query_concept.variable.display_name, width: '100%', make_selection: true }
+    @defaults = { title: @query_concept.variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', title: '', legend: 'right' }
     case @query_concept.variable.variable_type when 'numeric', 'integer', 'date'
-      chart_params[:height] = '300px'
-      chart_params[:units] = @query_concept.variable.units
-      chart_params[:legend] = 'none'
+      @defaults[:height] = '300px'
+      @defaults[:units] = @query_concept.variable.units
+      @defaults[:legend] = 'none'
     when 'choices'
-      chart_params[:height] = '250px'
+      @defaults[:height] = '250px'
     end
 
     @chart_element_id = "variable_chart_#{@query_concept.variable.id}"
-    result_hash = @query_concept.variable.graph_values(current_user, chart_params)
+    result_hash = @query_concept.variable.graph_values(current_user)
     @values = result_hash[:values]
     @categories = result_hash[:categories]
     @chart_type = result_hash[:chart_type]
-    @defaults = result_hash[:defaults]
 
     render nothing: true unless @query_concept
   end

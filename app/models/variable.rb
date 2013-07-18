@@ -66,13 +66,13 @@ class Variable < ActiveRecord::Base
   end
 
   # TODO: Requires refactoring. It looks like some transformations are redundant and can be achieved in a single step.
-  def graph_values(current_user, chart_params)
+  def graph_values(current_user)
     categories = []
     mapping_values = []
 
     if ['numeric', 'integer', 'date', 'choices'].include?(self.variable_type)
       self.mappings.each do |mapping|
-        mapping_values << mapping.graph_values_short(current_user, chart_params)
+        mapping_values << mapping.graph_values_short(current_user)
       end
     end
 
@@ -122,11 +122,7 @@ class Variable < ActiveRecord::Base
       chart_type = "pie"
     end
 
-    defaults = { width: "320px", height: 240, units: '', title: '', legend: 'right' }
-
-    defaults.merge!(chart_params)
-
-    { values: values, categories: categories, chart_type: chart_type, defaults: defaults }
+    { values: values, categories: categories, chart_type: chart_type }
   end
 
 end

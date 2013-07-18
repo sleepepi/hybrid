@@ -1,4 +1,4 @@
-loadSensitiveVariablePopover = () ->
+@loadSensitiveVariablePopover = () ->
   $("[data-object='sensitive-tooltip']").popover(
     html: true
     placement: 'right'

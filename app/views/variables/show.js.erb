@@ -1,17 +1,16 @@
-<% chart_params = { title: @variable.display_name, width: '100%', make_selection: true } %>
+<% @defaults = { title: @variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', title: '', legend: 'right' } %>
 <% case @variable.variable_type when 'numeric', 'integer', 'date' %>
-  <% chart_params[:height] = '300px' %>
-  <% chart_params[:units] = @variable.units %>
-  <% chart_params[:legend] = 'none' %>
+  <% @defaults[:height] = '300px' %>
+  <% @defaults[:units] = @variable.units %>
+  <% @defaults[:legend] = 'none' %>
 <% when 'choices' %>
-  <% chart_params[:height] = '250px' %>
+  <% @defaults[:height] = '250px' %>
 <% end %>
 <% @chart_element_id = "variable_chart_#{@variable.id}" %>
-<% result_hash = @variable.graph_values(current_user, chart_params) %>
+<% result_hash = @variable.graph_values(current_user) %>
 <% @values = result_hash[:values] %>
 <% @categories = result_hash[:categories] %>
 <% @chart_type = result_hash[:chart_type] %>
-<% @defaults = result_hash[:defaults] %>
 
 $("#variable_info").html("");
 $("#variable_info").append("<%= escape_javascript( render partial: 'variables/info', locals: { variable: @variable } ) %>");
