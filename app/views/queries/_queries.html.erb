@@ -4,10 +4,8 @@
   <thead>
     <tr>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.name', 'Name', 'queries_search') %></th>
+      <th>Total</th>
       <th>From</th>
-      <th>Concepts</th>
-      <th>Datasets</th>
-      <th>Reports</th>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.created_at', 'Created', 'queries_search') %></th>
       <th>Actions</th>
     </tr>
@@ -16,10 +14,8 @@
   <% @queries.each do |query| %>
     <tr>
       <td><%= link_to query.name, query %></td>
+      <td style="text-align:center"><%= number_with_delimiter query.total %></td>
       <td><%= query.sources.collect{|s| s.name}.join(', ') %></td>
-      <td><%= query.query_concepts.size %></td>
-      <td><%= query.true_datasets.size %></td>
-      <td><%= query.true_reports.size %></td>
       <td style="text-align:right"><%= simple_time(query.created_at) %></td>
       <td>
         <%= link_to 'Delete', query, data: { confirm: "Are you sure you want to delete Query #{query.name}?" }, method: :delete, class: 'btn btn-mini btn-danger btn-block' %>

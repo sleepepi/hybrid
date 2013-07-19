@@ -66,6 +66,8 @@ class QueriesController < ApplicationController
             @overall_errors[grouping] = [@overall_errors[grouping], "#{total}"].select{|i| not i.blank?}.join(', ')
           end
         end
+
+        query.update( total: @overall_totals[nil] )
       end
     else
       render nothing: true
