@@ -50,9 +50,6 @@ Contour.setup do |config|
     },
     {
       name: 'Users', display: 'signed_in', path: 'users_path', position: 'left', condition: 'current_user.system_admin?'
-    },
-    {
-      name: 'About', display: 'always', path: 'about_path', position: 'left'
     }
   ]
 
