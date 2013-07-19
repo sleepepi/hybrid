@@ -50,23 +50,21 @@
   <div class="control-group">
     <label class="control-label">Tools</label>
     <div class="controls" style="padding-top:4px">
-      <%= link_to image_tag('gentleface/checkbox_checked.png', style: 'margin-left:4px;margin-right:4px'), select_all_query_concepts_path(query_id: @query.id, selected: true), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Select All Filters' %>
-      <%= link_to image_tag('gentleface/checkbox_unchecked.png', style: 'margin-left:4px;margin-right:4px'), select_all_query_concepts_path(query_id: @query.id, selected: false), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Deselect All Filters' %>
+      <%= link_to image_tag('gentleface/checkbox_checked.png'), select_all_query_concepts_path(query_id: @query.id, selected: true), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Select All Filters' %>
+      <%= link_to image_tag('gentleface/checkbox_unchecked.png'), select_all_query_concepts_path(query_id: @query.id, selected: false), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Deselect All Filters' %>
       <span class="space"></span>
-      <%= link_to image_tag('gentleface/indent_increase.png', style: 'margin-left:4px;margin-right:4px'), indent_query_concepts_path(query_id: @query.id, indent: 1), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Increase Indent' %>
-      <%= link_to image_tag('gentleface/indent_decrease.png', style: 'margin-left:4px;margin-right:4px'), indent_query_concepts_path(query_id: @query.id, indent: -1), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Decrease Indent' %>
+      <%= link_to image_tag('gentleface/indent_increase.png'), indent_query_concepts_path(query_id: @query.id, indent: 1), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Increase Indent' %>
+      <%= link_to image_tag('gentleface/indent_decrease.png'), indent_query_concepts_path(query_id: @query.id, indent: -1), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Decrease Indent' %>
       <span class="space"></span>
-      <%= link_to image_tag('gentleface/clipboard_copy.png', style: 'margin-left:4px;margin-right:4px'), copy_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Copy Selected Filters' %>
+      <%= link_to image_tag('gentleface/clipboard_copy.png'), copy_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, class: 'loader', rel: 'tooltip', title: 'Copy Selected Filters' %>
       <span class="space"></span>
-      <%= link_to image_tag("gentleface/undo#{'_q' unless @query.undo?}.png", style: 'margin-left:4px;margin-right:4px', id: 'undo_img', 'data-img-disabled' => image_path("gentleface/undo_q.png"), 'data-img-enabled' => image_path("gentleface/undo.png")), undo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'undo', rel: 'tooltip', title: 'Undo Last Change' %>
-      <%= link_to image_tag("gentleface/redo#{'_q' unless @query.redo?}.png", style: 'margin-left:4px;margin-right:4px', id: 'redo_img', 'data-img-disabled' => image_path("gentleface/redo_q.png"), 'data-img-enabled' => image_path("gentleface/redo.png")), redo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'redo', rel: 'tooltip', title: 'Redo Last Change' %>
+      <%= link_to image_tag("gentleface/undo#{'_q' unless @query.undo?}.png", id: 'undo_img', 'data-img-disabled' => image_path("gentleface/undo_q.png"), 'data-img-enabled' => image_path("gentleface/undo.png")), undo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'undo', rel: 'tooltip', title: 'Undo Last Change' %>
+      <%= link_to image_tag("gentleface/redo#{'_q' unless @query.redo?}.png", id: 'redo_img', 'data-img-disabled' => image_path("gentleface/redo_q.png"), 'data-img-enabled' => image_path("gentleface/redo.png")), redo_query_path(@query), method: :post, remote: true, class: 'loader', id: 'redo', rel: 'tooltip', title: 'Redo Last Change' %>
       <span class="space"></span>
-      <%= link_to image_tag('gentleface/trash.png', style: 'margin-left:4px;margin-right:4px'), trash_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, data: { confirm: 'Are you sure you want to remove all the selected concepts?' }, class: 'loader', rel: 'tooltip', title: 'Remove Selected Filters' %>
+      <%= link_to image_tag('gentleface/trash.png'), trash_selected_query_concepts_path(query_id: @query.id), method: :post, remote: true, data: { confirm: 'Are you sure you want to remove all the selected concepts?' }, class: 'loader', rel: 'tooltip', title: 'Remove Selected Filters' %>
     </div>
   </div>
 </form>
-
-<hr class="soften" style="margin: 20px 0px">
 
 <div class="row-fluid">
   <div class="span9">
@@ -125,8 +123,6 @@
 <% end %>
 
 <div id="information" style="display:none"></div>
-
-<hr class="soften" style="margin: 20px 0px">
 
 <div id="inlaid_report"></div>
 
