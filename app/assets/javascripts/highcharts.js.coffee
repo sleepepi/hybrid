@@ -1,20 +1,3 @@
-# This prototype is provided by the Mozilla foundation and
-# is distributed under the MIT license.
-# http://www.ibiblio.org/pub/Linux/LICENSES/mit.license
-
-# if (!Array.prototype.map)
-#   Array.prototype.map = (fun, thisp) ->
-#     len = this.length
-#     if (typeof fun != "function")
-#       throw new TypeError()
-#     res = new Array(len)
-#     thisp = arguments[1]
-#     # for (i = 0; i < len; i++)
-#     for i in [0..len-1]
-#       if (i in this)
-#         res[i] = fun.call(thisp, this[i], i, this)
-#     return res
-
 # Custom HighChart Charts
 @drawHighChartHistogramChart = (element_id, values, params, categories) ->
   counts = {}
