@@ -8,7 +8,6 @@
       <th>Concepts</th>
       <th>Datasets</th>
       <th>Reports</th>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.user_id', 'Creator', 'queries_search') %></th>
       <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.created_at', 'Created', 'queries_search') %></th>
       <th>Actions</th>
     </tr>
@@ -21,10 +20,8 @@
       <td><%= query.query_concepts.size %></td>
       <td><%= query.true_datasets.size %></td>
       <td><%= query.true_reports.size %></td>
-      <td><%= link_to query.user.name, query.user if query.user %></td>
       <td style="text-align:right"><%= simple_time(query.created_at) %></td>
       <td>
-        <%= link_to 'Edit', query, class: 'btn btn-mini' %>
         <%= link_to 'Delete', query, data: { confirm: "Are you sure you want to delete Query #{query.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
       </td>
     </tr>

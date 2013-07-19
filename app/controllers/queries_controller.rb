@@ -123,13 +123,13 @@ class QueriesController < ApplicationController
   def show
     @query = current_user.all_queries.find_by_id(params[:id])
     @query = current_user.all_queries.find_by_id(current_user.current_query_id) unless @query
-    @query = current_user.queries.create(name: "#{current_user.last_name} Search ##{current_user.queries.count+1}") unless @query
+    @query = current_user.queries.create(name: "#{current_user.last_name} ##{current_user.queries.count+1}") unless @query
 
     current_user.update_column :current_query_id, @query.id
   end
 
   def new
-    @query = current_user.queries.create(name: "#{current_user.last_name}  Search ##{current_user.queries.count+1}")
+    @query = current_user.queries.create(name: "#{current_user.last_name}  ##{current_user.queries.count+1}")
     current_user.update_column :current_query_id, @query.id
     redirect_to root_path, notice: "Created search #{@query.name}"
   end

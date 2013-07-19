@@ -30,18 +30,18 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "should show time" do
     time = Time.now
-    assert_equal time.strftime("at %I:%M %p"), simple_time(time)
+    assert_equal time.strftime("%l:%M %p"), simple_time(time)
   end
 
   test "should show full time from yesterday" do
     time = Time.now - 1.day
     time += 2.days if time.year != Time.now.year # Test would fail if run on Jan 1st otherwise
-    assert_equal time.strftime("on %b %d at %I:%M %p"), simple_time(time)
+    assert_equal time.strftime("%b %d at %l:%M %p"), simple_time(time)
   end
 
   test "should show full time from last year" do
     time = Time.now - 1.year
-    assert_equal time.strftime("on %b %d, %Y at %I:%M %p"), simple_time(time)
+    assert_equal time.strftime("%b %d, %Y at %l:%M %p"), simple_time(time)
   end
 
   test "should show recent activity" do
