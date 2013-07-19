@@ -70,8 +70,8 @@
 
 <div class="row-fluid">
   <div class="span9">
-    <%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form' do %>
-      <div id="query_concepts" style="clear:both;margin-left:50px;margin-right:50px"><%= render partial: 'query_concepts/query_concepts' %></div>
+    <%= form_tag reorder_query_path(@query), method: :post, remote: true, id: 'query_concepts_form', class: 'form-horizontal' do %>
+      <div id="query_concepts"><%= render partial: 'query_concepts/query_concepts' %></div>
     <% end %>
   </div>
 

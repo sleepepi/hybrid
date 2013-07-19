@@ -1,5 +1,5 @@
 <li class="ui-state-default faded_delete_icon bubble" id="report_concept_<%= @report_concept.id %>" data-image-id="report_concept_<%= @report_concept.id %>_delete_icon">
-  <%= image_tag('gentleface/cursor_drag_arrow.png', style: 'vertical-align:text-bottom') %>
+  <i class="icon-move" style="cursor:move"></i>
   <%= @report_concept.variable.display_name %>
 
   <% @report_concept.statistic = (@report_concept.variable.variable_type == 'date' ? 'month' : 'all') if @report_concept.statistic.blank? %>

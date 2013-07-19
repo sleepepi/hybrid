@@ -391,3 +391,7 @@ td.error {
   margin-bottom: 15px;
   padding: 7px 9px;
 }
+
+#query_concepts .control-group {
+  margin-bottom: 0px;
+}
