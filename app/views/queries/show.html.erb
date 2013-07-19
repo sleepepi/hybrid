@@ -2,7 +2,8 @@
 
 <div class="page-header">
   <h1>
-    <div id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></div>
+    <%= link_to 'Searches', queries_path %> &middot;
+    <span id="query_<%= @query.id %>_name"><%= render partial: 'queries/name' %></span>
     <%#= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>
     <%#= link_to "History", queries_path, class: 'btn btn-mini' %>
     <%#= link_to "New Search", new_query_path, id: 'new_search_link', class: 'btn btn-mini' %>
