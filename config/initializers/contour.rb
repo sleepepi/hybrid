@@ -30,9 +30,6 @@ Contour.setup do |config|
               { name: 'Logout', path: 'destroy_user_session_path' }]
     },
     {
-      name: 'Searches', display: 'signed_in', path: 'queries_path', position: 'left'
-    },
-    {
       name: 'Dictionaries', display: 'signed_in', path: 'dictionaries_path', position: 'left', condition: 'current_user.system_admin?'
     },
     {
