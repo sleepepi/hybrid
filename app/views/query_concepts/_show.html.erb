@@ -11,7 +11,7 @@
   <% else %>
     <%= @query_concept.human_value %>
   <% end %>
-  <%= image_tag('icons/gentleface/cursor_H_split_16.png', style: 'vertical-align:text-bottom;cursor:move') %>
+  <%= image_tag('gentleface/cursor_H_split.png', style: 'vertical-align:text-bottom;cursor:move') %>
 <% end %>
 
 <%= link_to 'remove', query_concept_path(@query_concept, query_id: @query), method: :delete, remote: true, class: 'btn btn-mini btn-danger', id: "query_concept_#{@query_concept.id}_delete_link", style: 'display:none' %>
