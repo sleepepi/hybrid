@@ -5,7 +5,7 @@ class Query < ActiveRecord::Base
   include Searchable, Deletable
 
   # Named Scopes
-  scope :with_user, lambda { |arg| where( ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", arg, arg] ) }
+  scope :with_user, lambda { |arg| where( ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", arg, arg] ).references(:query_users) }
 
   # Model Validation
   validates_presence_of :name
