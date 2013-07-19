@@ -20,9 +20,6 @@ Contour.setup do |config|
   config.menu_items =
   [
     {
-      name: 'Sign In', display: 'not_signed_in', path: 'new_user_session_path', position: 'right'
-    },
-    {
       name: 'Sign Up', display: 'not_signed_in', path: 'new_user_registration_path', position: 'right'
     },
     {
@@ -33,7 +30,7 @@ Contour.setup do |config|
               { name: 'Logout', path: 'destroy_user_session_path' }]
     },
     {
-      name: 'History', display: 'signed_in', path: 'queries_path', position: 'left'
+      name: 'Searches', display: 'signed_in', path: 'queries_path', position: 'left'
     },
     {
       name: 'Dictionaries', display: 'signed_in', path: 'dictionaries_path', position: 'left', condition: 'current_user.system_admin?'
