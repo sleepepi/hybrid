@@ -1,7 +1,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  # id: 1
   user: admin
   name: MyString
   # description:
@@ -10,7 +9,6 @@ one:
   identifier_concept: identifier
 
 two:
-  # id: 2
   user: admin
   name: MyString
   # description:
@@ -19,7 +17,6 @@ two:
   identifier_concept: identifier
 
 three:
-  # id: 3
   user: valid
   name: MyString
   # description:
@@ -27,8 +24,7 @@ three:
   negated: false
   identifier_concept: identifier
 
-query_with_sources:
-  # id: 4
+search_with_sources:
   user: valid
   name: MyString
   # description:
@@ -36,8 +32,7 @@ query_with_sources:
   negated: false
   identifier_concept: identifier
 
-query_across_linked_sources:
-  # id: 5
+search_across_linked_sources:
   user: admin
   name: Linked Across Sources
   # description:
@@ -45,25 +40,25 @@ query_across_linked_sources:
   negated: false
   identifier_concept: identifier
 
-query_with_negated_concepts:
+search_with_negated_concepts:
   user: valid
-  name: Query With Negated Concepts
+  name: Search With Negated Concepts
   # description:
   deleted: false
   negated: false
   identifier_concept: identifier
 
-query_with_test_data:
+search_with_test_data:
   user: admin
-  name: Query With Test Data
+  name: Search With Test Data
   # description:
   deleted: false
   negated: false
   # identifier_concept: identifier
 
-query_with_history:
+search_with_history:
   user: valid
-  name: Query With History
+  name: Search With History
   # description:
   deleted: false
   negated: false
@@ -71,9 +66,9 @@ query_with_history:
   history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept) %>}]
   history_position: 1
 
-query_with_undone_history:
+search_with_undone_history:
   user: valid
-  name: Query With Undone History
+  name: Search With Undone History
   # description:
   deleted: false
   negated: false
@@ -81,9 +76,9 @@ query_with_undone_history:
   history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept_two) %>}]
   history_position: 0
 
-query_with_history_update_change:
+search_with_history_update_change:
   user: valid
-  name: Query With History Update
+  name: Search With History Update
   # description:
   deleted: false
   negated: false
@@ -91,9 +86,9 @@ query_with_history_update_change:
   history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept_update_change) %>, changes: {value: [NULL, 20]}}]
   history_position: 1
 
-query_with_undone_history_update_change:
+search_with_undone_history_update_change:
   user: valid
-  name: Query With Undone History Change
+  name: Search With Undone History Change
   # description:
   deleted: false
   negated: false

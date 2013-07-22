@@ -1,10 +1,10 @@
-<div class="modal hide modal-large" id="query_<%= @query.id %>_dataset_popup">
+<div class="modal hide modal-large" id="search_<%= @search.id %>_dataset_popup">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     <h3>New Dataset</h3>
   </div>
   <div class="modal-body">
-    <%= form_tag reports_path(query_id: @query.id, is_dataset: true), method: :post, remote: true, id: "new_dataset_form", class: 'form-horizontal' do %>
+    <%= form_tag reports_path(search_id: @search.id, is_dataset: true), method: :post, remote: true, id: "new_dataset_form", class: 'form-horizontal' do %>
       <% @report = Report.new({name: "Dataset: #{Time.now.strftime("%Y.%m.%d")}"}) %>
       <div class="control-group">
         <%= label :report, :name, class: 'control-label' %>
@@ -15,7 +15,7 @@
 
       <div class="control-group">
         <%= label :report, :template_id, "Template", class: 'control-label' %>
-        <div class="controls" id="query_<%= @query.id %>_datasets_list">
+        <div class="controls" id="search_<%= @search.id %>_datasets_list">
           <%= render partial: 'reports/datasets_list' %>
         </div>
       </div>

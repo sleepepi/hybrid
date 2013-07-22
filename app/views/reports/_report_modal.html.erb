@@ -4,7 +4,7 @@
     <h3>New Report</h3>
   </div>
   <div class="modal-body">
-    <%= form_tag reports_path(query_id: @query.id, is_dataset: false), method: :post, remote: true, id: "new_report_form", class: 'form-horizontal' do %>
+    <%= form_tag reports_path(search_id: @search.id, is_dataset: false), method: :post, remote: true, id: "new_report_form", class: 'form-horizontal' do %>
       <% @report = Report.new({name: "Report: #{Time.now.strftime("%Y.%m.%d")}"}) %>
       <div class="control-group">
         <%= label :report, :name, class: 'control-label' %>

@@ -1,4 +1,4 @@
-<%= form_for @query_concept, url: query_concept_path(@query_concept, query_id: @query), method: :patch, remote: true, html: { class: 'form-horizontal', id: "edit_query_concept_#{@query_concept.id}" } do |f| %>
+<%= form_for @query_concept, url: query_concept_path(@query_concept, search_id: @search), method: :patch, remote: true, html: { class: 'form-horizontal', id: "edit_query_concept_#{@query_concept.id}" } do |f| %>
   <% begin %>
     <%= render partial: "query_concepts/forms/#{@query_concept.variable.variable_type}", locals: { f: f } %>
   <% rescue %>
@@ -28,7 +28,7 @@
   <div class="form-actions">
     <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "#edit_query_concept_#{@query_concept.id}" } %>
     <%= link_to 'Cancel', '#', class: 'btn', data: { object: 'hide-contour-modal' } %>
-    <%= link_to 'Remove', query_concept_path(@query_concept, query_id: @query), method: 'delete', remote: true, class: 'btn btn-danger' %>
+    <%= link_to 'Remove', query_concept_path(@query_concept, search_id: @search), method: 'delete', remote: true, class: 'btn btn-danger' %>
   </div>
 <% end %>
 

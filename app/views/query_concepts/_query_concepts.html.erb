@@ -1,10 +1,10 @@
-<% if @query.query_concepts.size > 0 %>
-  <% @query.query_concepts.each do |query_concept| %>
+<% if @search.query_concepts.size > 0 %>
+  <% @search.query_concepts.each do |query_concept| %>
     <% @query_concept = query_concept %>
     <div id="query_concept_<%= @query_concept.id %>">
       <%= render partial: 'query_concepts/show' %>
     </div>
-      <% if @query_concept.position < @query_concept.query.query_concepts.size - 1 %>
+      <% if @query_concept.position < @query_concept.search.query_concepts.size - 1 %>
         <div class="control-group">
           <div class="controls">
             <div class="qc-cancel">

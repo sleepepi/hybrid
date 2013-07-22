@@ -1,9 +1,0 @@
-<% if @query.name.blank? %>
-  <span class="muted">Query <%= @query.created_at.strftime("%Y.%m.%d") %></span>
-<% else %>
-  <%= @query.name %>
-<% end %>
-
-
-<%= link_to 'Edit Name', edit_query_path(@query), method: :get, remote: true, class: 'btn btn-mini' %>
-<%= link_to "Copy Search", copy_query_path(@query), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>

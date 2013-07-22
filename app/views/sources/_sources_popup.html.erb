@@ -1,6 +1,6 @@
 <div class="download-container">
 <% @sources.each do |source| %>
   <% link_name = highlight(source.name, @search_terms, highlighter: '<b>\1</b>') %>
-  <%= link_to "<label class='checkbox'>".html_safe + link_name + "</label>".html_safe, source_path(source, popup: true, query_id: @query.id), remote: true, method: :get %>
+  <%= link_to "<label class='checkbox'>".html_safe + link_name + "</label>".html_safe, source_path(source, popup: true, search_id: @search.id), remote: true, method: :get %>
 <% end %>
 </div>

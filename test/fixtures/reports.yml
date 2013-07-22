@@ -1,28 +1,25 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 report:
-  # id: 1
   name: Report
   user: admin
-  query: one
+  search: one
   is_dataset: false
 
 dataset:
-  # id: 2
   name: Dataset
   user: admin
-  query: one
+  search: one
   is_dataset: true
 
 empty_report:
-  # id: 3
   name: Empty Report
   user: admin
-  query: two
+  search: two
   is_dataset: false
 
 report_with_data:
   name: Report with Data
   user: admin
-  query: query_with_test_data
+  search: search_with_test_data
   is_dataset: false

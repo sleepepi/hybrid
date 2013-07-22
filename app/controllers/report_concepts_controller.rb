@@ -1,7 +1,7 @@
 class ReportConceptsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_query,                       only: [ :create, :update, :destroy ]
-  before_action :redirect_without_query,          only: [ :create, :update, :destroy ]
+  before_action :set_search,                      only: [ :create, :update, :destroy ]
+  before_action :redirect_without_search,         only: [ :create, :update, :destroy ]
   before_action :set_report,                      only: [ :create, :update, :destroy ]
   before_action :redirect_without_report,         only: [ :create, :update, :destroy ]
   before_action :set_report_concept,              only: [ :update, :destroy ]
@@ -32,7 +32,7 @@ class ReportConceptsController < ApplicationController
   private
 
     def set_report
-      @report = @query.reports.find_by_id(params[:report_id])
+      @report = @search.reports.find_by_id(params[:report_id])
     end
 
     def redirect_without_report

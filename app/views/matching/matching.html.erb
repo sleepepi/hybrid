@@ -2,14 +2,14 @@
   <div class="control-group">
     <div class="control-label">Cases</div>
     <div class="controls">
-      <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil), data: { object: 'matching-form-option' } %>
+      <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_searches.order('searches.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Controls</div>
     <div class="controls">
-      <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_queries.order('queries.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil), data: { object: 'matching-form-option' } %>
+      <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_searches.order('searches.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 

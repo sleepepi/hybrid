@@ -1,4 +1,4 @@
-<% variable_scope = Variable.current.with_source(@query.sources.collect{|s| s.all_linked_sources.pluck(:id) + [s.id]}.flatten.uniq) %>
+<% variable_scope = Variable.current.with_source(@search.sources.collect{|s| s.all_linked_sources.pluck(:id) + [s.id]}.flatten.uniq) %>
 
 <% variable_scope_filter_by_search = ( params[:search].blank? ? Variable.none : variable_scope.search(params[:search]) ) %>
 <% discovered_variable_ids = variable_scope_filter_by_search.pluck(:id) %>
@@ -12,7 +12,7 @@
     <% if found_number > 0 %>
       <%= render partial: 'variables/folder_link', locals: { folder_id: folder_id, folder: folder_display_name } %>
     <% else %>
-      <%= link_to open_folder_query_path(@query, folder: folder_path, folder_id: folder_id), method: :get, remote: true, style: "text-decoration:none" do %>
+      <%= link_to open_folder_search_path(@search, folder: folder_path, folder_id: folder_id), method: :get, remote: true, style: "text-decoration:none" do %>
         <i class="icon-folder-close"></i>
         <span class="nolink"><%= folder_display_name %></span>
       <% end %>
@@ -33,12 +33,12 @@
   <% folder_variable_scope.with_exact_folder(folder).each do |variable| %>
     <div class="<%= 'common' if variable.commonly_used? %>">
       <% link_name = discovered_variable_ids.include?(variable.id) ? "<span class='highlight'>#{variable.display_name}</span>".html_safe : variable.display_name %>
-      <%= link_to link_name, dictionary_variable_path(variable.dictionary, variable, query_id: @query.id), remote: true %>
+      <%= link_to link_name, dictionary_variable_path(variable.dictionary, variable, search_id: @search.id), remote: true %>
     </div>
   <% end %>
   <% hidden_count = variable_scope.with_exact_folder(folder).count - variable_scope_filter_by_search.with_exact_folder(folder).count %>
   <% if folder and discovered_variable_ids.size > 0 and hidden_count > 0 %>
     <% folder_id = "folder_#{folder.gsub(' ', '_').gsub(/[^a-zA-Z\d\-_]/,'_')}" %>
-    <%= link_to pluralize(hidden_count, 'Hidden Variable'), open_folder_query_path(@query, folder: folder, folder_id: folder_id), method: :get, remote: true, class: 'btn btn-mini' %>
+    <%= link_to pluralize(hidden_count, 'Hidden Variable'), open_folder_search_path(@search, folder: folder, folder_id: folder_id), method: :get, remote: true, class: 'btn btn-mini' %>
   <% end %>
 </div>

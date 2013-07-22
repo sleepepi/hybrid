@@ -1,11 +1,11 @@
-class Query < ActiveRecord::Base
+class Search < ActiveRecord::Base
   serialize :history, Array
 
   # Concerns
   include Searchable, Deletable
 
   # Named Scopes
-  scope :with_user, lambda { |arg| where( ["queries.user_id = ? or queries.id in (select query_users.query_id from query_users where query_users.user_id = ?)", arg, arg] ).references(:query_users) }
+  scope :with_user, lambda { |arg| where( "searches.user_id = ? or searches.id in (select query_users.search_id from query_users where query_users.user_id = ?)", arg, arg ).references(:query_users) }
 
   # Model Validation
   validates_presence_of :name
@@ -28,7 +28,7 @@ class Query < ActiveRecord::Base
   # has_many :query_users, dependent: :destroy
   # has_many :users, through: :query_users, order: 'last_name, first_name', conditions: ['users.deleted = ?', false]
 
-  # Query Methods
+  # Search Methods
 
   def generate_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
     temp_query_concepts.collect{|qc| Resolver.new(qc, source, current_user)}
@@ -86,7 +86,7 @@ class Query < ActiveRecord::Base
     master_total = 0
     master_tables = resolvers.collect(&:tables).flatten.compact.uniq
     join_hash = source.join_conditions(master_tables, current_user)
-    resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
+    resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
     master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
 
     if master_tables.size > 0
@@ -163,12 +163,12 @@ class Query < ActiveRecord::Base
     self.reload
   end
 
-  # Returns whether the query has an action to undo
+  # Returns whether the search has an action to undo
   def undo?
     self.history_position > 0
   end
 
-  # Returns whether the query has an action to redo
+  # Returns whether the search has an action to redo
   def redo?
     self.history_position < self.history.size
   end
@@ -213,7 +213,7 @@ class Query < ActiveRecord::Base
   end
 
   # If the undo is in the middle of the stack, add the forward redo actions to the top of the stack and point to the last item
-  def roll_forward_query_history!
+  def roll_forward_search_history!
     max = self.history.size - 1
     (self.history_position..max).reverse_each do |current_position|
       history_hash = self.history[current_position].symbolize_keys
@@ -240,18 +240,18 @@ class Query < ActiveRecord::Base
   end
 
   def copy
-    query_copy = self.user.queries.new(self.copyable_attributes)
-    query_copy.name += " Copy"
-    query_copy.save
+    search_copy = self.user.searches.new(self.copyable_attributes)
+    search_copy.name += " Copy"
+    search_copy.save
     self.query_sources.each do |qs|
-      query_copy.sources << qs.source
+      search_copy.sources << qs.source
     end
     self.query_concepts.each do |qc|
-      query_copy.query_concepts << query_copy.query_concepts.create(qc.copyable_attributes)
+      search_copy.query_concepts << search_copy.query_concepts.create(qc.copyable_attributes)
     end
-    query_copy.history = []
-    query_copy.history_position = 0
-    query_copy.save
-    query_copy
+    search_copy.history = []
+    search_copy.history_position = 0
+    search_copy.save
+    search_copy
   end
 end

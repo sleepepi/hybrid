@@ -22,9 +22,9 @@
   </div>
 </div>
 
-<%= form_tag report_table_report_path(@report, query_id: @query.id), method: :post, remote: true, onsubmit: "showWaiting('#report_table', ' Loading Report', true)", id: 'report_table_form', style: 'display:inline' do %>
+<%= form_tag report_table_report_path(@report, search_id: @search.id), method: :post, remote: true, onsubmit: "showWaiting('#report_table', ' Loading Report', true)", id: 'report_table_form', style: 'display:inline' do %>
 <% end %>
-<%= form_tag reorder_report_path(@report, query_id: @query.id), method: :post, remote: true, id: 'reorder_report_form', style: 'display:inline' do %>
+<%= form_tag reorder_report_path(@report, search_id: @search.id), method: :post, remote: true, id: 'reorder_report_form', style: 'display:inline' do %>
 <% end %>
 
 <%= javascript_tag "

@@ -9,7 +9,7 @@
 
   <div id="report_concept_<%= @report_concept.id %>_options" style="display:none">
     <% if ['integer', 'numeric', 'choices', 'date'].include?(@report_concept.variable.variable_type) %>
-      <%= form_tag report_concept_path(@report_concept, query_id: @query.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form" do %>
+      <%= form_tag report_concept_path(@report_concept, search_id: @search.id), method: :put, remote: true, id: "report_concept_#{@report_concept.id}_form" do %>
         <div class="sheet-container">
           <% statistics = ['integer', 'numeric'].include?(@report_concept.variable.variable_type) ? ReportConcept::STATISTIC.collect{|a,b| a} : ['all', 'count', 'percent'] %>
           <% statistics = ['year', 'month', 'week', 'day'] if @report_concept.variable.variable_type == 'date' %>

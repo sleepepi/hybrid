@@ -1,12 +1,12 @@
 class QuerySourcesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_query,               only: [ :show, :create, :destroy ]
-  before_action :redirect_without_query,  only: [ :show, :create, :destroy ]
+  before_action :set_search,               only: [ :show, :create, :destroy ]
+  before_action :redirect_without_search,  only: [ :show, :create, :destroy ]
 
   def show
-    @query_source = @query.query_sources.find_by_id(params[:id])
+    @query_source = @search.query_sources.find_by_id(params[:id])
     @source = @query_source.source if @query_source
-    if @source and @query and current_user.all_queries.include?(@query)
+    if @source and @search and current_user.all_searches.include?(@search)
       @order = 'sources.name'
       source_scope = Source.available
       source_scope = source_scope.order(@order)
@@ -19,15 +19,15 @@ class QuerySourcesController < ApplicationController
 
   def create
     @source = Source.available.find_by_id(query_source_params[:source_id])
-    @query.sources << @source if @source and not @query.sources.include?(@source)
+    @search.sources << @source if @source and not @search.sources.include?(@source)
     render 'query_sources/query_sources'
   end
 
   def destroy
-    @query_source = @query.query_sources.find_by_id(params[:id])
+    @query_source = @search.query_sources.find_by_id(params[:id])
     if @query_source
       @query_source.destroy
-      @query.reload
+      @search.reload
     end
     render 'query_sources/query_sources'
   end

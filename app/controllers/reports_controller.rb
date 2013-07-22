@@ -3,12 +3,12 @@ class ReportsController < ApplicationController
 
   # This retrieves the entire dataset
   def get_csv
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report = @query.reports.find_by_id(params[:id]) if @query
-    if @query and @report
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    @report = @search.reports.find_by_id(params[:id]) if @search
+    if @search and @report
       csv_string = CSV.generate do |csv|
         csv << @report.report_concepts.collect{|rc| rc.variable.display_name}
-        @query.view_concept_values(current_user, @report.report_concepts, ["download dataset", "download limited dataset"]).each do |row|
+        @search.view_concept_values(current_user, @report.report_concepts, ["download dataset", "download limited dataset"]).each do |row|
           csv << row
         end
       end
@@ -47,15 +47,15 @@ class ReportsController < ApplicationController
   end
 
   def report_table
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report = @query.reports.find_by_id(params[:id]) if @query
-    render nothing: true unless @query and @report
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    @report = @search.reports.find_by_id(params[:id]) if @search
+    render nothing: true unless @search and @report
   end
 
   def edit
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report = @query.reports.find_by_id(params[:id]) if @query
-    if @query and @report
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    @report = @search.reports.find_by_id(params[:id]) if @search
+    if @search and @report
       params[:add_report_id] = @report.id
       render 'edit'
     else
@@ -64,9 +64,9 @@ class ReportsController < ApplicationController
   end
 
   def create
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    if @query and @report = @query.reports.create(user_id: current_user.id, name: params[:report][:name], is_dataset: params[:is_dataset])
-      @element_id = (params[:is_dataset] == 'true') ? "dataset_tabs-#{@query.true_datasets.size + 1}" : "report_tabs-#{@query.true_reports.size + 1}"
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    if @search and @report = @search.reports.create(user_id: current_user.id, name: params[:report][:name], is_dataset: params[:is_dataset])
+      @element_id = (params[:is_dataset] == 'true') ? "dataset_tabs-#{@search.true_datasets.size + 1}" : "report_tabs-#{@search.true_reports.size + 1}"
 
       if template_report = current_user.reports.find_by_id(params[:template_report_id])
         template_report.report_concepts.each do |report_concept|
@@ -81,9 +81,9 @@ class ReportsController < ApplicationController
   end
 
   def destroy
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    @report = @query.reports.find_by_id(params[:id]) if @query
-    if @query and @report
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    @report = @search.reports.find_by_id(params[:id]) if @search
+    if @search and @report
       @report.destroy
       render "reports"
     else
@@ -93,14 +93,14 @@ class ReportsController < ApplicationController
 
   def edit_name
     @report = current_user.reports.find_by_id(params[:id])
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    render nothing: true unless @report and @query
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    render nothing: true unless @report and @search
   end
 
   def save_name
     @report = current_user.reports.find_by_id(params[:id])
-    @query = current_user.all_queries.find_by_id(params[:query_id])
-    if @report and @query
+    @search = current_user.all_searches.find_by_id(params[:search_id])
+    if @report and @search
       @report.update_attributes name: params[:report][:name]
     else
       render nothing: true
@@ -108,9 +108,9 @@ class ReportsController < ApplicationController
   end
 
   def reorder
-    @query = current_user.all_queries.find_by_id(params[:query_id])
+    @search = current_user.all_searches.find_by_id(params[:search_id])
     @report = current_user.reports.find_by_id(params[:id])
-    if @query and @report
+    if @search and @report
       row_report_concept_ids = params[:rows].to_s.gsub('report_concept_', '').split(',')
       column_report_concept_ids = params[:columns].to_s.gsub('report_concept_', '').split(',')
       @report.reorder(column_report_concept_ids, row_report_concept_ids)

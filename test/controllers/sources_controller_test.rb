@@ -104,7 +104,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should get index for popup" do
-    get :index, popup: 'true', query_id: queries(:one).to_param, format: 'js'
+    get :index, popup: 'true', search_id: searches(:one).to_param, format: 'js'
     assert_not_nil assigns(:sources)
     assert_template 'popup'
   end
@@ -132,23 +132,23 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should show source" do
-    get :show, id: @source, query_id: queries(:one).to_param
+    get :show, id: @source, search_id: searches(:one).to_param
     assert_not_nil assigns(:source)
-    assert_not_nil assigns(:query)
+    assert_not_nil assigns(:search)
     assert_template 'show'
   end
 
   test "should show source info popup" do
-    get :show, id: @source, query_id: queries(:one).to_param, popup: 'true', format: 'js'
+    get :show, id: @source, search_id: searches(:one).to_param, popup: 'true', format: 'js'
     assert_not_nil assigns(:source)
-    assert_not_nil assigns(:query)
+    assert_not_nil assigns(:search)
     assert_template 'info'
   end
 
   test "should not show source info popup with invalid query" do
-    get :show, id: @source, query_id: -1, popup: 'true', format: 'js'
+    get :show, id: @source, search_id: -1, popup: 'true', format: 'js'
     assert_not_nil assigns(:source)
-    assert_nil assigns(:query)
+    assert_nil assigns(:search)
     assert_response :success
   end
 

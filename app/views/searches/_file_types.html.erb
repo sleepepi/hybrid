@@ -1,16 +1,16 @@
-<% file_types = FileType.available.with_source(@query.sources.collect{|s| s.id}) %>
+<% file_types = FileType.available.with_source(@search.sources.collect{|s| s.id}) %>
 
 <% if file_types.blank? %>
-  <% if @query.sources.size > 0 %>
+  <% if @search.sources.size > 0 %>
     <i class="icon-question-sign"></i>
-    <span class="quiet">No files available for selected <%= @query.sources.size > 1 ? 'source'.pluralize : 'source' %>.</span>
+    <span class="quiet">No files available for selected <%= @search.sources.size > 1 ? 'source'.pluralize : 'source' %>.</span>
   <% end %>
 <% else %>
   <% unavailable_files = 0 %>
   <% file_types.each_with_index do |file_type| %>
     <div style="line-height:25px">
-      <% if file_type.user_can_download?(current_user, @query.sources) %>
-        <%= link_to file_type.name_and_short_extension, data_files_query_path(@query, file_type_id: file_type.id), method: :post, remote: true %>
+      <% if file_type.user_can_download?(current_user, @search.sources) %>
+        <%= link_to file_type.name_and_short_extension, data_files_search_path(@search, file_type_id: file_type.id), method: :post, remote: true %>
       <% else %>
         <% unavailable_files += 1 %>
         <span class="quiet" style="text-decoration: line-through;"><%= file_type.name_and_short_extension %></span>

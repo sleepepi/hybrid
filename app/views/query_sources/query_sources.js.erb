@@ -5,7 +5,7 @@ $("#source_info").html("<%= escape_javascript(render("sources/info")) %>");
 <% end %>
 
 $("#query_sources").html("<%= escape_javascript(render("query_sources/query_sources")) %>");
-$("#query_file_types").html("<%= escape_javascript(render("queries/file_types")) %>")
+$("#query_file_types").html("<%= escape_javascript(render("searches/file_types")) %>")
 
-$("#query_form").submit();
+$("#search_form").submit();
 $("#report_table_form").submit();

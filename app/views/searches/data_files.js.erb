@@ -4,7 +4,7 @@ $("#files_popup").modal('show');
 
 showWaiting('#file_popup_info', ' Loading File Information', true);
 
-$.post("<%= request.script_name + '/queries/' + @query.id.to_s + '/load_file_type?file_type_id=' + (@file_type ? @file_type.id.to_s : '') %>", null, null, "script")
+$.post("<%= request.script_name + '/searches/' + @search.id.to_s + '/load_file_type?file_type_id=' + (@file_type ? @file_type.id.to_s : '') %>", null, null, "script")
 
 loadPopup();
 centerPopup();

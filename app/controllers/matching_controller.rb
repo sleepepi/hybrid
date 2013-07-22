@@ -1,6 +1,6 @@
 class MatchingController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_queries, only: [ :matching, :add_variable, :add_criteria ]
+  before_action :set_searches, only: [ :matching, :add_variable, :add_criteria ]
 
   def matching
     respond_to do |format|
@@ -28,9 +28,9 @@ class MatchingController < ApplicationController
 
   private
 
-    def set_queries
-      @cases = current_user.all_queries.find_by_id(params[:cases_id])
-      @controls = current_user.all_queries.find_by_id(params[:controls_id])
+    def set_searches
+      @cases = current_user.all_searches.find_by_id(params[:cases_id])
+      @controls = current_user.all_searches.find_by_id(params[:controls_id])
       @controls_per_case = (params[:controls_per_case].to_i <= 4 and params[:controls_per_case].to_i >= 1) ? params[:controls_per_case].to_i : 1
       @sources = (@cases ? @cases.sources.to_a : []) & (@controls ? @controls.sources.to_a : [])
     end

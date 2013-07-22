@@ -2,7 +2,7 @@
 
 # Concept Age at Visit with ages 18:25 selected
 one:
-  query: one
+  search: one
   variable: numeric
   value: 18:25
   position: 0
@@ -16,7 +16,7 @@ one:
 
 # Concept Gender with male selected
 categorical:
-  query: one
+  search: one
   variable: gender
   value: 1
   position: 1
@@ -29,7 +29,7 @@ categorical:
   level: 0
 
 date:
-  query: one
+  search: one
   variable: date
   # value: 18:25
   position: 2
@@ -42,7 +42,7 @@ date:
   level: 0
 
 three:
-  query: query_with_sources
+  search: search_with_sources
   variable: numeric
   value: 18:25
   position: 0
@@ -57,7 +57,7 @@ three:
 # Concept Gender with male selected
 four:
   # id: 4
-  query: query_with_sources
+  search: search_with_sources
   variable: choices
   value: 1
   position: 1
@@ -72,7 +72,7 @@ four:
 # # Concept Age at Visit with ages 18:25 selected
 # linked_concept:
 #   # id: 5
-#   query: query_across_linked_sources
+#   search: search_across_linked_sources
 #   concept: continuous
 #   value: 18:25
 #   position: 0
@@ -86,7 +86,7 @@ four:
 
 # rev_linked_concept:
 #   # id: 6
-#   query: query_across_linked_sources
+#   search: search_across_linked_sources
 #   concept: boolean
 #   value: "20:250"
 #   position: 1
@@ -99,7 +99,7 @@ four:
 #   level: 0
 
 # negated_continuous:
-#   query: query_with_negated_concepts
+#   search: search_with_negated_concepts
 #   concept: continuous
 #   value: 18:25
 #   position: 0
@@ -113,7 +113,7 @@ four:
 
 # # Concept Gender with male selected
 # negated_categorical:
-#   query: query_with_negated_concepts
+#   search: search_with_negated_concepts
 #   concept: categorical
 #   value: 1
 #   position: 1
@@ -126,7 +126,7 @@ four:
 #   level: 0
 
 with_data:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: numeric
   value: 18:25
   position: 0
@@ -139,7 +139,7 @@ with_data:
   level: 0
 
 with_choices_data:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: choices
   value: 1
   position: 1
@@ -152,7 +152,7 @@ with_choices_data:
   level: 0
 
 with_data_negated:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: numeric
   value: 18:25
   position: 2
@@ -165,7 +165,7 @@ with_data_negated:
   level: 0
 
 with_choices_data_negated:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: choices
   value: 1
   position: 3
@@ -178,7 +178,7 @@ with_choices_data_negated:
   level: 0
 
 # with_boolean_data:
-#   query: query_with_test_data
+#   search: search_with_test_data
 #   concept: boolean
 #   value: true
 #   position: 4
@@ -191,7 +191,7 @@ with_choices_data_negated:
 #   level: 0
 
 with_date_data:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: date
   value: 1234
   position: 5
@@ -204,7 +204,7 @@ with_date_data:
   level: 0
 
 # with_boolean_data_negated:
-#   query: query_with_test_data
+#   search: search_with_test_data
 #   concept: boolean
 #   value: true
 #   position: 6
@@ -217,7 +217,7 @@ with_date_data:
 #   level: 0
 
 with_choices_data_true_false:
-  query: query_with_test_data
+  search: search_with_test_data
   variable: choices
   value: 'true,false'
   position: 7
@@ -230,7 +230,7 @@ with_choices_data_true_false:
   level: 0
 
 history_query_concept:
-  query: query_with_history
+  search: search_with_history
   variable: choices
   # value: 'true,false'
   position: 0
@@ -243,7 +243,7 @@ history_query_concept:
   level: 0
 
 history_query_concept_two:
-  query: query_with_undone_history
+  search: search_with_undone_history
   variable: choices
   # value: 'true,false'
   position: 0
@@ -257,7 +257,7 @@ history_query_concept_two:
   deleted: true
 
 history_query_concept_update_change:
-  query: query_with_history_update_change
+  search: search_with_history_update_change
   variable: numeric
   value: 20
   position: 0
@@ -270,7 +270,7 @@ history_query_concept_update_change:
   level: 0
 
 history_query_concept_two_update_change:
-  query: query_with_undone_history_update_change
+  search: search_with_undone_history_update_change
   variable: numeric
   # value: 20
   position: 0

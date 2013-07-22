@@ -25,9 +25,9 @@ class User < ActiveRecord::Base
   has_many :file_types
   has_many :dictionaries, -> { where deleted: false }
 
-  has_many :queries, -> { where deleted: false }
+  has_many :searches, -> { where deleted: false }
   has_many :query_users
-  has_many :shared_queries, -> { where( deleted: false ).order( 'name' ) }, through: :query_users, source: :query
+  has_many :shared_searches, -> { where( deleted: false ).order( 'name' ) }, through: :query_users, source: :search
 
   has_many :reports
 
@@ -55,9 +55,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def all_queries
-    @all_queries ||= begin
-      ::Query.current.with_user(self.id)
+  def all_searches
+    @all_searches ||= begin
+      Search.current.with_user(self.id)
     end
   end
 

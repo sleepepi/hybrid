@@ -11,8 +11,8 @@
     <div style="line-height:30px;height:30px"
       data-object="toggle-delete-link" data-target="#query_concept_<%= @query_concept.id %>_delete_link">
       <div style="padding-left:<%= 10*@query_concept.level %>px">
-        <%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, data: { object: 'mark_query_concept', query_id: @query.id, query_concept_id: @query_concept.id }, style: 'margin-top: -3px;' %>
-        <%= link_to edit_query_concept_path(@query_concept, query_id: @query), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "query_concept_#{@query_concept.id}_delete_icon" } do %>
+        <%= check_box_tag "query_concept_#{@query_concept.id}_checked", '1', @query_concept.selected, data: { object: 'mark_query_concept', search_id: @search.id, query_concept_id: @query_concept.id }, style: 'margin-top: -3px;' %>
+        <%= link_to edit_query_concept_path(@query_concept, search_id: @search), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "query_concept_#{@query_concept.id}_delete_icon" } do %>
           <%= @query_concept.variable_name_with_source %>
           <span class="nolink">is</span> <% if @query_concept.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
 
@@ -25,7 +25,7 @@
 
         <span id="query_concept_<%= @query_concept.id %>_delete_link" style="display:none">
           <i class="icon-move" style="cursor:move"></i>
-          <%= link_to 'remove', query_concept_path(@query_concept, query_id: @query), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+          <%= link_to 'remove', query_concept_path(@query_concept, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
         </span>
       </div>
       <div style="padding-left:<%= 10*@query_concept.level %>px"><span id="record_ids_<%= @query_concept.id %>_errors" class="quiet errors_found"></span></div>

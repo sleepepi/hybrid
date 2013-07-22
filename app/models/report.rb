@@ -1,6 +1,6 @@
 class Report < ActiveRecord::Base
   belongs_to :user
-  belongs_to :query
+  belongs_to :search
 
   has_many :report_concepts, -> { order :position }, dependent: :destroy
   has_many :variables, through: :report_concepts
@@ -25,7 +25,7 @@ class Report < ActiveRecord::Base
 
   def generate_report_table(current_user)
     filtered_report_concepts = self.report_concepts.select{|rc| not rc.position.blank?}
-    values = self.query.view_concept_values(current_user, filtered_report_concepts)
+    values = self.search.view_concept_values(current_user, filtered_report_concepts)
 
     row_values = []
     filtered_report_concepts.each_with_index do |rc, index|
@@ -224,7 +224,7 @@ class Report < ActiveRecord::Base
       end
     end
 
-    result_hash[:error] = "No report was generated since the associated query is returning 0 results.  Please modify your query and then reload the report." if result_hash[:error].blank? and values.blank?
+    result_hash[:error] = "No report was generated since the associated search returns 0 results.  Please modify your search and then reload the report." if result_hash[:error].blank? and values.blank?
 
     { result: master_table, error: result_hash[:error] }
   end

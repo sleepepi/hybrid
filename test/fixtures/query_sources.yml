@@ -1,33 +1,33 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  query: one
+  search: one
   source: one
 
 two:
-  query: one
+  search: one
   source: two
 
 three:
-  query: query_with_sources
+  search: search_with_sources
   source: one
 
 four:
-  query: query_with_sources
+  search: search_with_sources
   source: two
 
 five:
-  query: query_across_linked_sources
+  search: search_across_linked_sources
   source: linked_source_a
 
 six:
-  query: query_with_negated_concepts
+  search: search_with_negated_concepts
   source: one
 
 seven:
-  query: query_with_negated_concepts
+  search: search_with_negated_concepts
   source: two
 
 eight:
-  query: query_with_test_data
+  search: search_with_test_data
   source: fully_mapped_test_data_source

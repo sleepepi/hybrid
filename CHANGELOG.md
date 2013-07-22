@@ -12,6 +12,7 @@
   - Updated to contour 2.0.0.rc5
 
 ### Refactoring
+- Renamed queries to searches
 - Removed references to external concepts and datasets
 - Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
   - To link across sources `identifier` concepts are now required to be mapped in each source

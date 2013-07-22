@@ -1,17 +1,17 @@
-<%= render partial: 'contour/layouts/per_page', locals: { type: 'queries', per_page: 20 } %>
+<%= render partial: 'contour/layouts/per_page', locals: { type: 'searches', per_page: 20 } %>
 
 <table class="table table-striped table-bordered" style="width:100%">
   <thead>
     <tr>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.name', 'Name', 'queries_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'searches.name', 'Name', 'searches_search') %></th>
       <th>Total</th>
       <th>From</th>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'queries.created_at', 'Created', 'queries_search') %></th>
+      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'searches.created_at', 'Created', 'searches_search') %></th>
       <th>Actions</th>
     </tr>
   </thead>
 
-  <% @queries.each do |query| %>
+  <% @searches.each do |query| %>
     <tr>
       <td><%= link_to query.name, query %></td>
       <td style="text-align:center"><%= number_with_delimiter query.total %></td>
@@ -24,4 +24,4 @@
   <% end %>
 </table>
 
-<center><%= paginate @queries, theme: "contour" %></center>
+<center><%= paginate @searches, theme: "contour" %></center>

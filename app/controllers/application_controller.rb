@@ -67,12 +67,12 @@ class ApplicationController < ActionController::Base
       empty_response_or_root_path(dictionaries_path) unless @dictionary
     end
 
-    def set_query(id = :query_id)
-      @query = current_user.all_queries.find_by_id(params[id])
+    def set_search(id = :search_id)
+      @search = current_user.all_searches.find_by_id(params[id])
     end
 
-    def redirect_without_query
-      empty_response_or_root_path(queries_path) unless @query
+    def redirect_without_search
+      empty_response_or_root_path(searches_path) unless @search
     end
 
 end

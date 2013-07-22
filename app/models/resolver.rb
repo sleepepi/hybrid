@@ -27,8 +27,8 @@ class Resolver
     results.to_a.first[0]
   end
 
-  def conditions_for_entire_query
-    "("*filter.left_brackets + conditions + ")"*filter.right_brackets + (filter.position < (filter.query.query_concepts.size - 1) ? " #{filter.right_operator}" : '')
+  def conditions_for_entire_search
+    "("*filter.left_brackets + conditions + ")"*filter.right_brackets + (filter.position < (filter.search.query_concepts.size - 1) ? " #{filter.right_operator}" : '')
   end
 
   private
@@ -65,7 +65,7 @@ class Resolver
 
     def construct_conditions
       if filter.source and filter.source != source
-        # This is get Age at SHHS2 against SHHS1 (linked query)
+        # This is get Age at SHHS2 against SHHS1 (linked search)
         # GENERATE LINKED SQL
         # 1) Get the Source Join between filter.source and source
         #    This returns table column, table column "the joins" per se....

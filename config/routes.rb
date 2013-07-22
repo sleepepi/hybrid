@@ -30,7 +30,7 @@ SleepPortal::Application.routes.draw do
     end
   end
 
-  resources :queries do
+  resources :searches do
     member do
       get :variables_popup
       get :open_folder
@@ -104,7 +104,7 @@ SleepPortal::Application.routes.draw do
   post "/matching/add_variable" => "matching#add_variable", as: :add_variable
   post "/matching/add_criteria" => "matching#add_criteria", as: :add_criteria
 
-  root to: "queries#show"
+  root to: "searches#show"
 
   # See how all your routes lay out with "rake routes"
 end

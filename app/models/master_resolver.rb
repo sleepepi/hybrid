@@ -2,11 +2,11 @@ class MasterResolver
 
   attr_reader :errors, :values
 
-  def initialize(report_concepts, query, current_user, actions_required = ['view data distribution', 'view limited data distribution'])
+  def initialize(report_concepts, search, current_user, actions_required = ['view data distribution', 'view limited data distribution'])
     @report_concepts = report_concepts.compact.to_a
     @current_user = current_user
     @actions_required = actions_required
-    @query = query
+    @search = search
     @errors = []
     @super_grid = {}
     @values = []
@@ -15,7 +15,7 @@ class MasterResolver
   end
 
   def all_sources
-    (@query.sources.to_a | @report_concepts.collect(&:source)).uniq
+    (@search.sources.to_a | @report_concepts.collect(&:source)).uniq
   end
 
   # The identifier variable is used to link across multiple datasets
@@ -80,7 +80,7 @@ class MasterResolver
   private
 
   def generate_resolvers(source)
-    @query.query_concepts.collect{|qc| Resolver.new(qc, source, @current_user)}
+    @search.query_concepts.collect{|qc| Resolver.new(qc, source, @current_user)}
   end
 
   def source_tables(source)
@@ -90,7 +90,7 @@ class MasterResolver
   def source_conditions(source)
     resolvers = generate_resolvers(source)
     join_hash = source.join_conditions(source_tables(source), @current_user)
-    resolver_conditions = resolvers.collect(&:conditions_for_entire_query).join(' ')
+    resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
     [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
   end
 

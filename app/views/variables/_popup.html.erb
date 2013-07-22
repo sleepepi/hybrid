@@ -6,7 +6,7 @@
 
 <div class="row-fluid">
   <div class="span6">
-    <%= form_tag open_folder_query_path(@query), remote: true, method: :get, id: "concept_search_form" do %>
+    <%= form_tag open_folder_search_path(@search), remote: true, method: :get, id: "concept_search_form" do %>
       <%= text_field_tag 'variable_search', params[:concept_search], class: 'span12', placeholder: 'Enter variable name or navigate folders.', name: 'search' %>
     <% end %>
     <div id="variable_folders">

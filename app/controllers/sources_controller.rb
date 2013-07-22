@@ -93,7 +93,7 @@ class SourcesController < ApplicationController
     source_scope = source_scope.order(@order)
 
     @sources = source_scope.page(params[:page]).per( 20 )
-    @query = current_user.queries.find_by_id(params[:query_id])
+    @search = current_user.searches.find_by_id(params[:search_id])
     render json: @sources.collect{|s| { id: s.id.to_s, text: s.name }} if params[:autocomplete] == 'true'
     render 'popup' if params[:popup] == 'true'
   end
@@ -103,8 +103,8 @@ class SourcesController < ApplicationController
   def show
     if params[:popup] == 'true'
       @source = Source.available.find_by_id(params[:id])
-      @query = current_user.queries.find_by_id(params[:query_id])
-      if @source and @query
+      @search = current_user.searches.find_by_id(params[:search_id])
+      if @source and @search
         render 'info'
       else
         render nothing: true
@@ -114,7 +114,7 @@ class SourcesController < ApplicationController
       @source = current_user.all_sources.find_by_id(params[:id])
       source = Source.find_by_id(params[:id])
       @source = source if (not @source) and source and (source.user_has_action_group?(current_user, "All Read") or source.user_has_action_group?(current_user, "All Write"))
-      @query = current_user.queries.find_by_id(params[:query_id])
+      @search = current_user.searches.find_by_id(params[:search_id])
     end
     redirect_to root_path unless @source
   end

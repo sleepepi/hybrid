@@ -3,17 +3,17 @@ class QueryConcept < ActiveRecord::Base
   OPERATOR = ["and", "or"]
 
   # Callbacks
-  after_create :create_qc_query_history
-  before_update :update_qc_query_history
+  after_create :create_qc_search_history
+  before_update :update_qc_search_history
 
   # Concerns
   include Deletable
 
   # Model Validation
-  validates_presence_of :query_id, :variable_id, :position
+  validates_presence_of :search_id, :variable_id, :position
 
   # Model Relationships
-  belongs_to :query
+  belongs_to :search
   belongs_to :variable
   belongs_to :source
 
@@ -21,13 +21,13 @@ class QueryConcept < ActiveRecord::Base
 
   def variable_name_with_source
     full_name = "#{self.variable.display_name}"
-    full_name += " at #{self.source.name}" if self.source and (self.source != self.query.sources.first or self.query.sources.size != 1)
+    full_name += " at #{self.source.name}" if self.source and (self.source != self.search.sources.first or self.search.sources.size != 1)
     full_name
   end
 
   # def concept_name_with_source
   #   full_name = "#{self.concept.human_name}"
-  #   full_name += " at #{self.source.name}" if self.source and (self.source != self.query.sources.first or self.query.sources.size != 1)
+  #   full_name += " at #{self.source.name}" if self.source and (self.source != self.search.sources.first or self.search.sources.size != 1)
   #   full_name
   # end
 
@@ -40,7 +40,7 @@ class QueryConcept < ActiveRecord::Base
   end
 
   def copyable_attributes
-    self.attributes.reject{|key, val| ['id', 'query_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
+    self.attributes.reject{|key, val| ['id', 'search_id', 'deleted', 'created_at', 'updated_at'].include?(key.to_s)}
   end
 
   def human_value
@@ -122,32 +122,32 @@ class QueryConcept < ActiveRecord::Base
   # Overwrites deletable since it relies on callbacks
   def destroy
     self.update deleted: true
-    self.query.update_positions
+    self.search.update_positions
   end
 
   def undestroy
     self.update deleted: false
-    self.query.update_positions
+    self.search.update_positions
   end
 
   # After Create Action
-  def create_qc_query_history
-    self.query.roll_forward_query_history!
-    self.query.history << { action: 'create', id: self.id }
-    self.query.history_position = self.query.history.size
-    self.query.save!
+  def create_qc_search_history
+    self.search.roll_forward_search_history!
+    self.search.history << { action: 'create', id: self.id }
+    self.search.history_position = self.search.history.size
+    self.search.save!
   end
 
-  def update_qc_query_history
+  def update_qc_search_history
     # Don't include right_brackets, left_brackets, or position updates
     if self.changes.blank? or self.changes.keys.include?('right_brackets') or self.changes.keys.include?('left_brackets') or self.changes.keys.include?('position') or self.changes.keys.include?('selected')
       # Rails.logger.debug "No update for these changes: #{self.changes}"
     else
-      self.query.roll_forward_query_history!
+      self.search.roll_forward_search_history!
 
-      self.query.history << { action: 'update', id: self.id, changes: self.changes }
-      self.query.history_position = self.query.history.size
-      self.query.save!
+      self.search.history << { action: 'update', id: self.id, changes: self.changes }
+      self.search.history_position = self.search.history.size
+      self.search.save!
     end
   end
 end

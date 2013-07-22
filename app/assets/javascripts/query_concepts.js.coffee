@@ -1,6 +1,6 @@
 @markQueryConcept = (element) ->
   params = {}
-  params.query_id = $(element).data('query-id')
+  params.search_id = $(element).data('search-id')
   params.query_concept_id = $(element).data('query-concept-id')
   params.selected = $(element).is(':checked')
   $.post( root_url + "query_concepts/mark_selected", params, null, "script" )

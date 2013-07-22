@@ -1,11 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one: 
+one:
   id: 1
   user: admin
-  query: one
+  search: one
 
 two:
   id: 2
   user: valid
-  query: one
+  search: one

@@ -36,12 +36,12 @@ class Mapping < ActiveRecord::Base
 
   def abstract_value(query_concept)
     result = []
-    query_concept_value = query_concept.value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '')
+    query_concept_value = query_concept.value
 
     return ['1 = 0'] if query_concept_value.blank?
 
     case self.variable.variable_type when 'date', 'integer', 'numeric'
-      result = query_concept_value.to_s.split(',')
+      result = query_concept_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '').split(',')
     when 'choices'
       if query_concept.negated?
         full_set = self.variable.domain.options.collect{|option| option[:value]}

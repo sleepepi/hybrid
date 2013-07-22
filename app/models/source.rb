@@ -32,7 +32,7 @@ class Source < ActiveRecord::Base
   has_many :rules, dependent: :destroy
 
   has_many :query_sources, dependent: :destroy
-  has_many :queries, -> { order :name }, through: :query_sources
+  has_many :searches, -> { order :name }, through: :query_sources
 
   # Source Methods
 

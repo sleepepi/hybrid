@@ -17,7 +17,7 @@
   markup += "</span>" unless concept.commonly_used
   markup
 
-@buildQuerySourceTypeahead = () ->
+@buildSearchSourceTypeahead = () ->
   $("#source").select2(
     placeholder: "Select a data source"
     width: 'resolve'
@@ -33,7 +33,7 @@
     if $("#source").val() != ""
       $("#source").select2("val", "")
       params = {}
-      params.query_id = $(this).data('query-id')
+      params.search_id = $(this).data('search-id')
       params.query_source = {}
       params.query_source.source_id = e.val
       showWaiting('#query_sources', 'Loading Sources', false)
@@ -48,7 +48,7 @@
     initSelection: (element, callback) ->
       callback([])
     ajax:
-      url: root_url + "queries/#{$('#variable_search').data('query-id')}/autocomplete"
+      url: root_url + "searches/#{$('#variable_search').data('search-id')}/autocomplete"
       dataType: 'json'
       data: (term, page) -> { search: term }
       results: (data, page) -> # parse the results into the format expected by Select2.
@@ -58,22 +58,22 @@
     if $("#variable_search").val() != ""
       $("#variable_search").select2("val", "")
       params = {}
-      params.query_id = $(this).data('query-id')
+      params.search_id = $(this).data('search-id')
       params.variable_id = e.val
       showWaiting('#concept_folders', 'Loading', false)
       $.post(root_url + "query_concepts", params, null, "script")
   )
 
-@submitQueryName = () ->
-  $.post(root_url + "queries/#{$("#query_name").data('query-id')}", "_method=patch" + "&" + $("#query_name").serialize(), null, "script")
+@submitSearchName = () ->
+  $.post(root_url + "searches/#{$("#search_name").data('search-id')}", "_method=patch" + "&" + $("#search_name").serialize(), null, "script")
 
-@cancelQueryNameEdit = () ->
-  $.get(root_url + "queries/#{$("#query_name").data('query-id')}", null, null, "script")
+@cancelSearchNameEdit = () ->
+  $.get(root_url + "searches/#{$("#search_name").data('search-id')}", null, null, "script")
 
 jQuery ->
-  $( "#query_form" ).submit()
+  $( "#search_form" ).submit()
 
-  buildQuerySourceTypeahead()
+  buildSearchSourceTypeahead()
   $("#selected_source_id").val('')
 
   buildQueryConceptTypeahead()
@@ -114,14 +114,14 @@ jQuery ->
       $('#query_concept_' + $(this).data('value') + '_rop_select').hide()
       false
     )
-    .on('click', '[data-object~="save_query_name"]', () ->
-      submitQueryName()
+    .on('click', '[data-object~="save_search_name"]', () ->
+      submitSearchName()
       false
     )
-    .on("keyup", "#query_name", (event) ->
+    .on("keyup", "#search_name", (event) ->
       if event.which == 13
-        submitQueryName()
+        submitSearchName()
       else if event.which == 27
-        cancelQueryNameEdit()
+        cancelSearchNameEdit()
     )
 

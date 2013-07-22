@@ -1,4 +1,4 @@
 class QuerySource < ActiveRecord::Base
-  belongs_to :query, touch: true
+  belongs_to :search, touch: true
   belongs_to :source
 end

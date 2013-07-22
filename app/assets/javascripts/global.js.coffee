@@ -46,7 +46,7 @@
     ajax:
       url: root_url + "concepts"
       dataType: 'json'
-      data: (term, page) -> { search: term, autocomplete: 'true', query_id: $('#report_concept_search_term').data('query-id') }
+      data: (term, page) -> { search: term, autocomplete: 'true', search_id: $('#report_concept_search_term').data('search-id') }
       results: (data, page) -> # parse the results into the format expected by Select2.
           return results: data
     formatResult: formatConceptResult
