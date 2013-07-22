@@ -31,9 +31,9 @@
             if(high_range >= categories.length)
               high_range = categories.length - 1
 
-            $("#query_concept_value").val(categories[low_range] + ':' + categories[high_range])
-            $("#query_concept_value").change()
-            $("#query_concept_value").effect("highlight", {}, 1000)
+            $("#criterium_value").val(categories[low_range] + ':' + categories[high_range])
+            $("#criterium_value").change()
+            $("#criterium_value").effect("highlight", {}, 1000)
             false
     credits:
       enabled: false

@@ -1,4 +1,4 @@
-<% if @query_concept.variable.domain %>
+<% if @criterium.variable.domain %>
   <div class="control-group">
     <%= f.label :value, nil, class: 'control-label' %>
     <div class="controls sheet-container">
@@ -6,8 +6,8 @@
         <%= link_to simple_check(true) + ' Select All', '#', data: { object: 'categorical-check-all' }, class: 'btn btn-mini' %>
         <%= link_to simple_check(false) + ' Deselect All', '#', data: { object: 'categorical-uncheck-all' }, class: 'btn btn-mini' %>
       </div>
-      <% @query_concept.variable.domain.options.each do |option| %>
-        <% selected = @query_concept.value.to_s.split(',').include?(option[:value].to_s) %>
+      <% @criterium.variable.domain.options.each do |option| %>
+        <% selected = @criterium.value.to_s.split(',').include?(option[:value].to_s) %>
         <label class="checkbox <%= 'selected' if selected %>"><%= check_box_tag "values[]", option[:value], selected, class: 'choices' %> <%= option[:display_name] %></label>
       <% end %>
     </div>

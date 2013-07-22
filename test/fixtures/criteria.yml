@@ -229,7 +229,7 @@ with_choices_data_true_false:
   selected: false
   level: 0
 
-history_query_concept:
+history_criterium:
   search: search_with_history
   variable: choices
   # value: 'true,false'
@@ -242,7 +242,7 @@ history_query_concept:
   selected: false
   level: 0
 
-history_query_concept_two:
+history_criterium_two:
   search: search_with_undone_history
   variable: choices
   # value: 'true,false'
@@ -256,7 +256,7 @@ history_query_concept_two:
   level: 0
   deleted: true
 
-history_query_concept_update_change:
+history_criterium_update_change:
   search: search_with_history_update_change
   variable: numeric
   value: 20
@@ -269,7 +269,7 @@ history_query_concept_update_change:
   selected: false
   level: 0
 
-history_query_concept_two_update_change:
+history_criterium_two_update_change:
   search: search_with_undone_history_update_change
   variable: numeric
   # value: 20

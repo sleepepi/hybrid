@@ -1,14 +1,14 @@
-@markQueryConcept = (element) ->
+@markCriteria = (element) ->
   params = {}
   params.search_id = $(element).data('search-id')
-  params.query_concept_id = $(element).data('query-concept-id')
+  params.criterium_id = $(element).data('criterium-id')
   params.selected = $(element).is(':checked')
-  $.post( root_url + "query_concepts/mark_selected", params, null, "script" )
+  $.post( root_url + "criteria/mark_selected", params, null, "script" )
 
 jQuery ->
   $(document)
-    .on('click', '[data-object~="mark_query_concept"]', () ->
-      markQueryConcept(this)
+    .on('click', '[data-object~="mark_criterium"]', () ->
+      markCriteria(this)
     )
     .on('click', '[data-object~="select-checkbox"]', () ->
       checkbox = $("input[name='values[]'][value='#{$(this).data('value')}']")

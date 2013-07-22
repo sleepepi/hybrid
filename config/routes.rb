@@ -46,7 +46,7 @@ SleepPortal::Application.routes.draw do
     end
   end
 
-  resources :query_concepts do
+  resources :criteria do
     collection do
       post :indent
       post :mark_selected

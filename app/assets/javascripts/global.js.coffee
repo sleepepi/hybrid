@@ -23,16 +23,16 @@
 
 @changeRightOperator = (element, index) ->
   element = $(element)
-  $('#selected_right_operator_query_concept_id').val(index)
-  $('#query_concept_right_operator').val(element.val())
-  $.post($("#right_operator_query_concepts_form").attr("action"), $("#right_operator_query_concepts_form").serialize(), null, "script")
+  $('#selected_right_operator_criterium_id').val(index)
+  $('#criterium_right_operator').val(element.val())
+  $.post($("#right_operator_criteria_form").attr("action"), $("#right_operator_criteria_form").serialize(), null, "script")
 
 @switchOnTrueMouseOut = (index) ->
-  element = $('#query_concept_' + index + '_rop_select')
+  element = $('#criterium_' + index + '_rop_select')
   element.mouseout((e, handler) ->
     if isTrueMouseOut(e||window.event, this)
-      $('#query_concept_' + index + '_rop_select').hide()
-      $('#query_concept_' + index + '_rop_text').show()
+      $('#criterium_' + index + '_rop_select').hide()
+      $('#criterium_' + index + '_rop_text').show()
   )
 
 
@@ -102,7 +102,7 @@ jQuery ->
     false
   )
 
-  # Show and hide a delete icon on mouseover and mouseout for query_concepts
+  # Show and hide a delete icon on mouseover and mouseout for criteria
   $(document)
     .on('mouseover', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/delete.png'))
     .on('mouseout', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/blank.png'))

@@ -14,8 +14,8 @@ class Search < ActiveRecord::Base
   belongs_to :user
   belongs_to :identifier_concept, class_name: "Concept"
 
-  has_many :query_concepts, -> { where(deleted: false).order('position') }
-  has_many :concepts, -> { order "query_concepts.position" }, through: :query_concepts
+  has_many :criteria, -> { where( deleted: false ).order('position') }
+  has_many :concepts, -> { order "criteria.position" }, through: :criteria
 
   has_many :query_sources, dependent: :destroy
   has_many :sources, -> { order :name }, through: :query_sources
@@ -30,8 +30,8 @@ class Search < ActiveRecord::Base
 
   # Search Methods
 
-  def generate_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
-    temp_query_concepts.collect{|qc| Resolver.new(qc, source, current_user)}
+  def generate_resolvers(current_user, source, temp_criteria = self.criteria)
+    temp_criteria.collect{|qc| Resolver.new(qc, source, current_user)}
   end
 
   def file_type_count(current_user, file_type)
@@ -78,10 +78,10 @@ class Search < ActiveRecord::Base
     all_files
   end
 
-  def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_query_concepts = self.query_concepts)
-    return { result: [[nil, 0]], errors: [] } if temp_query_concepts.blank?
+  def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_criteria = self.criteria)
+    return { result: [[nil, 0]], errors: [] } if temp_criteria.blank?
 
-    resolvers = generate_resolvers(current_user, source, temp_query_concepts)
+    resolvers = generate_resolvers(current_user, source, temp_criteria)
 
     master_total = 0
     master_tables = resolvers.collect(&:tables).flatten.compact.uniq
@@ -118,11 +118,11 @@ class Search < ActiveRecord::Base
     # return result
   end
 
-  def reorder(query_concept_ids)
-    return if (query_concept_ids | self.query_concepts.collect{|qc| qc.id.to_s}).size != self.query_concepts.size or query_concept_ids.size != self.query_concepts.size
+  def reorder(criterium_ids)
+    return if (criterium_ids | self.criteria.collect{|qc| qc.id.to_s}).size != self.criteria.size or criterium_ids.size != self.criteria.size
 
-    query_concept_ids.each_with_index do |query_concept_id, index|
-      self.query_concepts.find_by_id(query_concept_id).update_attributes position: index
+    criterium_ids.each_with_index do |criterium_id, index|
+      self.criteria.find_by_id(criterium_id).update_attributes position: index
     end
 
     self.reload
@@ -132,34 +132,34 @@ class Search < ActiveRecord::Base
   def update_brackets!
     current_level = 0
     current_offset = 0
-    previous_query_concept = nil
-    previous_operator = self.query_concepts.first ? self.query_concepts.first.right_operator : nil
-    self.query_concepts.each do |query_concept|
-      if previous_query_concept and previous_query_concept.level != query_concept.level
+    previous_criterium = nil
+    previous_operator = self.criteria.first ? self.criteria.first.right_operator : nil
+    self.criteria.each do |criterium|
+      if previous_criterium and previous_criterium.level != criterium.level
         current_offset = 0
       end
-      # unless previous_query_concept and previous_query_concept.level == query_concept.level and previous_query_concept.level > 0 and current_offset == 1
+      # unless previous_criterium and previous_criterium.level == criterium.level and previous_criterium.level > 0 and current_offset == 1
       #   current_offset = 0
       # end
 
-      previous_query_concept.update_column :right_brackets, [current_level - query_concept.level + current_offset, 0].max if previous_query_concept
-      query_concept.update_column :left_brackets, [query_concept.level - current_level + current_offset, 0].max
-      if previous_query_concept and previous_operator != query_concept.right_operator and previous_query_concept.level == query_concept.level and query_concept.level > 0 and current_offset == 0
+      previous_criterium.update_column :right_brackets, [current_level - criterium.level + current_offset, 0].max if previous_criterium
+      criterium.update_column :left_brackets, [criterium.level - current_level + current_offset, 0].max
+      if previous_criterium and previous_operator != criterium.right_operator and previous_criterium.level == criterium.level and criterium.level > 0 and current_offset == 0
         current_offset = 1
       else
         current_offset = 0
       end
-      current_level = query_concept.level
-      previous_query_concept = query_concept
-      previous_operator = query_concept.right_operator
+      current_level = criterium.level
+      previous_criterium = criterium
+      previous_operator = criterium.right_operator
     end
 
-    previous_query_concept.update_column :right_brackets, [current_level, 0].max if previous_query_concept
+    previous_criterium.update_column :right_brackets, [current_level, 0].max if previous_criterium
     self.reload
   end
 
   def update_positions
-    self.query_concepts.each_with_index{ |qc, index| qc.update_column :position, index }
+    self.criteria.each_with_index{ |qc, index| qc.update_column :position, index }
     self.reload
   end
 
@@ -185,7 +185,7 @@ class Search < ActiveRecord::Base
     current_position = self.history_position + position
     if current_position >= 0 and current_position < self.history.size
       history_hash = self.history[current_position].symbolize_keys
-      qc = QueryConcept.find_by_id(history_hash[:id])
+      qc = Criterium.find_by_id(history_hash[:id])
       case history_hash[:action] when 'create'
         if direction == 0 then qc.destroy else qc.undestroy end
       when 'destroy'
@@ -246,8 +246,8 @@ class Search < ActiveRecord::Base
     self.query_sources.each do |qs|
       search_copy.sources << qs.source
     end
-    self.query_concepts.each do |qc|
-      search_copy.query_concepts << search_copy.query_concepts.create(qc.copyable_attributes)
+    self.criteria.each do |qc|
+      search_copy.criteria << search_copy.criteria.create(qc.copyable_attributes)
     end
     search_copy.history = []
     search_copy.history_position = 0

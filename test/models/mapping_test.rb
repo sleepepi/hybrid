@@ -20,13 +20,13 @@ class MappingTest < ActiveSupport::TestCase
     assert !result[:error].blank?
   end
 
-  test "abstract_value for query concepts" do
-    assert mappings(:calculation).abstract_value(query_concepts(:with_data)).kind_of?(Array)
-    assert mappings(:calculation).abstract_value(query_concepts(:with_data_negated)).kind_of?(Array)
-    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data)).kind_of?(Array)
-    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data_negated)).kind_of?(Array)
-    assert mappings(:mapped_choices).abstract_value(query_concepts(:with_choices_data_true_false)).kind_of?(Array)
-    assert mappings(:mapped_date).abstract_value(query_concepts(:with_date_data)).kind_of?(Array)
+  test "abstract_value for criteria" do
+    assert mappings(:calculation).abstract_value(criteria(:with_data)).kind_of?(Array)
+    assert mappings(:calculation).abstract_value(criteria(:with_data_negated)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(criteria(:with_choices_data)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(criteria(:with_choices_data_negated)).kind_of?(Array)
+    assert mappings(:mapped_choices).abstract_value(criteria(:with_choices_data_true_false)).kind_of?(Array)
+    assert mappings(:mapped_date).abstract_value(criteria(:with_date_data)).kind_of?(Array)
   end
 
   test "human_normalized_value converts mappings to human readable format" do

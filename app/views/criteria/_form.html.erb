@@ -1,0 +1,36 @@
+<%= form_for @criterium, url: criterium_path(@criterium, search_id: @search), method: :patch, remote: true, html: { class: 'form-horizontal', id: "edit_criterium_#{@criterium.id}" } do |f| %>
+  <% begin %>
+    <%= render partial: "criteria/forms/#{@criterium.variable.variable_type}", locals: { f: f } %>
+  <% rescue %>
+    <div class="control-group">
+      <label class="control-label"><%= @criterium.variable.variable_type.titleize %></label>
+      <div class="controls">
+        <%= f.text_field :value %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="control-group" style="<%= 'display:none' if @criterium.variable.sources.uniq.size < 2 %>">
+    <%= f.label :source_id, "At", class: 'control-label' %>
+    <div class="controls sheet-container">
+      <% @criterium.variable.sources.uniq.each do |source| %>
+        <label class="radio <%= 'selected' if @criterium.source == source %>"><%= radio_button_tag "criterium[source_id]", source.id, @criterium.source == source %> <%= source.name %></label>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls sheet-container">
+      <label class="checkbox negation <%= 'selected' if @criterium.negated? %> inline"><%= f.check_box :negated %> Negated</label>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "#edit_criterium_#{@criterium.id}" } %>
+    <%= link_to 'Cancel', '#', class: 'btn', data: { object: 'hide-contour-modal' } %>
+    <%= link_to 'Remove', criterium_path(@criterium, search_id: @search), method: 'delete', remote: true, class: 'btn btn-danger' %>
+  </div>
+<% end %>
+
+
+<%= render partial: 'variables/about', locals: { variable: @criterium.variable } %>

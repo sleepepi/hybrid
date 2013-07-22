@@ -41,7 +41,7 @@ class SearchesController < ApplicationController
 
       @search.sources.each do |source|
         if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
-          sub_totals << @search.record_count_only_with_sub_totals_using_resolvers(current_user, source, @search.query_concepts)
+          sub_totals << @search.record_count_only_with_sub_totals_using_resolvers(current_user, source, @search.criteria)
         else
           sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
         end
@@ -67,9 +67,9 @@ class SearchesController < ApplicationController
   end
 
   def reorder
-    query_concept_ids = params[:order].to_s.gsub('query_concept_', '').split(',').select{|i| not i.blank?}
-    @search.reorder(query_concept_ids)
-    render 'query_concepts/query_concepts'
+    criterium_ids = params[:order].to_s.gsub('criterium_', '').split(',').select{|i| not i.blank?}
+    @search.reorder(criterium_ids)
+    render 'criteria/criteria'
   end
 
   def data_files
@@ -96,12 +96,12 @@ class SearchesController < ApplicationController
 
   def undo
     @search.undo!
-    render 'query_concepts/query_concepts'
+    render 'criteria/criteria'
   end
 
   def redo
     @search.redo!
-    render 'query_concepts/query_concepts'
+    render 'criteria/criteria'
   end
 
   def index
@@ -118,7 +118,7 @@ class SearchesController < ApplicationController
   end
 
   def new
-    @search = current_user.searches.create(name: "#{current_user.last_name}  ##{current_user.searches.count+1}")
+    @search = current_user.searches.create(name: "#{current_user.last_name} ##{current_user.searches.count+1}")
     current_user.update_column :current_search_id, @search.id
     redirect_to root_path, notice: "Created search #{@search.name}"
   end

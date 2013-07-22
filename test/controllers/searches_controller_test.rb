@@ -44,13 +44,13 @@ class SearchesControllerTest < ActionController::TestCase
   end
 
   test "should reorder search concepts" do
-    post :reorder, id: searches(:search_with_sources), order: "query_concept_#{query_concepts(:four).to_param},query_concept_#{query_concepts(:three).to_param}", format: 'js'
-    assert_equal [[0,query_concepts(:four).to_param],[1,query_concepts(:three).to_param]], assigns(:search).query_concepts.collect{|qc| [qc.position, qc.id.to_s]}
-    assert_template 'query_concepts'
+    post :reorder, id: searches(:search_with_sources), order: "criterium_#{criteria(:four).to_param},criterium_#{criteria(:three).to_param}", format: 'js'
+    assert_equal [[0,criteria(:four).to_param],[1,criteria(:three).to_param]], assigns(:search).criteria.collect{|qc| [qc.position, qc.id.to_s]}
+    assert_template 'criteria'
   end
 
   test "reorder should return blank without valid search" do
-    post :reorder, id: -1, order: "query_concept_#{query_concepts(:four).to_param},query_concept_#{query_concepts(:three).to_param}", format: 'js'
+    post :reorder, id: -1, order: "criterium_#{criteria(:four).to_param},criterium_#{criteria(:three).to_param}", format: 'js'
     assert_response :success
   end
 
@@ -98,7 +98,7 @@ class SearchesControllerTest < ActionController::TestCase
   test "should undo last change" do
     post :undo, id: searches(:search_with_sources), format: 'js'
     assert_not_nil assigns(:search)
-    assert_template 'query_concepts'
+    assert_template 'criteria'
   end
 
   test "should not undo last change without valid id" do
@@ -109,7 +109,7 @@ class SearchesControllerTest < ActionController::TestCase
   test "should undo last create action" do
     post :undo, id: searches(:search_with_history), format: 'js'
     assert_not_nil assigns(:search)
-    assert_equal 0, assigns(:search).query_concepts.size
+    assert_equal 0, assigns(:search).criteria.size
     assert_equal 0, assigns(:search).history_position
     assert_response :success
   end
@@ -117,7 +117,7 @@ class SearchesControllerTest < ActionController::TestCase
   test "should undo last update action" do
     post :undo, id: searches(:search_with_history_update_change), format: 'js'
     assert_not_nil assigns(:search)
-    assert_nil assigns(:search).query_concepts.first.value
+    assert_nil assigns(:search).criteria.first.value
     assert_equal 0, assigns(:search).history_position
     assert_response :success
   end
@@ -125,13 +125,13 @@ class SearchesControllerTest < ActionController::TestCase
   test "should redo last change" do
     post :redo, id: searches(:search_with_sources), format: 'js'
     assert_not_nil assigns(:search)
-    assert_template 'query_concepts'
+    assert_template 'criteria'
   end
 
   test "should redo undone create action" do
     post :redo, id: searches(:search_with_undone_history), format: 'js'
     assert_not_nil assigns(:search)
-    assert_equal 1, assigns(:search).query_concepts.size
+    assert_equal 1, assigns(:search).criteria.size
     assert_equal 1, assigns(:search).history_position
     assert_response :success
   end
@@ -139,7 +139,7 @@ class SearchesControllerTest < ActionController::TestCase
   test "should redo undone update action" do
     post :redo, id: searches(:search_with_undone_history_update_change), format: 'js'
     assert_not_nil assigns(:search)
-    assert_equal '20', assigns(:search).query_concepts.first.value
+    assert_equal '20', assigns(:search).criteria.first.value
     assert_equal 1, assigns(:search).history_position
     assert_response :success
   end
@@ -168,7 +168,7 @@ class SearchesControllerTest < ActionController::TestCase
   test "should copy search" do
     post :copy, id: @search
     assert_not_nil assigns(:search)
-    assert_equal @search.query_concepts.size, assigns(:search).query_concepts.size
+    assert_equal @search.criteria.size, assigns(:search).criteria.size
     assert_equal @search.query_sources.size, assigns(:search).query_sources.size
     assert_equal @search.name + " Copy", assigns(:search).name
     assert_redirected_to root_path

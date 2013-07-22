@@ -63,7 +63,7 @@ search_with_history:
   deleted: false
   negated: false
   # identifier_concept: identifier
-  history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept) %>}]
+  history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium) %>}]
   history_position: 1
 
 search_with_undone_history:
@@ -73,7 +73,7 @@ search_with_undone_history:
   deleted: false
   negated: false
   # identifier_concept: identifier
-  history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept_two) %>}]
+  history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_two) %>}]
   history_position: 0
 
 search_with_history_update_change:
@@ -83,7 +83,7 @@ search_with_history_update_change:
   deleted: false
   negated: false
   # identifier_concept: identifier
-  history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept_update_change) %>, changes: {value: [NULL, 20]}}]
+  history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_update_change) %>, changes: {value: [NULL, 20]}}]
   history_position: 1
 
 search_with_undone_history_update_change:
@@ -93,5 +93,5 @@ search_with_undone_history_update_change:
   deleted: false
   negated: false
   # identifier_concept: identifier
-  history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_query_concept_two_update_change) %>, changes: {value: [NULL, 20]}}]
+  history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_two_update_change) %>, changes: {value: [NULL, 20]}}]
   history_position: 0

@@ -1,6 +1,6 @@
 <div>
   <h3>
-    <%= @query_concept.variable.display_name %>
+    <%= @criterium.variable.display_name %>
   </h3>
 </div>
 
@@ -8,12 +8,12 @@
 
 <div class="row-fluid">
   <div class="span6">
-    <%= render partial: 'query_concepts/form' %>
+    <%= render partial: 'criteria/form' %>
   </div>
 
   <div class="span6">
     <div id="variable-info">
-      <%= render partial: 'variables/info', locals: { variable: @query_concept.variable } %>
+      <%= render partial: 'variables/info', locals: { variable: @criterium.variable } %>
     </div>
   </div>
 </div>

@@ -80,7 +80,7 @@ class MasterResolver
   private
 
   def generate_resolvers(source)
-    @search.query_concepts.collect{|qc| Resolver.new(qc, source, @current_user)}
+    @search.criteria.collect{|qc| Resolver.new(qc, source, @current_user)}
   end
 
   def source_tables(source)

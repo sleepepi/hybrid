@@ -1,0 +1,48 @@
+<div class="control-group">
+  <div class="controls">
+    <% if @criterium.left_brackets > 0 %><div style="padding-left:<%= [10*(@criterium.level - @criterium.left_brackets), 0].max %>px"><%= '('*@criterium.left_brackets %></div><% end %>
+  </div>
+</div>
+
+<div class="control-group">
+  <label class="control-label"><div id="record_ids_<%= @criterium.id %>_display" class="records_found"></div></label>
+  <div class="controls" style="white-space:nowrap">
+
+    <div style="line-height:30px;height:30px"
+      data-object="toggle-delete-link" data-target="#criterium_<%= @criterium.id %>_delete_link">
+      <div style="padding-left:<%= 10*@criterium.level %>px">
+        <%= check_box_tag "criterium_#{@criterium.id}_checked", '1', @criterium.selected, data: { object: 'mark_criterium', search_id: @search.id, criterium_id: @criterium.id }, style: 'margin-top: -3px;' %>
+        <%= link_to edit_criterium_path(@criterium, search_id: @search), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "criterium_#{@criterium.id}_delete_icon" } do %>
+          <%= @criterium.variable_name_with_source %>
+          <span class="nolink">is</span> <% if @criterium.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
+
+          <% if @criterium.value.blank? %>
+            <div class="btn btn-mini">Click to Set Value</div>
+          <% else %>
+            <%= @criterium.human_value %>
+          <% end %>
+        <% end %>
+
+        <span id="criterium_<%= @criterium.id %>_delete_link" style="display:none">
+          <i class="icon-move" style="cursor:move"></i>
+          <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+        </span>
+      </div>
+      <div style="padding-left:<%= 10*@criterium.level %>px"><span id="record_ids_<%= @criterium.id %>_errors" class="quiet errors_found"></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="control-group">
+  <div class="controls">
+    <% if @criterium.right_brackets > 0 %><div style="padding-left:<%= [10*(@criterium.level - @criterium.right_brackets), 0].max %>px"><%= ')'*@criterium.right_brackets %></div><% end %>
+  </div>
+</div>
+
+<div style="display:none" data-object="query-draggable-helper">
+  <div class="control-group">
+    <div class="controls">
+      <div class='criterium-box'><b><%= @criterium.variable_name_with_source %></b><% unless @criterium.human_value.blank? %> is <% if @criterium.negated? %>not <% end %><b><%= @criterium.human_value %></b><% end %></div>
+    </div>
+  </div>
+</div>

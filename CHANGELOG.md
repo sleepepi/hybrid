@@ -13,6 +13,7 @@
 
 ### Refactoring
 - Renamed queries to searches
+- Renamed query concepts to criteria
 - Removed references to external concepts and datasets
 - Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
   - To link across sources `identifier` concepts are now required to be mapped in each source
@@ -279,7 +280,7 @@
 - Report Table and Dataset generation no longer fail if a user adds a sensitive concept in the search, the sensitive concept is simply omitted from the report or dataset
 
 ### Testing
-- QueryConceptsController test updated to include actions for selecting, indenting, copying, and removing search concepts
+- CriteriaController test updated to include actions for selecting, indenting, copying, and removing search concepts
 
 ## 0.7.0 (October 10, 2011)
 

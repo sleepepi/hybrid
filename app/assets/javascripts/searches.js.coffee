@@ -40,7 +40,7 @@
       $.post(root_url + "query_sources", params, null, "script")
   )
 
-@buildQueryConceptTypeahead = () ->
+@buildCriteriumTypeahead = () ->
   $("#variable_search").select2(
     placeholder: "Select a variable"
     minimumInputLength: 1
@@ -60,8 +60,8 @@
       params = {}
       params.search_id = $(this).data('search-id')
       params.variable_id = e.val
-      showWaiting('#concept_folders', 'Loading', false)
-      $.post(root_url + "query_concepts", params, null, "script")
+      showWaiting('#variable_folders', 'Loading', false)
+      $.post(root_url + "criteria", params, null, "script")
   )
 
 @submitSearchName = () ->
@@ -76,15 +76,15 @@ jQuery ->
   buildSearchSourceTypeahead()
   $("#selected_source_id").val('')
 
-  buildQueryConceptTypeahead()
+  buildCriteriumTypeahead()
   $("#selected_concept_id").val('')
 
-  $( "#query_concepts" )
+  $( "#criteria" )
     .sortable(
       axis: "y"
       stop: (event, ui) ->
         order = $(this).sortable('toArray').toString()
-        $.post($("#query_concepts_form").attr("action"), "&order=#{order}", null, "script")
+        $.post($("#criteria_form").attr("action"), "&order=#{order}", null, "script")
       cancel: 'span.errors_found, div.qc-cancel'
       helper: (event, draggable) ->
         "<div>"+draggable.children('[data-object~="query-draggable-helper"]').first().html()+"</div>"
@@ -105,13 +105,13 @@ jQuery ->
       false
     )
     .on('click', '[data-object~="operand-edit"]', () ->
-      $('#query_concept_' + $(this).data('value') + '_rop_text').hide()
-      $('#query_concept_' + $(this).data('value') + '_rop_select').show()
+      $('#criterium_' + $(this).data('value') + '_rop_text').hide()
+      $('#criterium_' + $(this).data('value') + '_rop_select').show()
       false
     )
     .on('click', '[data-object~="operand-hide"]', () ->
-      $('#query_concept_' + $(this).data('value') + '_rop_text').show()
-      $('#query_concept_' + $(this).data('value') + '_rop_select').hide()
+      $('#criterium_' + $(this).data('value') + '_rop_text').show()
+      $('#criterium_' + $(this).data('value') + '_rop_select').hide()
       false
     )
     .on('click', '[data-object~="save_search_name"]', () ->

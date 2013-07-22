@@ -28,7 +28,7 @@ class Resolver
   end
 
   def conditions_for_entire_search
-    "("*filter.left_brackets + conditions + ")"*filter.right_brackets + (filter.position < (filter.search.query_concepts.size - 1) ? " #{filter.right_operator}" : '')
+    "("*filter.left_brackets + conditions + ")"*filter.right_brackets + (filter.position < (filter.search.criteria.size - 1) ? " #{filter.right_operator}" : '')
   end
 
   private

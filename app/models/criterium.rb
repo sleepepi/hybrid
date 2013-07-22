@@ -1,4 +1,14 @@
-class QueryConcept < ActiveRecord::Base
+# Criterium VS Criterion
+# I wanted to use Criteria plural (for "search criteria") as criteria is commonly used.
+# Rails howver thinks the singular version of that is Criterium
+#   Criterion -> Criterions
+#   Criterium -> Criteria
+# While I could monkey patch ActiveRecord to use Criterion -> Criteria
+# to account for the more commonly used English words,
+# the added complexity (and potential nuances) is (are) not worth it
+# So in this code base, use Criterium for singular and Criteria for plural.
+
+class Criterium < ActiveRecord::Base
 
   OPERATOR = ["and", "or"]
 
@@ -17,7 +27,7 @@ class QueryConcept < ActiveRecord::Base
   belongs_to :variable
   belongs_to :source
 
-  # Query Concept Methods
+  # Criterium Methods
 
   def variable_name_with_source
     full_name = "#{self.variable.display_name}"

@@ -1,9 +1,9 @@
-$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("query_concepts/popup")) %>");
+$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("criteria/popup")) %>");
 showContourModal();
 
-$("#variable_<%= @query_concept.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @query_concept.variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
+$("#variable_<%= @criterium.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @criterium.variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
 
-<% case @query_concept.variable.chart_type when 'column' %>
+<% case @criterium.variable.chart_type when 'column' %>
   drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
 <% when 'pie' %>
   drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
@@ -12,8 +12,8 @@ $("#variable_<%= @query_concept.variable.id %>_graph").html('<div id="<%= @chart
 
 $('.datepicker').datepicker({ showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
 
-<% if ['integer', 'numeric'].include?(@query_concept.variable.variable_type) %>
-  $('#query_concept_value').popover({
+<% if ['integer', 'numeric'].include?(@criterium.variable.variable_type) %>
+  $('#criterium_value').popover({
     html: true,
     placement: 'bottom',
     trigger: 'hover',

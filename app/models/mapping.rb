@@ -34,20 +34,20 @@ class Mapping < ActiveRecord::Base
     end
   end
 
-  def abstract_value(query_concept)
+  def abstract_value(criterium)
     result = []
-    query_concept_value = query_concept.value
+    criterium_value = criterium.value
 
-    return ['1 = 0'] if query_concept_value.blank?
+    return ['1 = 0'] if criterium_value.blank?
 
     case self.variable.variable_type when 'date', 'integer', 'numeric'
-      result = query_concept_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '').split(',')
+      result = criterium_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '').split(',')
     when 'choices'
-      if query_concept.negated?
+      if criterium.negated?
         full_set = self.variable.domain.options.collect{|option| option[:value]}
-        query_concept_value = (full_set - query_concept_value.split(',')).join(',')
+        criterium_value = (full_set - criterium_value.split(',')).join(',')
       end
-      result = query_concept_value.to_s.split(',').collect{|v| "'" + v.to_s.gsub(/[^\w\-\.]/, '') + "'" }
+      result = criterium_value.to_s.split(',').collect{|v| "'" + v.to_s.gsub(/[^\w\-\.]/, '') + "'" }
     else
       return ['1 = 0']
     end

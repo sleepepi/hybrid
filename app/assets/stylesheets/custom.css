@@ -1,32 +1,3 @@
-/*************************************
-   WELCOME TO THE CUSTOM STYLESHEET
---------------------------------------
-              custom.css
-        BlueTrip CSS Framework
-    Put your custom styles in here.
-***************************************/
-
-/**************************************/
-/*           COLOR SCHEME             */
-/**************************************
-- black		#000
-- white		#fff
-- logo blue   #0E7799
-- link blue   #057080
-
-- dark blue   #094E63
-- light blue  #CDEDF7
-- orange      #EB6C20
-***************************************/
-
-/**************************************/
-/*            MAIN CONTENT            */
-/**************************************/
-
-/*input[type="text"], input[type="password"], textarea {
-  font-family: "Liberation Sans", Helvetica, Arial, sans-serif;
-}*/
-
 .collapsed {
   white-space:nowrap;
   overflow:hidden;
@@ -34,21 +5,6 @@
 
 .recently_updated {
   background-color: #ffffcc;
-}
-
-/* TODO remove query_concepts and concept_folders if no longer needed */
-
-#query_concepts {
-/*  overflow-x: auto;*/
-/*  white-space: nowrap;*/
-}
-
-#concept_folders {
-/*  white-space:nowrap;*/
-/*  overflow:auto;*/
-/*  max-height:200px;*/
-/*  white-space:nowrap;*/
-/*  width:245px;*/
 }
 
 .and {
@@ -321,7 +277,7 @@ tr.overall td {
 
 /* End Contour Backdrop */
 
-.query-concept-box {
+.criterium-box {
   background-color: white;
 
   padding: 3px 5px;
@@ -392,6 +348,6 @@ td.error {
   padding: 7px 9px;
 }
 
-#query_concepts .control-group {
+#criteria .control-group {
   margin-bottom: 0px;
 }

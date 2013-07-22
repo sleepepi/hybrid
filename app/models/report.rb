@@ -10,7 +10,7 @@ class Report < ActiveRecord::Base
   end
 
   def reorder(column_ids, row_ids)
-    # return if (query_concept_ids | self.query_concepts.collect{|qc| qc.id.to_s}).size != self.query_concepts.size or query_concept_ids.size != self.query_concepts.size
+    # return if (criterium_ids | self.criteria.collect{|qc| qc.id.to_s}).size != self.criteria.size or criterium_ids.size != self.criteria.size
 
     row_ids.each_with_index do |report_concept_id, index|
       self.report_concepts.find_by_id(report_concept_id).update_attributes(position: index + 1, strata: true) if self.report_concepts.find_by_id(report_concept_id)
