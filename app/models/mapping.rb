@@ -36,7 +36,7 @@ class Mapping < ActiveRecord::Base
 
   def abstract_value(query_concept)
     result = []
-    query_concept_value = query_concept.value
+    query_concept_value = query_concept.value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '')
 
     return ['1 = 0'] if query_concept_value.blank?
 
@@ -128,27 +128,6 @@ class Mapping < ActiveRecord::Base
     return true if actions_required.include?('view limited data distribution') and self.source.user_has_action?(current_user, 'view limited data distribution') and not sensitive_variable
 
     return false
-  end
-
-  private
-
-  def std_dev(population)
-    def variance(pop)
-      return nil if pop.empty?
-      n = 0
-      mean = 0.0
-      s = 0.0
-      pop.each { |x|
-        n = n + 1
-        delta = x - mean
-        mean = mean + (delta / n)
-        s = s + delta * (x - mean)
-      }
-      # if you want to calculate std deviation
-      # of a sample change this to "s / (n-1)"
-      return s / n
-    end
-    Math.sqrt(variance(population))
   end
 
 end

@@ -62,7 +62,7 @@
     </dl>
   </div>
 
-  <% if @source.has_repository?(current_user) and @source.user_has_action?(current_user, "edit data source connection information") %>
+  <% if @source.user_has_action?(current_user, "edit data source connection information") %>
     <div class="span4">
       <div class="page-header">
         <h3>Data Source Wrapper: <%= @source.human_wrapper %></h3>
@@ -79,7 +79,9 @@
         <dd><%= @source.username %></dd>
       </dl>
     </div>
+  <% end %>
 
+  <% if @source.has_repository?(current_user) %>
     <div class="span4">
       <div class="page-header">
         <h3>File Repository: <%= @source.human_repository %></h3>

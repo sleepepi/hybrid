@@ -22,7 +22,7 @@
           <% if values.size == 1 %>
             -
           <% else %>
-            &plusmn; <%= "%0.2f" % (@mapping.send('std_dev', values)) %>
+            &plusmn; <%= "%0.2f" % std_dev(values) %>
           <% end %>
         </td>
         <td><%= values.sort[(values.size / 2).to_i] %></td>

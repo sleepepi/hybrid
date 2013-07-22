@@ -5,25 +5,18 @@ class SourcesController < ApplicationController
   before_action :set_source_with_edit_data_source_connection_information, only: [ :edit, :update ]
   before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings, :table_columns_for_select ]
   before_action :set_source_with_view_or_edit_data_source_mappings, only: [ :table_columns ]
-  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :table_columns_for_select ]
+  before_action :set_source_with_download_files, only: [ :download_file ]
+  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :table_columns_for_select, :download_file ]
   before_action :set_viewable_dictionary,     only: [ :auto_map ]
   before_action :redirect_without_dictionary, only: [ :auto_map ]
 
   def download_file
-    @source = current_user.all_sources.find_by_id(params[:id])
-    source = Source.find_by_id(params[:id])
-    @source = source if (not @source) and source and source.user_has_action?(current_user, "download files")
-
-    if @source
-      result_hash = Aqueduct::Builder.repository(@source, current_user).get_file(params[:file_locator], params[:file_type])
-      file_path = result_hash[:file_path]
-      if result_hash[:error].blank? and File.exists?(file_path.to_s)
-        send_file file_path, disposition:'attachment'
-      else
-        render text: "File not found on server..."
-      end
+    result_hash = Aqueduct::Builder.repository(@source, current_user).get_file(params[:file_locator], params[:file_type])
+    file_path = result_hash[:file_path]
+    if result_hash[:error].blank? and File.exists?(file_path.to_s)
+      send_file file_path, disposition:'attachment'
     else
-      render nothing: true
+      render text: "File not found on server..."
     end
   end
 
@@ -141,7 +134,7 @@ class SourcesController < ApplicationController
     @source = current_user.sources.new(source_params)
 
     if @source.save
-      redirect_to @source, notice: 'Database was successfully created.'
+      redirect_to @source, notice: 'Source was successfully created.'
     else
       render action: 'new'
     end
@@ -177,6 +170,10 @@ class SourcesController < ApplicationController
 
     def set_source_with_edit_data_source_mappings
       super(:id)
+    end
+
+    def set_source_with_download_files
+      set_source_with_actions(:id, ["download files"])
     end
 
     def set_source_with_view_or_edit_data_source_mappings

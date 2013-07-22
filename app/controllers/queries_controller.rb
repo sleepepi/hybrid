@@ -1,7 +1,7 @@
 class QueriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_query,               only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo ]
-  before_action :redirect_without_query,  only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo ]
+  before_action :set_query,               only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo, :total_records_count, :reorder ]
+  before_action :redirect_without_query,  only: [ :autocomplete, :destroy, :variables_popup, :open_folder, :edit, :update, :undo, :redo, :total_records_count, :reorder ]
 
   # GET /queries/1/variable_popup.js
   def variables_popup
@@ -28,61 +28,48 @@ class QueriesController < ApplicationController
 
   # Get Count
   def total_records_count
-    query = current_user.all_queries.find_by_id(params[:id])
-    if query
-      query_concepts = query.query_concepts
-      sources = query.sources
+    total_records_found = 0
+    @overall_totals = {}
+    @overall_errors = {}
 
-      total_records_found = 0
-      @overall_totals = {}
-      @overall_errors = {}
-
-      if sources.size == 0
-        @sql_conditions = []
-        @overall_totals[nil] = 0
-        @overall_errors[nil] = 'No Data Sources Selected'
-      else
-        sub_totals = []
-
-        sources.each do |source|
-          if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
-            sub_totals << query.record_count_only_with_sub_totals_using_resolvers(current_user, source, query_concepts)
-          else
-            sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
-          end
-        end
-
-        @sql_conditions = sub_totals.collect{|st| st[:sql_conditions]}.flatten
-
-        sub_totals.each do |sub_total_hash|
-          sub_total = sub_total_hash[:result]
-          sub_total_error = sub_total_hash[:errors]
-
-          sub_total.each do |grouping, total|
-            @overall_totals[grouping] = @overall_totals[grouping].to_i + total.to_i
-          end
-
-          sub_total_error.each do |grouping, total|
-            @overall_errors[grouping] = [@overall_errors[grouping], "#{total}"].select{|i| not i.blank?}.join(', ')
-          end
-        end
-
-        query.update( total: @overall_totals[nil] )
-      end
+    if @query.sources.size == 0
+      @sql_conditions = []
+      @overall_totals[nil] = 0
+      @overall_errors[nil] = 'No Data Sources Selected'
     else
-      render nothing: true
+      sub_totals = []
+
+      @query.sources.each do |source|
+        if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
+          sub_totals << @query.record_count_only_with_sub_totals_using_resolvers(current_user, source, @query.query_concepts)
+        else
+          sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
+        end
+      end
+
+      @sql_conditions = sub_totals.collect{|st| st[:sql_conditions]}.flatten
+
+      sub_totals.each do |sub_total_hash|
+        sub_total = sub_total_hash[:result]
+        sub_total_error = sub_total_hash[:errors]
+
+        sub_total.each do |grouping, total|
+          @overall_totals[grouping] = @overall_totals[grouping].to_i + total.to_i
+        end
+
+        sub_total_error.each do |grouping, total|
+          @overall_errors[grouping] = [@overall_errors[grouping], "#{total}"].select{|i| not i.blank?}.join(', ')
+        end
+      end
+
+      @query.update( total: @overall_totals[nil] )
     end
   end
 
   def reorder
-    @query = current_user.all_queries.find_by_id(params[:id])
-    if @query
-      query_concept_ids = params[:order].to_s.gsub('query_concept_', '').split(',').select{|i| not i.blank?}
-      @query.reorder(query_concept_ids)
-      render 'query_concepts/query_concepts'
-    else
-      render nothing: true
-    end
+    query_concept_ids = params[:order].to_s.gsub('query_concept_', '').split(',').select{|i| not i.blank?}
+    @query.reorder(query_concept_ids)
+    render 'query_concepts/query_concepts'
   end
 
   def data_files

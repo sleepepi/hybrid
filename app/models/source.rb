@@ -93,6 +93,7 @@ class Source < ActiveRecord::Base
   end
 
   def has_repository?(current_user)
+    return false if self.repository.blank?
     result_hash = Aqueduct::Builder.repository(self, current_user).has_repository?
     return result_hash[:result]
   end

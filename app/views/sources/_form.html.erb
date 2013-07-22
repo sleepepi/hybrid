@@ -83,7 +83,7 @@
   <div class="control-group">
     <%= f.label :repository, nil, class: 'control-label' %>
     <div class="controls">
-      <%= f.select :repository, Source::REPOSITORY %>
+      <%= f.select :repository, [['---', nil]] + Source::REPOSITORY %>
     </div>
   </div>
 

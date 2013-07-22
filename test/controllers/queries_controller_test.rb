@@ -39,7 +39,7 @@ class QueriesControllerTest < ActionController::TestCase
   end
 
   test "total records count renders blank if no query is provided" do
-    post :total_records_count, id: -1
+    post :total_records_count, id: -1, format: 'js'
     assert_response :success
   end
 

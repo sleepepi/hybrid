@@ -22,7 +22,7 @@ class SourcesControllerTest < ActionController::TestCase
   test "should not download file with invalid source" do
     get :download_file, id: -1, file_locator: 'sample', file_type: '.txt'
     assert_nil assigns(:source)
-    assert_response :success
+    assert_redirected_to sources_path
   end
 
   test "should auto map" do

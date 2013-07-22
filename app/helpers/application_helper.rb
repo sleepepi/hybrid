@@ -51,6 +51,25 @@ module ApplicationHelper
     target_link_as_blank(markdown.render(replace_numbers_with_ascii(text.to_s)))
   end
 
+  def std_dev(population)
+    def variance(pop)
+      return nil if pop.empty?
+      n = 0
+      mean = 0.0
+      s = 0.0
+      pop.each { |x|
+        n = n + 1
+        delta = x - mean
+        mean = mean + (delta / n)
+        s = s + delta * (x - mean)
+      }
+      # if you want to calculate std deviation
+      # of a sample change this to "s / (n-1)"
+      return s / n
+    end
+    Math.sqrt(variance(population))
+  end
+
   private
 
     def target_link_as_blank(text)
