@@ -13,8 +13,8 @@ class Criterium < ActiveRecord::Base
   OPERATOR = ["and", "or"]
 
   # Callbacks
-  after_create :create_qc_search_history
-  before_update :update_qc_search_history
+  after_create :create_search_history
+  before_update :update_search_history
 
   # Concerns
   include Deletable
@@ -141,14 +141,14 @@ class Criterium < ActiveRecord::Base
   end
 
   # After Create Action
-  def create_qc_search_history
+  def create_search_history
     self.search.roll_forward_search_history!
     self.search.history << { action: 'create', id: self.id }
     self.search.history_position = self.search.history.size
     self.search.save!
   end
 
-  def update_qc_search_history
+  def update_search_history
     # Don't include right_brackets, left_brackets, or position updates
     if self.changes.blank? or self.changes.keys.include?('right_brackets') or self.changes.keys.include?('left_brackets') or self.changes.keys.include?('position') or self.changes.keys.include?('selected')
       # Rails.logger.debug "No update for these changes: #{self.changes}"

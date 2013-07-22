@@ -41,7 +41,7 @@ class Mapping < ActiveRecord::Base
     return ['1 = 0'] if criterium_value.blank?
 
     case self.variable.variable_type when 'date', 'integer', 'numeric'
-      result = criterium_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)]/, '').split(',')
+      result = criterium_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)\:]/, '').split(',')
     when 'choices'
       if criterium.negated?
         full_set = self.variable.domain.options.collect{|option| option[:value]}
