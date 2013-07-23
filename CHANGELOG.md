@@ -15,8 +15,8 @@
 - Renamed queries to searches
 - Renamed query concepts to criteria
 - Removed references to external concepts and datasets
-- Source Joins now exclusively define relationships on a single source, and no longer permit linking across sources
-  - To link across sources `identifier` concepts are now required to be mapped in each source
+- Source Joins have been removed
+  - To link across sources `identifier` variables are now required to be mapped in each source
 - Source Rules and Source Files interfaces updated to be more consistent
 - Mappings no longer have status, deleted, or units
 - Generic concepts have been changed into variables and domains for better integration using the [Spout JSON Data Dictionary Gem](https://github.com/sleepepi/spout)

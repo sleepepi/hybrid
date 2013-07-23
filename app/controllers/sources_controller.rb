@@ -3,10 +3,10 @@ class SourcesController < ApplicationController
 
   before_action :set_source, only: [ :destroy ]
   before_action :set_source_with_edit_data_source_connection_information, only: [ :edit, :update ]
-  before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings, :table_columns_for_select ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings ]
   before_action :set_source_with_view_or_edit_data_source_mappings, only: [ :table_columns ]
   before_action :set_source_with_download_files, only: [ :download_file ]
-  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :table_columns_for_select, :download_file ]
+  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :download_file ]
   before_action :set_viewable_dictionary,     only: [ :auto_map ]
   before_action :redirect_without_dictionary, only: [ :auto_map ]
 
@@ -60,10 +60,6 @@ class SourcesController < ApplicationController
   def remove_all_mappings
     @source.mappings.destroy_all
     redirect_to @source
-  end
-
-  def table_columns_for_select
-    @columns = @source.table_columns(current_user, params[:table])[:result]
   end
 
   def table_columns

@@ -2,9 +2,9 @@
   <%= @source.name %>
   <% if @search and @search.sources.include?(@source) %>
     <% query_source = @search.query_sources.find_by_source_id(@source.id) %>
-    <%= link_to "Remove from Search", query_source_path(query_source, search_id: @search.id), method: :delete, remote: true, class: 'btn btn-danger' %>
+    <%= link_to "Remove from Search", query_source_path(query_source, search_id: @search.id), method: :delete, remote: true, class: 'btn btn-danger-inverse' %>
   <% else %>
-    <%= link_to "Add to Search", query_sources_path(search_id: @search.id, query_source: { source_id: @source.id } ), method: :post, remote: true, title: @source.name, class: 'btn btn-primary' if @search %>
+    <%= link_to "Add to Search", query_sources_path(search_id: @search.id, query_source: { source_id: @source.id } ), method: :post, remote: true, title: @source.name, class: 'btn btn-success' if @search %>
   <% end %>
 </h3>
 
@@ -22,32 +22,36 @@
       <% if join_conditions_hash[:error].blank? %>
         <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, variable) %>
         <% if result_hash[:error].blank? %>
-          <li><%= result_hash[:result] %> <%= variable.display_name %></li>
+          <li><%= pluralize(result_hash[:result], variable.display_name) %></li>
         <% end %>
       <% end %>
     <% end %>
-    <li><%= pluralize @source.mappings.size, 'Mapped Concept' %></li>
+    <li><%= pluralize @source.mappings.size, 'Mapped Variable' %></li>
   </ul>
 
-  <h4>Available File Types</h4>
-  <ul>
-    <% if @source.file_types.size > 0 %>
-
-      <% @source.file_types.each do |file_type| %>
-        <li>
-          <%= file_type.name_and_short_extension %><br /><br />
-        </li>
+  <% if @source.all_dictionaries.size > 0 %>
+    <h4>Associated Dictionaries</h4>
+    <ul>
+      <% @source.all_dictionaries.sort{|a,b| a.name <=> b.name}.each do |dictionary| %>
+        <li><%= link_to dictionary.name, dictionary_variables_path(dictionary), target: '_blank' %></li>
       <% end %>
-    <% else %>
-      <li class="quiet">No Files Available for Download</li>
-    <% end %>
-  </ul>
+    </ul>
+  <% end %>
+
+  <% if @source.file_types.size > 0 %>
+    <h4>Available File Types</h4>
+    <ul>
+      <% @source.file_types.each do |file_type| %>
+        <li><%= file_type.name_and_short_extension %></li>
+      <% end %>
+    </ul>
+  <% end %>
 
   <% if @source.all_linked_sources.size > 0 %>
     <h4>Cross-Linked Data Sources</h4>
     <ul>
       <% @source.all_linked_sources.sort{|a,b| a.name <=> b.name}.each do |linked_source| %>
-        <li><%= link_to linked_source.name, source_path(linked_source, popup: true, search_id: @search.id), remote: true, method: :get %><br /><br /></li>
+        <li><%= link_to linked_source.name, source_path(linked_source, popup: true, search_id: @search.id), remote: true, method: :get %></li>
       <% end %>
     </ul>
   <% end %>
@@ -65,14 +69,5 @@
         <% end %>
       </ul>
     </li>
-  </ul>
-<% end %>
-
-<% if @source.all_dictionaries.size > 0 %>
-  <h4>Associated Dictionaries</h4>
-  <ul>
-    <% @source.all_dictionaries.sort{|a,b| a.name <=> b.name}.each do |dictionary| %>
-      <li><%= link_to dictionary.name, dictionary_variables_path(dictionary), target: '_blank' %></li>
-    <% end %>
   </ul>
 <% end %>

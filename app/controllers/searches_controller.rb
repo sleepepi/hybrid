@@ -34,7 +34,7 @@ class SearchesController < ApplicationController
 
     if @search.sources.size == 0
       @sql_conditions = []
-      @overall_totals[nil] = 0
+      @overall_totals[nil] = []
       @overall_errors[nil] = 'No Data Sources Selected'
     else
       sub_totals = []
@@ -43,7 +43,7 @@ class SearchesController < ApplicationController
         if source.user_has_action?(current_user, 'get count') or current_user.all_sources.include?(source)
           sub_totals << @search.record_count_only_with_sub_totals_using_resolvers(current_user, source, @search.criteria)
         else
-          sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
+          # sub_totals << { result: [[nil, 0]], errors: [[nil, "No permissions to get counts for #{source.name}"]] }
         end
       end
 
@@ -54,7 +54,8 @@ class SearchesController < ApplicationController
         sub_total_error = sub_total_hash[:errors]
 
         sub_total.each do |grouping, total|
-          @overall_totals[grouping] = @overall_totals[grouping].to_i + total.to_i
+          @overall_totals[grouping] ||= []
+          @overall_totals[grouping] = @overall_totals[grouping] + total
         end
 
         sub_total_error.each do |grouping, total|
@@ -62,7 +63,7 @@ class SearchesController < ApplicationController
         end
       end
 
-      @search.update( total: @overall_totals[nil] )
+      @search.update( total: (@overall_totals[nil].first[:count] rescue 0) )
     end
   end
 

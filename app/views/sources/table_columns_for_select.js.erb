@@ -1,1 +1,0 @@
-$("#<%= params[:attribute] %>-container").html("<%= escape_javascript(render partial: "joins/column_selection_container", locals: { attribute: params[:attribute], table: params[:table], selected_column: nil } ) %>");

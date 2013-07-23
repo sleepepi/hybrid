@@ -106,3 +106,15 @@ calculation:
   design_name: MyString
   sensitivity: 0
   commonly_used: false
+
+identifier:
+  folder: Demographics
+  name: participant_id
+  display_name: Participant ID
+  variable_type: identifier
+  dictionary: one
+  version: MyString
+  design_file: MyString
+  design_name: MyString
+  sensitivity: 1
+  commonly_used: false

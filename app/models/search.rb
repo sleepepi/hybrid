@@ -79,32 +79,44 @@ class Search < ActiveRecord::Base
   end
 
   def record_count_only_with_sub_totals_using_resolvers(current_user, source, temp_criteria = self.criteria)
-    return { result: [[nil, 0]], errors: [] } if temp_criteria.blank?
-
     resolvers = generate_resolvers(current_user, source, temp_criteria)
 
-    master_total = 0
+    master_sql_statement = ''
+    master_counts = []
+    master_selects = resolvers.collect(&:selects).flatten.compact.uniq{ |hash| hash[:variable] }
+    Rails.logger.debug master_selects
     master_tables = resolvers.collect(&:tables).flatten.compact.uniq
     join_hash = source.join_conditions(master_tables, current_user)
     resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
     master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
 
-    if master_tables.size > 0
+    Rails.logger.debug "MASTER TABLES:"
+    Rails.logger.debug master_tables
+    Rails.logger.debug "MASTER SELECTS:"
+    Rails.logger.debug master_selects
+
+    if master_tables.size > 0 and master_selects.size > 0
       wrapper = Aqueduct::Builder.wrapper(source, current_user)
-      sql_statement = "SELECT COUNT(*) FROM #{master_tables.join(', ')} WHERE #{master_conditions}"
-      Rails.logger.debug sql_statement
+      master_sql_statement = "SELECT #{master_selects.collect{|star| "COUNT(#{star[:table_column]})"}.join(', ')} FROM #{master_tables.join(', ')} WHERE #{master_conditions}"
+
       wrapper.connect
-      (results, number_of_rows) = wrapper.query(sql_statement)
+      (results, number_of_rows) = wrapper.query(master_sql_statement)
       wrapper.disconnect
-      master_total = results.to_a.first[0]
+
+      results.to_a.first.each_with_index do |count, index|
+        master_counts << { count: count, variable: master_selects[index][:variable] }
+      end
     end
 
 
-    sub_totals = resolvers.collect{|r| ["record_ids_#{r.position}", r.count]} + [[nil, master_total]]
-    sql_conditions = resolvers.collect{|r| r.tables.join(',') + ' WHERE ' + r.conditions} + [master_tables.join(',') + ' WHERE ' + master_conditions]
+    sub_totals = resolvers.collect{|r| ["record_ids_#{r.position}", r.counts]} + [[nil, master_counts]]
+    sql_conditions = resolvers.collect(&:sql_conditions) + [master_sql_statement]
     errors = resolvers.collect{|r| ["record_ids_#{r.position}", r.errors.join(',')]}
 
-    return { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
+    Rails.logger.debug "SUBTOTALS"
+    Rails.logger.debug sub_totals
+
+    { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
 
   def view_concept_values(current_user, selected_report_concepts, actions_required = ["view data distribution", "view limited data distribution"])

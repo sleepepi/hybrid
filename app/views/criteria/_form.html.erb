@@ -26,9 +26,9 @@
   </div>
 
   <div class="form-actions">
-    <%= link_to 'Update', '#', class: 'btn btn-primary', data: { object: 'submit', target: "#edit_criterium_#{@criterium.id}" } %>
+    <%= link_to 'Update', '#', class: 'btn btn-success', data: { object: 'submit', target: "#edit_criterium_#{@criterium.id}" } %>
     <%= link_to 'Cancel', '#', class: 'btn', data: { object: 'hide-contour-modal' } %>
-    <%= link_to 'Remove', criterium_path(@criterium, search_id: @search), method: 'delete', remote: true, class: 'btn btn-danger' %>
+    <%= link_to 'Remove', criterium_path(@criterium, search_id: @search), method: 'delete', remote: true, class: 'btn btn-danger-inverse' %>
   </div>
 <% end %>
 

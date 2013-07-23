@@ -1,6 +1,6 @@
 class Resolver
 
-  attr_reader :conditions, :tables, :position, :errors
+  attr_reader :conditions, :tables, :position, :errors, :identifiers, :selects
 
   def initialize(filter, source, current_user)
     @position = filter.id
@@ -10,21 +10,37 @@ class Resolver
     @errors = []
     set_identifier
     set_conditions
+    set_selects
   end
 
   def count
     return 0 if tables.size == 0
+
     wrapper = Aqueduct::Builder.wrapper(source, current_user)
-
-    join_hash = source.join_conditions(tables, current_user)
-    all_conditions = [join_hash[:result], conditions].select{|c| not c.blank?}
-
-    sql_statement = "SELECT COUNT(*) FROM #{tables.join(', ')} WHERE #{all_conditions.join(' and ')}"
-
     wrapper.connect
-    (results, number_of_rows) = wrapper.query(sql_statement)
+    (results, number_of_rows) = wrapper.query(sql_conditions)
     wrapper.disconnect
     results.to_a.first[0]
+  end
+
+  def counts
+    return [] if tables.size == 0
+
+    wrapper = Aqueduct::Builder.wrapper(source, current_user)
+    wrapper.connect
+    (results, number_of_rows) = wrapper.query(sql_conditions)
+    wrapper.disconnect
+    counts = []
+    results.to_a.first.each_with_index do |count, index|
+      counts << { count: count, variable: @selects[index][:variable] }
+    end
+    counts
+  end
+
+  def sql_conditions
+    join_hash = source.join_conditions(tables, current_user)
+    all_conditions = [join_hash[:result], conditions].select{|c| not c.blank?}
+    "SELECT #{@selects.collect{|star| "COUNT(#{star[:table_column]})"}.join(', ')} FROM #{tables.join(', ')} WHERE #{all_conditions.join(' and ')}"
   end
 
   def conditions_for_entire_search
@@ -56,11 +72,20 @@ class Resolver
     end
 
     def set_identifier
-      identifiers = []
+      @identifiers = []
       Variable.current.where( variable_type: 'identifier' ).with_source(all_sources.collect(&:id)).each do |variable|
-        identifiers << variable if not all_sources.collect{|s| s.variables.where( variable_type: 'identifier' ).pluck(:id).include?(variable.id) }.include?(false)
+        @identifiers << variable if not all_sources.collect{|s| s.variables.where( variable_type: 'identifier' ).pluck(:id).include?(variable.id) }.include?(false)
       end
-      @identifier = identifiers.first
+      @identifier = @identifiers.first
+    end
+
+    def set_selects
+      @selects = []
+      result_hash = source.sql_codes(current_user)
+      sql_open = result_hash[:open]
+      sql_close = result_hash[:close]
+
+      @selects = source.mappings.where( variable_id: @identifiers.collect{|v| v.id}, table: @tables ).collect{ |m| { variable: m.variable, table_column: "#{m.table}.#{sql_open}#{m.column}#{sql_close}" } } if @identifiers.size > 0
     end
 
     def construct_conditions

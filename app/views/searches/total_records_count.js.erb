@@ -2,11 +2,12 @@ $("#information").html("<%= escape_javascript(render("total_records_count")) %>"
 
 $(".errors_found").html("");
 
-<% @overall_totals.each do |grouping,total| %>
-  <% if grouping == nil %>
-    $('#total_records_found_display').html('<%= number_with_delimiter(total) %>');
-  <% else %>
-    $('#<%= grouping %>_display').html('<%= number_with_delimiter(total) %>');
+<% @overall_totals.each do |grouping,totals| %>
+  <% totals.collect{|hash| hash[:count]} %>
+  <% grouping_name = (grouping == nil ? 'total_records_found' : grouping) %>
+  $('#<%= grouping_name %>_display').html('');
+  <% totals.each do |hash| %>
+    $('#<%= grouping_name %>_display').append('<div><%= number_with_delimiter(hash[:count]) %> <% if grouping == nil %><div class="total-description"><%= hash[:variable].display_name.pluralize %></div><% end %></div>');
   <% end %>
 <% end %>
 <% @overall_errors.each do |grouping,error| %>

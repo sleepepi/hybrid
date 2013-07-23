@@ -25,7 +25,7 @@
 
         <span id="criterium_<%= @criterium.id %>_delete_link" style="display:none">
           <i class="icon-move" style="cursor:move"></i>
-          <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger' %>
+          <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger-inverse' %>
         </span>
       </div>
       <div style="padding-left:<%= 10*@criterium.level %>px"><span id="record_ids_<%= @criterium.id %>_errors" class="quiet errors_found"></span></div>

@@ -52,13 +52,18 @@ choices_with_values:
 #   column: column9
 #   # column_value: MyString
 
-# identifier:
-#   source: two
-#   concept: identifier
-#   # value: MyString
-#   table: table
-#   column: column10
-#   # column_value: MyString
+identifier_table_one:
+  source: two
+  variable: identifier
+  table: table
+  column: column10
+
+identifier_table_two:
+  source: two
+  variable: identifier
+  table: table2
+  column: column10
+
 
 # filelocator:
 #   source: two

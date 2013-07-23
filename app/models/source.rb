@@ -24,8 +24,6 @@ class Source < ActiveRecord::Base
   # has_many :concepts, -> { order :short_name }, through: :mappings
   has_many :variables, -> { order :display_name }, through: :mappings
 
-  has_many :joins, dependent: :destroy
-
   has_many :source_file_types, dependent: :destroy
   has_many :file_types, -> { order :name }, through: :source_file_types
 
@@ -83,7 +81,7 @@ class Source < ActiveRecord::Base
       columns.reject!{|hash| mapped_columns.include?(hash[:column])}
     end
 
-    columns.select!{|hash| hash[:column] =~ Regexp.new( search ) } unless search.blank?
+    columns.select!{|hash| hash[:column].to_s.downcase =~ Regexp.new( search.downcase ) } unless search.blank?
 
     if per_page > 0
       max_pages = (columns.size / per_page) + 1
@@ -155,27 +153,26 @@ class Source < ActiveRecord::Base
     self.mappings.where( variable_id: variable.id ).pluck(:table).uniq
   end
 
-  # # Returns tables for a selected concepts
-  # def concept_tables(concept)
-  #   self.mappings.where(concept_id: concept.id).pluck(:table).uniq
-  # end
-
-  # Given a list of tables find all the join conditions
   def join_conditions(tables, current_user)
     result = []
     errors = []
+    result_hash = self.sql_codes(current_user)
+    sql_open = result_hash[:open]
+    sql_close = result_hash[:close]
+
     tables.each_with_index do |table_one, table_index|
       for i in (table_index+1..tables.size-1)
         table_two = tables[i]
         # find Join Condition if it exists between table_one and table_two
-        join = self.joins.find_by_from_table_and_to_table(table_one, table_two) || self.joins.find_by_from_table_and_to_table(table_two, table_one)
+        identifiers = []
+        self.variables.where( variable_type: 'identifier' ).each do |variable|
+          identifiers << variable if self.mappings.where( variable_id: variable.id, table: [table_one, table_two] ).uniq.pluck(:table).sort == [table_one, table_two].sort
+        end
 
-        result_hash = self.sql_codes(current_user)
-        sql_open = result_hash[:open]
-        sql_close = result_hash[:close]
+        identifier = identifiers.first
 
-        if join
-          result << "#{join.from_table}.#{sql_open}#{join.from_column}#{sql_close} = #{join.to_table}.#{sql_open}#{join.to_column}#{sql_close}"
+        if identifier and table_one_mapping = self.mappings.where( variable_id: identifier.id, table: table_one).first and table_two_mapping = self.mappings.where( variable_id: identifier.id, table: table_two).first
+          result << "#{table_one_mapping.table}.#{sql_open}#{table_one_mapping.column}#{sql_close} = #{table_two_mapping.table}.#{sql_open}#{table_two_mapping.column}#{sql_close}"
         else
           errors << "No Table join found between tables #{table_one} and #{table_two}"
         end
@@ -183,6 +180,7 @@ class Source < ActiveRecord::Base
     end
     { result: result, errors: errors }
   end
+
 
   def count(current_user, criteria, conditions, tables, join_conditions, select_identifier_concept)
     Aqueduct::Builder.wrapper(self, current_user).count(criteria, conditions, tables, join_conditions, select_identifier_concept ? select_identifier_concept.mapped_name(current_user, self) : nil)
