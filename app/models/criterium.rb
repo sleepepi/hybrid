@@ -151,7 +151,7 @@ class Criterium < ActiveRecord::Base
   def update_search_history
     # Don't include right_brackets, left_brackets, or position updates
     if self.changes.blank? or self.changes.keys.include?('right_brackets') or self.changes.keys.include?('left_brackets') or self.changes.keys.include?('position') or self.changes.keys.include?('selected')
-      # Rails.logger.debug "No update for these changes: #{self.changes}"
+      # "No update for these changes: #{self.changes}"
     else
       self.search.roll_forward_search_history!
 

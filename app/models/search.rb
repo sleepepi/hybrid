@@ -84,16 +84,10 @@ class Search < ActiveRecord::Base
     master_sql_statement = ''
     master_counts = []
     master_selects = resolvers.collect(&:selects).flatten.compact.uniq{ |hash| hash[:variable] }
-    Rails.logger.debug master_selects
     master_tables = resolvers.collect(&:tables).flatten.compact.uniq
     join_hash = source.join_conditions(master_tables, current_user)
     resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
     master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
-
-    Rails.logger.debug "MASTER TABLES:"
-    Rails.logger.debug master_tables
-    Rails.logger.debug "MASTER SELECTS:"
-    Rails.logger.debug master_selects
 
     if master_tables.size > 0 and master_selects.size > 0
       wrapper = Aqueduct::Builder.wrapper(source, current_user)
@@ -112,9 +106,6 @@ class Search < ActiveRecord::Base
     sub_totals = resolvers.collect{|r| ["record_ids_#{r.position}", r.counts]} + [[nil, master_counts]]
     sql_conditions = resolvers.collect(&:sql_conditions) + [master_sql_statement]
     errors = resolvers.collect{|r| ["record_ids_#{r.position}", r.errors.join(',')]}
-
-    Rails.logger.debug "SUBTOTALS"
-    Rails.logger.debug sub_totals
 
     { result: sub_totals, errors: errors, sql_conditions: sql_conditions }
   end
