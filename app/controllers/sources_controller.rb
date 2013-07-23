@@ -69,7 +69,7 @@ class SourcesController < ApplicationController
   def table_columns
     params[:page] = 1 if params[:page].blank?
 
-    result_hash = @source.table_columns(current_user, params[:table], params[:page].to_i, 20, params[:filter_unmapped] == '1')
+    result_hash = @source.table_columns(current_user, params[:table], params[:page].to_i, 20, params[:filter_unmapped] == '1', params[:search])
     @columns = result_hash[:result]
     @max_pages = result_hash[:max_pages]
     @error = result_hash[:error]

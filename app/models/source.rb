@@ -72,7 +72,7 @@ class Source < ActiveRecord::Base
     Aqueduct::Builder.wrapper(self, current_user).tables
   end
 
-  def table_columns(current_user, table, page = 1, per_page = -1, filter_unmapped = false)
+  def table_columns(current_user, table, page = 1, per_page = -1, filter_unmapped = false, search = '')
     result_hash = Aqueduct::Builder.wrapper(self, current_user).table_columns(table)
 
     columns = result_hash[:columns]
@@ -82,6 +82,8 @@ class Source < ActiveRecord::Base
       mapped_columns = self.mappings.includes(:source, :variable, { variable: :domain }).where( table: table ).select{|m| m.mapped?(current_user) }.collect{|m| m.column}.uniq
       columns.reject!{|hash| mapped_columns.include?(hash[:column])}
     end
+
+    columns.select!{|hash| hash[:column] =~ Regexp.new( search ) } unless search.blank?
 
     if per_page > 0
       max_pages = (columns.size / per_page) + 1
