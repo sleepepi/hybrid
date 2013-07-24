@@ -8,7 +8,7 @@
   <label class="control-label"><div id="record_ids_<%= @criterium.id %>_display" class="records_found"></div></label>
   <div class="controls" style="white-space:nowrap">
 
-    <div style="line-height:30px;height:30px"
+    <div style="line-height:30px;"
       data-object="toggle-delete-link" data-target="#criterium_<%= @criterium.id %>_delete_link">
       <div style="padding-left:<%= 10*@criterium.level %>px">
         <%= check_box_tag "criterium_#{@criterium.id}_checked", '1', @criterium.selected, data: { object: 'mark_criterium', search_id: @search.id, criterium_id: @criterium.id }, style: 'margin-top: -3px;' %>
@@ -28,7 +28,7 @@
           <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger-inverse' %>
         </span>
       </div>
-      <div style="padding-left:<%= 10*@criterium.level %>px"><span id="record_ids_<%= @criterium.id %>_errors" class="quiet errors_found"></span></div>
+      <div style="padding-left:<%= 10*@criterium.level %>px"><span id="record_ids_<%= @criterium.id %>_errors" class="errors_found"></span></div>
     </div>
   </div>
 </div>

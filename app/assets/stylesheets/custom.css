@@ -17,10 +17,6 @@
   color: #76CF00;
 }
 
-.errors_found {
-  color: #8a1f11;
-}
-
 .ui-autocomplete-category {
 	font-weight: bold;
   padding: 0 .2em;
@@ -382,4 +378,10 @@ td.error {
   background-image: linear-gradient(#ee5f5b, #bd362f);
   background-repeat: repeat-x;
   border-color: #cd504a;
+}
+
+.alert-inline {
+  display: inline-block;
+  padding: 0px 8px;
+  margin: 0px;
 }
