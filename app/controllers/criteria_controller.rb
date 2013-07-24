@@ -119,7 +119,7 @@ class CriteriaController < ApplicationController
 
     def criterium_params
       params.require(:criterium).permit(
-        :value, :right_operator, :negated, :source_id
+        :value, :right_operator, :negated, :mapping_id
       )
     end
 end

@@ -10,11 +10,11 @@
     </div>
   <% end %>
 
-  <div class="control-group" style="<%= 'display:none' if @criterium.variable.sources.uniq.size < 2 %>">
-    <%= f.label :source_id, "At", class: 'control-label' %>
+  <div class="control-group" style="<%= 'display:none' if @criterium.variable.mappings.size < 2 %>">
+    <%= f.label :mapping_id, "At", class: 'control-label' %>
     <div class="controls sheet-container">
-      <% @criterium.variable.sources.uniq.each do |source| %>
-        <label class="radio <%= 'selected' if @criterium.source == source %>"><%= radio_button_tag "criterium[source_id]", source.id, @criterium.source == source %> <%= source.name %></label>
+      <% @criterium.variable.mappings.each do |mapping| %>
+        <label class="radio <%= 'selected' if @criterium.mapping == mapping %>"><%= radio_button_tag "criterium[mapping_id]", mapping.id, @criterium.mapping == mapping %> <%= mapping.human_table %></label>
       <% end %>
     </div>
   </div>

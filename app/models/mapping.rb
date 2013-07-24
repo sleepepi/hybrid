@@ -13,6 +13,12 @@ class Mapping < ActiveRecord::Base
 
   # Mapping Methods
 
+  # Provides the human table name
+  # Tables can be named to specify a timepoint
+  def human_table
+    "HUMAN: #{self.table}"
+  end
+
   def mapped?(current_user)
     if self.variable.variable_type == 'choices'
       (self.column_values(current_user).reject{|v| v == nil}.collect{|v| v.to_s} | self.variable.domain_values).size <= self.variable.domain_values.size

@@ -2,9 +2,9 @@ class Resolver
 
   attr_reader :conditions, :tables, :position, :errors, :identifiers, :selects
 
-  def initialize(filter, source, current_user)
-    @position = filter.id
-    @filter = filter
+  def initialize(criterium, source, current_user)
+    @position = criterium.id
+    @criterium = criterium
     @source = source
     @current_user = current_user
     @errors = []
@@ -44,7 +44,7 @@ class Resolver
   end
 
   def conditions_for_entire_search
-    "("*filter.left_brackets + conditions + ")"*filter.right_brackets + (filter.position < (filter.search.criteria.size - 1) ? " #{filter.right_operator}" : '')
+    "("*criterium.left_brackets + conditions + ")"*criterium.right_brackets + (criterium.position < (criterium.search.criteria.size - 1) ? " #{criterium.right_operator}" : '')
   end
 
   private
@@ -63,12 +63,12 @@ class Resolver
       @source
     end
 
-    def filter
-      @filter
+    def criterium
+      @criterium
     end
 
     def all_sources
-      [filter.source, source].uniq.compact
+      [criterium.mapping.source, source].uniq.compact
     end
 
     def set_identifier
@@ -89,20 +89,20 @@ class Resolver
     end
 
     def construct_conditions
-      if filter.source and filter.source != source
+      if criterium.mapping and criterium.mapping.source != source
         # This is get Age at SHHS2 against SHHS1 (linked search)
         # GENERATE LINKED SQL
-        # 1) Get the Source Join between filter.source and source
+        # 1) Get the Source Join between criterium.mapping.source and source
         #    This returns table column, table column "the joins" per se....
         if @identifier
           source_identifer_mapping = source.mappings.where( variable_id: @identifier.id ).first
-          filter_source_identifer_mapping = filter.source.mappings.where( variable_id: @identifier.id ).first
+          criterium_source_identifer_mapping = criterium.mapping.source.mappings.where( variable_id: @identifier.id ).first
         end
 
-        if source_identifer_mapping and filter_source_identifer_mapping
-          (conditions, table) = generate_sql_through_link(source_identifer_mapping, filter_source_identifer_mapping)
+        if source_identifer_mapping and criterium_source_identifer_mapping
+          (conditions, table) = generate_sql_through_link(source_identifer_mapping, criterium_source_identifer_mapping)
         else
-          @errors << "No join found between #{filter.source.name} and #{source.name}."
+          @errors << "No join found between #{criterium.mapping.source.name} and #{source.name}."
           return ['1 = 0', nil]
         end
 
@@ -115,28 +115,28 @@ class Resolver
       return [conditions, table]
     end
 
-    # 2) Generate AND EVALUATE sql against linked source and SELECT table2.column2 WHERE sql as normal for filter.source (generate_sql_as_normal(filter.source))
+    # 2) Generate AND EVALUATE sql against linked source and SELECT table2.column2 WHERE sql as normal for criterium.mapping.source (generate_sql_as_normal(criterium.mapping.source))
     # 3) Build the sql to look like WHERE resolving_source.id IN (linked_ids)
-    def generate_sql_through_link(source_identifer_mapping, filter_source_identifer_mapping)
-      result_hash = filter.source.sql_codes(current_user)
+    def generate_sql_through_link(source_identifer_mapping, criterium_source_identifer_mapping)
+      result_hash = criterium.mapping.source.sql_codes(current_user)
       sql_open = result_hash[:open]
       sql_close = result_hash[:close]
 
-      wrapper = Aqueduct::Builder.wrapper(filter.source, current_user)
+      wrapper = Aqueduct::Builder.wrapper(criterium.mapping.source, current_user)
 
-      tables_covered = [filter_source_identifer_mapping.table]
+      tables_covered = [criterium_source_identifer_mapping.table]
 
-      (more_conditions, another_table) = generate_sql_as_normal(filter.source)
+      (more_conditions, another_table) = generate_sql_as_normal(criterium.mapping.source)
 
       tables_covered << another_table
 
       tables_covered = tables_covered.compact.uniq
 
-      join_hash = filter.source.join_conditions(tables_covered, current_user)
+      join_hash = criterium.mapping.source.join_conditions(tables_covered, current_user)
       join_hash[:result]
       all_conditions = [join_hash[:result], more_conditions].select{|c| not c.blank?}
 
-      sql_statement = "SELECT #{filter_source_identifer_mapping.table}.#{sql_open}#{filter_source_identifer_mapping.column}#{sql_close} FROM #{tables_covered.join(', ')} WHERE #{all_conditions.join(' and ')}"
+      sql_statement = "SELECT #{criterium_source_identifer_mapping.table}.#{sql_open}#{criterium_source_identifer_mapping.column}#{sql_close} FROM #{tables_covered.join(', ')} WHERE #{all_conditions.join(' and ')}"
 
       wrapper.connect
       (results, number_of_rows) = wrapper.query(sql_statement)
@@ -156,13 +156,13 @@ class Resolver
       sql_open = result_hash[:open]
       sql_close = result_hash[:close]
 
-      # Choose first currently, handle multiple later? would need "table" specified by filter, or mapping chosen explicitly
-      mapping = thesource.mappings.where( variable_id: filter.variable_id ).first
+      # Choose first currently, handle multiple later? would need "table" specified by criterium, or mapping chosen explicitly
+      mapping = thesource.mappings.where( variable_id: criterium.variable_id ).first
 
       return [result, nil] unless mapping
 
       mapped_name = mapping.table + '.' + sql_open + mapping.column + sql_close
-      values = mapping.abstract_value(filter)
+      values = mapping.abstract_value(criterium)
 
       all_conditions = []
 
@@ -170,7 +170,7 @@ class Resolver
         all_conditions << '1 = 0'
       else
         values.each do |val|
-          token_hash = filter.find_tokens(val)
+          token_hash = criterium.find_tokens(val)
 
           token = token_hash[:token]
           val = token_hash[:val]
@@ -182,7 +182,7 @@ class Resolver
             all_conditions << "#{mapped_name} IS NULL"
           elsif val == '1 = 0' or (range.size == 1 and range[0].blank?) or (range.size == 2 and range[0].blank? and range[1].blank?)
             all_conditions << '1 = 0'
-          elsif filter.variable.variable_type == 'date'
+          elsif criterium.variable.variable_type == 'date'
             if range[0].blank? # From is empty, so every date less or equal to the to date
               all_conditions << "DATE(#{mapped_name}) <= DATE('#{range[1]}')"
             elsif range[1].blank? # To is empty, so every date greater or equal to the from date
@@ -190,7 +190,7 @@ class Resolver
             else
               all_conditions << "DATE(#{mapped_name}) BETWEEN DATE('#{range[0]}') and DATE('#{range[1]}')"
             end
-          elsif ['numeric', 'integer'].include?(filter.variable.variable_type)
+          elsif ['numeric', 'integer'].include?(criterium.variable.variable_type)
             numeric_string = sql_numeric.blank? ? "(#{mapped_name}+0.0)" : "CAST(#{mapped_name} AS #{sql_numeric})"
             if range.size == 2
               if left_token.blank? and right_token.blank?
@@ -207,7 +207,7 @@ class Resolver
         end
       end
 
-      invert_container = (filter.negated? and filter.variable.variable_type != 'choices')
+      invert_container = (criterium.negated? and criterium.variable.variable_type != 'choices')
       result = "#{'NOT ' if invert_container}(" + all_conditions.uniq.join(' or ') + ')'
 
       [result, mapping.table]

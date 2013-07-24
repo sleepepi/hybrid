@@ -13,7 +13,7 @@
       <div style="padding-left:<%= 10*@criterium.level %>px">
         <%= check_box_tag "criterium_#{@criterium.id}_checked", '1', @criterium.selected, data: { object: 'mark_criterium', search_id: @search.id, criterium_id: @criterium.id }, style: 'margin-top: -3px;' %>
         <%= link_to edit_criterium_path(@criterium, search_id: @search), remote: true, style: 'text-decoration:none', class: 'faded_delete_icon', data: { image_id: "criterium_#{@criterium.id}_delete_icon" } do %>
-          <%= @criterium.variable_name_with_source %>
+          <%= @criterium.variable_name_with_mapping %>
           <span class="nolink">is</span> <% if @criterium.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
 
           <% if @criterium.value.blank? %>
@@ -42,7 +42,7 @@
 <div style="display:none" data-object="query-draggable-helper">
   <div class="control-group">
     <div class="controls">
-      <div class='criterium-box'><b><%= @criterium.variable_name_with_source %></b><% unless @criterium.human_value.blank? %> is <% if @criterium.negated? %>not <% end %><b><%= @criterium.human_value %></b><% end %></div>
+      <div class='criterium-box'><b><%= @criterium.variable_name_with_mapping %></b><% unless @criterium.human_value.blank? %> is <% if @criterium.negated? %>not <% end %><b><%= @criterium.human_value %></b><% end %></div>
     </div>
   </div>
 </div>

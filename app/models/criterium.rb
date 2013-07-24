@@ -25,28 +25,22 @@ class Criterium < ActiveRecord::Base
   # Model Relationships
   belongs_to :search
   belongs_to :variable
-  belongs_to :source
+  belongs_to :mapping
 
   # Criterium Methods
 
-  def variable_name_with_source
-    full_name = "#{self.variable.display_name}"
-    full_name += " at #{self.source.name}" if self.source and (self.source != self.search.sources.first or self.search.sources.size != 1)
-    full_name
+  def mapping
+    if self.mapping_id and selected_mapping = self.variable.mappings.find_by_id(self.mapping_id)
+      selected_mapping
+    else
+      self.variable.mappings.first
+    end
   end
 
-  # def concept_name_with_source
-  #   full_name = "#{self.concept.human_name}"
-  #   full_name += " at #{self.source.name}" if self.source and (self.source != self.search.sources.first or self.search.sources.size != 1)
-  #   full_name
-  # end
-
-  def source
-    if self.source_id and selected_source = Source.find_by_id(self.source_id)
-      selected_source
-    else
-      self.variable.sources.first
-    end
+  def variable_name_with_mapping
+    full_name = "#{self.variable.display_name}"
+    full_name += " at #{self.mapping.human_table}" if self.mapping and self.variable.mappings.size > 1
+    full_name
   end
 
   def copyable_attributes
