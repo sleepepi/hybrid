@@ -1,0 +1,17 @@
+<div class="page-header">
+  <h1>
+    Edit Table Human Name
+    <small><%= params[:table].to_s %></small>
+  </h1>
+</div>
+
+<%= text_field_tag :human_name, @source.table_hash[params[:table].to_s], placeholder: params[:table].to_s %>
+
+<hr class="soften" style="margin-top:20px;" />
+
+<div class="button-group pull-right">
+  <%= link_to 'Save', '#', data: { object: 'save-table-name', source_id: @source.id, table: params[:table].to_s }, class: 'btn btn-mini btn-primary' %>
+  <%= link_to 'Cancel', '#', data: { object: 'hide-contour-modal' }, class: 'btn btn-mini' %>
+</div>
+
+

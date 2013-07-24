@@ -1,2 +1,3 @@
+$("#source-tables").html("<%= escape_javascript(render("sources/tables")) %>");
 $("#mapping_form_<%= @mapping.column.gsub(' ', '_') %>").html("<%= escape_javascript(render("show")) %>");
 hideContourModal();

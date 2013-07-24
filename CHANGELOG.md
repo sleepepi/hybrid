@@ -4,6 +4,8 @@
 - PostgreSQL is now the database of choice for the Sleep Portal
 - Queries can now be constructed by chosing concepts in another data source that are linked to the original query data source
 - Individual Data Source columns now display available concepts if the automap picks up more than one mapping candidate
+- Data Source tables can now be named to specify the encounter or visit
+  - This allows the same concept to be mapped in multiple tables
 - Modified interface for selecting boolean and categorical search criteria
 - Creating and editing a source join now provides underlying table and column information
 - Use of Ruby 2.0.0-p247 is now recommended

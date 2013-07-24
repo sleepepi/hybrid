@@ -78,6 +78,8 @@ SleepPortal::Application.routes.draw do
       get :table_columns
       get :download_file
       post :remove_all_mappings
+      get :edit_table_name
+      patch :update_table_name
     end
 
     resources :rules

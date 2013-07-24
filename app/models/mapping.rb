@@ -16,7 +16,7 @@ class Mapping < ActiveRecord::Base
   # Provides the human table name
   # Tables can be named to specify a timepoint
   def human_table
-    "HUMAN: #{self.table}"
+    self.source.table_hash[self.table].blank? ? self.table : self.source.table_hash[self.table]
   end
 
   def mapped?(current_user)

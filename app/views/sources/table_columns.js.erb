@@ -1,3 +1,4 @@
+$("#source-tables").html("<%= escape_javascript(render("sources/tables")) %>");
 $("#table_content").html("<%= escape_javascript(render("table_columns")) %>");
 
 <% @columns.each do |column_data| %>

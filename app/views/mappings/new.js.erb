@@ -1,1 +1,2 @@
+$("#source-tables").html("<%= escape_javascript(render("sources/tables")) %>");
 $("#mapping_form_<%= @column.gsub(' ', '_') %>").html("<%= escape_javascript(render("new")) %>");

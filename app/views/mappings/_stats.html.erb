@@ -6,6 +6,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th style="text-align:left"><%= @mapping.human_table %></th>
           <th style="text-align:left">N</th>
           <th style="text-align:left">Mean</th>
           <th style="text-align:left">StdDev</th>
@@ -16,6 +17,7 @@
         </tr>
       </thead>
       <tr>
+        <td></td>
         <td><%= values.size %></td>
         <td><%= "%0.2f" % (values.sum / values.size) %></td>
         <td>
@@ -35,6 +37,7 @@
     <table class="table table-striped table-hover" style="width:100%">
       <thead>
         <tr>
+          <th style="text-align:left"><%= @mapping.human_table %></th>
           <th style="text-align:left">Value</th>
           <th style="text-align:left">Mapping</th>
           <th style="text-align:left">Count</th>
@@ -43,6 +46,7 @@
       </thead>
       <% values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array| %>
         <tr data-object="select-checkbox" data-value="<%= key %>" style="cursor:pointer">
+          <td></td>
           <td><%= (key == nil ? "NULL" : key.to_s) %></td>
           <td><%= @mapping.human_normalized_value(key) %></td>
           <td><%= array.size %></td>
@@ -56,6 +60,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+          <th style="text-align:left"><%= @mapping.human_table %></th>
           <th style="text-align:left">N</th>
           <th style="text-align:left">Median</th>
           <th style="text-align:left">Minimum</th>
@@ -64,6 +69,7 @@
         </tr>
       </thead>
       <tr>
+        <td></td>
         <td><%= values.size %></td>
         <td><%= values[(values.size / 2).to_i] %></td>
         <td><%= values.first %></td>

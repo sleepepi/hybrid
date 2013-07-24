@@ -3,6 +3,8 @@ class Source < ActiveRecord::Base
   WRAPPER = Aqueduct.wrappers.collect{|a| [a.to_s.split('::').last, a.to_s.split('::').last.downcase]}
   REPOSITORY = Aqueduct.repositories.collect{|a| [a.to_s.split('::').last, a.to_s.split('::').last.downcase]}
 
+  serialize :table_hash, Hash
+
   # Concerns
   include Searchable, Deletable
 
@@ -190,7 +192,7 @@ class Source < ActiveRecord::Base
     result_hash = self.table_columns(current_user, table)
     columns = result_hash[:result].collect{|c| c[:column]}
     number_mapped = self.mappings.where( table: table, column: columns ).uniq.select(:column).count
-    "#{number_mapped} of #{columns.size}"
+    { mapped: number_mapped, total: columns.size }
   end
 
 end

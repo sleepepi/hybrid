@@ -1,4 +1,5 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+--- !map:HashWithIndifferentAccess
 
 one:
   # id: 1
@@ -18,6 +19,8 @@ one:
   file_server_path: MyString
   file_server_login: MyString
   file_server_password: MyString
+  table_hash: { table_one: 'Visit One',
+                table_two: 'Visit Two' }
 
 two:
   # id: 2

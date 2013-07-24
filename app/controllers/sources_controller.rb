@@ -3,12 +3,21 @@ class SourcesController < ApplicationController
 
   before_action :set_source, only: [ :destroy ]
   before_action :set_source_with_edit_data_source_connection_information, only: [ :edit, :update ]
-  before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :auto_map, :remove_all_mappings, :edit_table_name, :update_table_name ]
   before_action :set_source_with_view_or_edit_data_source_mappings, only: [ :table_columns ]
   before_action :set_source_with_download_files, only: [ :download_file ]
-  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :download_file ]
+  before_action :redirect_without_source,     only: [ :destroy, :edit, :update, :auto_map, :remove_all_mappings, :download_file, :edit_table_name, :update_table_name ]
   before_action :set_viewable_dictionary,     only: [ :auto_map ]
   before_action :redirect_without_dictionary, only: [ :auto_map ]
+
+  def edit_table_name
+
+  end
+
+  def update_table_name
+    @source.table_hash[params[:table].to_s] = params[:human_name].to_s.strip
+    @source.save
+  end
 
   def download_file
     result_hash = Aqueduct::Builder.repository(@source, current_user).get_file(params[:file_locator], params[:file_type])
