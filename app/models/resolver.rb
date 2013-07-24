@@ -107,7 +107,6 @@ class Resolver
         end
 
       else
-        # Generate Sql as normal
         # This is the same source against the same source
         (conditions, table) = generate_sql_as_normal(source)
       end
@@ -157,9 +156,12 @@ class Resolver
       sql_close = result_hash[:close]
 
       # Choose first currently, handle multiple later? would need "table" specified by criterium, or mapping chosen explicitly
-      mapping = thesource.mappings.where( variable_id: criterium.variable_id ).first
+      # mapping = thesource.mappings.where( variable_id: criterium.variable_id ).first
 
-      return [result, nil] unless mapping
+      # New approach
+      mapping = criterium.mapping
+
+      return [result, nil] unless mapping and mapping.source == thesource
 
       mapped_name = mapping.table + '.' + sql_open + mapping.column + sql_close
       values = mapping.abstract_value(criterium)
