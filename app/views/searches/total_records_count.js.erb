@@ -14,6 +14,8 @@ $(".errors_found").html("");
   <% if grouping == nil %>
     $('#total_errors_found').html("<div class='alert alert-warning'><%= escape_javascript(error.html_safe) %></div>");
   <% else %>
-    $('#<%= grouping %>_errors').html("<div class='alert alert-warning alert-inline'><%= escape_javascript(error.html_safe) %></div>");
+    <% unless error.blank? %>
+      $('#<%= grouping %>_errors').html("<div class='alert alert-warning alert-inline'><%= escape_javascript(error.html_safe) %></div>");
+    <% end %>
   <% end %>
 <% end %>
