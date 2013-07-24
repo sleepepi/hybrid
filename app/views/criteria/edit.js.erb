@@ -1,4 +1,4 @@
-$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("criteria/popup")) %>");
+$("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("criteria/edit")) %>");
 showContourModal();
 
 $("#variable_<%= @criterium.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @criterium.variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
