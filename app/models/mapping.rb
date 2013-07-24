@@ -80,7 +80,7 @@ class Mapping < ActiveRecord::Base
       values = values.select{|v| not v.blank?}.collect{|num_string| num_string.to_f} # Ignore null and blank values!
     when 'choices'
       values = values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.collect do |key, array|
-        { name: "#{self.human_normalized_value(key)} in #{self.source.name}", y: array.size, id: key.to_s }
+        { name: "#{self.human_normalized_value(key)} in #{self.source.name} at #{self.human_table}", y: array.size, id: key.to_s, mapping_id: self.id }
       end
     end
 
@@ -114,7 +114,7 @@ class Mapping < ActiveRecord::Base
       categories = tmp_categories[0..top_value]
     when 'choices'
       values = values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.collect do |key, array|
-        { name: "#{self.human_normalized_value(key)}", y: array.size, id: key.to_s }
+        { name: "#{self.human_normalized_value(key)} in #{self.source.name} at #{self.human_table}", y: array.size, id: key.to_s, mapping_id: self.id }
       end
     end
 

@@ -45,7 +45,7 @@
         </tr>
       </thead>
       <% values.sort{|a,b|( a and b ) ? a <=> b : ( a ? -1 : 1 ) }.group_by{|val| val}.each do |key, array| %>
-        <tr data-object="select-checkbox" data-value="<%= key %>" style="cursor:pointer">
+        <tr data-object="select-checkbox" data-value="<%= key %>" data-mapping-id="<%= @mapping.id %>" style="cursor:pointer">
           <td></td>
           <td><%= (key == nil ? "NULL" : key.to_s) %></td>
           <td><%= @mapping.human_normalized_value(key) %></td>

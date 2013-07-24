@@ -33,7 +33,7 @@ class Criterium < ActiveRecord::Base
     if self.mapping_id and selected_mapping = self.variable.mappings.find_by_id(self.mapping_id)
       selected_mapping
     else
-      self.variable.mappings.first
+      self.variable.mappings.sort{ |m1, m2| m1.human_table <=> m2.human_table }.first
     end
   end
 

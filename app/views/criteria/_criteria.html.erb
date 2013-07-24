@@ -7,7 +7,7 @@
       <% if @criterium.position < @criterium.search.criteria.size - 1 %>
         <div class="control-group">
           <div class="controls">
-            <div class="qc-cancel">
+            <div class="qc-cancel" style="line-height:40px">
               <span id="criterium_<%= @criterium.id %>_rop_text" onmouseover="$('#criterium_<%= @criterium.id %>_right_operator_edit_icon').show();" onmouseout="$('#criterium_<%= @criterium.id %>_right_operator_edit_icon').hide();" style="padding-left:<%= [10*(@criterium.level - @criterium.right_brackets), 0].max %>px">
                 <%= link_to @criterium.right_operator, '#', style: 'color:#404040;text-decoration:none', data: { object: 'operand-edit', value: "#{@criterium.id}" } %>
                 <%= link_to 'edit', '#', data: { object: 'operand-edit', value: "#{@criterium.id}" }, id: "criterium_#{@criterium.id}_right_operator_edit_icon", style: 'display:none', class: 'btn btn-mini' %>

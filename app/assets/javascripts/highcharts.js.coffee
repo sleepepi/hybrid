@@ -122,12 +122,7 @@
           events:
             click: (event) ->
               if params['make_selection']
-                checkbox = $("input[name='values[]'][value='#{this.id}']")
-                if checkbox.is(':checked')
-                  checkbox.prop('checked',false)
-                else
-                  checkbox.prop('checked',true)
-                checkbox.change()
+                selectCriteria(this.id, this.mapping_id, true)
                 false
     # legend:
     #   layout: 'vertical'

@@ -1,22 +1,29 @@
-@markCriteria = (element) ->
+@markCriterium = (element) ->
   params = {}
   params.search_id = $(element).data('search-id')
   params.criterium_id = $(element).data('criterium-id')
   params.selected = $(element).is(':checked')
   $.post( root_url + "criteria/mark_selected", params, null, "script" )
 
+@selectCriteria = (value, mapping_id, clear_existing) ->
+  checkboxes = $("input[name='values[]']").prop('checked', false).change() if clear_existing
+  checkbox = $("input[name='values[]'][value='#{value}']")
+  if checkbox.is(':checked') and $("#criterium_mapping_id_#{mapping_id}").is(':checked')
+    checkbox.prop('checked',false)
+  else
+    checkbox.prop('checked',true)
+  checkbox.change()
+  radio = $("#criterium_mapping_id_#{mapping_id}")
+  radio.prop('checked', true)
+  radio.change()
+
 jQuery ->
   $(document)
     .on('click', '[data-object~="mark_criterium"]', () ->
-      markCriteria(this)
+      markCriterium(this)
     )
     .on('click', '[data-object~="select-checkbox"]', () ->
-      checkbox = $("input[name='values[]'][value='#{$(this).data('value')}']")
-      if checkbox.is(':checked')
-        checkbox.prop('checked',false)
-      else
-        checkbox.prop('checked',true)
-      checkbox.change()
+      selectCriteria($(this).data('value'), $(this).data('mapping-id'), false)
       false
     )
     .on('mouseover', '[data-object="toggle-delete-link"]', () -> $($(this).data('target')).show())
