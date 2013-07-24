@@ -122,7 +122,7 @@
           events:
             click: (event) ->
               if params['make_selection']
-                selectCriteria(this.id, this.mapping_id, true)
+                selectCriteria(this.id, this.mapping_id)
                 false
     # legend:
     #   layout: 'vertical'

@@ -5,8 +5,8 @@
   params.selected = $(element).is(':checked')
   $.post( root_url + "criteria/mark_selected", params, null, "script" )
 
-@selectCriteria = (value, mapping_id, clear_existing) ->
-  checkboxes = $("input[name='values[]']").prop('checked', false).change() if clear_existing
+@selectCriteria = (value, mapping_id) ->
+  checkboxes = $("input[name='values[]']").prop('checked', false).change()
   checkbox = $("input[name='values[]'][value='#{value}']")
   if checkbox.is(':checked') and $("#criterium_mapping_id_#{mapping_id}").is(':checked')
     checkbox.prop('checked',false)
@@ -23,7 +23,7 @@ jQuery ->
       markCriterium(this)
     )
     .on('click', '[data-object~="select-checkbox"]', () ->
-      selectCriteria($(this).data('value'), $(this).data('mapping-id'), false)
+      selectCriteria($(this).data('value'), $(this).data('mapping-id'))
       false
     )
     .on('mouseover', '[data-object="toggle-delete-link"]', () -> $($(this).data('target')).show())
