@@ -31,6 +31,3 @@
     <%= link_to 'Remove', criterium_path(@criterium, search_id: @search), method: 'delete', remote: true, class: 'btn btn-danger-inverse' %>
   </div>
 <% end %>
-
-
-<%= render partial: 'variables/about', locals: { variable: @criterium.variable } %>
