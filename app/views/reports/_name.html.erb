@@ -2,5 +2,5 @@
 
 <span id="report_<%= @report.id %>_delete_link" style="display:none">
 <%= link_to 'edit', edit_name_report_path(@report, search_id: @search.id), method: :post, remote: true, class: 'btn btn-mini' %>
-<%= link_to 'remove', report_path(@report, search_id: @search.id), method: :delete, remote: true, data: { confirm: "Are you sure you want to delete #{@report.name}?" }, class: 'btn btn-mini btn-danger' %>
+<%= link_to 'remove', report_path(@report, search_id: @search.id), method: :delete, remote: true, data: { confirm: "Are you sure you want to delete #{@report.name}?" }, class: 'btn btn-mini btn-danger-inverse' %>
 </span>

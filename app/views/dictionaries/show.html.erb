@@ -3,8 +3,8 @@
   <h1>
     <%= link_to 'Dictionaries', dictionaries_path %> &middot; <%= @title %>
     <%= link_to 'Edit Dictionary', edit_dictionary_path(@dictionary), class: 'btn btn-mini' %>
-    <%= link_to 'Delete Dictionary', @dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
-    <%= link_to 'Clean Dictionary', clean_dictionary_path(@dictionary), method: :post, data: { confirm: "Are you sure you want to DELETE all associated variables and domains for #{@dictionary.name} dictionary?" }, class: 'btn btn-mini btn-danger' %>
+    <%= link_to 'Delete Dictionary', @dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{@dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger-inverse' %>
+    <%= link_to 'Clean Dictionary', clean_dictionary_path(@dictionary), method: :post, data: { confirm: "Are you sure you want to DELETE all associated variables and domains for #{@dictionary.name} dictionary?" }, class: 'btn btn-mini btn-danger-inverse' %>
   </h1>
 </div>
 

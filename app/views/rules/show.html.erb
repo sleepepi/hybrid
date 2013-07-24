@@ -3,7 +3,7 @@
   <h1>
     <%= link_to @source.name, @source %> &middot; <%= link_to 'Rules', source_rules_path(@source) %> &middot; <%= @title %>
     <%= link_to "Edit Rule", edit_source_rule_path(@rule.source, @rule), class: 'btn btn-mini' %>
-    <%= link_to "Delete Rule", [@rule.source, @rule], data: { confirm: "Are you sure you want to delete Rule #{@rule.name}?" }, method: :delete, class: 'btn btn-mini btn-danger' %>
+    <%= link_to "Delete Rule", [@rule.source, @rule], data: { confirm: "Are you sure you want to delete Rule #{@rule.name}?" }, method: :delete, class: 'btn btn-mini btn-danger-inverse' %>
   </h1>
 </div>
 
