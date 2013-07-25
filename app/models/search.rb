@@ -86,6 +86,7 @@ class Search < ActiveRecord::Base
     master_tables = resolvers.collect(&:tables).flatten.compact.uniq
     join_hash = source.join_conditions(master_tables, current_user)
     resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
+    resolver_conditions = "( #{resolver_conditions} )" unless resolver_conditions.blank?
     master_conditions = [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
 
     if master_tables.size > 0 and master_selects.size > 0

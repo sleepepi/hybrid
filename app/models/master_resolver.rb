@@ -91,6 +91,7 @@ class MasterResolver
     resolvers = generate_resolvers(source)
     join_hash = source.join_conditions(source_tables(source), @current_user)
     resolver_conditions = resolvers.collect(&:conditions_for_entire_search).join(' ')
+    resolver_conditions = "( #{resolver_conditions} )" unless resolver_conditions.blank?
     [join_hash[:result], resolver_conditions].select{|c| not c.blank?}.join(' and ')
   end
 
