@@ -3,40 +3,26 @@
 one:
   source: two
   variable: choices
-  # value: MyString
   table: table
   column: column1
-  # column_value: MyString
 
 two:
   source: two
   variable: choices
-  # value: MyString
   table: table
   column: column2
-  # column_value: MyString
 
 # three:
 #   source: two
-#   concept: one
-#   # value: MyString
+#   variable: one
 #   table: table
 #   column: column3
-#   # column_value: MyString
 
 numeric_with_units:
   source: two
   variable: numeric
   table: table
   column: column4
-
-# continuous_without_units:
-#   source: two
-#   concept: continuous
-#   # value: MyString
-#   table: table
-#   column: column5
-#   # column_value: MyString
 
 choices_with_values:
   source: two
@@ -46,11 +32,9 @@ choices_with_values:
 
 # datetime:
 #   source: two
-#   concept: datetime
-#   # value: MyString
+#   variable: datetime
 #   table: table
 #   column: column9
-#   # column_value: MyString
 
 identifier_table_one:
   source: two
@@ -67,58 +51,45 @@ identifier_table_two:
 
 # filelocator:
 #   source: two
-#   concept: filelocator
-#   # value: MyString
+#   variable: filelocator
 #   table: table
 #   column: column11
-#   # column_value: MyString
 
 # filelocatormapped:
 #   source: two
-#   concept: filelocator
-#   # value: MyString
+#   variable: filelocator
 #   table: table
 #   column: column12
-#   # column_value: MyString
 
 # freetext:
 #   source: two
-#   concept: freetext
-#   # value: MyString
+#   variable: freetext
 #   table: table
 #   column: column12
-#   # column_value: MyString
 
 # invalid:
 #   source: two
-#   concept: invalid
-#   # value: MyString
+#   variable: invalid
 #   table: table
 #   column: column13
-#   # column_value: MyString
 
 # no_concept:
 #   source: two
-#   # concept: MyString
+#   # variable: MyString
 #   table: table
 #   column: column14
-#   # column_value: MyString
 
 # continuous_with_formula:
 #   source: two
-#   concept: formula
-#   # value: MyString
+#   variable: formula
 #   table: table
 #   column: column16
-#   # column_value: MyString
 
 # continuous_with_units_and_linked:
 #   source: linked_source_b
-#   concept: continuous
-#   # value: MyString
+#   variable: continuous
 #   table: table
 #   column: column4
-#   # column_value: MyString
 
 calculation:
   source: fully_mapped_test_data_source
@@ -140,8 +111,6 @@ mapped_date:
 
 # mapped_with_human_units:
 #   source: fully_mapped_test_data_source
-#   concept: continuous_parent
-#   # value: MyString
+#   variable: continuous_parent
 #   table: table
 #   column: column11
-#   # column_value: MyString

@@ -1,9 +1,9 @@
 class MappingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_source_with_edit_data_source_mappings, only: [ :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :redirect_without_source,                   only: [ :info, :automap_popup, :show, :edit, :create, :update, :destroy ]
-  before_action :set_mapping,                               only: [ :info, :show, :edit, :update, :destroy ]
-  before_action :redirect_without_mapping,                  only: [ :info, :show, :edit, :update, :destroy ]
+  before_action :set_source_with_edit_data_source_mappings, only: [ :info, :automap_popup, :show, :create, :destroy ]
+  before_action :redirect_without_source,                   only: [ :info, :automap_popup, :show, :create, :destroy ]
+  before_action :set_mapping,                               only: [ :info, :show, :destroy ]
+  before_action :redirect_without_mapping,                  only: [ :info, :show, :destroy ]
 
   def automap_popup
   end
@@ -30,32 +30,9 @@ class MappingsController < ApplicationController
   def show
   end
 
-  # GET /mappings/1/edit
-  def edit
-  end
-
   # POST /mappings
   def create
     @mapping = @source.mappings.create(mapping_params)
-    render 'show'
-  end
-
-  # PATCH /mappings/1
-  def update
-    (mapping_params[:column_values] || []).each do |column_value_hash|
-      column_value = column_value_hash[:is_null] == 'true' ? nil : column_value_hash[:column_value]
-      value = column_value_hash[:value]
-      val_mapping = @source.mappings.where( table: @mapping.table, column: @mapping.column, column_value: (column_value == nil ? 'NULL' : column_value.to_s) ).first_or_create
-
-      value = value.blank? ? nil : value
-      if @mapping.concept
-        if Concept.find_by_id(value)
-          val_mapping.update( concept_id: value, value: nil )
-        else
-          val_mapping.update( concept_id: @mapping.concept_id, value: value )
-        end
-      end
-    end
     render 'show'
   end
 

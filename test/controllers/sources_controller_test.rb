@@ -68,7 +68,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should show table columns" do
-    post :table_columns, id: @source, format: 'js'
+    post :table_columns, id: @source, table: 'table', format: 'js'
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:columns)
     assert_not_nil assigns(:max_pages)
@@ -77,7 +77,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should show filtered table columns" do
-    post :table_columns, id: @source, filter_unmapped: '1', format: 'js'
+    post :table_columns, id: @source, table: 'table', filter_unmapped: '1', format: 'js'
     assert_not_nil assigns(:source)
     assert_not_nil assigns(:columns)
     assert_not_nil assigns(:max_pages)
@@ -86,7 +86,7 @@ class SourcesControllerTest < ActionController::TestCase
   end
 
   test "should not show table columns for invalid source" do
-    post :table_columns, id: -1, format: 'js'
+    post :table_columns, id: -1, table: 'table', format: 'js'
     assert_nil assigns(:source)
     assert_template 'mapping_privilege'
   end
