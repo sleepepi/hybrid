@@ -4,10 +4,6 @@
   <h1>
     <%= link_to 'Searches', searches_path %> &middot;
     <span id="search_<%= @search.id %>_name"><%= render partial: 'searches/name' %></span>
-    <%#= link_to "Copy Search", copy_search_path(@search), method: :post, id: 'copy_search_link', class: 'btn btn-mini' %>
-    <%#= link_to "History", searches_path, class: 'btn btn-mini' %>
-    <%#= link_to "New Search", new_search_path, id: 'new_search_link', class: 'btn btn-mini' %>
-    <%#= link_to "Matching", matching_path(cases_id: @search.id, controls_id: @search.id), class: 'btn btn-mini' %>
   </h1>
 </div>
 
@@ -22,7 +18,7 @@
     <label class="control-label">From</label>
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { search_id: @search.id } %>
-      <%= link_to 'Browse All Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-mini' %>
+      <%= link_to 'Browse All Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 
@@ -36,7 +32,7 @@
     <label class="control-label">With</label>
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag 'variable_search', '', tabindex: '2', data: { search_id: @search.id } %>
-      <%= link_to 'Browse All Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-mini' %>
+      <%= link_to 'Browse All Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 </form>
@@ -88,44 +84,6 @@
 <%= form_tag total_records_count_search_path(@search), method: :post, remote: true, id: 'search_form', style: 'display:inline', onsubmit: "showWaiting('#total_records_found_display', ' ', true)" do %>
 <% end %>
 
-<% if false %>
-
-<hr class="soften" style="margin: 20px 0px">
-
-<div class="row-fluid">
-  <div class="span3">
-    <h2 class="about-title" style="text-align:left">Result</h2>
-    <div id="total_records_found_display" class="records_found" style="font-weight: 300;font-size:30px;line-height:1"></div>
-    <span id="total_errors_found" class="errors_found"></span>
-  </div>
-
-  <div class="span3">
-    <h2 class="about-title" style="text-align:left">
-      Datasets
-      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new dataset', data: { object: 'modal-show', target: "#search_#{@search.id}_dataset_popup" } %>
-    </h2>
-    <div id="search_<%= @search.id %>_datasets_container"><%= render partial: 'reports/datasets' %></div>
-  </div>
-
-  <div class="span3">
-    <h2 class="about-title" style="text-align:left">
-      Reports
-      <%= link_to 'create', '#', class: 'btn btn-mini btn-primary', rel: 'tooltip', title: 'Create a new report', data: { object: 'modal-show', target: '#report_popup' }, id: 'add_report_btn' %>
-    </h2>
-    <div id="reports_container"><%= render partial: 'reports/reports' %></div>
-  </div>
-
-  <div class="span3">
-    <h2 class="about-title" style="text-align:left">Data Files</h2>
-    <div id="query_file_types"><%= render partial: 'searches/file_types' %></div>
-  </div>
-</div>
-<% end %>
-
 <div id="information" style="display:none"></div>
 
 <div id="inlaid_report"></div>
-
-<%= render partial: 'reports/report_modal' %>
-<%= render partial: 'reports/dataset_modal' %>
-<%= render partial: 'source_file_types/modal' %>

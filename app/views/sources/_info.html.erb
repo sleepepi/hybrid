@@ -15,17 +15,6 @@
 <% if @source.user_has_action?(current_user, "view data source general information") or @source.user_has_action?(current_user, "get count") %>
   <h4>Summary Counts</h4>
   <ul>
-    <% @source.variables.where(variable_type: 'identifier').order('display_name').uniq.each do |variable| %>
-      <% tables = @source.variable_tables(variable) %>
-      <% join_conditions_hash = @source.join_conditions(tables, current_user) %>
-      <% join_conditions = join_conditions_hash[:result] %>
-      <% if join_conditions_hash[:error].blank? %>
-        <% result_hash = @source.count(current_user, [], "1=1", tables, join_conditions, variable) %>
-        <% if result_hash[:error].blank? %>
-          <li><%= pluralize(result_hash[:result], variable.display_name) %></li>
-        <% end %>
-      <% end %>
-    <% end %>
     <li><%= pluralize @source.mappings.size, 'Mapped Variable' %></li>
   </ul>
 
@@ -61,11 +50,10 @@
 <% Rule::ACTION_GROUPS.each_with_index do |(rule_group, rules), index| %>
   <ul style="list-style-type: none;margin-left: 0px;">
     <li>
-      <%= check_box_tag rule_group, '1', false, disabled: true, class: "rule_group_#{index}_parent" %>
       <b><%= rule_group %></b>
       <ul style="list-style-type: none;">
         <% rules.each do |action| %>
-          <li style="<%= @source.user_has_action?(current_user, action) ? 'color:green;' : 'text-decoration:line-through' %>"><%= check_box_tag "rules[#{action.gsub(' ', '_')}]", '1', @source.user_has_action?(current_user, action), disabled: true, class: "rule_group_#{index}" %> <%= action %></li>
+          <li class="<%= 'muted' unless @source.user_has_action?(current_user, action) %>"><%= simple_check @source.user_has_action?(current_user, action) %> <%= action %></li>
         <% end %>
       </ul>
     </li>

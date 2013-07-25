@@ -151,10 +151,6 @@ class Source < ActiveRecord::Base
     return false
   end
 
-  def variable_tables(variable)
-    self.mappings.where( variable_id: variable.id ).pluck(:table).uniq
-  end
-
   def join_conditions(tables, current_user)
     result = []
     errors = []
@@ -181,11 +177,6 @@ class Source < ActiveRecord::Base
       end
     end
     { result: result, errors: errors }
-  end
-
-
-  def count(current_user, criteria, conditions, tables, join_conditions, variable)
-    Aqueduct::Builder.wrapper(self, current_user).count(criteria, conditions, tables, join_conditions, variable ? variable.mapped_name(current_user, self) : nil)
   end
 
   def table_columns_mapped(current_user, table)

@@ -22,7 +22,7 @@
 
   <% @sources.each do |source| %>
     <tr>
-      <td style="text-align:center"><%= check_box_tag :source, :visible, source.visible?, disabled: true %></td>
+      <td style="text-align:center"><%= simple_check source.visible? %></td>
       <td><%= link_to_if (source.user_has_action_group?(current_user, "All Read") or source.user_has_action_group?(current_user, "All Write")),  source.name, source %></td>
       <td><%= link_to source.user.name, source.user if source.user %></td>
       <td><%= source.wrapper %></td>

@@ -33,26 +33,11 @@
   </div>
 </div>
 
+<%= simple_markdown @source.description %>
+
 <div class="row">
-  <div class="span4">
-    <div class="page-header">
-      <h3>General Information</h3>
-    </div>
-
-    <dl class="dl-horizontal">
-      <dt>Creator</dt>
-      <dd><%= link_to @source.user.name, @source.user if @source.user %></dd>
-
-      <dt>Visible</dt>
-      <dd><%= simple_check @source.visible? %></dd>
-
-      <dt>Description</dt>
-      <dd><%= sanitize @source.description, attributes: %w(href target) %></dd>
-    </dl>
-  </div>
-
   <% if @source.user_has_action?(current_user, "edit data source connection information") %>
-    <div class="span4">
+    <div class="span6">
       <div class="page-header">
         <h3>Data Source: <%= @source.human_wrapper %></h3>
       </div>
@@ -71,7 +56,7 @@
   <% end %>
 
   <% if @source.has_repository?(current_user) %>
-    <div class="span4">
+    <div class="span6">
       <div class="page-header">
         <h3>File Repository: <%= @source.human_repository %></h3>
       </div>
