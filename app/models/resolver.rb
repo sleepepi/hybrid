@@ -184,6 +184,8 @@ class Resolver
             all_conditions << "#{mapped_name} IS NULL"
           elsif val == '1 = 0' or (range.size == 1 and range[0].blank?) or (range.size == 2 and range[0].blank? and range[1].blank?)
             all_conditions << '1 = 0'
+          elsif val == '1 = 1'
+            all_conditions << '1 = 1'
           elsif criterium.variable.variable_type == 'date'
             if range[0].blank? # From is empty, so every date less or equal to the to date
               all_conditions << "DATE(#{mapped_name}) <= DATE('#{range[1]}')"

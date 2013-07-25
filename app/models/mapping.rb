@@ -44,7 +44,7 @@ class Mapping < ActiveRecord::Base
     result = []
     criterium_value = criterium.value
 
-    return ['1 = 0'] if criterium_value.blank?
+    return ['1 = 1'] if criterium_value.blank?
 
     case self.variable.variable_type when 'date', 'integer', 'numeric'
       result = criterium_value.to_s.gsub(/[^0-9\.\,><=\[\]\(\)\:]/, '').split(',')

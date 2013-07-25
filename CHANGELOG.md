@@ -8,6 +8,7 @@
   - This allows the same concept to be mapped in multiple tables
 - Modified interface for selecting boolean and categorical search criteria
 - Creating and editing a source join now provides underlying table and column information
+- Adding new criteria to search now shows the total count available without specifying a value
 - Use of Ruby 2.0.0-p247 is now recommended
 - **Gem Changes**
   - Updated to rails 4.0.0
