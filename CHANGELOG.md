@@ -11,7 +11,7 @@
 - Use of Ruby 2.0.0-p247 is now recommended
 - **Gem Changes**
   - Updated to rails 4.0.0
-  - Updated to contour 2.0.0.rc5
+  - Updated to contour 2.0.0.rc6
 
 ### Refactoring
 - Renamed queries to searches
