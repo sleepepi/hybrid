@@ -27,7 +27,7 @@
             &plusmn; <%= "%0.2f" % std_dev(values) %>
           <% end %>
         </td>
-        <td><%= values.sort[(values.size / 2).to_i] %></td>
+        <td><%= "%0.2f" % values.sort[(values.size / 2).to_i] %></td>
         <td><%= "%0.2f" % (values.min) %></td>
         <td><%= "%0.2f" % (values.max) %></td>
         <td><%= missing_values == 0 ? '-' : missing_values %></td>
