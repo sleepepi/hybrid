@@ -184,8 +184,8 @@ class Source < ActiveRecord::Base
   end
 
 
-  def count(current_user, criteria, conditions, tables, join_conditions, select_identifier_concept)
-    Aqueduct::Builder.wrapper(self, current_user).count(criteria, conditions, tables, join_conditions, select_identifier_concept ? select_identifier_concept.mapped_name(current_user, self) : nil)
+  def count(current_user, criteria, conditions, tables, join_conditions, variable)
+    Aqueduct::Builder.wrapper(self, current_user).count(criteria, conditions, tables, join_conditions, variable ? variable.mapped_name(current_user, self) : nil)
   end
 
   def table_columns_mapped(current_user, table)

@@ -12,7 +12,6 @@ class Search < ActiveRecord::Base
 
   # Model Relationships
   belongs_to :user
-  belongs_to :identifier_concept, class_name: "Concept"
 
   has_many :criteria, -> { where( deleted: false ).order('position') }
   has_many :concepts, -> { order "criteria.position" }, through: :criteria

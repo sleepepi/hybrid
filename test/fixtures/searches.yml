@@ -6,7 +6,6 @@ one:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 two:
   user: admin
@@ -14,7 +13,6 @@ two:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 three:
   user: valid
@@ -22,7 +20,6 @@ three:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 search_with_sources:
   user: valid
@@ -30,7 +27,6 @@ search_with_sources:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 search_across_linked_sources:
   user: admin
@@ -38,7 +34,6 @@ search_across_linked_sources:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 search_with_negated_concepts:
   user: valid
@@ -46,7 +41,6 @@ search_with_negated_concepts:
   # description:
   deleted: false
   negated: false
-  identifier_concept: identifier
 
 search_with_test_data:
   user: admin
@@ -54,7 +48,6 @@ search_with_test_data:
   # description:
   deleted: false
   negated: false
-  # identifier_concept: identifier
 
 search_with_history:
   user: valid
@@ -62,7 +55,6 @@ search_with_history:
   # description:
   deleted: false
   negated: false
-  # identifier_concept: identifier
   history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium) %>}]
   history_position: 1
 
@@ -72,7 +64,6 @@ search_with_undone_history:
   # description:
   deleted: false
   negated: false
-  # identifier_concept: identifier
   history: [{action: 'create', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_two) %>}]
   history_position: 0
 
@@ -82,7 +73,6 @@ search_with_history_update_change:
   # description:
   deleted: false
   negated: false
-  # identifier_concept: identifier
   history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_update_change) %>, changes: {value: [NULL, 20]}}]
   history_position: 1
 
@@ -92,6 +82,5 @@ search_with_undone_history_update_change:
   # description:
   deleted: false
   negated: false
-  # identifier_concept: identifier
   history: [{action: 'update', id: <%= ActiveRecord::FixtureSet.identify(:history_criterium_two_update_change) %>, changes: {value: [NULL, 20]}}]
   history_position: 0
