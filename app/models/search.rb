@@ -29,6 +29,10 @@ class Search < ActiveRecord::Base
 
   # Search Methods
 
+  def variables
+    Variable.current.with_source(self.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq)
+  end
+
   def generate_resolvers(current_user, source, temp_criteria = self.criteria)
     temp_criteria.collect{|qc| Resolver.new(qc, source, current_user)}
   end

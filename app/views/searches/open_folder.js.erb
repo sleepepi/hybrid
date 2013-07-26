@@ -5,3 +5,36 @@
   $("#<%= params[:folder_id] %>_link").html("<%= escape_javascript( render partial: 'variables/folder_link', locals: { folder_id: params[:folder_id], folder: folder_display_name } ) %>");
   $("#<%= params[:folder_id] %>_content").html("<%= escape_javascript( render partial: 'variables/folders', locals: { folder: params[:folder] } ) %>");
 <% end %>
+
+<% if @search.variables.search(params[:search]).size > 0 and not params[:search].blank? %>
+
+  <% @variable = @search.variables.search(params[:search]).order('folder, commonly_used DESC, display_name').first %>
+  <% @defaults = { title: @variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', legend: 'right' } %>
+  <% case @variable.variable_type when 'numeric', 'integer', 'date' %>
+    <% @defaults[:height] = '300px' %>
+    <% @defaults[:units] = @variable.units %>
+    <% @defaults[:legend] = 'none' %>
+  <% when 'choices' %>
+    <% @defaults[:height] = '250px' %>
+  <% end %>
+  <% @chart_element_id = "variable_chart_#{@variable.id}" %>
+  <% result_hash = @variable.graph_values(current_user) %>
+  <% @values = result_hash[:values] %>
+  <% @categories = result_hash[:categories] %>
+
+  $("#variable_info").html("");
+  $("#variable_info").append("<%= escape_javascript( render partial: 'variables/info', locals: { variable: @variable } ) %>");
+  $("#variable_info").append("<%= escape_javascript( render partial: 'variables/about', locals: { variable: @variable } ) %>");
+  $("#variable_info").append("<%= escape_javascript( render partial: 'variables/add', locals: { variable: @variable } ) %>");
+
+  $("#variable_<%= @variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
+
+  <% case @variable.chart_type when 'column' %>
+    drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
+  <% when 'pie' %>
+    drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
+  <% end %>
+
+  loadSensitiveVariablePopover();
+
+<% end %>

@@ -1,4 +1,4 @@
-<% variable_scope = Variable.current.with_source(@search.sources.collect{|s| s.all_linked_sources.pluck(:id) + [s.id]}.flatten.uniq) %>
+<% variable_scope = @search.variables %>
 
 <% variable_scope_filter_by_search = ( params[:search].blank? ? Variable.none : variable_scope.search(params[:search]) ) %>
 <% discovered_variable_ids = variable_scope_filter_by_search.pluck(:id) %>
@@ -30,7 +30,7 @@
 <% folder_variable_scope = discovered_variable_ids.size > 0 ? variable_scope_filter_by_search : variable_scope %>
 
 <div>
-  <% folder_variable_scope.with_exact_folder(folder).each do |variable| %>
+  <% folder_variable_scope.with_exact_folder(folder).order('commonly_used DESC, display_name').each do |variable| %>
     <div class="<%= 'common' if variable.commonly_used? %>">
       <% link_name = discovered_variable_ids.include?(variable.id) ? "<span class='highlight'>#{variable.display_name}</span>".html_safe : variable.display_name %>
       <%= link_to link_name, dictionary_variable_path(variable.dictionary, variable, search_id: @search.id), remote: true %>

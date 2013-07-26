@@ -61,7 +61,7 @@ class CriteriaController < ApplicationController
   def edit
     @criterium = @search.criteria.find_by_id(params[:id])
 
-    @defaults = { title: @criterium.variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', title: '', legend: 'right' }
+    @defaults = { title: @criterium.variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', legend: 'right' }
     case @criterium.variable.variable_type when 'numeric', 'integer', 'date'
       @defaults[:height] = '300px'
       @defaults[:units] = @criterium.variable.units

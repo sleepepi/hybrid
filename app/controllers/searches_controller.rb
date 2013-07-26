@@ -14,7 +14,7 @@ class SearchesController < ApplicationController
   end
 
   def autocomplete
-    @variables = Variable.current.search(params[:search]).where( dictionary_id: @search.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.variables.pluck(:dictionary_id).uniq}.flatten.uniq ).page(params[:page]).per(10)
+    @variables = @search.variables.search(params[:search]).page(params[:page]).per(10)
     render json: @variables.group_by{|v| v.folder}.collect{|folder, variables| { text: folder, commonly_used: true, children: variables.collect{|v| { id: v.id, text: v.display_name, commonly_used: v.commonly_used }}}}
   end
 

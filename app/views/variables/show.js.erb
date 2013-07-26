@@ -1,4 +1,4 @@
-<% @defaults = { title: @variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', title: '', legend: 'right' } %>
+<% @defaults = { title: @variable.display_name, width: '100%', make_selection: true, height: '240px', units: '', legend: 'right' } %>
 <% case @variable.variable_type when 'numeric', 'integer', 'date' %>
   <% @defaults[:height] = '300px' %>
   <% @defaults[:units] = @variable.units %>
