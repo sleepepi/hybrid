@@ -1,5 +1,6 @@
 $("#information").html("<%= escape_javascript(render("total_records_count")) %>");
 
+$('#total_records_found_display').html('');
 $(".errors_found").html("");
 
 <% @overall_totals.each do |grouping,totals| %>
