@@ -13,16 +13,6 @@ class Resolver
     set_selects
   end
 
-  def count
-    return 0 if tables.size == 0
-
-    wrapper = Aqueduct::Builder.wrapper(source, current_user)
-    wrapper.connect
-    (results, number_of_rows) = wrapper.query(sql_conditions)
-    wrapper.disconnect
-    results.to_a.first[0]
-  end
-
   def counts
     return [] if tables.size == 0
 
@@ -68,7 +58,7 @@ class Resolver
     end
 
     def all_sources
-      [criterium.mapping.source, source].uniq.compact
+      [(criterium.mapping ? criterium.mapping.source : nil), source].uniq.compact
     end
 
     def set_identifier

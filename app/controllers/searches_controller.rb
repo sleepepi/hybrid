@@ -14,15 +14,7 @@ class SearchesController < ApplicationController
   end
 
   def autocomplete
-    @search = current_user.searches.find_by_id(params[:id])
-
-    variable_scope = Variable.current.search(params[:search]).where( dictionary_id: @search.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.variables.pluck(:dictionary_id).uniq}.flatten.uniq )
-
-    @variables = variable_scope.page(params[:page]).per(10)
-      # @order = scrub_order(Concept, params[:order], "concepts.search_name")
-      # concept_scope = concept_scope.order("(concepts.folder IS NULL or concepts.folder = '') ASC, concepts.folder ASC, " + @order)
-      # @concepts = concept_scope.page(params[:page]).per(10)
-
+    @variables = Variable.current.search(params[:search]).where( dictionary_id: @search.sources.collect{|s| s.all_linked_sources_and_self}.flatten.uniq.collect{|s| s.variables.pluck(:dictionary_id).uniq}.flatten.uniq ).page(params[:page]).per(10)
     render json: @variables.group_by{|v| v.folder}.collect{|folder, variables| { text: folder, commonly_used: true, children: variables.collect{|v| { id: v.id, text: v.display_name, commonly_used: v.commonly_used }}}}
   end
 

@@ -1,14 +1,18 @@
 $("[data-object~='contour_modal_container']").html("<%= escape_javascript(render("criteria/edit")) %>");
 showContourModal();
 
-$("#variable_<%= @criterium.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @criterium.variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
+<% if @criterium.variable.mappings.count == 0 %>
+  $("#variable_<%= @criterium.variable.id %>_graph").html('This variable is not mapped in any data source.')
+<% else %>
 
-<% case @criterium.variable.chart_type when 'column' %>
-  drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
-<% when 'pie' %>
-  drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
+  $("#variable_<%= @criterium.variable.id %>_graph").html('<div id="<%= @chart_element_id %>_qc_popup" <% if @criterium.variable.chart_type %>style="position:relative;width: <%= @defaults[:width] %>;height: <%= @defaults[:height] %>"<% end %>></div>');
+
+  <% case @criterium.variable.chart_type when 'column' %>
+    drawHighChartHistogramChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>, <%= @categories.to_json.html_safe %>);
+  <% when 'pie' %>
+    drawHighChartPieChart('<%= @chart_element_id %>_qc_popup', <%= @values.to_json.html_safe %>, <%= @defaults.to_json.html_safe %>);
+  <% end %>
 <% end %>
-
 
 $('.datepicker').datepicker({ showOtherMonths: true, selectOtherMonths: true, changeMonth: true, changeYear: true });
 
