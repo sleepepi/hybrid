@@ -1,4 +1,4 @@
-## 0.15.0
+## 0.15.0 (July 26, 2013)
 
 ### Enhancements
 - PostgreSQL is now the database of choice for the Sleep Portal
