@@ -4,17 +4,17 @@
 
 <hr class="soften" style="margin-top:5px;margin-bottom:35px"/>
 
-<div class="row-fluid">
-  <div class="span6">
+<div class="row">
+  <div class="col-md-6">
     <%= form_tag open_folder_search_path(@search), remote: true, method: :get, id: "concept_search_form" do %>
-      <%= text_field_tag 'variable_search', params[:concept_search], class: 'span12', placeholder: 'Enter variable name or navigate folders.', name: 'search' %>
+      <%= text_field_tag 'variable_search', params[:concept_search], class: 'col-md-12', placeholder: 'Enter variable name or navigate folders.', name: 'search' %>
     <% end %>
     <div id="variable_folders">
       <%= render partial: 'variables/folders', locals: { folder: nil } %>
     </div>
   </div>
 
-  <div class="span6">
+  <div class="col-md-6">
     <div id="variable_info">
     </div>
   </div>

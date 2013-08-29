@@ -6,13 +6,13 @@
 
 <hr class="soften" style="margin-top:5px;margin-bottom:35px"/>
 
-<div class="row-fluid">
-  <div class="span6">
+<div class="row">
+  <div class="col-md-6">
     <%= render partial: 'criteria/form' %>
     <%= render partial: 'variables/about', locals: { variable: @criterium.variable } %>
   </div>
 
-  <div class="span6">
+  <div class="col-md-6">
     <div id="variable-info">
       <%= render partial: 'variables/info', locals: { variable: @criterium.variable } %>
     </div>

@@ -1,7 +1,7 @@
 <% @title = "About #{DEFAULT_APP_NAME}" %>
 
 <div class="row" style="margin-top:54px">
-  <div class="span12">
+  <div class="col-md-12">
     <h1 class="about-title"><%= @title %></h1>
     <p class="about-tagline">Visit our <%= link_to 'online community', ABOUT_PAGE_FORUM, target: '_blank' %> or contact us <%= mail_to ABOUT_PAGE_CONTACT, 'via email', target: '_blank', subject: "#{DEFAULT_APP_NAME} Question" %>.</p>
     <p class="about-signup"><%= link_to 'Sign Me Up', new_user_registration_path, class: "btn btn-primary btn-large" %></p>
@@ -13,7 +13,7 @@
 <p class="about-description">The <%= DEFAULT_APP_NAME %> is a <%= link_to 'free to use*', 'https://github.com/sleepepi/sleepportal/blob/master/LICENSE', rel: 'tooltip', data: { title: 'Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License' } %> and <%= link_to 'open source', 'https://github.com/sleepepi/sleepportal', rel: 'tooltip', data: { title: 'Source code freely available on GitHub' } %> web application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. The <%= DEFAULT_APP_NAME %> also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. The <%= DEFAULT_APP_NAME %> uses a data dictionary approach to define data and database relationships.</p>
 
 <div class="row">
-  <div class="span4">
+  <div class="col-md-4">
     <h2 class="about-title">Interactive Search</h2>
     <ul>
       <li>See interactive counts.</li>
@@ -21,14 +21,14 @@
       <li>Longitudinal searches and searches across multiple data sources.</li>
     </ul>
   </div>
-  <div class="span4">
+  <div class="col-md-4">
     <h2 class="about-title">Exportable Datasets</h2>
     <ul>
       <li>Filter and export datasets for offline statistical analysis.</li>
       <li>Download numerous large files associated with your search with a single click.</li>
     </ul>
   </div>
-  <div class="span4">
+  <div class="col-md-4">
     <h2 class="about-title">Dynamic Reports</h2>
     <ul>
       <li>Create and download customizable summary reports.</li>

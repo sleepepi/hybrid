@@ -4,10 +4,10 @@
   <br />
 <% elsif @report.is_dataset? %>
   <div class="row">
-    <div class="span6">
+    <div class="col-md-6">
       <%= link_to 'Download CSV', get_csv_report_path(@report, search_id: @search.id), method: :post, class: 'btn btn-mini', target: '_blank' %>
       <%= params[:report_id] = @report.id; params[:add_report_id] = @report.id; render partial: 'concepts/folders' %>
     </div>
-    <div class="span6">
+    <div class="col-md-6">
   </div>
 <% end %>
