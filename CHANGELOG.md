@@ -4,6 +4,7 @@
 - **Gem Changes**
   - Updated to contour 2.1.0.beta17
   - Updated to pg 0.16.0 and aqueduct-postgresql 0.2.2
+  - Updated to mysql 0.3.13
 
 ## 0.15.0 (July 26, 2013)
 
