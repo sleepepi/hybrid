@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails',                '4.0.0'
 
 # Database Adapter
-gem 'pg',                   '0.15.1'
+gem 'pg',                   '0.16.0'
 gem 'thin',                 '~> 1.5.0',           platforms: [ :mswin, :mingw ]
 gem 'eventmachine',         '~> 1.0.0',           platforms: [ :mswin, :mingw ]
 
@@ -18,7 +18,7 @@ gem 'aqueduct',             '~> 0.2.0'
 gem 'aqueduct-elastic',     '~> 0.2.0'
 gem 'aqueduct-ftp',         '~> 0.2.0'
 gem 'aqueduct-mounted',     '~> 0.2.0'
-gem 'aqueduct-postgresql',  '~> 0.2.1'
+gem 'aqueduct-postgresql',  '~> 0.2.2'
 gem 'aqueduct-mysql',       '~> 0.2.1'
 # Install instructions for Windows: http://blog.mmediasys.com/2011/07/07/installing-mysql-on-windows-7-x64-and-using-ruby-with-it/
 gem 'mysql2',               '0.3.12'
