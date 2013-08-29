@@ -2,7 +2,7 @@
   <% result_hash = @report.finalize_report_table(current_user) %>
 
   <% if result_hash[:error].blank? %>
-    <%= link_to 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'btn' %><br /><br />
+    <%= link_to 'Download Report', get_table_report_path(@report), method: :post, target: '_blank', class: 'btn btn-default' %><br /><br />
     <table class="table table-hover">
       <thead>
         <tr>

@@ -18,9 +18,9 @@
   <div style="clear:both"></div>
   <% end %>
 
-  <%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_ids: params[:criteria_ids], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn' %>
+  <%= link_to 'Download CSV', matching_path(format: 'csv', cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_ids: params[:criteria_ids], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn btn-default' %>
 
-  <%= link_to 'Copy Configuration to URL Bar', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_ids: params[:criteria_ids], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn' %>
+  <%= link_to 'Copy Configuration to URL Bar', matching_path(cases_id: params[:cases_id], controls_id: params[:controls_id], criteria_ids: params[:criteria_ids], variable_ids: params[:variable_ids], controls_per_case: @controls_per_case), class: 'btn btn-default' %>
 
 
   <hr class="soften" style="margin: 20px 0px">
