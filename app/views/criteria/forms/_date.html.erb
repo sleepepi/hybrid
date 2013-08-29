@@ -1,12 +1,12 @@
 <div class="form-group">
   <%= label_tag :start_date, nil, class: 'col-md-2 control-label' %>
   <div class="col-md-10">
-    <%= text_field_tag :start_date, (@criterium.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@criterium.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+    <%= text_field_tag :start_date, (@criterium.value.to_s.split(":")[0].blank? ? "" : Date.strptime(@criterium.value.to_s.split(":")[0], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker form-control' %>
   </div>
 </div>
 <div class="form-group">
   <%= label_tag :end_date, nil, class: 'col-md-2 control-label' %>
   <div class="col-md-10">
-    <%= text_field_tag :end_date, (@criterium.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@criterium.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker' %>
+    <%= text_field_tag :end_date, (@criterium.value.to_s.split(":")[1].blank? ? "" : Date.strptime(@criterium.value.to_s.split(":")[1], "%Y-%m-%d").strftime("%m/%d/%Y")), class: 'datepicker form-control' %>
   </div>
 </div>
