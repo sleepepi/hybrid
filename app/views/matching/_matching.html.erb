@@ -70,12 +70,12 @@
               <% counts.each_with_index do |count, count_index| %>
                 <td class="<%= (type == 'match' and name == "Controls" and case_value_counts[count_index] != 0 and count == 0) ? 'error' : (type == 'match' and name == "Controls" and case_value_counts[count_index] * @controls_per_case != count ? 'warning' : '') %>">
                   <span style="background-color: <%= sliceColors[count_index % sliceColors.size] %>">&nbsp;</span> <%= count %>
-                  <% if type == 'match' and name == "Controls" and (case_value_counts[count_index] * @controls_per_case != count or (case_value_counts[count_index] != 0 and count == 0)) %><span rel="tooltip" title="&lt; <%= case_value_counts[count_index] * @controls_per_case %>" data-placement="right"><i class="icon-exclamation-sign"></i></span><% end %>
+                  <% if type == 'match' and name == "Controls" and (case_value_counts[count_index] * @controls_per_case != count or (case_value_counts[count_index] != 0 and count == 0)) %><span rel="tooltip" title="&lt; <%= case_value_counts[count_index] * @controls_per_case %>" data-placement="right"><span class="glyphicon glyphicon-exclamation-sign"></span></span><% end %>
                 </td>
               <% end %>
               <td class="<%= (type == 'match' and name == "Controls" and case_values.count != 0 and values.count == 0) ? 'error' : (type == 'match' and name == "Controls" and case_values.count * @controls_per_case != values.count ? 'warning' : '') %>">
                 <%= values.count %>
-                <% if type == 'match' and name == "Controls" and (case_values.count * @controls_per_case != values.count or (case_values.count != 0 and values.count == 0)) %><span rel="tooltip" title="&lt; <%= case_values.count * @controls_per_case %>" data-placement="right"><i class="icon-exclamation-sign"></i></span><% end %>
+                <% if type == 'match' and name == "Controls" and (case_values.count * @controls_per_case != values.count or (case_values.count != 0 and values.count == 0)) %><span rel="tooltip" title="&lt; <%= case_values.count * @controls_per_case %>" data-placement="right"><span class="glypicon glyphicon-exclamation-sign"></span></span><% end %>
               </td>
             </tr>
             <% end %>

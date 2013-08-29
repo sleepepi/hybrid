@@ -13,7 +13,7 @@
       <%= render partial: 'variables/folder_link', locals: { folder_id: folder_id, folder: folder_display_name } %>
     <% else %>
       <%= link_to open_folder_search_path(@search, folder: folder_path, folder_id: folder_id), method: :get, remote: true, style: "text-decoration:none" do %>
-        <i class="icon-folder-close"></i>
+        <span class="glyphicon glyphicon-folder-close"></span>
         <span class="nolink"><%= folder_display_name %></span>
       <% end %>
     <% end %>

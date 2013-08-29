@@ -14,7 +14,7 @@ jQuery ->
       folder_id = $(this).data('folder-id')
       $("##{folder_id}_content").toggle()
       if $("##{folder_id}_content").is(':visible')
-        $("##{folder_id}_link_img").attr('class', 'icon-folder-open')
+        $("##{folder_id}_link_img").attr('class', 'glyphicon glyphicon-folder-open')
       else
-        $("##{folder_id}_link_img").attr('class', 'icon-folder-close')
+        $("##{folder_id}_link_img").attr('class', 'glyphicon glyphicon-folder-close')
     )

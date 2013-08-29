@@ -2,7 +2,7 @@
 
 <% if file_types.blank? %>
   <% if @search.sources.size > 0 %>
-    <i class="icon-question-sign"></i>
+    <span class="glyphicon glyphicon-question-sign"></span>
     <span class="quiet">No files available for selected <%= @search.sources.size > 1 ? 'source'.pluralize : 'source' %>.</span>
   <% end %>
 <% else %>
