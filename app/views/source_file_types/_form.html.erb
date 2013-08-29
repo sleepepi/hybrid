@@ -19,7 +19,7 @@
 
   <div class="control-group">
     <%= f.label :file_type_id, nil, class: 'col-md-2 control-label' %>
-    <div class="controls">
+    <div class="col-md-10">
       <%= f.select :file_type_id, options_for_select([['---', nil]] + (FileType.available - @source.file_types + (@source_file_type.file_type ? [@source_file_type.file_type] : [])).collect{|ft| [ft.name_and_extension, ft.id]}, @source_file_type.file_type_id) %>
     </div>
   </div>

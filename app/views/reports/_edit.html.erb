@@ -10,7 +10,7 @@
 
   <div class="control-group">
     <label class="control-label">With</label>
-    <div class="controls">
+    <div class="col-md-10">
       <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'report-concept-typeahead', search_id: @search.id }, style: 'width:350px'  %>
       <%= link_to 'more', search_folder_concepts_path(popup: true, search_id: @search.id, add_report_id: @report.id), method: :post, remote: true, class: 'btn btn-mini', rel: 'tooltip', title: 'Browse more concepts', data: { placement: 'right' } %>
     </div>

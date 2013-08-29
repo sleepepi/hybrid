@@ -1,21 +1,21 @@
 <%= form_tag matching_path, method: :get, remote: true, class: 'form-horizontal', data: { object: 'form-load' }, id: 'matching-form' do %>
   <div class="control-group">
     <div class="control-label">Cases</div>
-    <div class="controls">
+    <div class="col-md-10">
       <%= select_tag :cases_id, options_for_select([['---', nil]] + current_user.all_searches.order('searches.created_at DESC').collect{|q| [q.name, q.id]}, @cases ? @cases.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Controls</div>
-    <div class="controls">
+    <div class="col-md-10">
       <%= select_tag :controls_id, options_for_select([['---', nil]] + current_user.all_searches.order('searches.created_at DESC').collect{|q| [q.name, q.id]}, @controls ? @controls.id : nil), data: { object: 'matching-form-option' } %>
     </div>
   </div>
 
   <div class="control-group">
     <div class="control-label">Match on</div>
-    <div class="controls">
+    <div class="col-md-10">
       <div id="matching_criteria_ids">
         <% (params[:criteria_ids].blank? ? [nil,nil,nil] : params[:criteria_ids]).each do |criteria_id| %>
           <%= render partial: 'matching/criteria', locals: { criteria_id: criteria_id } %>
@@ -29,7 +29,7 @@
 
   <div class="control-group">
     <div class="control-label">Include in Dataset</div>
-    <div class="controls">
+    <div class="col-md-10">
       <div id="dataset_variable_ids">
         <% (params[:variable_ids].blank? ? [nil] : params[:variable_ids]).each do |variable_id| %>
           <%= render partial: 'matching/variable_selection', locals: { variable_id: variable_id } %>
