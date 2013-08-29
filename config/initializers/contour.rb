@@ -24,7 +24,13 @@ Contour.setup do |config|
     },
     {
       name: 'image_tag(current_user.avatar_url(18, "blank"))+" "+current_user.name', eval: true, display: 'signed_in', path: 'settings_path', position: 'right',
-      links: [{ html: '"<div class=\"small\" style=\"color:#bbb\">"+current_user.email+"</div>"', eval: true },
+      links: [{ name: "About #{DEFAULT_APP_NAME} v#{SleepPortal::VERSION::STRING}", path: 'about_path' },
+              { divider: true },
+              { header: 'Administrative', condition: 'current_user.system_admin?' },
+              { name: 'Users', path: 'users_path', condition: 'current_user.system_admin?' },
+              { divider: true, condition: 'current_user.system_admin?' },
+              { header: 'current_user.email', eval: true },
+              { html: 'Settings', path: 'settings_path' },
               { name: 'Authentications', path: 'authentications_path', condition: 'not PROVIDERS.blank?' },
               { divider: true },
               { name: 'Logout', path: 'destroy_user_session_path' }]
@@ -34,9 +40,6 @@ Contour.setup do |config|
     },
     {
       name: 'Sources', display: 'signed_in', path: 'sources_path', position: 'left', condition: 'current_user.system_admin?'
-    },
-    {
-      name: 'Users', display: 'signed_in', path: 'users_path', position: 'left', condition: 'current_user.system_admin?'
     }
   ]
 

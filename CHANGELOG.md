@@ -1,6 +1,7 @@
 ## 0.15.1
 
 ### Enhancements
+- Reorganized Menu
 - **Gem Changes**
   - Updated to contour 2.1.0.beta17
   - Updated to pg 0.16.0 and aqueduct-postgresql 0.2.2
