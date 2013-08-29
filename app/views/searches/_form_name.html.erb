@@ -1,3 +1,3 @@
 <%= text_field :search, :name, class: "input-large", placeholder: "Enter a Name for your Search", style: 'margin-bottom:0px', data: { search_id: @search.id } %>
 <%= link_to 'Save Name', '#', class: 'btn btn-primary btn-xs', data: { object: 'save_search_name' } %>
-<%= link_to 'Cancel', @search, method: :get, remote: true, class: 'btn btn-xs' %>
+<%= link_to 'Cancel', @search, method: :get, remote: true, class: 'btn btn-xs btn-default' %>

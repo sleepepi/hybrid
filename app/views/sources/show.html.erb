@@ -5,12 +5,12 @@
   </h1>
   <div class="btn-toolbar">
     <% if @source.user_has_action?(current_user, "edit data source connection information") %>
-      <div class="btn-group"><%= link_to "Edit Source", edit_source_path(@source), class: 'btn btn-xs' %></div>
+      <div class="btn-group"><%= link_to "Edit Source", edit_source_path(@source), class: 'btn btn-xs btn-default' %></div>
       <div class="btn-group"><%= link_to "Delete Source", @source, data: { confirm: "Are you sure you want to delete Source #{@source.name}?" }, method: :delete, class: 'btn btn-xs btn-danger-inverse' %></div>
     <% end %>
     <% if @source.user_has_action?(current_user, "edit data source rules") %>
       <div class="btn-group">
-        <%= link_to "Rules", source_rules_path(source_id: @source.id), class: 'btn btn-xs' %>
+        <%= link_to "Rules", source_rules_path(source_id: @source.id), class: 'btn btn-xs btn-default' %>
         <button class="btn dropdown-toggle btn-xs" data-toggle="dropdown">
           <span class="caret"></span>
         </button>
@@ -21,7 +21,7 @@
     <% end %>
     <% if @source.user_has_action?(current_user, "edit data source mappings") %>
       <div class="btn-group">
-        <%= link_to "File Types", source_file_types_path(source_id: @source.id), class: 'btn btn-xs' %>
+        <%= link_to "File Types", source_file_types_path(source_id: @source.id), class: 'btn btn-xs btn-default' %>
         <button class="btn dropdown-toggle btn-xs" data-toggle="dropdown">
           <span class="caret"></span>
         </button>

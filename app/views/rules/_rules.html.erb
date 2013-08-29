@@ -20,7 +20,7 @@
         <%= (rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| link_to u.name, u}.join(', ').html_safe %>
       </td>
       <td>
-        <%= link_to 'Edit', edit_source_rule_path(rule.source, rule), class: 'btn btn-xs' %>
+        <%= link_to 'Edit', edit_source_rule_path(rule.source, rule), class: 'btn btn-xs btn-default' %>
         <%= link_to 'Delete', [rule.source, rule], data: { confirm: "Are you sure you want to delete Rule #{rule.name}?" }, method: :delete, class: 'btn btn-xs btn-danger-inverse' %>
       </td>
     </tr>

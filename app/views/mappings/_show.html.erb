@@ -1,6 +1,6 @@
 <tr class="search_no_border">
   <td valign="top" style="white-space:nowrap">
-    <%= link_to 'info', info_mapping_path(@mapping, source_id: @mapping.source.id), method: :post, remote: true, with: "'show=' + $('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible')", before: "$('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').toggle(); this.src = ($('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible') ? '#{request.script_name}/assets/contour/down.png' : '#{request.script_name}/assets/contour/right.png')", class: 'btn btn-xs' %>
+    <%= link_to 'info', info_mapping_path(@mapping, source_id: @mapping.source.id), method: :post, remote: true, with: "'show=' + $('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible')", before: "$('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').toggle(); this.src = ($('#mapping_#{@mapping.column.gsub(' ', '_')}_stats').is(':visible') ? '#{request.script_name}/assets/contour/down.png' : '#{request.script_name}/assets/contour/right.png')", class: 'btn btn-xs btn-default' %>
   </td>
   <td valign="top">
     <%= @mapping.column %>

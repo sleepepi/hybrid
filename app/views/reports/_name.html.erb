@@ -1,6 +1,6 @@
 <%= link_to @report.name, edit_report_path(@report, search_id: @search.id), method: :get, remote: true, onclick: "$('#inlaid_report').html('<table width=\"100%\"><tr><td id=\"report_waiting_#{@report.id}\"></td></tr></table>');showWaiting('#report_waiting_#{@report.id}', ' Loading #{@report.is_dataset? ? 'Dataset' : 'Report'}', true);" %>
 
 <span id="report_<%= @report.id %>_delete_link" style="display:none">
-<%= link_to 'edit', edit_name_report_path(@report, search_id: @search.id), method: :post, remote: true, class: 'btn btn-xs' %>
+<%= link_to 'edit', edit_name_report_path(@report, search_id: @search.id), method: :post, remote: true, class: 'btn btn-xs btn-default' %>
 <%= link_to 'remove', report_path(@report, search_id: @search.id), method: :delete, remote: true, data: { confirm: "Are you sure you want to delete #{@report.name}?" }, class: 'btn btn-xs btn-danger-inverse' %>
 </span>
