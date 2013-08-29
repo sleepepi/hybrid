@@ -1,6 +1,6 @@
 <% if @criterium.variable.domain %>
   <div class="control-group">
-    <%= f.label :value, nil, class: 'control-label' %>
+    <%= f.label :value, nil, class: 'col-md-2 control-label' %>
     <div class="controls sheet-container">
       <div style="margin-bottom:5px">
         <%= link_to simple_check(true) + ' Select All', '#', data: { object: 'categorical-check-all' }, class: 'btn btn-mini' %>

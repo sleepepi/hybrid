@@ -16,35 +16,35 @@
   <% end %>
 
   <div class="control-group">
-    <%= f.label :name, nil, class: 'control-label' %>
+    <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :name %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :description, nil, class: 'control-label' %>
+    <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :visible, nil, class: 'control-label' %>
+    <%= f.label :visible, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.check_box :visible %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= label :variables_file, "Variables File", class: 'control-label' %>
+    <%= label :variables_file, "Variables File", class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= file_field_tag :variables_file %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= label :domains_file, "Domains File", class: 'control-label' %>
+    <%= label :domains_file, "Domains File", class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= file_field_tag :domains_file %>
     </div>

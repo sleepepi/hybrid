@@ -11,7 +11,7 @@
   <% end %>
 
   <div class="control-group" style="<%= 'display:none' if @criterium.variable.mappings.size < 2 %>">
-    <%= f.label :mapping_id, "At", class: 'control-label' %>
+    <%= f.label :mapping_id, "At", class: 'col-md-2 control-label' %>
     <div class="controls sheet-container">
       <% @criterium.variable.mappings.sort{ |m1, m2| m1.human_table <=> m2.human_table }.each do |mapping| %>
         <label class="radio <%= 'selected' if @criterium.mapping == mapping %>"><%= radio_button_tag "criterium[mapping_id]", mapping.id, @criterium.mapping == mapping %> <%= mapping.human_table %></label>

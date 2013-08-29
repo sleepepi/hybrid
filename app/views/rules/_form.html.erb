@@ -16,21 +16,21 @@
   <% end %>
 
   <div class="control-group">
-    <%= f.label :name, nil, class: 'control-label' %>
+    <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :name %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :description, nil, class: 'control-label' %>
+    <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :actions, nil, class: 'control-label' %>
+    <%= f.label :actions, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
         <tr>
@@ -48,14 +48,14 @@
   </div>
 
   <div class="control-group">
-    <%= f.label :users, nil, class: 'control-label' %>
+    <%= f.label :users, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :user_tokens, data: { pre: (@rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| { name: u.name_and_email, id: u.id }}.to_json } %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :blocked, nil, class: 'control-label' %>
+    <%= f.label :blocked, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.check_box :blocked %>
     </div>

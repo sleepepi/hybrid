@@ -16,63 +16,63 @@
   <% end %>
 
   <div class="control-group">
-    <%= f.label :name, nil, class: 'control-label' %>
+    <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :name %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :description, nil, class: 'control-label' %>
+    <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :visible, nil, class: 'control-label' %>
+    <%= f.label :visible, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.check_box :visible %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :wrapper, nil, class: 'control-label' %>
+    <%= f.label :wrapper, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.select :wrapper, Source::WRAPPER %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :host, nil, class: 'control-label' %>
+    <%= f.label :host, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :host, placeholder: 'localhost' %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :port, nil, class: 'control-label' %>
+    <%= f.label :port, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.number_field :port, placeholder: '3306' %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :database, nil, class: 'control-label' %>
+    <%= f.label :database, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :database %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :username, nil, class: 'control-label' %>
+    <%= f.label :username, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :username %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :password, nil, class: 'control-label' %>
+    <%= f.label :password, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :password %>
     </div>
@@ -81,35 +81,35 @@
 
 
   <div class="control-group">
-    <%= f.label :repository, nil, class: 'control-label' %>
+    <%= f.label :repository, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.select :repository, [['---', nil]] + Source::REPOSITORY %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :file_server_host, nil, class: 'control-label' %>
+    <%= f.label :file_server_host, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :file_server_host %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :file_server_path, nil, class: 'control-label' %>
+    <%= f.label :file_server_path, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :file_server_path %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :file_server_login, nil, class: 'control-label' %>
+    <%= f.label :file_server_login, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :file_server_login %>
     </div>
   </div>
 
   <div class="control-group">
-    <%= f.label :file_server_password, nil, class: 'control-label' %>
+    <%= f.label :file_server_password, nil, class: 'col-md-2 control-label' %>
     <div class="controls">
       <%= f.text_field :file_server_password %>
     </div>
