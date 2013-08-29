@@ -4,8 +4,8 @@
 
 <%= form_for @dictionary, html: { class: 'form-horizontal', enctype: "multipart/form-data" } do |f| %>
   <% if @dictionary.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@dictionary.errors.count, "error") %> prohibited this dictionary from being saved:</h2>
+    <div id="error_explanation" class="bs-callout bs-callout-danger">
+      <h4><%= pluralize(@dictionary.errors.count, "error") %> prohibited this dictionary from being saved</h4>
 
       <ul>
       <% @dictionary.errors.full_messages.each do |msg| %>

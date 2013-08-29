@@ -1,7 +1,7 @@
 <%= form_for(@report_concept) do |f| %>
   <% if @report_concept.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@report_concept.errors.count, "error") %> prohibited this report_concept from being saved:</h2>
+    <div id="error_explanation" class="bs-callout bs-callout-danger">
+      <h4><%= pluralize(@report_concept.errors.count, "error") %> prohibited this report_concept from being saved</h4>
 
       <ul>
       <% @report_concept.errors.full_messages.each do |msg| %>

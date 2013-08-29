@@ -4,8 +4,8 @@
 
 <%= form_for @file_type, html: { class: 'form-horizontal' } do |f| %>
   <% if @file_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@file_type.errors.count, "error") %> prohibited this file_type from being saved:</h2>
+    <div id="error_explanation" class="bs-callout bs-callout-danger">
+      <h4><%= pluralize(@file_type.errors.count, "error") %> prohibited this file_type from being saved</h4>
 
       <ul>
       <% @file_type.errors.full_messages.each do |msg| %>
