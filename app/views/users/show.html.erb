@@ -9,8 +9,11 @@
   </h1>
 </div>
 
-<% if current_user.system_admin? %>
-  <dl class="dl-horizontal">
+<dl class="dl-horizontal">
+    <dt>User Avatar</dt>
+    <dd><%= image_tag @user.avatar_url, class: 'img-rounded' %></dd>
+
+  <% if current_user.system_admin? %>
     <dt>Email</dt>
     <dd><%= @user.email %></dd>
 
@@ -27,8 +30,6 @@
     <dt>Service Account</dt>
     <dd><%= simple_check @user.service_account? %></dd>
 
-    <dt>User Avatar</dt>
-    <dd><%= image_tag @user.avatar_url, class: 'img-rounded' %></dd>
 
     <% if @user.authentications.size > 0 %>
       <dt>Authentications</dt>
@@ -44,5 +45,5 @@
         </div>
       </dd>
     <% end %>
-  </dl>
-<% end %>
+  <% end %>
+</dl>
