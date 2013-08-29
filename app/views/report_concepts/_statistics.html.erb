@@ -18,7 +18,7 @@
           <% end %>
         </div>
 
-        <div class="control-group" style="<%= 'display:none' if @report_concept.variable.sources.uniq.size < 2 %>">
+        <div class="form-group" style="<%= 'display:none' if @report_concept.variable.sources.uniq.size < 2 %>">
           <label class="control-label">At</label>
           <div class="controls sheet-container">
             <% @report_concept.variable.sources.uniq.each do |source| %>

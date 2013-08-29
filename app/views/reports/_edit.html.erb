@@ -8,7 +8,7 @@
 <%= form_tag report_concepts_path(search_id: @search.id, report_id: @report.id), method: :post, remote: true, id: 'report_concept_search_form', class: 'form-horizontal' do %>
   <%= hidden_field_tag 'selected_report_concept_id', '', name: 'concept_id' %>
 
-  <div class="control-group">
+  <div class="form-group">
     <label class="control-label">With</label>
     <div class="col-md-10">
       <%= text_field_tag 'report_concept_search_term', '', name: 'concept_search_term', rel: 'tooltip', title: 'Search for Age, Gender, Body Mass Index and hit <b>[Enter]</b>', data: { object: 'report-concept-typeahead', search_id: @search.id }, style: 'width:350px'  %>

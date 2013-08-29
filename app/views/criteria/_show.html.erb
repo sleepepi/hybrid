@@ -1,10 +1,10 @@
-<div class="control-group">
+<div class="form-group">
   <div class="col-md-10">
     <% if @criterium.left_brackets > 0 %><div style="padding-left:<%= [10*(@criterium.level - @criterium.left_brackets), 0].max %>px"><%= '('*@criterium.left_brackets %></div><% end %>
   </div>
 </div>
 
-<div class="control-group">
+<div class="form-group">
   <label class="control-label"><div id="record_ids_<%= @criterium.id %>_display" class="records_found"></div></label>
   <div class="col-md-10">
 
@@ -33,14 +33,14 @@
   </div>
 </div>
 
-<div class="control-group">
+<div class="form-group">
   <div class="col-md-10">
     <% if @criterium.right_brackets > 0 %><div style="padding-left:<%= [10*(@criterium.level - @criterium.right_brackets), 0].max %>px"><%= ')'*@criterium.right_brackets %></div><% end %>
   </div>
 </div>
 
 <div style="display:none" data-object="query-draggable-helper">
-  <div class="control-group">
+  <div class="form-group">
     <div class="col-md-10">
       <div class='criterium-box'><b><%= @criterium.variable_name_with_mapping %></b><% unless @criterium.human_value.blank? %> is <% if @criterium.negated? %>not <% end %><b><%= @criterium.human_value %></b><% end %></div>
     </div>

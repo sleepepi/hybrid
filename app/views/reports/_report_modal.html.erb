@@ -6,14 +6,14 @@
   <div class="modal-body">
     <%= form_tag reports_path(search_id: @search.id, is_dataset: false), method: :post, remote: true, id: "new_report_form", class: 'form-horizontal' do %>
       <% @report = Report.new({name: "Report: #{Time.now.strftime("%Y.%m.%d")}"}) %>
-      <div class="control-group">
+      <div class="form-group">
         <%= label :report, :name, class: 'col-md-2 control-label' %>
         <div class="col-md-10">
           <%= text_field :report, :name, class: "ui-widget-content ui-corner-all", id: 'report_name' %>
         </div>
       </div>
 
-      <div class="control-group">
+      <div class="form-group">
         <%= label :report, :template_id, "Template", class: 'col-md-2 control-label' %>
         <div class="controls" id="reports_list">
           <%= render partial: 'reports/reports_list' %>

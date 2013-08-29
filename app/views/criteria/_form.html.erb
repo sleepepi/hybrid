@@ -2,7 +2,7 @@
   <% begin %>
     <%= render partial: "criteria/forms/#{@criterium.variable.variable_type}", locals: { f: f } %>
   <% rescue %>
-    <div class="control-group">
+    <div class="form-group">
       <label class="control-label"><%= @criterium.variable.variable_type.titleize %></label>
       <div class="col-md-10">
         <%= f.text_field :value %>
@@ -10,7 +10,7 @@
     </div>
   <% end %>
 
-  <div class="control-group" style="<%= 'display:none' if @criterium.variable.mappings.size < 2 %>">
+  <div class="form-group" style="<%= 'display:none' if @criterium.variable.mappings.size < 2 %>">
     <%= f.label :mapping_id, "At", class: 'col-md-2 control-label' %>
     <div class="controls sheet-container">
       <% @criterium.variable.mappings.sort{ |m1, m2| m1.human_table <=> m2.human_table }.each do |mapping| %>
@@ -19,7 +19,7 @@
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls sheet-container">
       <label class="checkbox negation <%= 'selected' if @criterium.negated? %> inline"><%= f.check_box :negated %> Negated</label>
     </div>

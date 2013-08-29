@@ -15,35 +15,35 @@
     </div>
   <% end %>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :name %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :extension, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :extension %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :visible, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.check_box :visible %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :dictionary_id, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.select :dictionary_id, [['---', nil]] + Dictionary.current.collect{|d| [d.name, d.id]} %>

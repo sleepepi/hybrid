@@ -15,21 +15,21 @@
     </div>
   <% end %>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :name %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_area :description, rows: 7, style: 'width:95%' %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :actions, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <table class="blank" style="width:100%"><col width="33%"/><col width="33%"/><col width="33%"/>
@@ -47,14 +47,14 @@
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :users, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :user_tokens, data: { pre: (@rule.users || []).collect{|id| User.find_by_id(id)}.compact.collect{|u| { name: u.name_and_email, id: u.id }}.to_json } %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :blocked, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.check_box :blocked %>

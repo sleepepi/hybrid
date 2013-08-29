@@ -14,20 +14,20 @@
 </div>
 
 <form class="form-horizontal">
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { search_id: @search.id } %>
       <%= link_to 'Browse Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls" id="query_sources">
       <%= render partial: 'query_sources/query_sources' %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag 'variable_search', '', tabindex: '2', data: { search_id: @search.id } %>
       <%= link_to 'Browse Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
@@ -41,7 +41,7 @@
 <% end %>
 
 <form class="form-horizontal">
-  <div class="control-group">
+  <div class="form-group">
     <div class="controls" style="padding-top:4px">
       <%= link_to image_tag('gentleface/checkbox_checked.png'), select_all_criteria_path(search_id: @search.id, selected: true), method: :post, remote: true, rel: 'tooltip', title: 'Select All Filters' %>
       <%= link_to image_tag('gentleface/checkbox_unchecked.png'), select_all_criteria_path(search_id: @search.id, selected: false), method: :post, remote: true, rel: 'tooltip', title: 'Deselect All Filters' %>

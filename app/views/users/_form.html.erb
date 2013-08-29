@@ -15,41 +15,41 @@
     </div>
   <% end %>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :first_name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :first_name %>
     </div>
   </div>
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :last_name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :last_name %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :status, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.select :status, User::STATUS %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :email, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.text_field :email %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :system_admin, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.check_box :system_admin %>
     </div>
   </div>
 
-  <div class="control-group">
+  <div class="form-group">
     <%= f.label :service_account, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
       <%= f.check_box :service_account %>
