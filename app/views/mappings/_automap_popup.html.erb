@@ -26,7 +26,7 @@
   <tbody>
     <% variables.each do |variable| %>
       <tr class="<%= 'info' if variable.dictionary == most_used_dictionary %>">
-        <td><%= link_to 'Automap', mappings_path(source_id: @source.id, mapping: { variable_id: variable.id, table: params[:table], column: params[:column] } ), method: :post, remote: true, class: 'btn btn-primary btn-mini' %></td>
+        <td><%= link_to 'Automap', mappings_path(source_id: @source.id, mapping: { variable_id: variable.id, table: params[:table], column: params[:column] } ), method: :post, remote: true, class: 'btn btn-primary btn-xs' %></td>
         <td><%= variable.name %></td>
         <td>
           <%= variable.display_name %>

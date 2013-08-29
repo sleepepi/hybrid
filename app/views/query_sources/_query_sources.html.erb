@@ -4,7 +4,7 @@
     onmouseout="$('#query_source_<%= query_source.id %>_delete_link').hide();">
     <%= link_to query_source.source.name, query_source_path(query_source, search_id: @search.id), method: :get, remote: true %>
     <div style="display:inline-block;width:55px">
-      <%= link_to 'remove', query_source_path(query_source, search_id: @search.id), method: :delete, remote: true, class: 'btn btn-mini btn-danger-inverse', id: "query_source_#{query_source.id}_delete_link", style: 'display:none' %>
+      <%= link_to 'remove', query_source_path(query_source, search_id: @search.id), method: :delete, remote: true, class: 'btn btn-xs btn-danger-inverse', id: "query_source_#{query_source.id}_delete_link", style: 'display:none' %>
     </div>
   </div>
 <% end %>

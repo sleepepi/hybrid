@@ -4,8 +4,8 @@
 
   <% @report_concept.statistic = (@report_concept.variable.variable_type == 'date' ? 'month' : 'all') if @report_concept.statistic.blank? %>
 
-  <%= link_to 'edit', '#', data: { object: 'toggle', target: "#report_concept_#{@report_concept.id}_options" }, class: 'btn btn-mini' %>
-  <%= link_to 'remove', @report_concept, method: :delete, remote: true, id: "report_concept_#{@report_concept.id}_delete_icon", data: { confirm: "Are you sure you want to remove this concept from Report #{@report.name}?" }, class: 'btn btn-mini btn-danger-inverse' %>
+  <%= link_to 'edit', '#', data: { object: 'toggle', target: "#report_concept_#{@report_concept.id}_options" }, class: 'btn btn-xs' %>
+  <%= link_to 'remove', @report_concept, method: :delete, remote: true, id: "report_concept_#{@report_concept.id}_delete_icon", data: { confirm: "Are you sure you want to remove this concept from Report #{@report.name}?" }, class: 'btn btn-xs btn-danger-inverse' %>
 
   <div id="report_concept_<%= @report_concept.id %>_options" style="display:none">
     <% if ['integer', 'numeric', 'choices', 'date'].include?(@report_concept.variable.variable_type) %>

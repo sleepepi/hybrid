@@ -24,8 +24,8 @@
       <td><%= file_type.sources.collect{|s| link_to(s.name, s)}.join(', ').html_safe %></td>
       <td><%= link_to file_type.dictionary.name, file_type.dictionary if file_type.dictionary %></td>
       <td>
-        <%= link_to 'Edit', edit_file_type_path(file_type), class: 'btn btn-mini' %>
-        <%= link_to 'Delete', file_type, data: { confirm: "Are you sure you want to delete File Type #{file_type.name}?" }, method: :delete, class: 'btn btn-mini btn-danger-inverse' %>
+        <%= link_to 'Edit', edit_file_type_path(file_type), class: 'btn btn-xs' %>
+        <%= link_to 'Delete', file_type, data: { confirm: "Are you sure you want to delete File Type #{file_type.name}?" }, method: :delete, class: 'btn btn-xs btn-danger-inverse' %>
       </td>
     </tr>
   <% end %>

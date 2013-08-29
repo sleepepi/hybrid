@@ -17,7 +17,7 @@
   <div class="form-group">
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { search_id: @search.id } %>
-      <%= link_to 'Browse Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
+      <%= link_to 'Browse Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-xs', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 
@@ -30,7 +30,7 @@
   <div class="form-group">
     <div class="controls" style="white-space:nowrap">
       <%= text_field_tag 'variable_search', '', tabindex: '2', data: { search_id: @search.id } %>
-      <%= link_to 'Browse Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-mini', style: 'margin: 3px 0px;' %>
+      <%= link_to 'Browse Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-xs', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 </form>

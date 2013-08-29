@@ -10,11 +10,11 @@
             <div class="qc-cancel" style="line-height:40px">
               <span id="criterium_<%= @criterium.id %>_rop_text" onmouseover="$('#criterium_<%= @criterium.id %>_right_operator_edit_icon').show();" onmouseout="$('#criterium_<%= @criterium.id %>_right_operator_edit_icon').hide();" style="padding-left:<%= [10*(@criterium.level - @criterium.right_brackets), 0].max %>px">
                 <%= link_to @criterium.right_operator, '#', style: 'color:#404040;text-decoration:none', data: { object: 'operand-edit', value: "#{@criterium.id}" } %>
-                <%= link_to 'edit', '#', data: { object: 'operand-edit', value: "#{@criterium.id}" }, id: "criterium_#{@criterium.id}_right_operator_edit_icon", style: 'display:none', class: 'btn btn-mini' %>
+                <%= link_to 'edit', '#', data: { object: 'operand-edit', value: "#{@criterium.id}" }, id: "criterium_#{@criterium.id}_right_operator_edit_icon", style: 'display:none', class: 'btn btn-xs' %>
               </span>
               <span id="criterium_<%= @criterium.id %>_rop_select" style="display:none;padding-left:<%= [10*(@criterium.level - @criterium.right_brackets), 0].max %>px">
                 <%= select_tag "criterium_#{@criterium.id}_right_operator", options_for_select(['and', 'or'].collect{|a| [a,a]}, @criterium.right_operator), style: 'vertical-align:middle', name: 'right_operator', onchange: "changeRightOperator('#criterium_#{@criterium.id}_right_operator', #{@criterium.id});" %>
-                <%= link_to 'cancel', '#', data: { object: 'operand-hide', value: "#{@criterium.id}" }, class: 'btn btn-mini', style: 'margin-top:-10px' %>
+                <%= link_to 'cancel', '#', data: { object: 'operand-hide', value: "#{@criterium.id}" }, class: 'btn btn-xs', style: 'margin-top:-10px' %>
               </span>
               <br />
             </div>

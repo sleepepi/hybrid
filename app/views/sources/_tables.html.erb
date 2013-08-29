@@ -31,7 +31,7 @@
         <% else %>
           <%= @source.table_hash[table.to_s] %>
         <% end %>
-        <%= link_to 'edit', edit_table_name_source_path(@source, table: table), remote: true, method: :get, class: 'btn btn-mini' %>
+        <%= link_to 'edit', edit_table_name_source_path(@source, table: table), remote: true, method: :get, class: 'btn btn-xs' %>
       </td>
       <td>
         <% hash = @source.table_columns_mapped(current_user, table) %>

@@ -1,4 +1,4 @@
 <%= form_tag save_name_report_path(@report, search_id: @search.id), method: :post, remote: true, class: 'form-inline', style: 'margin-bottom:0px' do %>
   <%= text_field :report, :name, style: 'width:200px', placeholder: "ID ##{@report.id}" %>
-  <%= submit_tag 'save', class: 'btn btn-mini btn-primary' %>
+  <%= submit_tag 'save', class: 'btn btn-xs btn-primary' %>
 <% end %>

@@ -2,7 +2,7 @@
 <div class="page-header">
   <h1>
     <%= @title %>
-    <%= link_to "Create Source", new_source_path, class: 'btn btn-mini btn-primary' if current_user.system_admin? %>
+    <%= link_to "Create Source", new_source_path, class: 'btn btn-xs btn-primary' if current_user.system_admin? %>
   </h1>
 </div>
 

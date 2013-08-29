@@ -17,7 +17,7 @@
           <span class="nolink">is</span> <% if @criterium.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
 
           <% if @criterium.value.blank? %>
-            <div class="btn btn-mini">Click to Set Value</div>
+            <div class="btn btn-xs">Click to Set Value</div>
           <% else %>
             <%= @criterium.human_value %>
           <% end %>
@@ -25,7 +25,7 @@
 
         <span id="criterium_<%= @criterium.id %>_delete_link" style="display:none">
           <i class="icon-move" style="cursor:move"></i>
-          <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-mini btn-danger-inverse' %>
+          <%= link_to 'remove', criterium_path(@criterium, search_id: @search), method: :delete, remote: true, class: 'btn btn-xs btn-danger-inverse' %>
         </span>
       </div>
       <div style="padding-left:<%= 10*@criterium.level %>px"><span id="record_ids_<%= @criterium.id %>_errors" class="errors_found"></span></div>

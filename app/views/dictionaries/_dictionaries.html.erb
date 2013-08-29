@@ -20,8 +20,8 @@
       <td><%= link_to dictionary.variables.size, dictionary_variables_path(dictionary) %></td>
       <td><%= link_to dictionary.domains.size, dictionary_domains_path(dictionary) %></td>
       <td>
-        <%= link_to 'Edit', edit_dictionary_path(dictionary), class: 'btn btn-mini' %>
-        <%= link_to 'Delete', dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{dictionary.name}?" }, method: :delete, class: 'btn btn-mini btn-danger-inverse' %>
+        <%= link_to 'Edit', edit_dictionary_path(dictionary), class: 'btn btn-xs' %>
+        <%= link_to 'Delete', dictionary, data: { confirm: "Are you sure you want to delete Dictionary #{dictionary.name}?" }, method: :delete, class: 'btn btn-xs btn-danger-inverse' %>
       </td>
     </tr>
   <% end %>
