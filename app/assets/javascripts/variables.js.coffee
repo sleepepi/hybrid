@@ -17,4 +17,5 @@ jQuery ->
         $("##{folder_id}_link_img").attr('class', 'glyphicon glyphicon-folder-open')
       else
         $("##{folder_id}_link_img").attr('class', 'glyphicon glyphicon-folder-close')
+      false
     )
