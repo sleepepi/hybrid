@@ -17,7 +17,7 @@
           <span class="nolink">is</span> <% if @criterium.negated? %><span style="color:#c33;font-weight:bold">not </span><% end %>
 
           <% if @criterium.value.blank? %>
-            <div class="btn btn-xs">Click to Set Value</div>
+            <div class="btn btn-xs btn-default">Click to Set Value</div>
           <% else %>
             <%= @criterium.human_value %>
           <% end %>
