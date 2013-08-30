@@ -2,6 +2,6 @@
 [<%= @sources.collect{|s| "{\"id\":\"#{s.id}\", \"label\":\"#{highlight(s.name, @search_terms, highlighter: '<b>\1</b>')}\", \"value\":\"#{s.name}\", \"category\":\"\"}" }.join(',').html_safe %>]
 <% else %>
 [
-  {"label": "", "value": "", "category": "<span class='label label-important'>No Matching Sources Found</span>", "category_only": "true"}
+  {"label": "", "value": "", "category": "<span class='label label-warning'>No Matching Sources Found</span>", "category_only": "true"}
 ]
 <% end %>
