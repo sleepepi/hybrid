@@ -1,10 +1,10 @@
 <div class="sub-title">
   Table <b><%= params[:table] %></b>
   <% if @source.user_has_action?(current_user, "edit data source mappings") %>
-    <%= form_tag auto_map_source_path(@source, table: params[:table]), method: :post, remote: true, id: 'auto_map_form' do %>
+    <%= form_tag auto_map_source_path(@source, table: params[:table]), method: :post, remote: true, id: 'auto_map_form', class: 'form-inline' do %>
       <%= link_to 'Auto Map Table', '#', data: { object: 'table-automap' } %>
       to Dictionary
-      <%= select_tag :dictionary_id, options_for_select([["--Choose Dictionary--", nil]] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]) %>
+      <%= select_tag :dictionary_id, options_for_select([["--Choose Dictionary--", nil]] + Dictionary.available.order('name').collect{|item| [item.name, item.id]}, params[:dictionary_id]), class: 'form-control' %>
     <% end %>
   <% end %>
 </div>
@@ -26,28 +26,28 @@
     <% end %>
   <% end %>
 
-  <div class="pagination pagination-centered">
-    <ul>
-      <% if params[:page].to_i == 1 %>
-        <li class="disabled"><a href="#">&laquo;</a></li>
-      <% else %>
-        <li><%= link_to '&laquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i - 1, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
-      <% end %>
-    <% page_list.each do |page_number| %>
-      <% if page_number == nil %>
-        <li class="disabled"><a href="#">&hellip;</a></li>
-      <% elsif params[:page].to_i == page_number %>
-        <li class="active"><a href="#"><%= page_number %></a></li>
-      <% else %>
-        <li><%= link_to page_number, table_columns_source_path(@source, table: params[:table], page: page_number, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
-      <% end %>
+  <div class="center">
+  <ul class="pagination pagination-centered">
+    <% if params[:page].to_i == 1 %>
+      <li class="disabled"><a href="#">&laquo;</a></li>
+    <% else %>
+      <li><%= link_to '&laquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i - 1, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
     <% end %>
-      <% if params[:page].to_i == @max_pages %>
-        <li class="disabled"><a href="#">&raquo;</a></li>
-      <% else %>
-        <li><%= link_to '&raquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i + 1, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
-      <% end %>
-    </ul>
+  <% page_list.each do |page_number| %>
+    <% if page_number == nil %>
+      <li class="disabled"><a href="#">&hellip;</a></li>
+    <% elsif params[:page].to_i == page_number %>
+      <li class="active"><a href="#"><%= page_number %></a></li>
+    <% else %>
+      <li><%= link_to page_number, table_columns_source_path(@source, table: params[:table], page: page_number, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
+    <% end %>
+  <% end %>
+    <% if params[:page].to_i == @max_pages %>
+      <li class="disabled"><a href="#">&raquo;</a></li>
+    <% else %>
+      <li><%= link_to '&raquo;'.html_safe, table_columns_source_path(@source, table: params[:table], page: params[:page].to_i + 1, filter_unmapped: params[:filter_unmapped]), method: :get, remote: true, onclick: "showWaiting('#table_content', '', true)" %></li>
+    <% end %>
+  </ul>
   </div>
 
 <% end %>

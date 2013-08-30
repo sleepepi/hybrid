@@ -20,7 +20,7 @@
 
         <div class="form-group" style="<%= 'display:none' if @report_concept.variable.sources.uniq.size < 2 %>">
           <label class="control-label">At</label>
-          <div class="controls sheet-container">
+          <div class="col-md-10 sheet-container">
             <% @report_concept.variable.sources.uniq.each do |source| %>
               <label class="radio <%= 'selected' if @report_concept.source == source %>"><%= radio_button_tag "report_concept[source_id]", source.id, @report_concept.source == source, onchange: "showWaiting('#report_table', ' Loading Report', true);$('#report_concept_#{@report_concept.id}_form').submit();" %> <%= source.name %></label>
             <% end %>

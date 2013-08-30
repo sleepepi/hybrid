@@ -1,7 +1,7 @@
 <% if @criterium.variable.domain %>
   <div class="form-group">
     <%= f.label :value, nil, class: 'col-md-2 control-label' %>
-    <div class="controls sheet-container">
+    <div class="col-md-10 sheet-container">
       <div style="margin-bottom:5px">
         <%= link_to simple_check(true) + ' Select All', '#', data: { object: 'categorical-check-all' }, class: 'btn btn-xs btn-default' %>
         <%= link_to simple_check(false) + ' Deselect All', '#', data: { object: 'categorical-uncheck-all' }, class: 'btn btn-xs btn-default' %>

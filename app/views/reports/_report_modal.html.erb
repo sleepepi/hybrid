@@ -15,14 +15,14 @@
 
       <div class="form-group">
         <%= label :report, :template_id, "Template", class: 'col-md-2 control-label' %>
-        <div class="controls" id="reports_list">
+        <div class="col-md-10" id="reports_list">
           <%= render partial: 'reports/reports_list' %>
         </div>
       </div>
     <% end %>
   </div>
   <div class="modal-footer">
-    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Close</a>
+    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn btn-default">Close</a>
     <%= link_to 'Save', '#', data: { object: 'submit', target: '#new_report_form', dismiss: 'modal' }, class: 'btn btn-primary'  %>
   </div>
 </div>

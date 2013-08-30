@@ -3,7 +3,7 @@
 <div class="page-header">
   <h1>
     <%= link_to 'Searches', searches_path %> &middot;
-    <span id="search_<%= @search.id %>_name"><%= render partial: 'searches/name' %></span>
+    <span id="search_<%= @search.id %>_name" class="form-inline"><%= render partial: 'searches/name' %></span>
   </h1>
 </div>
 
@@ -15,21 +15,21 @@
 
 <form class="form-horizontal">
   <div class="form-group">
-    <div class="controls" style="white-space:nowrap">
-      <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { search_id: @search.id } %>
+    <div class="col-md-offset-2 col-md-10" style="white-space:nowrap">
+      <%= text_field_tag :source, '', name: 'search', tabindex: '1', data: { search_id: @search.id }, style: 'width:300px' %>
       <%= link_to 'Browse Sources', sources_path(popup: true, search_id: @search.id), remote: true, class: 'btn btn-xs btn-default', style: 'margin: 3px 0px;' %>
     </div>
   </div>
 
   <div class="form-group">
-    <div class="controls" id="query_sources">
+    <div class="col-md-offset-2 col-md-10" id="query_sources">
       <%= render partial: 'query_sources/query_sources' %>
     </div>
   </div>
 
   <div class="form-group">
-    <div class="controls" style="white-space:nowrap">
-      <%= text_field_tag 'variable_search', '', tabindex: '2', data: { search_id: @search.id } %>
+    <div class="col-md-offset-2 col-md-10" style="white-space:nowrap">
+      <%= text_field_tag 'variable_search', '', tabindex: '2', data: { search_id: @search.id }, style: 'width:300px' %>
       <%= link_to 'Browse Variables', variables_popup_search_path(@search), method: :get, remote: true, class: 'btn btn-xs btn-default', style: 'margin: 3px 0px;' %>
     </div>
   </div>
@@ -40,9 +40,11 @@
   <%= hidden_field_tag :criterium_right_operator, '', name: 'right_operator' %>
 <% end %>
 
+<hr class="soften" />
+
 <form class="form-horizontal">
   <div class="form-group">
-    <div class="controls" style="padding-top:4px">
+    <div class="col-md-offset-2 col-md-10" style="padding-top:4px">
       <%= link_to image_tag('gentleface/checkbox_checked.png'), select_all_criteria_path(search_id: @search.id, selected: true), method: :post, remote: true, rel: 'tooltip', title: 'Select All Filters' %>
       <%= link_to image_tag('gentleface/checkbox_unchecked.png'), select_all_criteria_path(search_id: @search.id, selected: false), method: :post, remote: true, rel: 'tooltip', title: 'Deselect All Filters' %>
       <span class="space"></span>

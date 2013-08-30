@@ -18,35 +18,36 @@
   <div class="form-group">
     <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.text_field :name %>
+      <%= f.text_field :name, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
     <%= f.label :extension, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.text_field :extension %>
+      <%= f.text_field :extension, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
     <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.text_area :description, rows: 7, style: 'width:95%' %>
+      <%= f.text_area :description, rows: 7, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
-    <%= f.label :visible, nil, class: 'col-md-2 control-label' %>
-    <div class="col-md-10">
-      <%= f.check_box :visible %>
+    <div class="col-md-offset-2 col-md-10">
+      <div class="checkbox">
+        <label><%= f.check_box :visible %> Visible</label>
+      </div>
     </div>
   </div>
 
   <div class="form-group">
     <%= f.label :dictionary_id, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.select :dictionary_id, [['---', nil]] + Dictionary.current.collect{|d| [d.name, d.id]} %>
+      <%= f.select :dictionary_id, [['---', nil]] + Dictionary.current.collect{|d| [d.name, d.id]}, {}, class: 'form-control' %>
     </div>
   </div>
 

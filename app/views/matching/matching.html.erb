@@ -43,7 +43,7 @@
 
   <div class="form-group">
     <div class="control-label">Controls Per Case</div>
-    <div class="controls sheet-container">
+    <div class="col-md-10 sheet-container">
       <% [1,2,3,4].each do |count| %>
         <label class="radio inline <%= 'selected' if @controls_per_case == count %>"><%= radio_button_tag :controls_per_case, count, @controls_per_case == count, data: { object: 'matching-form-option' } %> <%= count %></label>
       <% end %>

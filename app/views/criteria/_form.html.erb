@@ -5,14 +5,14 @@
     <div class="form-group">
       <label class="control-label"><%= @criterium.variable.variable_type.titleize %></label>
       <div class="col-md-10">
-        <%= f.text_field :value %>
+        <%= f.text_field :value, class: 'form-control' %>
       </div>
     </div>
   <% end %>
 
   <div class="form-group" style="<%= 'display:none' if @criterium.variable.mappings.size < 2 %>">
     <%= f.label :mapping_id, "At", class: 'col-md-2 control-label' %>
-    <div class="controls sheet-container">
+    <div class="col-md-10 sheet-container">
       <% @criterium.variable.mappings.sort{ |m1, m2| m1.human_table <=> m2.human_table }.each do |mapping| %>
         <label class="radio <%= 'selected' if @criterium.mapping == mapping %>"><%= radio_button_tag "criterium[mapping_id]", mapping.id, @criterium.mapping == mapping %> <%= mapping.human_table %></label>
       <% end %>
@@ -20,8 +20,8 @@
   </div>
 
   <div class="form-group">
-    <div class="controls sheet-container">
-      <label class="checkbox negation <%= 'selected' if @criterium.negated? %> inline"><%= f.check_box :negated %> Negated</label>
+    <div class="col-md-offset-2 col-md-10 sheet-container">
+      <label class="checkbox negation <%= 'selected' if @criterium.negated? %>"><%= f.check_box :negated %> Negated</label>
     </div>
   </div>
 

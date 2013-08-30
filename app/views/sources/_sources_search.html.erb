@@ -1,4 +1,0 @@
-<%= form_tag sources_path(popup: true, search_id: @search.id), method: :get, remote: true, onsubmit: "showWaiting('#variable_folders', ' Loading Sources', true)", id: "sources_form" do %>
-  <%= hidden_field_tag :order %>
-  <%= text_field_tag 'sources_search', params[:sources_search], class: 'col-md-12', placeholder: 'Enter source name to filter list.' %>
-<% end %>

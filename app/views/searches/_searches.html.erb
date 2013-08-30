@@ -3,20 +3,20 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'searches.name', 'Name', 'searches_search') %></th>
-      <th>Total</th>
-      <th>From</th>
-      <th style="white-space:nowrap"><%== sort_field_helper(@order, 'searches.created_at', 'Created', 'searches_search') %></th>
-      <th>Actions</th>
+      <th style="text-align:left;white-space:nowrap"><%== sort_field_helper(@order, 'searches.name', 'Name', 'searches_search') %></th>
+      <th style="text-align:left;">Total</th>
+      <th style="text-align:left;">From</th>
+      <th style="text-align:left;white-space:nowrap"><%== sort_field_helper(@order, 'searches.created_at', 'Created', 'searches_search') %></th>
+      <th style="text-align:left;">Actions</th>
     </tr>
   </thead>
 
   <% @searches.each do |query| %>
     <tr>
       <td><%= link_to query.name, query %></td>
-      <td style="text-align:center"><%= number_with_delimiter query.total %></td>
+      <td><%= number_with_delimiter query.total %></td>
       <td><%= query.sources.collect{|s| s.name}.join(', ') %></td>
-      <td style="text-align:right"><%= simple_time(query.created_at) %></td>
+      <td><%= simple_time(query.created_at) %></td>
       <td>
         <%= link_to 'Delete', query, data: { confirm: "Are you sure you want to delete Query #{query.name}?" }, method: :delete, class: 'btn btn-xs btn-danger-inverse btn-block' %>
       </td>

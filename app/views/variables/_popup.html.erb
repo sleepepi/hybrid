@@ -7,9 +7,9 @@
 <div class="row">
   <div class="col-md-6">
     <%= form_tag open_folder_search_path(@search), remote: true, method: :get, id: "concept_search_form" do %>
-      <%= text_field_tag 'variable_search', params[:concept_search], class: 'col-md-12', placeholder: 'Enter variable name or navigate folders.', name: 'search' %>
+      <%= text_field_tag 'variable_search', params[:concept_search], class: 'form-control', placeholder: 'Enter variable name or navigate folders.', name: 'search' %>
     <% end %>
-    <div id="variable_folders">
+    <div id="variable_folders" style="margin-top:10px">
       <%= render partial: 'variables/folders', locals: { folder: nil } %>
     </div>
   </div>
@@ -21,5 +21,5 @@
 </div>
 
 <div style="height:30px; margin-top:35px;">
-  <%= link_to 'Close', '#', class: 'btn btn-xs pull-right', data: { object: 'hide-contour-modal' } %>
+  <%= link_to 'Close', '#', class: 'btn btn-xs btn-default pull-right', data: { object: 'hide-contour-modal' } %>
 </div>

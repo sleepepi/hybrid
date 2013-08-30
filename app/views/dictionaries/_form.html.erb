@@ -18,35 +18,36 @@
   <div class="form-group">
     <%= f.label :name, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.text_field :name %>
+      <%= f.text_field :name, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
     <%= f.label :description, nil, class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= f.text_area :description, rows: 7, style: 'width:95%' %>
+      <%= f.text_area :description, rows: 7, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
-    <%= f.label :visible, nil, class: 'col-md-2 control-label' %>
-    <div class="col-md-10">
-      <%= f.check_box :visible %>
+    <div class="col-md-offset-2 col-md-10">
+      <div class="checkbox">
+        <label><%= f.check_box :visible %> Visible</label>
+      </div>
     </div>
   </div>
 
   <div class="form-group">
     <%= label :variables_file, "Variables File", class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= file_field_tag :variables_file %>
+      <%= file_field_tag :variables_file, class: 'form-control' %>
     </div>
   </div>
 
   <div class="form-group">
     <%= label :domains_file, "Domains File", class: 'col-md-2 control-label' %>
     <div class="col-md-10">
-      <%= file_field_tag :domains_file %>
+      <%= file_field_tag :domains_file, class: 'form-control' %>
     </div>
   </div>
 

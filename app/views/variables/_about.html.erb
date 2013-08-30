@@ -21,9 +21,9 @@
 
   <dt>Tags</dt>
   <dd>
-    <span class="label label-inverse"><%= variable.name %></span>
+    <span class="label label-primary"><%= variable.name %></span>
     <% variable.tags.pluck(:name).reject{|n| n.downcase == variable.name.downcase }.each do |tag_name| %>
-      <span class="label"><%= tag_name %></span>
+      <span class="label label-default"><%= tag_name %></span>
     <% end %>
   </dd>
 
