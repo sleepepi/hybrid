@@ -12,9 +12,7 @@
   )
   $('.rule_group_'+index+'_parent').prop('checked',mode)
 
-
-jQuery ->
-
+@loadRulesReady = () ->
   $("#rule_user_tokens").tokenInput(root_url + "users.json"
     crossDomain: false
     prePopulate: $("#rule_user_tokens").data("pre")

@@ -70,15 +70,12 @@
 @cancelSearchNameEdit = () ->
   $.get(root_url + "searches/#{$("#search_name").data('search-id')}", null, null, "script")
 
-jQuery ->
+@loadSearchReady = () ->
   $( "#search_form" ).submit()
-
   buildSearchSourceTypeahead()
   $("#selected_source_id").val('')
-
   buildCriteriumTypeahead()
   $("#selected_concept_id").val('')
-
   $( "#criteria" )
     .sortable(
       axis: "y"
@@ -89,6 +86,8 @@ jQuery ->
       helper: (event, draggable) ->
         "<div>"+draggable.children('[data-object~="query-draggable-helper"]').first().html()+"</div>"
     )
+
+jQuery ->
 
   $(document)
     .on('click', '[data-object~="folder-show-more"]', () ->

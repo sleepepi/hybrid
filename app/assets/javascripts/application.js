@@ -12,4 +12,5 @@
 //
 //= require contour
 // require turbolinks
+//= require external/highcharts-3.0.7.src.js
 //= require_tree .

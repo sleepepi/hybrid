@@ -92,16 +92,22 @@
       $(element).parent().removeClass('selected')
   )
 
-jQuery ->
+@ready = () ->
+  contourReady()
   $("input[rel=tooltip]").tooltip()
   $("a[rel~=tooltip]").tooltip()
-
   $("#table_columns_search select, #table_columns_search input").change( () ->
     $.get($("#table_columns_search").attr("action"), $("#table_columns_search").serialize(), null, "script")
     showWaiting('#table_content', ' Loading Table Mappings', true)
     false
   )
+  loadRulesReady()
+  loadSearchReady()
 
+$(document).ready(ready)
+$(document).on('page:load', ready)
+
+jQuery ->
   # Show and hide a delete icon on mouseover and mouseout for criteria
   $(document)
     .on('mouseover', ".faded_delete_icon", () -> $('#'+$(this).attr('data-image-id')).attr('src', root_url + 'assets/contour/delete.png'))
