@@ -1,4 +1,4 @@
-## 0.15.2
+## 0.15.2 (December 4, 2013)
 
 ### Enhancements
 - **Gem Changes**
