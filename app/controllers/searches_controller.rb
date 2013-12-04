@@ -103,6 +103,7 @@ class SearchesController < ApplicationController
   end
 
   def show
+    flash.delete(:notice)
     @search = current_user.all_searches.find_by_id(params[:id])
     @search = current_user.all_searches.find_by_id(current_user.current_search_id) unless @search
     @search = current_user.searches.create(name: "#{current_user.last_name} ##{current_user.searches.count+1}") unless @search
