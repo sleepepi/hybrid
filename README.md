@@ -4,7 +4,7 @@
 [![Dependency Status](https://gemnasium.com/sleepepi/sleepportal.png)](https://gemnasium.com/sleepepi/sleepportal)
 [![Code Climate](https://codeclimate.com/github/sleepepi/sleepportal.png)](https://codeclimate.com/github/sleepepi/sleepportal)
 
-The Sleep Portal is a web-application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. The Sleep Portal also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. A [data dictionary approach](https://github.com/sleepepi/spout) is used to define data and database relationships. Using Rails 4.0+ and Ruby 2.0.0+.
+The Sleep Portal is a web-application designed to easily connect across multiple heterogeneous relational databases and expose these to researchers through a powerful search interface that shows interactive counts and graphs of the underlying data. The Sleep Portal also allows the generation of dynamic datasets and reports from the underlying data, and provides the ability to aggregate and download associated files using a single click file downloader. A [data dictionary approach](https://github.com/sleepepi/spout) is used to define data and database relationships. Using Rails 4.0+ and Ruby 2.1.0+.
 
 ## Installation
 
